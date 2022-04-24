@@ -55,6 +55,7 @@ import 'package:invoiceninja_flutter/utils/web_stub.dart'
     if (dart.library.html) 'package:invoiceninja_flutter/utils/web.dart';
 
 // STARTER: import - do not remove comment
+import 'package:invoiceninja_flutter/redux/contact/contact_middleware.dart';
 
 void main({bool isTesting = false}) async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -77,6 +78,7 @@ void main({bool isTesting = false}) async {
         ..addAll(createStoreSettingsMiddleware())
         ..addAll(createStoreReportsMiddleware())
         // STARTER: middleware - do not remove comment
+        ..addAll(createStoreContactsMiddleware())
         ..addAll(createStoreRecurringExpensesMiddleware())
         ..addAll(createStoreSubscriptionsMiddleware())
         ..addAll(createStoreTaskStatusesMiddleware())

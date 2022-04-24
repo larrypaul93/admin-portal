@@ -10,6 +10,7 @@ import 'package:diacritic/diacritic.dart';
 
 // Project imports:
 import 'package:invoiceninja_flutter/constants.dart';
+import 'package:invoiceninja_flutter/data/models/contact_model.dart';
 import 'package:invoiceninja_flutter/data/models/gateway_token_model.dart';
 import 'package:invoiceninja_flutter/data/models/group_model.dart';
 import 'package:invoiceninja_flutter/data/models/models.dart';
@@ -114,58 +115,84 @@ abstract class ClientEntity extends Object
     GroupEntity group,
   }) {
     return _$ClientEntity._(
-      id: id ?? BaseEntity.nextId,
-      isChanged: false,
-      settings: SettingsEntity(),
-      name: '',
-      displayName: '',
-      balance: 0,
-      creditBalance: 0,
-      paidToDate: 0,
-      lastLogin: 0,
-      address1: '',
-      address2: '',
-      city: '',
-      state: '',
-      postalCode: '',
-      countryId: '',
-      phone: '',
-      privateNotes: '',
-      publicNotes: '',
-      website: '',
-      industryId: '',
-      sizeId: '',
-      vatNumber: '',
-      idNumber: '',
-      number: '',
-      shippingAddress1: '',
-      shippingAddress2: '',
-      shippingCity: '',
-      shippingState: '',
-      groupId: group?.id ?? '',
-      shippingPostalCode: '',
-      shippingCountryId: '',
-      customValue1: '',
-      customValue2: '',
-      customValue3: '',
-      customValue4: '',
-      contacts: BuiltList<ContactEntity>(
-        <ContactEntity>[ContactEntity().rebuild((b) => b..isPrimary = true)],
-      ),
-      activities: BuiltList<ActivityEntity>(),
-      ledger: BuiltList<LedgerEntity>(),
-      gatewayTokens: BuiltList<GatewayTokenEntity>(),
-      systemLogs: BuiltList<SystemLogEntity>(),
-      loadedAt: 0,
-      updatedAt: 0,
-      archivedAt: 0,
-      isDeleted: false,
-      createdUserId: '',
-      assignedUserId: user?.id ?? '',
-      createdAt: 0,
-      documents: BuiltList<DocumentEntity>(),
-      clientHash: '',
-    );
+        id: id ?? BaseEntity.nextId,
+        isChanged: false,
+        settings: SettingsEntity(),
+        name: '',
+        displayName: '',
+        balance: 0,
+        creditBalance: 0,
+        paidToDate: 0,
+        lastLogin: 0,
+        address1: '',
+        address2: '',
+        city: '',
+        state: '',
+        postalCode: '',
+        countryId: '',
+        phone: '',
+        privateNotes: '',
+        publicNotes: '',
+        website: '',
+        industryId: '',
+        sizeId: '',
+        vatNumber: '',
+        idNumber: '',
+        number: '',
+        shippingAddress1: '',
+        shippingAddress2: '',
+        shippingCity: '',
+        shippingState: '',
+        groupId: group?.id ?? '',
+        shippingPostalCode: '',
+        shippingCountryId: '',
+        customValue1: '',
+        customValue2: '',
+        customValue3: '',
+        customValue4: '',
+        contacts: BuiltList<ContactEntity>(
+          <ContactEntity>[ContactEntity().rebuild((b) => b..isPrimary = true)],
+        ),
+        activities: BuiltList<ActivityEntity>(),
+        ledger: BuiltList<LedgerEntity>(),
+        gatewayTokens: BuiltList<GatewayTokenEntity>(),
+        systemLogs: BuiltList<SystemLogEntity>(),
+        loadedAt: 0,
+        updatedAt: 0,
+        archivedAt: 0,
+        isDeleted: false,
+        createdUserId: '',
+        assignedUserId: user?.id ?? '',
+        createdAt: 0,
+        documents: BuiltList<DocumentEntity>(),
+        clientHash: '',
+        suffix: '',
+        legalBusinessName: '',
+        region: '',
+        phoneHome: '',
+        phoneMain: '',
+        phoneTollFree: '',
+        phoneCell: '',
+        fax: '',
+        email: '',
+        homeAddress1: '',
+        homeAddress2: '',
+        homeCity: '',
+        homeState: '',
+        homePostalCode: '',
+        homeCountryId: '',
+        headOfficeAddress1: '',
+        headOfficeAddress2: '',
+        headOfficeCity: '',
+        headOfficeState: '',
+        headOfficePostalCode: '',
+        headOfficeCountryId: '',
+        mainAddress1: '',
+        mainAddress2: '',
+        mainCity: '',
+        mainState: '',
+        mainPostalCode: '',
+        mainCountryId: '');
   }
 
   ClientEntity._();
@@ -294,6 +321,104 @@ abstract class ClientEntity extends Object
 
   @BuiltValueField(wireName: 'custom_value4')
   String get customValue4;
+
+  @nullable
+  String get suffix;
+
+  @nullable
+  @BuiltValueField(wireName: 'legal_business_name')
+  String get legalBusinessName;
+
+  @nullable
+  String get email;
+
+  @nullable
+  String get region;
+
+  @nullable
+  String get fax;
+
+  @nullable
+  @BuiltValueField(wireName: 'phone_home')
+  String get phoneHome;
+
+  @nullable
+  @BuiltValueField(wireName: 'phone_main')
+  String get phoneMain;
+
+  @nullable
+  @BuiltValueField(wireName: 'phone_toll_free')
+  String get phoneTollFree;
+
+  @nullable
+  @BuiltValueField(wireName: 'phone_cell')
+  String get phoneCell;
+
+  @nullable
+  @BuiltValueField(wireName: 'home_address1')
+  String get homeAddress1;
+
+  @nullable
+  @BuiltValueField(wireName: 'home_address2')
+  String get homeAddress2;
+
+  @nullable
+  @BuiltValueField(wireName: 'home_city')
+  String get homeCity;
+
+  @nullable
+  @BuiltValueField(wireName: 'home_state')
+  String get homeState;
+
+  @nullable
+  @BuiltValueField(wireName: 'home_postal_code')
+  String get homePostalCode;
+
+  @nullable
+  @BuiltValueField(wireName: 'home_country_id')
+  String get homeCountryId;
+
+  @nullable
+  @BuiltValueField(wireName: 'head_office_address1')
+  String get headOfficeAddress1;
+
+  @nullable
+  @BuiltValueField(wireName: 'head_office_address2')
+  String get headOfficeAddress2;
+
+  @nullable
+  @BuiltValueField(wireName: 'head_office_city')
+  String get headOfficeCity;
+
+  @nullable
+  @BuiltValueField(wireName: 'head_office_state')
+  String get headOfficeState;
+
+  @nullable
+  @BuiltValueField(wireName: 'head_office_postal_code')
+  String get headOfficePostalCode;
+
+  @nullable
+  @BuiltValueField(wireName: 'head_office_country_id')
+  String get headOfficeCountryId;
+
+  @BuiltValueField(wireName: 'main_address1')
+  String get mainAddress1;
+
+  @BuiltValueField(wireName: 'main_address2')
+  String get mainAddress2;
+
+  @BuiltValueField(wireName: 'main_city')
+  String get mainCity;
+
+  @BuiltValueField(wireName: 'main_state')
+  String get mainState;
+
+  @BuiltValueField(wireName: 'main_postal_code')
+  String get mainPostalCode;
+
+  @BuiltValueField(wireName: 'main_country_id')
+  String get mainCountryId;
 
   BuiltList<ContactEntity> get contacts;
 
@@ -769,6 +894,7 @@ abstract class ClientEntity extends Object
   static Serializer<ClientEntity> get serializer => _$clientEntitySerializer;
 }
 
+/*
 class ContactFields {
   static const String fullName = 'full_name';
   static const String firstName = 'first_name';
@@ -940,3 +1066,4 @@ abstract class ContactEntity extends Object
 
   static Serializer<ContactEntity> get serializer => _$contactEntitySerializer;
 }
+*/

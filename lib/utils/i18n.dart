@@ -30,6 +30,18 @@ mixin LocalizationsProvider on LocaleCodeAware {
       'enable_touch_events_help': 'Support drag events to scroll',
       'after_saving': 'After Saving',
       'view_record': 'View Record',
+      'contact': 'Contact',
+      'first_name,last_name,email': 'Contacts',
+      'new_contact': 'New Contact',
+      'edit_contact': 'Edit Contact',
+      'created_contact': 'Successfully created contact',
+      'updated_contact': 'Successfully updated contact',
+      'archived_contact': 'Successfully archived contact',
+      'deleted_contact': 'Successfully deleted contact',
+      'removed_contact': 'Successfully removed contact',
+      'restored_contact': 'Successfully restored contact',
+      'search_contact': 'Search Contact',
+
       'enable_email_markdown': 'Enable Email Markdown',
       'enable_email_markdown_help': 'Use visual markdown editor for emails',
       'enable_pdf_markdown': 'Enable PDF Markdown',
@@ -799,6 +811,7 @@ mixin LocalizationsProvider on LocaleCodeAware {
       'search_designs': 'Search :count Designs',
       'search_invoices': 'Search :count Invoices',
       'search_clients': 'Search :count Clients',
+      'search_contacts': 'Search :count Contacts',
       'search_products': 'Search :count Products',
       'search_quotes': 'Search :count Quotes',
       'search_credits': 'Search :count Credits',
@@ -2003,6 +2016,38 @@ mixin LocalizationsProvider on LocaleCodeAware {
       'transaction_id': 'Transaction ID',
       'status_color_theme': 'Status Color Theme',
       'load_color_theme': 'Load Color Theme',
+
+      'phone_home': 'Phone Home',
+      'phone_main': 'Phone Main',
+      'phone_toll_free': 'Phone Toll Free',
+      'phone_cell': 'Phone Cell',
+      'suffix': 'Suffix',
+      'fax': 'Fax',
+      'legal_business_name': 'Legal Business Name',
+      'region': 'Region',
+
+      'home_address': 'Home Address',
+      'main_address': 'Main Address',
+      'head_office_address': 'Head Office Address',
+
+      'home_address1': 'Home Street',
+      'home_address2': 'Home Apt/Suite',
+      'home_city': 'Home City',
+      'home_state': 'Home State/Province',
+      'home_postal_code': 'Home Postal Code',
+      'home_country': 'Home Country',
+      'head_office_address1': 'Head Office Street',
+      'head_office_address2': 'Head Office Apt/Suite',
+      'head_office_city': 'Head Office City',
+      'head_office_state': 'Head Office State/Province',
+      'head_office_postal_code': 'Head Office Postal Code',
+      'head_office_country': 'Head Office Country',
+      'main_address1': 'Main Street',
+      'main_address2': 'Main Apt/Suite',
+      'main_city': 'Main City',
+      'main_state': 'Main State/Province',
+      'main_postal_code': 'Main Postal Code',
+      'main_country': 'Main Country',
     },
     'sq': {
       'view_task': 'View Task',
@@ -2795,6 +2840,7 @@ mixin LocalizationsProvider on LocaleCodeAware {
       'search_designs': 'Search Designs',
       'search_invoices': 'Search Invoices',
       'search_clients': 'Search Clients',
+      'search_contacts': 'Search Contacts',
       'search_products': 'Search Products',
       'search_quotes': 'Search Quotes',
       'search_credits': 'Search Credits',
@@ -4787,6 +4833,7 @@ mixin LocalizationsProvider on LocaleCodeAware {
       'search_designs': 'البحث عن التصاميم',
       'search_invoices': 'البحث عن الفواتير',
       'search_clients': 'البحث عن العملاء',
+      'search_contacts': 'Search Contacts',
       'search_products': 'البحث عن المنتجات',
       'search_quotes': 'البحث في العروض',
       'search_credits': 'البحث عن الأرصدة',
@@ -6776,6 +6823,7 @@ mixin LocalizationsProvider on LocaleCodeAware {
       'search_designs': 'Search Designs',
       'search_invoices': 'Search Invoices',
       'search_clients': 'Search Clients',
+      'search_contacts': 'Search Contacts',
       'search_products': 'Search Products',
       'search_quotes': 'Search Quotes',
       'search_credits': 'Search Credits',
@@ -10740,6 +10788,7 @@ mixin LocalizationsProvider on LocaleCodeAware {
       'search_designs': 'Search Designs',
       'search_invoices': 'Search Invoices',
       'search_clients': 'Search Clients',
+      'search_contacts': 'Search Contacts',
       'search_products': 'Search Products',
       'search_quotes': 'Search Quotes',
       'search_credits': 'Search Credits',
@@ -70363,6 +70412,52 @@ mixin LocalizationsProvider on LocaleCodeAware {
   String get details => _localizedValues[localeCode]['details'] ?? '';
 
   String get phone => _localizedValues[localeCode]['phone'] ?? '';
+  String get phoneHome => _localizedValues[localeCode]['phone_home'] ?? '';
+  String get phoneMain => _localizedValues[localeCode]['phone_main'] ?? '';
+  String get phoneTollFree =>
+      _localizedValues[localeCode]['phone_toll_free'] ?? '';
+  String get phoneCell => _localizedValues[localeCode]['phone_cell'] ?? '';
+  String get suffix => _localizedValues[localeCode]['suffix'] ?? '';
+  String get fax => _localizedValues[localeCode]['fax'] ?? '';
+  String get legalBusinessName =>
+      _localizedValues[localeCode]['legal_business_name'] ?? '';
+  String get region => _localizedValues[localeCode]['region'] ?? '';
+
+  String get homeAddress => _localizedValues[localeCode]['home_address'] ?? '';
+  String get mainAddress => _localizedValues[localeCode]['main_address'] ?? '';
+  String get headOfficeAddress =>
+      _localizedValues[localeCode]['head_office_address'] ?? '';
+
+  String get homeAddress1 =>
+      _localizedValues[localeCode]['home_address1'] ?? '';
+  String get homeAddress2 =>
+      _localizedValues[localeCode]['home_address2'] ?? '';
+  String get homeCity => _localizedValues[localeCode]['home_city'] ?? '';
+  String get homeState => _localizedValues[localeCode]['home_state'] ?? '';
+  String get homePostalCode =>
+      _localizedValues[localeCode]['home_postal_code'] ?? '';
+  String get homeCountry => _localizedValues[localeCode]['home_country'] ?? '';
+  String get mainAddress1 =>
+      _localizedValues[localeCode]['main_address1'] ?? '';
+  String get mainAddress2 =>
+      _localizedValues[localeCode]['main_address2'] ?? '';
+  String get mainCity => _localizedValues[localeCode]['main_city'] ?? '';
+  String get mainState => _localizedValues[localeCode]['main_state'] ?? '';
+  String get mainPostalCode =>
+      _localizedValues[localeCode]['main_postal_code'] ?? '';
+  String get mainCountry => _localizedValues[localeCode]['main_country'] ?? '';
+  String get headOfficeAddress1 =>
+      _localizedValues[localeCode]['head_office_address1'] ?? '';
+  String get headOfficeAddress2 =>
+      _localizedValues[localeCode]['head_office_address2'] ?? '';
+  String get headOfficeCity =>
+      _localizedValues[localeCode]['head_office_city'] ?? '';
+  String get headOfficeState =>
+      _localizedValues[localeCode]['head_office_state'] ?? '';
+  String get headOfficePostalCode =>
+      _localizedValues[localeCode]['head_office_postal_code'] ?? '';
+  String get headOfficeCountry =>
+      _localizedValues[localeCode]['head_office_country'] ?? '';
 
   String get website => _localizedValues[localeCode]['website'] ?? '';
 
@@ -70380,7 +70475,7 @@ mixin LocalizationsProvider on LocaleCodeAware {
   String get couldNotLaunch =>
       _localizedValues[localeCode]['could_not_launch'] ?? '';
 
-  String get contacts => _localizedValues[localeCode]['contacts'] ?? '';
+  // String get contacts => _localizedValues[localeCode]['contacts'] ?? '';
 
   String get additional => _localizedValues[localeCode]['additional'] ?? '';
 
@@ -70643,7 +70738,7 @@ mixin LocalizationsProvider on LocaleCodeAware {
 
   String get addItem => _localizedValues[localeCode]['add_item'] ?? '';
 
-  String get contact => _localizedValues[localeCode]['contact'] ?? '';
+  // String get contact => _localizedValues[localeCode]['contact'] ?? '';
 
   String get workPhone => _localizedValues[localeCode]['work_phone'] ?? '';
 
@@ -73004,6 +73099,8 @@ mixin LocalizationsProvider on LocaleCodeAware {
 
   String get searchClients =>
       _localizedValues[localeCode]['search_clients'] ?? '';
+  String get searchContacts =>
+      _localizedValues[localeCode]['search_contacts'] ?? '';
 
   String get searchProducts =>
       _localizedValues[localeCode]['search_products'] ?? '';
@@ -74999,6 +75096,36 @@ mixin LocalizationsProvider on LocaleCodeAware {
       _localizedValues['en']['update_project'];
 
   // STARTER: lang field - do not remove comment
+  String get contact =>
+      _localizedValues[localeCode]['contact'] ??
+      _localizedValues['en']['contact'];
+  String get contacts =>
+      _localizedValues[localeCode]['first_name,last_name,email'] ??
+      _localizedValues['en']['first_name,last_name,email'];
+  String get newContact =>
+      _localizedValues[localeCode]['new_contact'] ??
+      _localizedValues['en']['new_contact'];
+  String get createdContact =>
+      _localizedValues[localeCode]['created_contact'] ??
+      _localizedValues['en']['created_contact'];
+  String get updatedContact =>
+      _localizedValues[localeCode]['updated_contact'] ??
+      _localizedValues['en']['updated_contact'];
+  String get archivedContact =>
+      _localizedValues[localeCode]['archived_contact'] ??
+      _localizedValues['en']['archived_contact'];
+  String get deletedContact =>
+      _localizedValues[localeCode]['deleted_contact'] ??
+      _localizedValues['en']['deleted_contact'];
+  String get restoredContact =>
+      _localizedValues[localeCode]['restored_contact'] ??
+      _localizedValues['en']['restored_contact'];
+  String get editContact =>
+      _localizedValues[localeCode]['edit_contact'] ??
+      _localizedValues['en']['edit_contact'];
+  String get searchContact =>
+      _localizedValues[localeCode]['search_contact'] ??
+      _localizedValues['en']['search_contact'];
 
   String lookup(String key) {
     final lookupKey = toSnakeCase(key);

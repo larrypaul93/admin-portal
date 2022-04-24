@@ -94,6 +94,10 @@ import 'package:invoiceninja_flutter/utils/localization.dart';
 import 'package:invoiceninja_flutter/utils/platforms.dart';
 
 // STARTER: import - do not remove comment
+import 'package:invoiceninja_flutter/ui/contact/contact_screen.dart';
+import 'package:invoiceninja_flutter/ui/contact/edit/contact_edit_vm.dart';
+import 'package:invoiceninja_flutter/ui/contact/view/contact_view_vm.dart';
+import 'package:invoiceninja_flutter/ui/contact/contact_screen_vm.dart';
 
 import 'package:invoiceninja_flutter/utils/web_stub.dart'
     if (dart.library.html) 'package:invoiceninja_flutter/utils/web.dart';
@@ -443,6 +447,13 @@ class InvoiceNinjaAppState extends State<InvoiceNinjaApp> {
                         ClientViewScreen.route: (context) => ClientViewScreen(),
                         ClientEditScreen.route: (context) => ClientEditScreen(),
                         ClientPdfScreen.route: (context) => ClientPdfScreen(),
+                        // ContactScreen.route: (context) =>
+                        //     ContactScreenBuilder(),
+                        // ContactViewScreen.route: (context) =>
+                        //     ContactViewScreen(),
+                        // ContactEditScreen.route: (context) =>
+                        //     ContactEditScreen(),
+                        // ContactScreen.route:(context) => ContactScreenBuilder(),
                         InvoiceScreen.route: (context) =>
                             InvoiceScreenBuilder(),
                         InvoiceViewScreen.route: (context) =>
@@ -490,6 +501,13 @@ class InvoiceNinjaAppState extends State<InvoiceNinjaApp> {
                         QuoteEmailScreen.route: (context) => QuoteEmailScreen(),
                         QuotePdfScreen.route: (context) => QuotePdfScreen(),
                         // STARTER: routes - do not remove comment
+                        ContactScreen.route: (context) =>
+                            ContactScreenBuilder(),
+                        ContactViewScreen.route: (context) =>
+                            ContactViewScreen(),
+                        ContactEditScreen.route: (context) =>
+                            ContactEditScreen(),
+
                         RecurringExpenseScreen.route: (context) =>
                             RecurringExpenseScreenBuilder(),
                         RecurringExpenseViewScreen.route: (context) =>

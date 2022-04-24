@@ -30,6 +30,7 @@ const EntityType _$gateway = const EntityType._('gateway');
 const EntityType _$gatewayToken = const EntityType._('gatewayToken');
 const EntityType _$invoiceItem = const EntityType._('invoiceItem');
 const EntityType _$design = const EntityType._('design');
+const EntityType _$contact = const EntityType._('contact');
 const EntityType _$recurringExpense = const EntityType._('recurringExpense');
 const EntityType _$recurringQuote = const EntityType._('recurringQuote');
 const EntityType _$subscription = const EntityType._('subscription');
@@ -37,7 +38,6 @@ const EntityType _$webhook = const EntityType._('webhook');
 const EntityType _$token = const EntityType._('token');
 const EntityType _$paymentTerm = const EntityType._('paymentTerm');
 const EntityType _$quoteItem = const EntityType._('quoteItem');
-const EntityType _$contact = const EntityType._('contact');
 const EntityType _$vendorContact = const EntityType._('vendorContact');
 const EntityType _$country = const EntityType._('country');
 const EntityType _$currency = const EntityType._('currency');
@@ -101,6 +101,8 @@ EntityType _$typeValueOf(String name) {
       return _$invoiceItem;
     case 'design':
       return _$design;
+    case 'contact':
+      return _$contact;
     case 'recurringExpense':
       return _$recurringExpense;
     case 'recurringQuote':
@@ -115,8 +117,6 @@ EntityType _$typeValueOf(String name) {
       return _$paymentTerm;
     case 'quoteItem':
       return _$quoteItem;
-    case 'contact':
-      return _$contact;
     case 'vendorContact':
       return _$vendorContact;
     case 'country':
@@ -172,6 +172,7 @@ final BuiltSet<EntityType> _$typeValues =
   _$gatewayToken,
   _$invoiceItem,
   _$design,
+  _$contact,
   _$recurringExpense,
   _$recurringQuote,
   _$subscription,
@@ -179,7 +180,6 @@ final BuiltSet<EntityType> _$typeValues =
   _$token,
   _$paymentTerm,
   _$quoteItem,
-  _$contact,
   _$vendorContact,
   _$country,
   _$currency,

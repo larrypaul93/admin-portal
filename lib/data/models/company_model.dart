@@ -11,6 +11,7 @@ import 'package:invoiceninja_flutter/.env.dart';
 import 'package:invoiceninja_flutter/constants.dart';
 import 'package:invoiceninja_flutter/data/models/account_model.dart';
 import 'package:invoiceninja_flutter/data/models/company_gateway_model.dart';
+import 'package:invoiceninja_flutter/data/models/contact_model.dart';
 import 'package:invoiceninja_flutter/data/models/group_model.dart';
 import 'package:invoiceninja_flutter/data/models/models.dart';
 import 'package:invoiceninja_flutter/data/models/payment_term_model.dart';
@@ -113,6 +114,7 @@ abstract class CompanyEntity extends Object
       customFields: BuiltMap<String, String>(),
       activities: BuiltList<ActivityEntity>(),
       clients: BuiltList<ClientEntity>(),
+      contacts: BuiltList<ContactEntity>(),
       products: BuiltList<ProductEntity>(),
       invoices: BuiltList<InvoiceEntity>(),
       recurringInvoices: BuiltList<InvoiceEntity>(),
@@ -274,6 +276,7 @@ abstract class CompanyEntity extends Object
   BuiltList<UserEntity> get users;
 
   BuiltList<ClientEntity> get clients;
+  BuiltList<ContactEntity> get contacts;
 
   BuiltList<ProductEntity> get products;
 

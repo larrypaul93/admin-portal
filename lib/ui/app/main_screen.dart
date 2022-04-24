@@ -4,6 +4,10 @@ import 'package:flutter/material.dart';
 // Package imports:
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:invoiceninja_flutter/ui/app/app_title_bar.dart';
+import 'package:invoiceninja_flutter/ui/contact/contact_screen.dart';
+import 'package:invoiceninja_flutter/ui/contact/contact_screen_vm.dart';
+import 'package:invoiceninja_flutter/ui/contact/edit/contact_edit_vm.dart';
+import 'package:invoiceninja_flutter/ui/contact/view/contact_view_vm.dart';
 import 'package:invoiceninja_flutter/utils/platforms.dart';
 import 'package:redux/redux.dart';
 
@@ -130,6 +134,12 @@ class MainScreen extends StatelessWidget {
         case ClientScreen.route:
           screen = EntityScreens(
             entityType: EntityType.client,
+            editingFilterEntity: editingFilterEntity,
+          );
+          break;
+        case ContactScreen.route:
+          screen = EntityScreens(
+            entityType: EntityType.contact,
             editingFilterEntity: editingFilterEntity,
           );
           break;
@@ -403,6 +413,9 @@ class EntityScreens extends StatelessWidget {
         case ClientScreen.route:
           child = isPdf ? ClientPdfScreen() : ClientEditScreen();
           break;
+        case ContactScreen.route:
+          child = ContactEditScreen();
+          break;
         case VendorScreen.route:
           child = VendorEditScreen();
           break;
@@ -428,6 +441,9 @@ class EntityScreens extends StatelessWidget {
       switch (editEntityType) {
         case EntityType.client:
           child = ClientEditScreen();
+          break;
+        case EntityType.contact:
+          child = ContactEditScreen();
           break;
         case EntityType.product:
           child = ProductEditScreen();
@@ -478,6 +494,9 @@ class EntityScreens extends StatelessWidget {
         switch (previewEntityType) {
           case EntityType.client:
             child = ClientViewScreen();
+            break;
+          case EntityType.contact:
+            child = ContactViewScreen();
             break;
           case EntityType.product:
             child = ProductViewScreen();
@@ -546,6 +565,11 @@ class EntityScreens extends StatelessWidget {
             leftFilterChild = editingFilterEntity && !uiState.isEditing
                 ? ClientEditScreen()
                 : ClientViewScreen(isFilter: true);
+            break;
+          case EntityType.contact:
+            leftFilterChild = editingFilterEntity && !uiState.isEditing
+                ? ContactEditScreen()
+                : ContactViewScreen(isFilter: true);
             break;
           case EntityType.invoice:
             leftFilterChild = editingFilterEntity && !uiState.isEditing
@@ -631,6 +655,9 @@ class EntityScreens extends StatelessWidget {
       switch (entityType) {
         case EntityType.client:
           listWidget = ClientScreenBuilder();
+          break;
+        case EntityType.contact:
+          listWidget = ContactScreenBuilder();
           break;
         case EntityType.product:
           listWidget = ProductScreenBuilder();

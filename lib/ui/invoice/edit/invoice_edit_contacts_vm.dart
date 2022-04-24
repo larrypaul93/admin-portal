@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 // Package imports:
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:invoiceninja_flutter/data/models/contact_model.dart';
 import 'package:redux/redux.dart';
 
 // Project imports:

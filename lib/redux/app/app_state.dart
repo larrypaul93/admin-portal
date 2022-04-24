@@ -8,6 +8,7 @@ import 'package:flutter/foundation.dart';
 import 'package:built_collection/built_collection.dart';
 import 'package:built_value/built_value.dart';
 import 'package:built_value/serializer.dart';
+import 'package:invoiceninja_flutter/ui/contact/contact_screen.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
 // Project imports:
@@ -88,6 +89,9 @@ import 'package:invoiceninja_flutter/utils/formatting.dart';
 import 'package:invoiceninja_flutter/utils/platforms.dart';
 
 // STARTER: import - do not remove comment
+import 'package:invoiceninja_flutter/redux/contact/contact_state.dart';
+import 'package:invoiceninja_flutter/ui/contact/edit/contact_edit_vm.dart';
+import 'package:invoiceninja_flutter/redux/contact/contact_selectors.dart';
 
 part 'app_state.g.dart';
 
@@ -288,6 +292,9 @@ abstract class AppState implements Built<AppState, AppStateBuilder> {
       case EntityType.invoice:
         return invoiceState.map;
       // STARTER: states switch map - do not remove comment
+      case EntityType.contact:
+        return contactState.map;
+
       case EntityType.recurringExpense:
         return recurringExpenseState.map;
 
@@ -368,6 +375,9 @@ abstract class AppState implements Built<AppState, AppStateBuilder> {
       case EntityType.invoice:
         return invoiceState.list;
       // STARTER: states switch list - do not remove comment
+      case EntityType.contact:
+        return contactState.list;
+
       case EntityType.recurringExpense:
         return recurringExpenseState.list;
 
@@ -437,6 +447,9 @@ abstract class AppState implements Built<AppState, AppStateBuilder> {
       case EntityType.invoice:
         return invoiceUIState;
       // STARTER: states switch - do not remove comment
+      case EntityType.contact:
+        return contactUIState;
+
       case EntityType.recurringExpense:
         return recurringExpenseUIState;
       case EntityType.subscription:
@@ -507,6 +520,10 @@ abstract class AppState implements Built<AppState, AppStateBuilder> {
   ListUIState get invoiceListState => uiState.invoiceUIState.listUIState;
 
   // STARTER: state getters - do not remove comment
+  ContactState get contactState => userCompanyState.contactState;
+  ListUIState get contactListState => uiState.contactUIState.listUIState;
+  ContactUIState get contactUIState => uiState.contactUIState;
+
   RecurringExpenseState get recurringExpenseState =>
       userCompanyState.recurringExpenseState;
   ListUIState get recurringExpenseListState =>
@@ -677,6 +694,9 @@ abstract class AppState implements Built<AppState, AppStateBuilder> {
       case CreditEditScreen.route:
         return hasCreditChanges(creditUIState.editing, creditState.map);
       // STARTER: has changes - do not remove comment
+      case ContactEditScreen.route:
+        return hasContactChanges(contactUIState.editing, contactState.map);
+
       case RecurringExpenseEditScreen.route:
         return hasRecurringExpenseChanges(
             recurringExpenseUIState.editing, recurringExpenseState.map);
@@ -840,6 +860,7 @@ abstract class AppState implements Built<AppState, AppStateBuilder> {
       RecurringInvoiceScreen.route,
       RecurringExpenseScreen.route,
       TaskScreen.route,
+      ContactScreen.route
     ].contains(mainRoute)) {
       if (isEmail || isPdf) {
         isFullScreen = true;
@@ -848,6 +869,8 @@ abstract class AppState implements Built<AppState, AppStateBuilder> {
           isFullScreen = prefState.isEditorFullScreen(EntityType.task);
         } else if (mainRoute == ClientScreen.route) {
           isFullScreen = prefState.isEditorFullScreen(EntityType.client);
+        } else if (mainRoute == ContactScreen.route) {
+          isFullScreen = prefState.isEditorFullScreen(EntityType.contact);
         } else if (mainRoute == VendorScreen.route) {
           isFullScreen = prefState.isEditorFullScreen(EntityType.vendor);
         } else if (mainRoute == ExpenseScreen.route ||

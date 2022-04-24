@@ -55,6 +55,9 @@ class _$UserCompanyStateSerializer
       'quoteState',
       serializers.serialize(object.quoteState,
           specifiedType: const FullType(QuoteState)),
+      'contactState',
+      serializers.serialize(object.contactState,
+          specifiedType: const FullType(ContactState)),
       'recurringExpenseState',
       serializers.serialize(object.recurringExpenseState,
           specifiedType: const FullType(RecurringExpenseState)),
@@ -169,6 +172,10 @@ class _$UserCompanyStateSerializer
         case 'quoteState':
           result.quoteState.replace(serializers.deserialize(value,
               specifiedType: const FullType(QuoteState)) as QuoteState);
+          break;
+        case 'contactState':
+          result.contactState.replace(serializers.deserialize(value,
+              specifiedType: const FullType(ContactState)) as ContactState);
           break;
         case 'recurringExpenseState':
           result.recurringExpenseState.replace(serializers.deserialize(value,
@@ -417,6 +424,8 @@ class _$UserCompanyState extends UserCompanyState {
   @override
   final QuoteState quoteState;
   @override
+  final ContactState contactState;
+  @override
   final RecurringExpenseState recurringExpenseState;
   @override
   final SubscriptionState subscriptionState;
@@ -462,6 +471,7 @@ class _$UserCompanyState extends UserCompanyState {
       this.projectState,
       this.paymentState,
       this.quoteState,
+      this.contactState,
       this.recurringExpenseState,
       this.subscriptionState,
       this.taskStatusState,
@@ -499,6 +509,8 @@ class _$UserCompanyState extends UserCompanyState {
         paymentState, 'UserCompanyState', 'paymentState');
     BuiltValueNullFieldError.checkNotNull(
         quoteState, 'UserCompanyState', 'quoteState');
+    BuiltValueNullFieldError.checkNotNull(
+        contactState, 'UserCompanyState', 'contactState');
     BuiltValueNullFieldError.checkNotNull(
         recurringExpenseState, 'UserCompanyState', 'recurringExpenseState');
     BuiltValueNullFieldError.checkNotNull(
@@ -553,6 +565,7 @@ class _$UserCompanyState extends UserCompanyState {
         projectState == other.projectState &&
         paymentState == other.paymentState &&
         quoteState == other.quoteState &&
+        contactState == other.contactState &&
         recurringExpenseState == other.recurringExpenseState &&
         subscriptionState == other.subscriptionState &&
         taskStatusState == other.taskStatusState &&
@@ -590,12 +603,12 @@ class _$UserCompanyState extends UserCompanyState {
                                                                 $jc(
                                                                     $jc(
                                                                         $jc(
-                                                                            $jc($jc($jc($jc($jc($jc($jc($jc(0, lastUpdated.hashCode), userCompany.hashCode), documentState.hashCode), productState.hashCode), clientState.hashCode), invoiceState.hashCode), expenseState.hashCode),
-                                                                                vendorState.hashCode),
-                                                                            taskState.hashCode),
-                                                                        projectState.hashCode),
-                                                                    paymentState.hashCode),
-                                                                quoteState.hashCode),
+                                                                            $jc($jc($jc($jc($jc($jc($jc($jc($jc(0, lastUpdated.hashCode), userCompany.hashCode), documentState.hashCode), productState.hashCode), clientState.hashCode), invoiceState.hashCode), expenseState.hashCode), vendorState.hashCode),
+                                                                                taskState.hashCode),
+                                                                            projectState.hashCode),
+                                                                        paymentState.hashCode),
+                                                                    quoteState.hashCode),
+                                                                contactState.hashCode),
                                                             recurringExpenseState.hashCode),
                                                         subscriptionState.hashCode),
                                                     taskStatusState.hashCode),
@@ -627,6 +640,7 @@ class _$UserCompanyState extends UserCompanyState {
           ..add('projectState', projectState)
           ..add('paymentState', paymentState)
           ..add('quoteState', quoteState)
+          ..add('contactState', contactState)
           ..add('recurringExpenseState', recurringExpenseState)
           ..add('subscriptionState', subscriptionState)
           ..add('taskStatusState', taskStatusState)
@@ -717,6 +731,12 @@ class UserCompanyStateBuilder
       _$this._quoteState ??= new QuoteStateBuilder();
   set quoteState(QuoteStateBuilder quoteState) =>
       _$this._quoteState = quoteState;
+
+  ContactStateBuilder _contactState;
+  ContactStateBuilder get contactState =>
+      _$this._contactState ??= new ContactStateBuilder();
+  set contactState(ContactStateBuilder contactState) =>
+      _$this._contactState = contactState;
 
   RecurringExpenseStateBuilder _recurringExpenseState;
   RecurringExpenseStateBuilder get recurringExpenseState =>
@@ -820,6 +840,7 @@ class UserCompanyStateBuilder
       _projectState = $v.projectState.toBuilder();
       _paymentState = $v.paymentState.toBuilder();
       _quoteState = $v.quoteState.toBuilder();
+      _contactState = $v.contactState.toBuilder();
       _recurringExpenseState = $v.recurringExpenseState.toBuilder();
       _subscriptionState = $v.subscriptionState.toBuilder();
       _taskStatusState = $v.taskStatusState.toBuilder();
@@ -869,6 +890,7 @@ class UserCompanyStateBuilder
               projectState: projectState.build(),
               paymentState: paymentState.build(),
               quoteState: quoteState.build(),
+              contactState: contactState.build(),
               recurringExpenseState: recurringExpenseState.build(),
               subscriptionState: subscriptionState.build(),
               taskStatusState: taskStatusState.build(),
@@ -908,6 +930,8 @@ class UserCompanyStateBuilder
         paymentState.build();
         _$failedField = 'quoteState';
         quoteState.build();
+        _$failedField = 'contactState';
+        contactState.build();
         _$failedField = 'recurringExpenseState';
         recurringExpenseState.build();
         _$failedField = 'subscriptionState';

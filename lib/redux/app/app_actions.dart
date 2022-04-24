@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 // Package imports:
 import 'package:built_collection/built_collection.dart';
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:invoiceninja_flutter/data/models/contact_model.dart';
 import 'package:redux/redux.dart';
 
 // Project imports:
@@ -64,6 +65,7 @@ import 'package:invoiceninja_flutter/utils/localization.dart';
 import 'package:invoiceninja_flutter/utils/platforms.dart';
 
 // STARTER: import - do not remove comment
+import 'package:invoiceninja_flutter/redux/contact/contact_actions.dart';
 
 class PersistUI {}
 
@@ -369,6 +371,10 @@ void viewEntitiesByType({
             action = ViewGroupList();
             break;
           // STARTER: view list - do not remove comment
+          case EntityType.contact:
+            action = ViewContactList();
+            break;
+
           case EntityType.recurringExpense:
             action = ViewRecurringExpenseList();
             break;
@@ -564,6 +570,13 @@ void viewEntityById({
             ));
             break;
           // STARTER: view - do not remove comment
+          case EntityType.contact:
+            store.dispatch(ViewContact(
+              contactId: entityId,
+              force: force,
+            ));
+            break;
+
           case EntityType.recurringExpense:
             store.dispatch(ViewRecurringExpense(
               recurringExpenseId: entityId,
@@ -790,6 +803,13 @@ void createEntityByType({
             ));
             break;
           // STARTER: create type - do not remove comment
+          case EntityType.contact:
+            store.dispatch(EditContact(
+              force: force,
+              contact: ContactEntity(state: state),
+            ));
+            break;
+
           case EntityType.recurringExpense:
             store.dispatch(EditRecurringExpense(
               force: force,
@@ -1005,6 +1025,14 @@ void createEntity({
             ));
             break;
           // STARTER: create - do not remove comment
+          case EntityType.contact:
+            store.dispatch(EditContact(
+              contact: entity,
+              force: force,
+              completer: completer,
+            ));
+            break;
+
           case EntityType.recurringExpense:
             store.dispatch(EditRecurringExpense(
               recurringExpense: entity,
@@ -1193,6 +1221,10 @@ void editEntity({
             ));
             break;
           // STARTER: edit - do not remove comment
+          case EntityType.contact:
+            store.dispatch(EditContact(contact: entity, completer: completer));
+            break;
+
           case EntityType.recurringExpense:
             store.dispatch(EditRecurringExpense(
                 recurringExpense: entity, completer: completer));
@@ -1360,6 +1392,10 @@ void handleEntitiesActions(List<BaseEntity> entities, EntityAction action,
       handleDocumentAction(context, entities, action);
       break;
     // STARTER: actions - do not remove comment
+    case EntityType.contact:
+      handleContactAction(context, entities, action);
+      break;
+
     case EntityType.recurringExpense:
       handleRecurringExpenseAction(context, entities, action);
       break;

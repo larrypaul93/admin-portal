@@ -2,6 +2,7 @@
 import 'dart:io';
 
 // Flutter imports:
+import 'package:built_collection/built_collection.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
@@ -13,6 +14,7 @@ import 'package:invoiceninja_flutter/constants.dart';
 import 'package:invoiceninja_flutter/data/models/models.dart';
 import 'package:invoiceninja_flutter/redux/static/static_selectors.dart';
 import 'package:invoiceninja_flutter/ui/app/form_card.dart';
+import 'package:invoiceninja_flutter/ui/app/forms/app_dropdown_button.dart';
 import 'package:invoiceninja_flutter/ui/app/forms/custom_field.dart';
 import 'package:invoiceninja_flutter/ui/app/forms/decorated_form_field.dart';
 import 'package:invoiceninja_flutter/ui/app/forms/dynamic_selector.dart';
@@ -46,6 +48,34 @@ class ClientEditDetailsState extends State<ClientEditDetails> {
   final _custom3Controller = TextEditingController();
   final _custom4Controller = TextEditingController();
 
+  final _suffixController = TextEditingController();
+  final _legalBusinessNameController = TextEditingController();
+  final _regionController = TextEditingController();
+  final _emailController = TextEditingController();
+  final _phoneHomeController = TextEditingController();
+  final _phoneMainController = TextEditingController();
+  final _phoneTollFreeController = TextEditingController();
+  final _phoneCellController = TextEditingController();
+  final _faxController = TextEditingController();
+
+  final regions = <String>[
+    'GVRD',
+    'FVRD',
+    'RMOW',
+    'CRD',
+    'SCRD',
+    'SLRD',
+    'RDOS',
+    'GTA',
+    'SF'
+  ]
+      .map((option) => DropdownMenuItem<String>(
+            value: option,
+            child: Text(option),
+          ))
+      .toList();
+  // final _personalController = BoolController();
+
   final _debouncer = Debouncer();
   List<TextEditingController> _controllers;
 
@@ -62,6 +92,15 @@ class ClientEditDetailsState extends State<ClientEditDetails> {
       _custom2Controller,
       _custom3Controller,
       _custom4Controller,
+      _suffixController,
+      _legalBusinessNameController,
+      _emailController,
+      _phoneHomeController,
+      _phoneMainController,
+      _phoneTollFreeController,
+      _phoneCellController,
+      _faxController,
+      _regionController
     ];
 
     _controllers
@@ -78,6 +117,16 @@ class ClientEditDetailsState extends State<ClientEditDetails> {
     _custom2Controller.text = client.customValue2;
     _custom3Controller.text = client.customValue3;
     _custom4Controller.text = client.customValue4;
+
+    _suffixController.text = client.suffix;
+    _legalBusinessNameController.text = client.legalBusinessName;
+    _emailController.text = client.email;
+    _phoneHomeController.text = client.phoneHome;
+    _phoneMainController.text = client.phoneMain;
+    _phoneTollFreeController.text = client.phoneTollFree;
+    _phoneCellController.text = client.phoneCell;
+    _faxController.text = client.fax;
+    _regionController.text = client.region;
 
     _controllers
         .forEach((dynamic controller) => controller.addListener(_onChanged));
@@ -107,7 +156,16 @@ class ClientEditDetailsState extends State<ClientEditDetails> {
       ..customValue1 = _custom1Controller.text.trim()
       ..customValue2 = _custom2Controller.text.trim()
       ..customValue3 = _custom3Controller.text.trim()
-      ..customValue4 = _custom4Controller.text.trim());
+      ..customValue4 = _custom4Controller.text.trim()
+      ..suffix = _suffixController.text.trim()
+      ..legalBusinessName = _legalBusinessNameController.text.trim()
+      ..email = _emailController.text.trim()
+      ..phoneMain = _phoneMainController.text.trim()
+      ..phoneHome = _phoneHomeController.text.trim()
+      ..phoneCell = _phoneCellController.text.trim()
+      ..phoneTollFree = _phoneTollFreeController.text.trim()
+      // ..region = _regionController.text.trim()
+      ..fax = _faxController.text.trim());
     if (client != viewModel.client) {
       _debouncer.run(() {
         viewModel.onChanged(client);
@@ -201,6 +259,24 @@ class ClientEditDetailsState extends State<ClientEditDetails> {
                 )
               : null,
         ),
+        DecoratedFormField(
+          label: localization.suffix,
+          controller: _suffixController,
+          onSavePressed: viewModel.onSavePressed,
+          keyboardType: TextInputType.text,
+        ),
+        DecoratedFormField(
+          label: localization.legalBusinessName,
+          controller: _legalBusinessNameController,
+          onSavePressed: viewModel.onSavePressed,
+          keyboardType: TextInputType.text,
+        ),
+        AppDropdownButton(
+            labelText: localization.region,
+            value: client.region,
+            items: regions,
+            onChanged: (dynamic region) =>
+                viewModel.onChanged(client.rebuild((b) => b..region = region))),
         if (client.isOld)
           DecoratedFormField(
             label: localization.number,
@@ -242,6 +318,30 @@ class ClientEditDetailsState extends State<ClientEditDetails> {
         DecoratedFormField(
           label: localization.phone,
           controller: _phoneController,
+          keyboardType: TextInputType.phone,
+          onSavePressed: viewModel.onSavePressed,
+        ),
+        DecoratedFormField(
+          label: localization.phoneHome,
+          controller: _phoneHomeController,
+          keyboardType: TextInputType.phone,
+          onSavePressed: viewModel.onSavePressed,
+        ),
+        DecoratedFormField(
+          label: localization.phoneMain,
+          controller: _phoneMainController,
+          keyboardType: TextInputType.phone,
+          onSavePressed: viewModel.onSavePressed,
+        ),
+        DecoratedFormField(
+          label: localization.phoneCell,
+          controller: _phoneCellController,
+          keyboardType: TextInputType.phone,
+          onSavePressed: viewModel.onSavePressed,
+        ),
+        DecoratedFormField(
+          label: localization.phoneTollFree,
+          controller: _phoneTollFreeController,
           keyboardType: TextInputType.phone,
           onSavePressed: viewModel.onSavePressed,
         ),

@@ -3,6 +3,8 @@ import 'dart:async';
 
 // Package imports:
 import 'package:built_collection/built_collection.dart';
+import 'package:invoiceninja_flutter/data/models/contact_model.dart';
+import 'package:invoiceninja_flutter/redux/contact/contact_actions.dart';
 import 'package:redux/redux.dart';
 
 // Project imports:
@@ -64,6 +66,9 @@ final editingContactReducer = combineReducers<ContactEntity>([
     return action.contact ?? ContactEntity();
   }),
   TypedReducer<ContactEntity, EditContact>((contact, action) {
+    return action.contact ?? ContactEntity();
+  }),
+  TypedReducer<ContactEntity, EditClientContact>((contact, action) {
     return action.contact ?? ContactEntity();
   }),
 ]);
@@ -129,7 +134,7 @@ final editingReducer = combineReducers<ClientEntity>([
   TypedReducer<ClientEntity, DeleteContact>((client, action) {
     return client.rebuild((b) => b..contacts.removeAt(action.index));
   }),
-  TypedReducer<ClientEntity, UpdateContact>((client, action) {
+  TypedReducer<ClientEntity, UpdateClientContact>((client, action) {
     return client.rebuild((b) => b..contacts[action.index] = action.contact);
   }),
   TypedReducer<ClientEntity, ViewClient>((client, action) {

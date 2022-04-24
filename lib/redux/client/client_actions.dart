@@ -8,6 +8,7 @@ import 'package:flutter/widgets.dart';
 import 'package:built_collection/built_collection.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:http/http.dart';
+import 'package:invoiceninja_flutter/data/models/contact_model.dart';
 import 'package:invoiceninja_flutter/redux/document/document_actions.dart';
 import 'package:invoiceninja_flutter/utils/dialogs.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -55,8 +56,8 @@ class EditClient implements PersistUI, PersistPrefs {
   final bool force;
 }
 
-class EditContact implements PersistUI {
-  EditContact([this.contact]);
+class EditClientContact implements PersistUI {
+  EditClientContact(this.contact);
 
   final ContactEntity contact;
 }
@@ -148,8 +149,8 @@ class AddContact implements PersistUI {
   final ContactEntity contact;
 }
 
-class UpdateContact implements PersistUI {
-  UpdateContact({this.index, this.contact});
+class UpdateClientContact implements PersistUI {
+  UpdateClientContact({this.index, this.contact});
 
   final int index;
   final ContactEntity contact;

@@ -27,6 +27,10 @@ Serializers _$serializers = (new Serializers().toBuilder()
       ..add(CompanyItemResponse.serializer)
       ..add(CompanyPrefState.serializer)
       ..add(ContactEntity.serializer)
+      ..add(ContactItemResponse.serializer)
+      ..add(ContactListResponse.serializer)
+      ..add(ContactState.serializer)
+      ..add(ContactUIState.serializer)
       ..add(CountryEntity.serializer)
       ..add(CountryItemResponse.serializer)
       ..add(CountryListResponse.serializer)
@@ -220,6 +224,9 @@ Serializers _$serializers = (new Serializers().toBuilder()
           const FullType(BuiltList, const [const FullType(ContactEntity)]),
           () => new ListBuilder<ContactEntity>())
       ..addBuilderFactory(
+          const FullType(BuiltList, const [const FullType(ContactEntity)]),
+          () => new ListBuilder<ContactEntity>())
+      ..addBuilderFactory(
           const FullType(BuiltList, const [const FullType(ActivityEntity)]),
           () => new ListBuilder<ActivityEntity>())
       ..addBuilderFactory(
@@ -381,6 +388,9 @@ Serializers _$serializers = (new Serializers().toBuilder()
       ..addBuilderFactory(
           const FullType(BuiltList, const [const FullType(ClientEntity)]),
           () => new ListBuilder<ClientEntity>())
+      ..addBuilderFactory(
+          const FullType(BuiltList, const [const FullType(ContactEntity)]),
+          () => new ListBuilder<ContactEntity>())
       ..addBuilderFactory(
           const FullType(BuiltList, const [const FullType(ProductEntity)]),
           () => new ListBuilder<ProductEntity>())
@@ -610,6 +620,13 @@ Serializers _$serializers = (new Serializers().toBuilder()
             const FullType(CompanyGatewayEntity)
           ]),
           () => new MapBuilder<String, CompanyGatewayEntity>())
+      ..addBuilderFactory(
+          const FullType(BuiltList, const [const FullType(String)]),
+          () => new ListBuilder<String>())
+      ..addBuilderFactory(
+          const FullType(BuiltMap,
+              const [const FullType(String), const FullType(ContactEntity)]),
+          () => new MapBuilder<String, ContactEntity>())
       ..addBuilderFactory(
           const FullType(BuiltList, const [const FullType(String)]),
           () => new ListBuilder<String>())

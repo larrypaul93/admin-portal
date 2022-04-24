@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 
 // Package imports:
 import 'package:flutter_styled_toast/flutter_styled_toast.dart';
+import 'package:invoiceninja_flutter/data/models/contact_model.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 // Project imports:

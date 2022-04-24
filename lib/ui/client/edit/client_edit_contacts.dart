@@ -3,15 +3,22 @@ import 'package:flutter/material.dart';
 
 // Project imports:
 import 'package:invoiceninja_flutter/constants.dart';
+import 'package:invoiceninja_flutter/data/models/contact_model.dart';
 import 'package:invoiceninja_flutter/data/models/models.dart';
 import 'package:invoiceninja_flutter/ui/app/buttons/elevated_button.dart';
+import 'package:invoiceninja_flutter/ui/app/edit_scaffold.dart';
 import 'package:invoiceninja_flutter/ui/app/form_card.dart';
+import 'package:invoiceninja_flutter/ui/app/forms/app_dropdown_button.dart';
 import 'package:invoiceninja_flutter/ui/app/forms/custom_field.dart';
 import 'package:invoiceninja_flutter/ui/app/forms/decorated_form_field.dart';
 import 'package:invoiceninja_flutter/ui/app/responsive_padding.dart';
 import 'package:invoiceninja_flutter/ui/app/scrollable_listview.dart';
 import 'package:invoiceninja_flutter/ui/client/edit/client_edit_contacts_vm.dart';
 import 'package:invoiceninja_flutter/ui/client/edit/client_edit_vm.dart';
+import 'package:invoiceninja_flutter/ui/contact/edit/contact_edit.dart';
+import 'package:invoiceninja_flutter/ui/contact/edit/contact_edit_desktop.dart';
+import 'package:invoiceninja_flutter/ui/contact/edit/contact_edit_footer.dart';
+import 'package:invoiceninja_flutter/ui/contact/edit/contact_edit_vm.dart';
 import 'package:invoiceninja_flutter/utils/completers.dart';
 import 'package:invoiceninja_flutter/utils/dialogs.dart';
 import 'package:invoiceninja_flutter/utils/localization.dart';
@@ -34,10 +41,14 @@ class _ClientEditContactsState extends State<ClientEditContacts> {
   ContactEntity selectedContact;
 
   void _showContactEditor(ContactEntity contact, BuildContext context) {
+    final viewModel = widget.viewModel;
+    // viewModel.contact = contact;
+    // viewModel.onTap(contact);
+    // Navigator.pushNamed(context, ContactEditScreen.route);
+    // return;
     showDialog<ResponsivePadding>(
         context: context,
         builder: (BuildContext context) {
-          final viewModel = widget.viewModel;
           final client = viewModel.client;
 
           return ContactEditDetails(
@@ -63,7 +74,7 @@ class _ClientEditContactsState extends State<ClientEditContacts> {
 
     List<Widget> contacts;
 
-    if (client.contacts.length > 1) {
+    if (client.contacts.isNotEmpty) {
       contacts = client.contacts
           .map((contact) => ContactListTile(
                 contact: contact,
@@ -192,6 +203,26 @@ class ContactEditDetailsState extends State<ContactEditDetails> {
   final _custom3Controller = TextEditingController();
   final _custom4Controller = TextEditingController();
 
+  final regions = <String>[
+    'GVRD',
+    'FVRD',
+    'RMOW',
+    'CRD',
+    'SCRD',
+    'SLRD',
+    'RDOS',
+    'GTA',
+    'SF'
+  ]
+      .map((option) => DropdownMenuItem<String>(
+            value: option,
+            child: Text(option),
+          ))
+      .toList();
+
+  static final GlobalKey<FormState> _formKey =
+      GlobalKey<FormState>(debugLabel: '_clientContactEdit');
+
   final _debouncer = Debouncer();
   List<TextEditingController> _controllers = [];
   ContactEntity _contact;
@@ -204,6 +235,11 @@ class ContactEditDetailsState extends State<ContactEditDetails> {
     } else {
       widget.clientViewModel.onSavePressed(context);
     }
+  }
+
+  void updateContact(ContactEntity editedContact) {
+    setState(() => _contact = editedContact);
+    // final contact = editedContact;
   }
 
   @override
@@ -255,6 +291,7 @@ class ContactEditDetailsState extends State<ContactEditDetails> {
   }
 
   void _onChanged() {
+    // return;
     final viewModel = widget.viewModel;
     final contact = _contact = widget.contact.rebuild((b) => b
       ..firstName = _firstNameController.text.trim()
@@ -331,6 +368,18 @@ class ContactEditDetailsState extends State<ContactEditDetails> {
           keyboardType: TextInputType.phone,
           onSavePressed: (_) => _onDoneContactPressed(),
         ),
+        AppDropdownButton(
+            labelText: localization.region,
+            value: _contact.region,
+            items: regions,
+            onChanged: (dynamic region) {
+              setState(() {
+                _contact = _contact.rebuild((b) => b..region = region);
+              });
+              // viewModel.onChanged(_contact.rebuild((b) => b..region = region));
+              // print(contact.rebuild((b) => b..region = region));
+              // print(clientRegion);
+            }),
         CustomField(
           controller: _custom1Controller,
           field: CustomFieldType.contact1,
@@ -374,10 +423,24 @@ class ContactEditDetailsState extends State<ContactEditDetails> {
           ),
       ],
     );
+    // return ContactEdit(viewModel: viewModel);
 
     return widget.isDialog
         ? AlertDialog(
-            content: SingleChildScrollView(child: column),
+            insetPadding: EdgeInsets.zero,
+            content: Container(
+              child: ClientEditContactScreen(
+                  contact: _contact, contactState: this, viewModel: viewModel),
+              width: MediaQuery.of(context).size.width - 200,
+            ),
+            //   Container(
+            //  child:
+            // SingleChildScrollView(
+            //     child: ContactEditDesktop(viewModel: viewModel)),
+            //  padding: EdgeInsets.zero,
+            //  width: MediaQuery.of(context).size.width - 100,
+            // ),
+            // content: column,
             actions: [
               TextButton(
                 child: Text(localization.remove.toUpperCase()),

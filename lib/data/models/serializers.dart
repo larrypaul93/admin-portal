@@ -49,6 +49,8 @@ import 'package:invoiceninja_flutter/redux/vendor/vendor_state.dart';
 import 'package:invoiceninja_flutter/redux/webhook/webhook_state.dart';
 
 // STARTER: import - do not remove comment
+import 'package:invoiceninja_flutter/data/models/contact_model.dart';
+import 'package:invoiceninja_flutter/redux/contact/contact_state.dart';
 
 part 'serializers.g.dart';
 
@@ -113,6 +115,10 @@ part 'serializers.g.dart';
   TaxRateItemResponse,
   TaxRateListResponse,
   // STARTER: serializers - do not remove comment
+  ContactEntity,
+  ContactListResponse,
+  ContactItemResponse,
+
   SubscriptionEntity,
   SubscriptionListResponse,
   SubscriptionItemResponse,

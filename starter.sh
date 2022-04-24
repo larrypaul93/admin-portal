@@ -156,7 +156,7 @@ else
 
     # Create new module files
     declare -a files=(
-       #'./stubs/data/models/stub_model'
+       './stubs/data/models/stub_model'
        './stubs/data/repositories/stub_repository'
        './stubs/redux/stub/stub_actions'
        './stubs/redux/stub/stub_reducer'

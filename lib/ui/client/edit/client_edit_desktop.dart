@@ -7,6 +7,9 @@ import 'package:invoiceninja_flutter/ui/app/scrollable_listview.dart';
 import 'package:invoiceninja_flutter/ui/client/edit/client_edit_billing_address.dart';
 import 'package:invoiceninja_flutter/ui/client/edit/client_edit_contacts_vm.dart';
 import 'package:invoiceninja_flutter/ui/client/edit/client_edit_details.dart';
+import 'package:invoiceninja_flutter/ui/client/edit/client_edit_head_office_address.dart';
+import 'package:invoiceninja_flutter/ui/client/edit/client_edit_home_address.dart';
+import 'package:invoiceninja_flutter/ui/client/edit/client_edit_main_address.dart';
 import 'package:invoiceninja_flutter/ui/client/edit/client_edit_notes.dart';
 import 'package:invoiceninja_flutter/ui/client/edit/client_edit_settings.dart';
 import 'package:invoiceninja_flutter/ui/client/edit/client_edit_shipping_address.dart';
@@ -51,6 +54,12 @@ class ClientEditDesktop extends StatelessWidget {
                     ClientEditSettings(
                       viewModel: viewModel,
                     ),
+                    ClientEditHomeAddress(
+                      viewModel: viewModel,
+                    ),
+                    ClientEditHeadOfficeAddress(
+                      viewModel: viewModel,
+                    ),
                   ],
                 ),
               ),
@@ -59,6 +68,9 @@ class ClientEditDesktop extends StatelessWidget {
               child: FocusTraversalGroup(
                 child: Column(
                   children: [
+                    ClientEditMainAddress(
+                      viewModel: viewModel,
+                    ),
                     ClientEditBillingAddress(
                       viewModel: viewModel,
                     ),

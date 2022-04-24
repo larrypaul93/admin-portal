@@ -179,6 +179,10 @@ class _$CompanyEntitySerializer implements StructuredSerializer<CompanyEntity> {
       serializers.serialize(object.clients,
           specifiedType:
               const FullType(BuiltList, const [const FullType(ClientEntity)])),
+      'contacts',
+      serializers.serialize(object.contacts,
+          specifiedType:
+              const FullType(BuiltList, const [const FullType(ContactEntity)])),
       'products',
       serializers.serialize(object.products,
           specifiedType:
@@ -561,6 +565,12 @@ class _$CompanyEntitySerializer implements StructuredSerializer<CompanyEntity> {
           result.clients.replace(serializers.deserialize(value,
                   specifiedType: const FullType(
                       BuiltList, const [const FullType(ClientEntity)]))
+              as BuiltList<Object>);
+          break;
+        case 'contacts':
+          result.contacts.replace(serializers.deserialize(value,
+                  specifiedType: const FullType(
+                      BuiltList, const [const FullType(ContactEntity)]))
               as BuiltList<Object>);
           break;
         case 'products':
@@ -1445,6 +1455,8 @@ class _$CompanyEntity extends CompanyEntity {
   @override
   final BuiltList<ClientEntity> clients;
   @override
+  final BuiltList<ContactEntity> contacts;
+  @override
   final BuiltList<ProductEntity> products;
   @override
   final BuiltList<InvoiceEntity> invoices;
@@ -1580,6 +1592,7 @@ class _$CompanyEntity extends CompanyEntity {
       this.expenseCategories,
       this.users,
       this.clients,
+      this.contacts,
       this.products,
       this.invoices,
       this.recurringInvoices,
@@ -1710,6 +1723,8 @@ class _$CompanyEntity extends CompanyEntity {
     BuiltValueNullFieldError.checkNotNull(users, 'CompanyEntity', 'users');
     BuiltValueNullFieldError.checkNotNull(clients, 'CompanyEntity', 'clients');
     BuiltValueNullFieldError.checkNotNull(
+        contacts, 'CompanyEntity', 'contacts');
+    BuiltValueNullFieldError.checkNotNull(
         products, 'CompanyEntity', 'products');
     BuiltValueNullFieldError.checkNotNull(
         invoices, 'CompanyEntity', 'invoices');
@@ -1836,6 +1851,7 @@ class _$CompanyEntity extends CompanyEntity {
         expenseCategories == other.expenseCategories &&
         users == other.users &&
         clients == other.clients &&
+        contacts == other.contacts &&
         products == other.products &&
         invoices == other.invoices &&
         recurringInvoices == other.recurringInvoices &&
@@ -1902,7 +1918,7 @@ class _$CompanyEntity extends CompanyEntity {
                                                                 $jc(
                                                                     $jc(
                                                                         $jc(
-                                                                            $jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc(0, enableCustomSurchargeTaxes1.hashCode), enableCustomSurchargeTaxes2.hashCode), enableCustomSurchargeTaxes3.hashCode), enableCustomSurchargeTaxes4.hashCode), sizeId.hashCode), industryId.hashCode), subdomain.hashCode), portalMode.hashCode), portalDomain.hashCode), updateProducts.hashCode), convertProductExchangeRate.hashCode), convertRateToClient.hashCode), fillProducts.hashCode), enableProductCost.hashCode), enableProductQuantity.hashCode), enableProductDiscount.hashCode), defaultTaskIsDateBased.hashCode), defaultQuantity.hashCode), showProductDetails.hashCode), clientCanRegister.hashCode), isLarge.hashCode), isDisabled.hashCode), enableShopApi.hashCode), companyKey.hashCode), firstDayOfWeek.hashCode), firstMonthOfYear.hashCode), numberOfInvoiceTaxRates.hashCode), numberOfItemTaxRates.hashCode), expenseInclusiveTaxes.hashCode), sessionTimeout.hashCode), passwordTimeout.hashCode), oauthPasswordRequired.hashCode), markdownEnabled.hashCode), markdownEmailEnabled.hashCode), useCommaAsDecimalPlace.hashCode), reportIncludeDrafts.hashCode), groups.hashCode), activities.hashCode), taxRates.hashCode), taskStatuses.hashCode), taskStatusMap.hashCode), companyGateways.hashCode), expenseCategories.hashCode), users.hashCode), clients.hashCode), products.hashCode), invoices.hashCode), recurringInvoices.hashCode), recurringExpenses.hashCode), payments.hashCode), quotes.hashCode), credits.hashCode), tasks.hashCode), projects.hashCode), expenses.hashCode), vendors.hashCode), designs.hashCode), documents.hashCode), tokens.hashCode), webhooks.hashCode), subscriptions.hashCode), paymentTerms.hashCode), systemLogs.hashCode), clientRegistrationFields.hashCode), customFields.hashCode), slackWebhookUrl.hashCode), googleAnalyticsKey.hashCode), markExpensesInvoiceable.hashCode), markExpensesPaid.hashCode),
+                                                                            $jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc(0, enableCustomSurchargeTaxes1.hashCode), enableCustomSurchargeTaxes2.hashCode), enableCustomSurchargeTaxes3.hashCode), enableCustomSurchargeTaxes4.hashCode), sizeId.hashCode), industryId.hashCode), subdomain.hashCode), portalMode.hashCode), portalDomain.hashCode), updateProducts.hashCode), convertProductExchangeRate.hashCode), convertRateToClient.hashCode), fillProducts.hashCode), enableProductCost.hashCode), enableProductQuantity.hashCode), enableProductDiscount.hashCode), defaultTaskIsDateBased.hashCode), defaultQuantity.hashCode), showProductDetails.hashCode), clientCanRegister.hashCode), isLarge.hashCode), isDisabled.hashCode), enableShopApi.hashCode), companyKey.hashCode), firstDayOfWeek.hashCode), firstMonthOfYear.hashCode), numberOfInvoiceTaxRates.hashCode), numberOfItemTaxRates.hashCode), expenseInclusiveTaxes.hashCode), sessionTimeout.hashCode), passwordTimeout.hashCode), oauthPasswordRequired.hashCode), markdownEnabled.hashCode), markdownEmailEnabled.hashCode), useCommaAsDecimalPlace.hashCode), reportIncludeDrafts.hashCode), groups.hashCode), activities.hashCode), taxRates.hashCode), taskStatuses.hashCode), taskStatusMap.hashCode), companyGateways.hashCode), expenseCategories.hashCode), users.hashCode), clients.hashCode), contacts.hashCode), products.hashCode), invoices.hashCode), recurringInvoices.hashCode), recurringExpenses.hashCode), payments.hashCode), quotes.hashCode), credits.hashCode), tasks.hashCode), projects.hashCode), expenses.hashCode), vendors.hashCode), designs.hashCode), documents.hashCode), tokens.hashCode), webhooks.hashCode), subscriptions.hashCode), paymentTerms.hashCode), systemLogs.hashCode), clientRegistrationFields.hashCode), customFields.hashCode), slackWebhookUrl.hashCode), googleAnalyticsKey.hashCode), markExpensesInvoiceable.hashCode), markExpensesPaid.hashCode),
                                                                                 invoiceExpenseDocuments.hashCode),
                                                                             invoiceTaskDocuments.hashCode),
                                                                         invoiceTaskTimelog.hashCode),
@@ -1972,6 +1988,7 @@ class _$CompanyEntity extends CompanyEntity {
           ..add('expenseCategories', expenseCategories)
           ..add('users', users)
           ..add('clients', clients)
+          ..add('contacts', contacts)
           ..add('products', products)
           ..add('invoices', invoices)
           ..add('recurringInvoices', recurringInvoices)
@@ -2244,6 +2261,12 @@ class CompanyEntityBuilder
   ListBuilder<ClientEntity> get clients =>
       _$this._clients ??= new ListBuilder<ClientEntity>();
   set clients(ListBuilder<ClientEntity> clients) => _$this._clients = clients;
+
+  ListBuilder<ContactEntity> _contacts;
+  ListBuilder<ContactEntity> get contacts =>
+      _$this._contacts ??= new ListBuilder<ContactEntity>();
+  set contacts(ListBuilder<ContactEntity> contacts) =>
+      _$this._contacts = contacts;
 
   ListBuilder<ProductEntity> _products;
   ListBuilder<ProductEntity> get products =>
@@ -2521,6 +2544,7 @@ class CompanyEntityBuilder
       _expenseCategories = $v.expenseCategories.toBuilder();
       _users = $v.users.toBuilder();
       _clients = $v.clients.toBuilder();
+      _contacts = $v.contacts.toBuilder();
       _products = $v.products.toBuilder();
       _invoices = $v.invoices.toBuilder();
       _recurringInvoices = $v.recurringInvoices.toBuilder();
@@ -2645,6 +2669,7 @@ class CompanyEntityBuilder
               expenseCategories: expenseCategories.build(),
               users: users.build(),
               clients: clients.build(),
+              contacts: contacts.build(),
               products: products.build(),
               invoices: invoices.build(),
               recurringInvoices: recurringInvoices.build(),
@@ -2709,6 +2734,8 @@ class CompanyEntityBuilder
         users.build();
         _$failedField = 'clients';
         clients.build();
+        _$failedField = 'contacts';
+        contacts.build();
         _$failedField = 'products';
         products.build();
         _$failedField = 'invoices';

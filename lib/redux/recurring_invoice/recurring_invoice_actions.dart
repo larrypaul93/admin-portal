@@ -8,6 +8,7 @@ import 'package:flutter/widgets.dart';
 import 'package:built_collection/built_collection.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:http/http.dart';
+import 'package:invoiceninja_flutter/data/models/contact_model.dart';
 import 'package:invoiceninja_flutter/redux/document/document_actions.dart';
 import 'package:url_launcher/url_launcher.dart';
 

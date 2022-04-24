@@ -10,6 +10,9 @@ import 'package:invoiceninja_flutter/ui/client/edit/client_edit_contacts_vm.dart
 import 'package:invoiceninja_flutter/ui/client/edit/client_edit_desktop.dart';
 import 'package:invoiceninja_flutter/ui/client/edit/client_edit_details.dart';
 import 'package:invoiceninja_flutter/ui/client/edit/client_edit_footer.dart';
+import 'package:invoiceninja_flutter/ui/client/edit/client_edit_head_office_address.dart';
+import 'package:invoiceninja_flutter/ui/client/edit/client_edit_home_address.dart';
+import 'package:invoiceninja_flutter/ui/client/edit/client_edit_main_address.dart';
 import 'package:invoiceninja_flutter/ui/client/edit/client_edit_notes.dart';
 import 'package:invoiceninja_flutter/ui/client/edit/client_edit_settings.dart';
 import 'package:invoiceninja_flutter/ui/client/edit/client_edit_shipping_address.dart';
@@ -37,7 +40,7 @@ class _ClientEditState extends State<ClientEdit>
   @override
   void initState() {
     super.initState();
-    _controller = TabController(vsync: this, length: 6);
+    _controller = TabController(vsync: this, length: 9);
   }
 
   @override
@@ -62,6 +65,7 @@ class _ClientEditState extends State<ClientEdit>
       onCancelPressed: (context) => viewModel.onCancelPressed(context),
       onSavePressed: (context) {
         final bool isValid = _formKey.currentState.validate();
+        print(client);
         setState(() {
           //autoValidate = !isValid;
         });
@@ -87,6 +91,15 @@ class _ClientEditState extends State<ClientEdit>
           ),
           Tab(
             text: localization.settings,
+          ),
+          Tab(
+            text: localization.homeAddress,
+          ),
+          Tab(
+            text: localization.mainAddress,
+          ),
+          Tab(
+            text: localization.headOfficeAddress,
           ),
           Tab(
             text: localization.billingAddress,
@@ -123,6 +136,21 @@ class _ClientEditState extends State<ClientEdit>
                   ScrollableListView(
                     children: [
                       ClientEditSettings(viewModel: viewModel),
+                    ],
+                  ),
+                  ScrollableListView(
+                    children: [
+                      ClientEditHomeAddress(viewModel: viewModel),
+                    ],
+                  ),
+                  ScrollableListView(
+                    children: [
+                      ClientEditMainAddress(viewModel: viewModel),
+                    ],
+                  ),
+                  ScrollableListView(
+                    children: [
+                      ClientEditHeadOfficeAddress(viewModel: viewModel),
                     ],
                   ),
                   ScrollableListView(

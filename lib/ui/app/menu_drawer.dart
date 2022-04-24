@@ -497,6 +497,13 @@ class MenuDrawer extends StatelessWidget {
                             // STARTER: menu - do not remove comment
                             DrawerTile(
                               company: company,
+                              entityType: EntityType.contact,
+                              icon: getEntityIcon(EntityType.contact),
+                              title: localization.contacts,
+                            ),
+
+                            DrawerTile(
+                              company: company,
                               entityType: EntityType.recurringExpense,
                               icon: getEntityIcon(EntityType.recurringExpense),
                               title: localization.recurringExpenses,

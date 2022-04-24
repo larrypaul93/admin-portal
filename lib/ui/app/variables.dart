@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 // Package imports:
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:flutter_styled_toast/flutter_styled_toast.dart';
+import 'package:invoiceninja_flutter/data/models/contact_model.dart';
 
 // Project imports:
 import 'package:invoiceninja_flutter/data/models/models.dart';
