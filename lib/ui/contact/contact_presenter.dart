@@ -8,7 +8,6 @@ class ContactPresenter extends EntityPresenter {
     return [
       ContactFields.firstName,
       ContactFields.lastName,
-      ContactFields.fullName,
       ContactFields.email,
       ContactFields.phone
     ];
@@ -29,9 +28,19 @@ class ContactPresenter extends EntityPresenter {
   @override
   Widget getField({String field, BuildContext context}) {
     //final state = StoreProvider.of<AppState>(context).state;
-    //final contact = entity as InvoiceEntity;
+    final contact = entity as ContactEntity;
 
     switch (field) {
+      case ContactFields.email:
+        return Text(contact.email);
+      case ContactFields.firstName:
+        return Text(contact.firstName);
+      case ContactFields.lastName:
+        return Text(contact.lastName);
+      case ContactFields.phone:
+        return Text(contact.phone);
+      case ContactFields.fullName:
+        return Text(contact.fullName);
     }
 
     return super.getField(field: field, context: context);

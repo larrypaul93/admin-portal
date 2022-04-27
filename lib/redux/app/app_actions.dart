@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 // Package imports:
 import 'package:built_collection/built_collection.dart';
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:invoiceninja_flutter/data/models/category_model.dart';
 import 'package:invoiceninja_flutter/data/models/contact_model.dart';
 import 'package:redux/redux.dart';
 
@@ -65,6 +66,8 @@ import 'package:invoiceninja_flutter/utils/localization.dart';
 import 'package:invoiceninja_flutter/utils/platforms.dart';
 
 // STARTER: import - do not remove comment
+import 'package:invoiceninja_flutter/redux/category/category_actions.dart';
+
 import 'package:invoiceninja_flutter/redux/contact/contact_actions.dart';
 
 class PersistUI {}
@@ -371,6 +374,10 @@ void viewEntitiesByType({
             action = ViewGroupList();
             break;
           // STARTER: view list - do not remove comment
+          case EntityType.category:
+            action = ViewCategoryList();
+            break;
+
           case EntityType.contact:
             action = ViewContactList();
             break;
@@ -570,6 +577,13 @@ void viewEntityById({
             ));
             break;
           // STARTER: view - do not remove comment
+          case EntityType.category:
+            store.dispatch(ViewCategory(
+              categoryId: entityId,
+              force: force,
+            ));
+            break;
+
           case EntityType.contact:
             store.dispatch(ViewContact(
               contactId: entityId,
@@ -803,6 +817,13 @@ void createEntityByType({
             ));
             break;
           // STARTER: create type - do not remove comment
+          case EntityType.category:
+            store.dispatch(EditCategory(
+              force: force,
+              category: CategoryEntity(state: state),
+            ));
+            break;
+
           case EntityType.contact:
             store.dispatch(EditContact(
               force: force,
@@ -1025,6 +1046,14 @@ void createEntity({
             ));
             break;
           // STARTER: create - do not remove comment
+          case EntityType.category:
+            store.dispatch(EditCategory(
+              category: entity,
+              force: force,
+              completer: completer,
+            ));
+            break;
+
           case EntityType.contact:
             store.dispatch(EditContact(
               contact: entity,
@@ -1221,6 +1250,11 @@ void editEntity({
             ));
             break;
           // STARTER: edit - do not remove comment
+          case EntityType.category:
+            store
+                .dispatch(EditCategory(category: entity, completer: completer));
+            break;
+
           case EntityType.contact:
             store.dispatch(EditContact(contact: entity, completer: completer));
             break;
@@ -1392,6 +1426,10 @@ void handleEntitiesActions(List<BaseEntity> entities, EntityAction action,
       handleDocumentAction(context, entities, action);
       break;
     // STARTER: actions - do not remove comment
+    case EntityType.category:
+      handleCategoryAction(context, entities, action);
+      break;
+
     case EntityType.contact:
       handleContactAction(context, entities, action);
       break;

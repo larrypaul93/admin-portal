@@ -162,6 +162,25 @@ class _$ProductEntitySerializer implements StructuredSerializer<ProductEntity> {
       'custom_value4',
       serializers.serialize(object.customValue4,
           specifiedType: const FullType(String)),
+      'category_id',
+      serializers.serialize(object.categoryId,
+          specifiedType: const FullType(String)),
+      'sub_category_id',
+      serializers.serialize(object.subCategoryId,
+          specifiedType: const FullType(String)),
+      'part_no',
+      serializers.serialize(object.partNo,
+          specifiedType: const FullType(String)),
+      'on_hand',
+      serializers.serialize(object.onHand,
+          specifiedType: const FullType(String)),
+      'upc',
+      serializers.serialize(object.upc, specifiedType: const FullType(String)),
+      'vendor_id',
+      serializers.serialize(object.vendorId,
+          specifiedType: const FullType(String)),
+      'sku',
+      serializers.serialize(object.sku, specifiedType: const FullType(String)),
       'documents',
       serializers.serialize(object.documents,
           specifiedType: const FullType(
@@ -179,6 +198,27 @@ class _$ProductEntitySerializer implements StructuredSerializer<ProductEntity> {
       serializers.serialize(object.id, specifiedType: const FullType(String)),
     ];
     Object value;
+    value = object.category;
+    if (value != null) {
+      result
+        ..add('category')
+        ..add(serializers.serialize(value,
+            specifiedType: const FullType(CategoryEntity)));
+    }
+    value = object.subCategory;
+    if (value != null) {
+      result
+        ..add('subCategory')
+        ..add(serializers.serialize(value,
+            specifiedType: const FullType(CategoryEntity)));
+    }
+    value = object.vendor;
+    if (value != null) {
+      result
+        ..add('vendor')
+        ..add(serializers.serialize(value,
+            specifiedType: const FullType(VendorEntity)));
+    }
     value = object.isChanged;
     if (value != null) {
       result
@@ -281,6 +321,46 @@ class _$ProductEntitySerializer implements StructuredSerializer<ProductEntity> {
         case 'custom_value4':
           result.customValue4 = serializers.deserialize(value,
               specifiedType: const FullType(String)) as String;
+          break;
+        case 'category_id':
+          result.categoryId = serializers.deserialize(value,
+              specifiedType: const FullType(String)) as String;
+          break;
+        case 'sub_category_id':
+          result.subCategoryId = serializers.deserialize(value,
+              specifiedType: const FullType(String)) as String;
+          break;
+        case 'part_no':
+          result.partNo = serializers.deserialize(value,
+              specifiedType: const FullType(String)) as String;
+          break;
+        case 'on_hand':
+          result.onHand = serializers.deserialize(value,
+              specifiedType: const FullType(String)) as String;
+          break;
+        case 'upc':
+          result.upc = serializers.deserialize(value,
+              specifiedType: const FullType(String)) as String;
+          break;
+        case 'vendor_id':
+          result.vendorId = serializers.deserialize(value,
+              specifiedType: const FullType(String)) as String;
+          break;
+        case 'sku':
+          result.sku = serializers.deserialize(value,
+              specifiedType: const FullType(String)) as String;
+          break;
+        case 'category':
+          result.category.replace(serializers.deserialize(value,
+              specifiedType: const FullType(CategoryEntity)) as CategoryEntity);
+          break;
+        case 'subCategory':
+          result.subCategory.replace(serializers.deserialize(value,
+              specifiedType: const FullType(CategoryEntity)) as CategoryEntity);
+          break;
+        case 'vendor':
+          result.vendor.replace(serializers.deserialize(value,
+              specifiedType: const FullType(VendorEntity)) as VendorEntity);
           break;
         case 'documents':
           result.documents.replace(serializers.deserialize(value,
@@ -544,6 +624,26 @@ class _$ProductEntity extends ProductEntity {
   @override
   final String customValue4;
   @override
+  final String categoryId;
+  @override
+  final String subCategoryId;
+  @override
+  final String partNo;
+  @override
+  final String onHand;
+  @override
+  final String upc;
+  @override
+  final String vendorId;
+  @override
+  final String sku;
+  @override
+  final CategoryEntity category;
+  @override
+  final CategoryEntity subCategory;
+  @override
+  final VendorEntity vendor;
+  @override
   final BuiltList<DocumentEntity> documents;
   @override
   final bool isChanged;
@@ -581,6 +681,16 @@ class _$ProductEntity extends ProductEntity {
       this.customValue2,
       this.customValue3,
       this.customValue4,
+      this.categoryId,
+      this.subCategoryId,
+      this.partNo,
+      this.onHand,
+      this.upc,
+      this.vendorId,
+      this.sku,
+      this.category,
+      this.subCategory,
+      this.vendor,
       this.documents,
       this.isChanged,
       this.createdAt,
@@ -619,6 +729,16 @@ class _$ProductEntity extends ProductEntity {
     BuiltValueNullFieldError.checkNotNull(
         customValue4, 'ProductEntity', 'customValue4');
     BuiltValueNullFieldError.checkNotNull(
+        categoryId, 'ProductEntity', 'categoryId');
+    BuiltValueNullFieldError.checkNotNull(
+        subCategoryId, 'ProductEntity', 'subCategoryId');
+    BuiltValueNullFieldError.checkNotNull(partNo, 'ProductEntity', 'partNo');
+    BuiltValueNullFieldError.checkNotNull(onHand, 'ProductEntity', 'onHand');
+    BuiltValueNullFieldError.checkNotNull(upc, 'ProductEntity', 'upc');
+    BuiltValueNullFieldError.checkNotNull(
+        vendorId, 'ProductEntity', 'vendorId');
+    BuiltValueNullFieldError.checkNotNull(sku, 'ProductEntity', 'sku');
+    BuiltValueNullFieldError.checkNotNull(
         documents, 'ProductEntity', 'documents');
     BuiltValueNullFieldError.checkNotNull(
         createdAt, 'ProductEntity', 'createdAt');
@@ -655,6 +775,16 @@ class _$ProductEntity extends ProductEntity {
         customValue2 == other.customValue2 &&
         customValue3 == other.customValue3 &&
         customValue4 == other.customValue4 &&
+        categoryId == other.categoryId &&
+        subCategoryId == other.subCategoryId &&
+        partNo == other.partNo &&
+        onHand == other.onHand &&
+        upc == other.upc &&
+        vendorId == other.vendorId &&
+        sku == other.sku &&
+        category == other.category &&
+        subCategory == other.subCategory &&
+        vendor == other.vendor &&
         documents == other.documents &&
         isChanged == other.isChanged &&
         createdAt == other.createdAt &&
@@ -687,17 +817,17 @@ class _$ProductEntity extends ProductEntity {
                                                                 $jc(
                                                                     $jc(
                                                                         $jc(
-                                                                            $jc($jc($jc($jc($jc($jc(0, productKey.hashCode), notes.hashCode), cost.hashCode), price.hashCode), quantity.hashCode),
-                                                                                taxName1.hashCode),
-                                                                            taxRate1.hashCode),
-                                                                        taxName2.hashCode),
-                                                                    taxRate2.hashCode),
-                                                                taxName3.hashCode),
-                                                            taxRate3.hashCode),
-                                                        customValue1.hashCode),
-                                                    customValue2.hashCode),
-                                                customValue3.hashCode),
-                                            customValue4.hashCode),
+                                                                            $jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc(0, productKey.hashCode), notes.hashCode), cost.hashCode), price.hashCode), quantity.hashCode), taxName1.hashCode), taxRate1.hashCode), taxName2.hashCode), taxRate2.hashCode), taxName3.hashCode), taxRate3.hashCode), customValue1.hashCode), customValue2.hashCode), customValue3.hashCode), customValue4.hashCode),
+                                                                                categoryId.hashCode),
+                                                                            subCategoryId.hashCode),
+                                                                        partNo.hashCode),
+                                                                    onHand.hashCode),
+                                                                upc.hashCode),
+                                                            vendorId.hashCode),
+                                                        sku.hashCode),
+                                                    category.hashCode),
+                                                subCategory.hashCode),
+                                            vendor.hashCode),
                                         documents.hashCode),
                                     isChanged.hashCode),
                                 createdAt.hashCode),
@@ -727,6 +857,16 @@ class _$ProductEntity extends ProductEntity {
           ..add('customValue2', customValue2)
           ..add('customValue3', customValue3)
           ..add('customValue4', customValue4)
+          ..add('categoryId', categoryId)
+          ..add('subCategoryId', subCategoryId)
+          ..add('partNo', partNo)
+          ..add('onHand', onHand)
+          ..add('upc', upc)
+          ..add('vendorId', vendorId)
+          ..add('sku', sku)
+          ..add('category', category)
+          ..add('subCategory', subCategory)
+          ..add('vendor', vendor)
           ..add('documents', documents)
           ..add('isChanged', isChanged)
           ..add('createdAt', createdAt)
@@ -804,6 +944,51 @@ class ProductEntityBuilder
   String get customValue4 => _$this._customValue4;
   set customValue4(String customValue4) => _$this._customValue4 = customValue4;
 
+  String _categoryId;
+  String get categoryId => _$this._categoryId;
+  set categoryId(String categoryId) => _$this._categoryId = categoryId;
+
+  String _subCategoryId;
+  String get subCategoryId => _$this._subCategoryId;
+  set subCategoryId(String subCategoryId) =>
+      _$this._subCategoryId = subCategoryId;
+
+  String _partNo;
+  String get partNo => _$this._partNo;
+  set partNo(String partNo) => _$this._partNo = partNo;
+
+  String _onHand;
+  String get onHand => _$this._onHand;
+  set onHand(String onHand) => _$this._onHand = onHand;
+
+  String _upc;
+  String get upc => _$this._upc;
+  set upc(String upc) => _$this._upc = upc;
+
+  String _vendorId;
+  String get vendorId => _$this._vendorId;
+  set vendorId(String vendorId) => _$this._vendorId = vendorId;
+
+  String _sku;
+  String get sku => _$this._sku;
+  set sku(String sku) => _$this._sku = sku;
+
+  CategoryEntityBuilder _category;
+  CategoryEntityBuilder get category =>
+      _$this._category ??= new CategoryEntityBuilder();
+  set category(CategoryEntityBuilder category) => _$this._category = category;
+
+  CategoryEntityBuilder _subCategory;
+  CategoryEntityBuilder get subCategory =>
+      _$this._subCategory ??= new CategoryEntityBuilder();
+  set subCategory(CategoryEntityBuilder subCategory) =>
+      _$this._subCategory = subCategory;
+
+  VendorEntityBuilder _vendor;
+  VendorEntityBuilder get vendor =>
+      _$this._vendor ??= new VendorEntityBuilder();
+  set vendor(VendorEntityBuilder vendor) => _$this._vendor = vendor;
+
   ListBuilder<DocumentEntity> _documents;
   ListBuilder<DocumentEntity> get documents =>
       _$this._documents ??= new ListBuilder<DocumentEntity>();
@@ -864,6 +1049,16 @@ class ProductEntityBuilder
       _customValue2 = $v.customValue2;
       _customValue3 = $v.customValue3;
       _customValue4 = $v.customValue4;
+      _categoryId = $v.categoryId;
+      _subCategoryId = $v.subCategoryId;
+      _partNo = $v.partNo;
+      _onHand = $v.onHand;
+      _upc = $v.upc;
+      _vendorId = $v.vendorId;
+      _sku = $v.sku;
+      _category = $v.category?.toBuilder();
+      _subCategory = $v.subCategory?.toBuilder();
+      _vendor = $v.vendor?.toBuilder();
       _documents = $v.documents.toBuilder();
       _isChanged = $v.isChanged;
       _createdAt = $v.createdAt;
@@ -920,6 +1115,16 @@ class ProductEntityBuilder
               customValue2: BuiltValueNullFieldError.checkNotNull(customValue2, 'ProductEntity', 'customValue2'),
               customValue3: BuiltValueNullFieldError.checkNotNull(customValue3, 'ProductEntity', 'customValue3'),
               customValue4: BuiltValueNullFieldError.checkNotNull(customValue4, 'ProductEntity', 'customValue4'),
+              categoryId: BuiltValueNullFieldError.checkNotNull(categoryId, 'ProductEntity', 'categoryId'),
+              subCategoryId: BuiltValueNullFieldError.checkNotNull(subCategoryId, 'ProductEntity', 'subCategoryId'),
+              partNo: BuiltValueNullFieldError.checkNotNull(partNo, 'ProductEntity', 'partNo'),
+              onHand: BuiltValueNullFieldError.checkNotNull(onHand, 'ProductEntity', 'onHand'),
+              upc: BuiltValueNullFieldError.checkNotNull(upc, 'ProductEntity', 'upc'),
+              vendorId: BuiltValueNullFieldError.checkNotNull(vendorId, 'ProductEntity', 'vendorId'),
+              sku: BuiltValueNullFieldError.checkNotNull(sku, 'ProductEntity', 'sku'),
+              category: _category?.build(),
+              subCategory: _subCategory?.build(),
+              vendor: _vendor?.build(),
               documents: documents.build(),
               isChanged: isChanged,
               createdAt: BuiltValueNullFieldError.checkNotNull(createdAt, 'ProductEntity', 'createdAt'),
@@ -932,6 +1137,12 @@ class ProductEntityBuilder
     } catch (_) {
       String _$failedField;
       try {
+        _$failedField = 'category';
+        _category?.build();
+        _$failedField = 'subCategory';
+        _subCategory?.build();
+        _$failedField = 'vendor';
+        _vendor?.build();
         _$failedField = 'documents';
         documents.build();
       } catch (e) {

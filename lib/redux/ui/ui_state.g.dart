@@ -53,6 +53,9 @@ class _$UIStateSerializer implements StructuredSerializer<UIState> {
       'invoiceUIState',
       serializers.serialize(object.invoiceUIState,
           specifiedType: const FullType(InvoiceUIState)),
+      'categoryUIState',
+      serializers.serialize(object.categoryUIState,
+          specifiedType: const FullType(CategoryUIState)),
       'contactUIState',
       serializers.serialize(object.contactUIState,
           specifiedType: const FullType(ContactUIState)),
@@ -201,6 +204,11 @@ class _$UIStateSerializer implements StructuredSerializer<UIState> {
           result.invoiceUIState.replace(serializers.deserialize(value,
               specifiedType: const FullType(InvoiceUIState)) as InvoiceUIState);
           break;
+        case 'categoryUIState':
+          result.categoryUIState.replace(serializers.deserialize(value,
+                  specifiedType: const FullType(CategoryUIState))
+              as CategoryUIState);
+          break;
         case 'contactUIState':
           result.contactUIState.replace(serializers.deserialize(value,
               specifiedType: const FullType(ContactUIState)) as ContactUIState);
@@ -339,6 +347,8 @@ class _$UIState extends UIState {
   @override
   final InvoiceUIState invoiceUIState;
   @override
+  final CategoryUIState categoryUIState;
+  @override
   final ContactUIState contactUIState;
   @override
   final RecurringExpenseUIState recurringExpenseUIState;
@@ -403,6 +413,7 @@ class _$UIState extends UIState {
       this.productUIState,
       this.clientUIState,
       this.invoiceUIState,
+      this.categoryUIState,
       this.contactUIState,
       this.recurringExpenseUIState,
       this.subscriptionUIState,
@@ -450,6 +461,8 @@ class _$UIState extends UIState {
         clientUIState, 'UIState', 'clientUIState');
     BuiltValueNullFieldError.checkNotNull(
         invoiceUIState, 'UIState', 'invoiceUIState');
+    BuiltValueNullFieldError.checkNotNull(
+        categoryUIState, 'UIState', 'categoryUIState');
     BuiltValueNullFieldError.checkNotNull(
         contactUIState, 'UIState', 'contactUIState');
     BuiltValueNullFieldError.checkNotNull(
@@ -523,6 +536,7 @@ class _$UIState extends UIState {
         productUIState == other.productUIState &&
         clientUIState == other.clientUIState &&
         invoiceUIState == other.invoiceUIState &&
+        categoryUIState == other.categoryUIState &&
         contactUIState == other.contactUIState &&
         recurringExpenseUIState == other.recurringExpenseUIState &&
         subscriptionUIState == other.subscriptionUIState &&
@@ -570,7 +584,7 @@ class _$UIState extends UIState {
                                                                 $jc(
                                                                     $jc(
                                                                         $jc(
-                                                                            $jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc(0, selectedCompanyIndex.hashCode), currentRoute.hashCode), previousRoute.hashCode), previewStack.hashCode), filterStack.hashCode), filter.hashCode), filterClearedAt.hashCode), lastActivityAt.hashCode), dashboardUIState.hashCode), productUIState.hashCode), clientUIState.hashCode), invoiceUIState.hashCode), contactUIState.hashCode), recurringExpenseUIState.hashCode), subscriptionUIState.hashCode), taskStatusUIState.hashCode), expenseCategoryUIState.hashCode),
+                                                                            $jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc(0, selectedCompanyIndex.hashCode), currentRoute.hashCode), previousRoute.hashCode), previewStack.hashCode), filterStack.hashCode), filter.hashCode), filterClearedAt.hashCode), lastActivityAt.hashCode), dashboardUIState.hashCode), productUIState.hashCode), clientUIState.hashCode), invoiceUIState.hashCode), categoryUIState.hashCode), contactUIState.hashCode), recurringExpenseUIState.hashCode), subscriptionUIState.hashCode), taskStatusUIState.hashCode), expenseCategoryUIState.hashCode),
                                                                                 recurringInvoiceUIState.hashCode),
                                                                             webhookUIState.hashCode),
                                                                         tokenUIState.hashCode),
@@ -607,6 +621,7 @@ class _$UIState extends UIState {
           ..add('productUIState', productUIState)
           ..add('clientUIState', clientUIState)
           ..add('invoiceUIState', invoiceUIState)
+          ..add('categoryUIState', categoryUIState)
           ..add('contactUIState', contactUIState)
           ..add('recurringExpenseUIState', recurringExpenseUIState)
           ..add('subscriptionUIState', subscriptionUIState)
@@ -701,6 +716,12 @@ class UIStateBuilder implements Builder<UIState, UIStateBuilder> {
       _$this._invoiceUIState ??= new InvoiceUIStateBuilder();
   set invoiceUIState(InvoiceUIStateBuilder invoiceUIState) =>
       _$this._invoiceUIState = invoiceUIState;
+
+  CategoryUIStateBuilder _categoryUIState;
+  CategoryUIStateBuilder get categoryUIState =>
+      _$this._categoryUIState ??= new CategoryUIStateBuilder();
+  set categoryUIState(CategoryUIStateBuilder categoryUIState) =>
+      _$this._categoryUIState = categoryUIState;
 
   ContactUIStateBuilder _contactUIState;
   ContactUIStateBuilder get contactUIState =>
@@ -869,6 +890,7 @@ class UIStateBuilder implements Builder<UIState, UIStateBuilder> {
       _productUIState = $v.productUIState.toBuilder();
       _clientUIState = $v.clientUIState.toBuilder();
       _invoiceUIState = $v.invoiceUIState.toBuilder();
+      _categoryUIState = $v.categoryUIState.toBuilder();
       _contactUIState = $v.contactUIState.toBuilder();
       _recurringExpenseUIState = $v.recurringExpenseUIState.toBuilder();
       _subscriptionUIState = $v.subscriptionUIState.toBuilder();
@@ -932,6 +954,7 @@ class UIStateBuilder implements Builder<UIState, UIStateBuilder> {
               productUIState: productUIState.build(),
               clientUIState: clientUIState.build(),
               invoiceUIState: invoiceUIState.build(),
+              categoryUIState: categoryUIState.build(),
               contactUIState: contactUIState.build(),
               recurringExpenseUIState: recurringExpenseUIState.build(),
               subscriptionUIState: subscriptionUIState.build(),
@@ -972,6 +995,8 @@ class UIStateBuilder implements Builder<UIState, UIStateBuilder> {
         clientUIState.build();
         _$failedField = 'invoiceUIState';
         invoiceUIState.build();
+        _$failedField = 'categoryUIState';
+        categoryUIState.build();
         _$failedField = 'contactUIState';
         contactUIState.build();
         _$failedField = 'recurringExpenseUIState';

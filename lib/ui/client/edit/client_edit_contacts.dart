@@ -56,7 +56,7 @@ class _ClientEditContactsState extends State<ClientEditContacts> {
             clientViewModel: widget.clientViewModel,
             key: Key(contact.entityKey),
             contact: contact,
-            isDialog: client.contacts.length > 1,
+            isDialog: client.contacts.isNotEmpty,
             index: client.contacts
                 .indexOf(client.contacts.firstWhere((c) => c.id == contact.id)),
           );

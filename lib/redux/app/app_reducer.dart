@@ -32,6 +32,8 @@ import 'package:invoiceninja_flutter/redux/vendor/vendor_actions.dart';
 import 'package:invoiceninja_flutter/redux/webhook/webhook_actions.dart';
 
 // STARTER: import - do not remove comment
+import 'package:invoiceninja_flutter/redux/category/category_actions.dart';
+
 import 'package:invoiceninja_flutter/redux/contact/contact_actions.dart';
 
 // We create the State reducer by combining many smaller reducers into one!
@@ -102,6 +104,10 @@ final lastErrorReducer = combineReducers<String>([
     return '${action.error}';
   }),
   // STARTER: errors - do not remove comment
+  TypedReducer<String, LoadCategoryFailure>((state, action) {
+    return '${action.error}';
+  }),
+
   TypedReducer<String, LoadContactsFailure>((state, action) {
     return '${action.error}';
   }),

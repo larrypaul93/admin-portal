@@ -10,6 +10,7 @@ import 'package:built_value/serializer.dart';
 import 'package:invoiceninja_flutter/.env.dart';
 import 'package:invoiceninja_flutter/constants.dart';
 import 'package:invoiceninja_flutter/data/models/account_model.dart';
+import 'package:invoiceninja_flutter/data/models/category_model.dart';
 import 'package:invoiceninja_flutter/data/models/company_gateway_model.dart';
 import 'package:invoiceninja_flutter/data/models/contact_model.dart';
 import 'package:invoiceninja_flutter/data/models/group_model.dart';
@@ -116,6 +117,7 @@ abstract class CompanyEntity extends Object
       clients: BuiltList<ClientEntity>(),
       contacts: BuiltList<ContactEntity>(),
       products: BuiltList<ProductEntity>(),
+      categories: BuiltList<CategoryEntity>(),
       invoices: BuiltList<InvoiceEntity>(),
       recurringInvoices: BuiltList<InvoiceEntity>(),
       recurringExpenses: BuiltList<ExpenseEntity>(),
@@ -279,6 +281,7 @@ abstract class CompanyEntity extends Object
   BuiltList<ContactEntity> get contacts;
 
   BuiltList<ProductEntity> get products;
+  BuiltList<CategoryEntity> get categories;
 
   BuiltList<InvoiceEntity> get invoices;
 

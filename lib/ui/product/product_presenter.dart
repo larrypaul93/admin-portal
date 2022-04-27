@@ -34,6 +34,13 @@ class ProductPresenter extends EntityPresenter {
       ProductFields.taxName1,
       ProductFields.taxName2,
       ProductFields.taxName3,
+      ProductFields.sku,
+      ProductFields.partNo,
+      ProductFields.onHand,
+      ProductFields.category,
+      ProductFields.vendor,
+      ProductFields.subCategory,
+      ProductFields.upc
     ];
   }
 
@@ -91,6 +98,27 @@ class ProductPresenter extends EntityPresenter {
       case ProductFields.taxRate3:
         return Text(formatNumber(product.taxRate3, context,
             formatNumberType: FormatNumberType.percent));
+
+      case ProductFields.category:
+        return Text(product.category?.name ?? '');
+
+      case ProductFields.vendor:
+        return Text(product.vendor?.name ?? '');
+
+      case ProductFields.subCategory:
+        return Text(product.subCategory?.name ?? '');
+
+      case ProductFields.sku:
+        return Text(product.sku);
+
+      case ProductFields.partNo:
+        return Text(product.partNo);
+
+      case ProductFields.onHand:
+        return Text(product.onHand);
+
+      case ProductFields.upc:
+        return Text(product.upc);
     }
 
     return super.getField(field: field, context: context);

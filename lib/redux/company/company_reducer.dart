@@ -35,6 +35,8 @@ import 'package:invoiceninja_flutter/redux/vendor/vendor_reducer.dart';
 import 'package:invoiceninja_flutter/redux/webhook/webhook_reducer.dart';
 
 // STARTER: import - do not remove comment
+import 'package:invoiceninja_flutter/redux/category/category_reducer.dart';
+
 import 'package:invoiceninja_flutter/redux/contact/contact_reducer.dart';
 
 UserCompanyState companyReducer(UserCompanyState state, dynamic action) {
@@ -53,6 +55,7 @@ UserCompanyState companyReducer(UserCompanyState state, dynamic action) {
     ..vendorState.replace(vendorsReducer(state.vendorState, action))
     ..taskState.replace(tasksReducer(state.taskState, action))
     // STARTER: reducer - do not remove comment
+    ..categoryState.replace(categoriesReducer(state.categoryState, action))
     ..contactState.replace(contactsReducer(state.contactState, action))
     ..recurringExpenseState
         .replace(recurringExpensesReducer(state.recurringExpenseState, action))

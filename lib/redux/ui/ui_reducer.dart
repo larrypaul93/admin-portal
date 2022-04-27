@@ -38,6 +38,8 @@ import 'package:invoiceninja_flutter/redux/vendor/vendor_reducer.dart';
 import 'package:invoiceninja_flutter/redux/webhook/webhook_reducer.dart';
 
 // STARTER: import - do not remove comment
+import 'package:invoiceninja_flutter/redux/category/category_reducer.dart';
+
 import 'package:invoiceninja_flutter/redux/contact/contact_reducer.dart';
 
 UIState uiReducer(UIState state, dynamic action) {
@@ -63,6 +65,7 @@ UIState uiReducer(UIState state, dynamic action) {
         .replace(dashboardUIReducer(state.dashboardUIState, action))
     ..reportsUIState.replace(reportsUIReducer(state.reportsUIState, action))
     // STARTER: reducer - do not remove comment
+    ..categoryUIState.replace(categoryUIReducer(state.categoryUIState, action))
     ..contactUIState.replace(contactUIReducer(state.contactUIState, action))
     ..recurringExpenseUIState.replace(
         recurringExpenseUIReducer(state.recurringExpenseUIState, action))

@@ -89,6 +89,10 @@ import 'package:invoiceninja_flutter/utils/formatting.dart';
 import 'package:invoiceninja_flutter/utils/platforms.dart';
 
 // STARTER: import - do not remove comment
+import 'package:invoiceninja_flutter/redux/category/category_state.dart';
+import 'package:invoiceninja_flutter/ui/category/edit/category_edit_vm.dart';
+import 'package:invoiceninja_flutter/redux/category/category_selectors.dart';
+
 import 'package:invoiceninja_flutter/redux/contact/contact_state.dart';
 import 'package:invoiceninja_flutter/ui/contact/edit/contact_edit_vm.dart';
 import 'package:invoiceninja_flutter/redux/contact/contact_selectors.dart';
@@ -292,6 +296,9 @@ abstract class AppState implements Built<AppState, AppStateBuilder> {
       case EntityType.invoice:
         return invoiceState.map;
       // STARTER: states switch map - do not remove comment
+      case EntityType.category:
+        return categoryState.map;
+
       case EntityType.contact:
         return contactState.map;
 
@@ -375,6 +382,9 @@ abstract class AppState implements Built<AppState, AppStateBuilder> {
       case EntityType.invoice:
         return invoiceState.list;
       // STARTER: states switch list - do not remove comment
+      case EntityType.category:
+        return categoryState.list;
+
       case EntityType.contact:
         return contactState.list;
 
@@ -447,6 +457,9 @@ abstract class AppState implements Built<AppState, AppStateBuilder> {
       case EntityType.invoice:
         return invoiceUIState;
       // STARTER: states switch - do not remove comment
+      case EntityType.category:
+        return categoryUIState;
+
       case EntityType.contact:
         return contactUIState;
 
@@ -520,6 +533,10 @@ abstract class AppState implements Built<AppState, AppStateBuilder> {
   ListUIState get invoiceListState => uiState.invoiceUIState.listUIState;
 
   // STARTER: state getters - do not remove comment
+  CategoryState get categoryState => userCompanyState.categoryState;
+  ListUIState get categoryListState => uiState.categoryUIState.listUIState;
+  CategoryUIState get categoryUIState => uiState.categoryUIState;
+
   ContactState get contactState => userCompanyState.contactState;
   ListUIState get contactListState => uiState.contactUIState.listUIState;
   ContactUIState get contactUIState => uiState.contactUIState;
@@ -694,6 +711,9 @@ abstract class AppState implements Built<AppState, AppStateBuilder> {
       case CreditEditScreen.route:
         return hasCreditChanges(creditUIState.editing, creditState.map);
       // STARTER: has changes - do not remove comment
+      case CategoryEditScreen.route:
+        return hasCategoryChanges(categoryUIState.editing, categoryState.map);
+
       case ContactEditScreen.route:
         return hasContactChanges(contactUIState.editing, contactState.map);
 

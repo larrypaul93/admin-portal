@@ -43,6 +43,8 @@ class EntityType extends EnumClass {
   static const EntityType invoiceItem = _$invoiceItem;
   static const EntityType design = _$design;
   // STARTER: entity type - do not remove comment
+  static const EntityType category = _$category;
+
   static const EntityType recurringExpense = _$recurringExpense;
   static const EntityType recurringQuote = _$recurringQuote;
   static const EntityType subscription = _$subscription;

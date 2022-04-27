@@ -16,6 +16,18 @@ mixin LocalizationsProvider on LocaleCodeAware {
   static final Map<String, Map<String, String>> _localizedValues = {
     'en': {
       // STARTER: lang key - do not remove comment
+      'category': 'Category',
+      'category': 'Category',
+      'new_category': 'New Category',
+      'edit_category': 'Edit Category',
+      'created_category': 'Successfully created category',
+      'updated_category': 'Successfully updated category',
+      'archived_category': 'Successfully archived category',
+      'deleted_category': 'Successfully deleted category',
+      'removed_category': 'Successfully removed category',
+      'restored_category': 'Successfully restored category',
+      'search_category': 'Search Category',
+
       'tax_amount1': 'Tax Amount 1',
       'tax_amount2': 'Tax Amount 2',
       'tax_amount3': 'Tax Amount 3',
@@ -75096,6 +75108,37 @@ mixin LocalizationsProvider on LocaleCodeAware {
       _localizedValues['en']['update_project'];
 
   // STARTER: lang field - do not remove comment
+  // String get category =>
+  //     _localizedValues[localeCode]['category'] ??
+  //     _localizedValues['en']['category'];
+  // String get category =>
+  //     _localizedValues[localeCode]['category'] ??
+  //     _localizedValues['en']['category'];
+  String get newCategory =>
+      _localizedValues[localeCode]['new_category'] ??
+      _localizedValues['en']['new_category'];
+  String get createdCategory =>
+      _localizedValues[localeCode]['created_category'] ??
+      _localizedValues['en']['created_category'];
+  String get updatedCategory =>
+      _localizedValues[localeCode]['updated_category'] ??
+      _localizedValues['en']['updated_category'];
+  String get archivedCategory =>
+      _localizedValues[localeCode]['archived_category'] ??
+      _localizedValues['en']['archived_category'];
+  String get deletedCategory =>
+      _localizedValues[localeCode]['deleted_category'] ??
+      _localizedValues['en']['deleted_category'];
+  String get restoredCategory =>
+      _localizedValues[localeCode]['restored_category'] ??
+      _localizedValues['en']['restored_category'];
+  String get editCategory =>
+      _localizedValues[localeCode]['edit_category'] ??
+      _localizedValues['en']['edit_category'];
+  String get searchCategory =>
+      _localizedValues[localeCode]['search_category'] ??
+      _localizedValues['en']['search_category'];
+
   String get contact =>
       _localizedValues[localeCode]['contact'] ??
       _localizedValues['en']['contact'];

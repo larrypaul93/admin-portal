@@ -94,6 +94,11 @@ import 'package:invoiceninja_flutter/utils/localization.dart';
 import 'package:invoiceninja_flutter/utils/platforms.dart';
 
 // STARTER: import - do not remove comment
+import 'package:invoiceninja_flutter/ui/category/category_screen.dart';
+import 'package:invoiceninja_flutter/ui/category/edit/category_edit_vm.dart';
+import 'package:invoiceninja_flutter/ui/category/view/category_view_vm.dart';
+import 'package:invoiceninja_flutter/ui/category/category_screen_vm.dart';
+
 import 'package:invoiceninja_flutter/ui/contact/contact_screen.dart';
 import 'package:invoiceninja_flutter/ui/contact/edit/contact_edit_vm.dart';
 import 'package:invoiceninja_flutter/ui/contact/view/contact_view_vm.dart';
@@ -501,6 +506,13 @@ class InvoiceNinjaAppState extends State<InvoiceNinjaApp> {
                         QuoteEmailScreen.route: (context) => QuoteEmailScreen(),
                         QuotePdfScreen.route: (context) => QuotePdfScreen(),
                         // STARTER: routes - do not remove comment
+                        CategoryScreen.route: (context) =>
+                            CategoryScreenBuilder(),
+                        CategoryViewScreen.route: (context) =>
+                            CategoryViewScreen(),
+                        CategoryEditScreen.route: (context) =>
+                            CategoryEditScreen(),
+
                         ContactScreen.route: (context) =>
                             ContactScreenBuilder(),
                         ContactViewScreen.route: (context) =>

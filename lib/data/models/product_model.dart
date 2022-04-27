@@ -2,6 +2,7 @@
 import 'package:built_collection/built_collection.dart';
 import 'package:built_value/built_value.dart';
 import 'package:built_value/serializer.dart';
+import 'package:invoiceninja_flutter/data/models/category_model.dart';
 
 // Project imports:
 import 'package:invoiceninja_flutter/data/models/models.dart';
@@ -65,6 +66,14 @@ class ProductFields {
   static const String taxName2 = 'tax_name2';
   static const String taxRate3 = 'tax_rate3';
   static const String taxName3 = 'tax_name3';
+
+  static const String sku = 'sku';
+  static const String category = 'category';
+  static const String subCategory = 'sub_category';
+  static const String partNo = 'part_no';
+  static const String onHand = 'onHand';
+  static const String upc = 'upc';
+  static const String vendor = 'vendor';
 }
 
 abstract class ProductEntity extends Object
@@ -96,6 +105,13 @@ abstract class ProductEntity extends Object
       assignedUserId: '',
       createdUserId: '',
       documents: BuiltList<DocumentEntity>(),
+      categoryId: '',
+      subCategoryId: '',
+      partNo: '',
+      onHand: '',
+      upc: '',
+      vendorId: '',
+      sku: '',
     );
   }
 
@@ -156,6 +172,34 @@ abstract class ProductEntity extends Object
 
   @BuiltValueField(wireName: 'custom_value4')
   String get customValue4;
+
+  @BuiltValueField(wireName: 'category_id')
+  String get categoryId;
+
+  @BuiltValueField(wireName: 'sub_category_id')
+  String get subCategoryId;
+
+  @BuiltValueField(wireName: 'part_no')
+  String get partNo;
+
+  @BuiltValueField(wireName: 'on_hand')
+  String get onHand;
+
+  String get upc;
+
+  @BuiltValueField(wireName: 'vendor_id')
+  String get vendorId;
+
+  String get sku;
+
+  @nullable
+  CategoryEntity get category;
+
+  @nullable
+  CategoryEntity get subCategory;
+
+  @nullable
+  VendorEntity get vendor;
 
   BuiltList<DocumentEntity> get documents;
 

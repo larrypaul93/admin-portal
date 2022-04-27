@@ -4,6 +4,10 @@ import 'package:flutter/material.dart';
 // Package imports:
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:invoiceninja_flutter/ui/app/app_title_bar.dart';
+import 'package:invoiceninja_flutter/ui/category/category_screen.dart';
+import 'package:invoiceninja_flutter/ui/category/category_screen_vm.dart';
+import 'package:invoiceninja_flutter/ui/category/edit/category_edit_vm.dart';
+import 'package:invoiceninja_flutter/ui/category/view/category_view_vm.dart';
 import 'package:invoiceninja_flutter/ui/contact/contact_screen.dart';
 import 'package:invoiceninja_flutter/ui/contact/contact_screen_vm.dart';
 import 'package:invoiceninja_flutter/ui/contact/edit/contact_edit_vm.dart';
@@ -146,6 +150,12 @@ class MainScreen extends StatelessWidget {
         case ProductScreen.route:
           screen = EntityScreens(
             entityType: EntityType.product,
+            editingFilterEntity: editingFilterEntity,
+          );
+          break;
+        case CategoryScreen.route:
+          screen = EntityScreens(
+            entityType: EntityType.category,
             editingFilterEntity: editingFilterEntity,
           );
           break;
@@ -416,6 +426,9 @@ class EntityScreens extends StatelessWidget {
         case ContactScreen.route:
           child = ContactEditScreen();
           break;
+        case CategoryScreen.route:
+          child = CategoryEditScreen();
+          break;
         case VendorScreen.route:
           child = VendorEditScreen();
           break;
@@ -447,6 +460,9 @@ class EntityScreens extends StatelessWidget {
           break;
         case EntityType.product:
           child = ProductEditScreen();
+          break;
+        case EntityType.category:
+          child = CategoryEditScreen();
           break;
         case EntityType.invoice:
           child = InvoiceEditScreen();
@@ -500,6 +516,9 @@ class EntityScreens extends StatelessWidget {
             break;
           case EntityType.product:
             child = ProductViewScreen();
+            break;
+          case EntityType.category:
+            child = CategoryViewScreen();
             break;
           case EntityType.invoice:
             child = InvoiceViewScreen();
@@ -661,6 +680,9 @@ class EntityScreens extends StatelessWidget {
           break;
         case EntityType.product:
           listWidget = ProductScreenBuilder();
+          break;
+        case EntityType.category:
+          listWidget = CategoryScreenBuilder();
           break;
         case EntityType.invoice:
           listWidget = InvoiceScreenBuilder();

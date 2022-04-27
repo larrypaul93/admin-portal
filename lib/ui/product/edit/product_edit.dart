@@ -4,11 +4,14 @@ import 'package:flutter/material.dart';
 // Project imports:
 import 'package:invoiceninja_flutter/data/models/entities.dart';
 import 'package:invoiceninja_flutter/data/models/models.dart';
+import 'package:invoiceninja_flutter/redux/category/category_selectors.dart';
+import 'package:invoiceninja_flutter/redux/vendor/vendor_selectors.dart';
 import 'package:invoiceninja_flutter/ui/app/edit_scaffold.dart';
 import 'package:invoiceninja_flutter/ui/app/form_card.dart';
 import 'package:invoiceninja_flutter/ui/app/forms/app_form.dart';
 import 'package:invoiceninja_flutter/ui/app/forms/custom_field.dart';
 import 'package:invoiceninja_flutter/ui/app/forms/decorated_form_field.dart';
+import 'package:invoiceninja_flutter/ui/app/forms/dynamic_selector.dart';
 import 'package:invoiceninja_flutter/ui/app/invoice/tax_rate_dropdown.dart';
 import 'package:invoiceninja_flutter/ui/app/scrollable_listview.dart';
 import 'package:invoiceninja_flutter/ui/product/edit/product_edit_vm.dart';
@@ -44,6 +47,11 @@ class _ProductEditState extends State<ProductEdit> {
   final _custom3Controller = TextEditingController();
   final _custom4Controller = TextEditingController();
 
+  final _skuController = TextEditingController();
+  final _partNoController = TextEditingController();
+  final _onHandController = TextEditingController();
+  final _upcController = TextEditingController();
+
   List<TextEditingController> _controllers = [];
   final _debouncer = Debouncer();
 
@@ -59,6 +67,10 @@ class _ProductEditState extends State<ProductEdit> {
       _custom2Controller,
       _custom3Controller,
       _custom4Controller,
+      _skuController,
+      _onHandController,
+      _partNoController,
+      _upcController
     ];
 
     _controllers
@@ -77,6 +89,11 @@ class _ProductEditState extends State<ProductEdit> {
     _custom2Controller.text = product.customValue2;
     _custom3Controller.text = product.customValue3;
     _custom4Controller.text = product.customValue4;
+
+    _skuController.text = product.sku;
+    _onHandController.text = product.onHand;
+    _partNoController.text = product.partNo;
+    _upcController.text = product.upc;
 
     _controllers
         .forEach((dynamic controller) => controller.addListener(_onChanged));
@@ -105,7 +122,11 @@ class _ProductEditState extends State<ProductEdit> {
       ..customValue1 = _custom1Controller.text.trim()
       ..customValue2 = _custom2Controller.text.trim()
       ..customValue3 = _custom3Controller.text.trim()
-      ..customValue4 = _custom4Controller.text.trim());
+      ..customValue4 = _custom4Controller.text.trim()
+      ..sku = _skuController.text.trim()
+      ..partNo = _partNoController.text.trim()
+      ..upc = _upcController.text.trim()
+      ..onHand = _onHandController.text.trim());
     if (product != widget.viewModel.product) {
       _debouncer.run(() {
         widget.viewModel.onChanged(product);
@@ -119,6 +140,7 @@ class _ProductEditState extends State<ProductEdit> {
     final viewModel = widget.viewModel;
     final product = viewModel.product;
     final company = viewModel.company;
+    final state = viewModel.state;
 
     return EditScaffold(
       entity: product,
@@ -221,6 +243,70 @@ class _ProductEditState extends State<ProductEdit> {
                     initialTaxName: product.taxName3,
                     initialTaxRate: product.taxRate3,
                   ),
+                DecoratedFormField(
+                  autofocus: true,
+                  label: 'SKU',
+                  controller: _skuController,
+                  onSavePressed: viewModel.onSavePressed,
+                  keyboardType: TextInputType.text,
+                ),
+                DecoratedFormField(
+                  autofocus: true,
+                  label: 'Part No',
+                  controller: _partNoController,
+                  onSavePressed: viewModel.onSavePressed,
+                  keyboardType: TextInputType.text,
+                ),
+                DecoratedFormField(
+                  autofocus: true,
+                  label: 'UPC',
+                  controller: _upcController,
+                  onSavePressed: viewModel.onSavePressed,
+                  keyboardType: TextInputType.text,
+                ),
+                DecoratedFormField(
+                  autofocus: true,
+                  label: 'On Hand',
+                  controller: _onHandController,
+                  onSavePressed: viewModel.onSavePressed,
+                  keyboardType: TextInputType.text,
+                ),
+                DynamicSelector(
+                  entityType: EntityType.category,
+                  entityIds: memoizedDropdownCategoryList(
+                      state.categoryState.map,
+                      state.categoryState.list,
+                      state.staticState,
+                      state.userState.map,
+                      ''),
+                  entityId: product.categoryId,
+                  onChanged: (categoryId) => viewModel.onChanged(
+                      product.rebuild((b) => b..categoryId = categoryId)),
+                ),
+                DynamicSelector(
+                  labelText: 'Sub Category',
+                  entityType: EntityType.category,
+                  entityIds: memoizedDropdownSubCategoryList(
+                      state.categoryState.map,
+                      state.categoryState.list,
+                      state.staticState,
+                      state.userState.map,
+                      product.categoryId),
+                  entityId: product.subCategoryId,
+                  onChanged: (categoryId) => viewModel.onChanged(
+                      product.rebuild((b) => b..subCategoryId = categoryId)),
+                ),
+                DynamicSelector(
+                  entityType: EntityType.vendor,
+                  entityIds: memoizedDropdownVendorList(
+                      state.vendorState.map,
+                      state.vendorState.list,
+                      state.userState.map,
+                      state.staticState),
+                  entityId: product.vendorId,
+                  onChanged: (vendorId) => viewModel.onChanged(
+                      product.rebuild((b) => b..vendorId = vendorId)),
+                ),
                 CustomField(
                   controller: _custom1Controller,
                   field: CustomFieldType.product1,

@@ -40,6 +40,8 @@ import 'package:invoiceninja_flutter/redux/vendor/vendor_actions.dart';
 import 'package:invoiceninja_flutter/redux/webhook/webhook_actions.dart';
 
 // STARTER: import - do not remove comment
+import 'package:invoiceninja_flutter/redux/category/category_actions.dart';
+
 import 'package:invoiceninja_flutter/redux/contact/contact_actions.dart';
 
 PrefState prefReducer(
@@ -495,6 +497,17 @@ Reducer<BuiltList<HistoryRecord>> historyReducer = combineReducers([
       _addToHistory(historyList,
           HistoryRecord(id: action.group.id, entityType: EntityType.group))),
   // STARTER: history - do not remove comment
+  TypedReducer<BuiltList<HistoryRecord>, ViewCategory>((historyList, action) =>
+      _addToHistory(
+          historyList,
+          HistoryRecord(
+              id: action.categoryId, entityType: EntityType.category))),
+  TypedReducer<BuiltList<HistoryRecord>, EditCategory>((historyList, action) =>
+      _addToHistory(
+          historyList,
+          HistoryRecord(
+              id: action.category.id, entityType: EntityType.category))),
+
   TypedReducer<BuiltList<HistoryRecord>, ViewContact>((historyList, action) =>
       _addToHistory(historyList,
           HistoryRecord(id: action.contactId, entityType: EntityType.contact))),
