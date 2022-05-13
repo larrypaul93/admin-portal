@@ -64,6 +64,8 @@ PrefState prefReducer(
       ..isMenuVisible = menuVisibleReducer(state.isMenuVisible, action)
       ..isHistoryVisible = historyVisibleReducer(state.isHistoryVisible, action)
       ..enableDarkMode = darkModeReducer(state.enableDarkMode, action)
+      ..enableJSPDF = enableJspdfReducer(state.enableJSPDF, action)
+      ..enableTooltips = enableTooltipsReducer(state.enableTooltips, action)
       ..persistData = persistDataReducer(state.persistData, action)
       ..persistUI = persistUIReducer(state.persistUI, action)
       ..showKanban = showKanbanReducer(state.showKanban, action)
@@ -275,6 +277,18 @@ Reducer<AppSidebarMode> historySidebarReducer = combineReducers([
 Reducer<bool> darkModeReducer = combineReducers([
   TypedReducer<bool, UpdateUserPreferences>((enableDarkMode, action) {
     return action.enableDarkMode ?? enableDarkMode;
+  }),
+]);
+
+Reducer<bool> enableJspdfReducer = combineReducers([
+  TypedReducer<bool, UpdateUserPreferences>((enableJSPDF, action) {
+    return action.enableJSPDF ?? enableJSPDF;
+  }),
+]);
+
+Reducer<bool> enableTooltipsReducer = combineReducers([
+  TypedReducer<bool, UpdateUserPreferences>((enableTooltips, action) {
+    return action.enableTooltips ?? enableTooltips;
   }),
 ]);
 

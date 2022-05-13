@@ -103,6 +103,8 @@ class InvoiceFields {
   static const String clientState = 'client_state';
   static const String clientPostalCode = 'client_postal_code';
   static const String clientCountry = 'client_country';
+  static const String quote = 'quote';
+  static const String recurringInvoice = 'recurring_invoice';
 }
 
 class InvoiceTotalFields {
@@ -1144,7 +1146,9 @@ abstract class InvoiceEntity extends Object
 
   String get calculatedStatusId {
     if (isRecurring) {
-      if (isPending) {
+      if (!isDraft && remainingCycles == 0) {
+        return kRecurringInvoiceStatusCompleted;
+      } else if (isPending) {
         return kRecurringInvoiceStatusPending;
       }
     } else {

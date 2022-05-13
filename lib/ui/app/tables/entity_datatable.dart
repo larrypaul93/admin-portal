@@ -53,6 +53,7 @@ class EntityDataTableSource extends AppDataTableSource {
   @override
   DataRow getRow(int index) {
     final state = StoreProvider.of<AppState>(context).state;
+    final prefState = state.prefState;
     final entity = entityMap[entityList[index]];
     entityPresenter.initialize(entity, context);
 
@@ -93,6 +94,16 @@ class EntityDataTableSource extends AppDataTableSource {
       backgroundColor = convertHexStringToColor(rowColor);
     }
 
+    final wideFields = [
+      'public_notes',
+      'private_notes',
+      'description',
+      'custom1',
+      'custom2',
+      'custom3',
+      'custom4',
+    ];
+
     return DataRow(
       selected: (listState.selectedIds ?? <String>[]).contains(entity.id),
       onSelectChanged:
@@ -103,7 +114,9 @@ class EntityDataTableSource extends AppDataTableSource {
             Row(
               children: <Widget>[
                 IconButton(
-                  tooltip: AppLocalization.of(context).editRecord,
+                  tooltip: prefState.enableTooltips
+                      ? AppLocalization.of(context).editRecord
+                      : null,
                   onPressed: () => editEntity(context: context, entity: entity),
                   icon: GestureDetector(
                     child: Icon(MdiIcons.circleEditOutline),
@@ -131,7 +144,17 @@ class EntityDataTableSource extends AppDataTableSource {
           ),
         ...tableColumns.map(
           (field) => DataCell(
-            entityPresenter.getField(field: field, context: context),
+            ConstrainedBox(
+              child: entityPresenter.getField(field: field, context: context),
+              constraints: BoxConstraints(
+                maxWidth: wideFields.contains(field)
+                    ? kTableColumnWidthMax * 1.5
+                    : kTableColumnWidthMax,
+                minWidth: field == ProductFields.description
+                    ? kTableColumnWidthMax
+                    : 0,
+              ),
+            ),
             onTap: () => onTap(entity),
             //onLongPress: () => selectEntity(entity: entity, context: context, longPress: true),
             backgroundColor: backgroundColor,

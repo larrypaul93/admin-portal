@@ -34,13 +34,21 @@ class _HealthCheckDialogState extends State<HealthCheckDialog> {
     super.didChangeDependencies();
   }
 
-  void runCheck() {
+  void runCheck() async {
     setState(() {
       _response = null;
     });
 
     final webClient = WebClient();
     final state = StoreProvider.of<AppState>(context).state;
+
+    try {
+      await webClient.get('${state.account.defaultUrl}/update?secret=', '',
+          rawResponse: true);
+    } catch (e) {
+      // do nothing
+    }
+
     final credentials = state.credentials;
     final url = '${credentials.url}/health_check';
 
@@ -82,7 +90,6 @@ class _HealthCheckDialogState extends State<HealthCheckDialog> {
   @override
   Widget build(BuildContext context) {
     final localization = AppLocalization.of(context);
-    final state = StoreProvider.of<AppState>(context).state;
     final webPhpVersion =
         _parseVersion(_response?.phpVersion?.currentPHPVersion ?? '');
     final cliPhpVersion =
@@ -137,15 +144,22 @@ class _HealthCheckDialogState extends State<HealthCheckDialog> {
                     isWarning: true,
                   ),
                   */
+                if (_response.filePermissions != 'Ok')
+                  _HealthListTile(
+                    title: 'Invalid File Permissions',
+                    isValid: false,
+                    subtitle: _response.filePermissions,
+                    url:
+                        'https://invoiceninja.github.io/docs/self-host-installation/#file-permissions',
+                  ),
+                /*
                 if (!state.account.isDocker) ...[
                   if (!_response.openBasedir)
-                    /*
                     _HealthListTile(
                       title: 'Open Basedir',
                       isWarning: true,
                       subtitle: 'Not enabled',
                     ),
-                    */
                     if (!_response.cacheEnabled)
                       _HealthListTile(
                         title: 'Config not cached',
@@ -154,6 +168,7 @@ class _HealthCheckDialogState extends State<HealthCheckDialog> {
                         isWarning: true,
                       ),
                 ],
+                */
                 if (_response.queue == 'sync')
                   _HealthListTile(
                     title: 'Queue not enabled',

@@ -95,9 +95,10 @@ class LoadInvoice {
 }
 
 class LoadInvoices {
-  LoadInvoices({this.completer});
+  LoadInvoices({this.completer, this.page = 1});
 
   final Completer completer;
+  final int page;
 }
 
 class LoadInvoiceRequest implements StartLoading {}

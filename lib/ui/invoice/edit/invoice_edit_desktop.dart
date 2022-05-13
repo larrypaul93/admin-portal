@@ -2,10 +2,13 @@
 import 'dart:convert';
 
 // Flutter imports:
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 // Package imports:
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:invoiceninja_flutter/data/models/vendor_model.dart';
+import 'package:invoiceninja_flutter/redux/vendor/vendor_actions.dart';
 import 'package:invoiceninja_flutter/redux/vendor/vendor_selectors.dart';
 import 'package:invoiceninja_flutter/ui/app/buttons/elevated_button.dart';
 import 'package:invoiceninja_flutter/ui/app/entity_dropdown.dart';
@@ -50,6 +53,9 @@ import 'package:invoiceninja_flutter/utils/icons.dart';
 import 'package:invoiceninja_flutter/utils/localization.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:printing/printing.dart';
+
+import 'package:invoiceninja_flutter/utils/web_stub.dart'
+    if (dart.library.html) 'package:invoiceninja_flutter/utils/web.dart';
 
 class InvoiceEditDesktop extends StatefulWidget {
   const InvoiceEditDesktop({
@@ -203,6 +209,7 @@ class InvoiceEditDesktopState extends State<InvoiceEditDesktop>
 
   @override
   Widget build(BuildContext context) {
+    final store = StoreProvider.of<AppState>(context);
     final localization = AppLocalization.of(context);
     final viewModel = widget.viewModel;
     final state = viewModel.state;
@@ -339,7 +346,7 @@ class InvoiceEditDesktopState extends State<InvoiceEditDesktop>
                               child: Text(localization.endless),
                               value: -1,
                             ),
-                            ...List<int>.generate(37, (i) => i)
+                            ...List<int>.generate(61, (i) => i)
                                 .map((value) => DropdownMenuItem(
                                       child: Text('$value'),
                                       value: value,
@@ -664,8 +671,8 @@ class InvoiceEditDesktopState extends State<InvoiceEditDesktop>
                                       clientId: invoice.clientId,
                                       projectId: invoice.projectId,
                                       onChanged: (projectId) {
-                                        final project =
-                                            state.projectState.get(projectId);
+                                        final project = store.state.projectState
+                                            .get(projectId);
                                         final client = state.clientState
                                             .get(project.clientId);
 
@@ -700,6 +707,12 @@ class InvoiceEditDesktopState extends State<InvoiceEditDesktop>
                                         invoice.rebuild(
                                             (b) => b.vendorId = vendor.id),
                                       ),
+                                      onCreateNew: (completer, name) {
+                                        store.dispatch(SaveVendorRequest(
+                                            vendor: VendorEntity()
+                                                .rebuild((b) => b..name = name),
+                                            completer: completer));
+                                      },
                                     ),
                                   DecoratedFormField(
                                     key: ValueKey(
@@ -932,8 +945,10 @@ class __PdfPreviewState extends State<_PdfPreview> {
 
   int _pageCount = 1;
   int _currentPage = 1;
+  String _pdfString;
   http.Response _response;
   bool _isLoading = false;
+  bool _pendingLoad = false;
 
   @override
   void didChangeDependencies() {
@@ -962,7 +977,12 @@ class __PdfPreviewState extends State<_PdfPreview> {
   }
 
   void _loadPdf() async {
-    if (!widget.invoice.hasClient || _isLoading) {
+    if (!widget.invoice.hasClient) {
+      return;
+    }
+
+    if (_isLoading) {
+      _pendingLoad = true;
       return;
     }
 
@@ -997,6 +1017,17 @@ class __PdfPreviewState extends State<_PdfPreview> {
         if (_currentPage > _pageCount) {
           _currentPage = _pageCount;
         }
+
+        if (kIsWeb && !state.prefState.enableJSPDF) {
+          _pdfString =
+              'data:application/pdf;base64,' + base64Encode(response.bodyBytes);
+          WebUtils.registerWebView(_pdfString);
+        }
+
+        if (_pendingLoad) {
+          _pendingLoad = false;
+          _loadPdf();
+        }
       });
     }).catchError((dynamic error) {
       setState(() {
@@ -1008,16 +1039,18 @@ class __PdfPreviewState extends State<_PdfPreview> {
   @override
   Widget build(BuildContext context) {
     final localization = AppLocalization.of(context);
+    final store = StoreProvider.of<AppState>(context);
+    final state = store.state;
 
     return Container(
-      height: 1450,
+      height: 1200,
       child: Stack(
         alignment: Alignment.topCenter,
         children: [
           Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              if (_pageCount > 1)
+              if (_pageCount > 1 && (state.prefState.enableJSPDF || !kIsWeb))
                 Padding(
                   padding: const EdgeInsets.only(bottom: 16),
                   child: Row(
@@ -1050,28 +1083,26 @@ class __PdfPreviewState extends State<_PdfPreview> {
                   ),
                 ),
               Expanded(
-                  child: _response == null
-                      ? SizedBox()
-                      : PdfPreview(
-                          build: (format) => _response.bodyBytes,
-                          canChangeOrientation: false,
-                          canChangePageFormat: false,
-                          canDebug: false,
-                          pages: [_currentPage - 1],
-                        )),
+                child: _response == null
+                    ? Container(
+                        color: Colors.grey.shade300,
+                      )
+                    : state.prefState.enableJSPDF || !kIsWeb
+                        ? PdfPreview(
+                            build: (format) => _response.bodyBytes,
+                            canChangeOrientation: false,
+                            canChangePageFormat: false,
+                            canDebug: false,
+                            pages: [_currentPage - 1],
+                            maxPageWidth: 800,
+                          )
+                        : HtmlElementView(viewType: _pdfString),
+              ),
             ],
           ),
           if (_isLoading)
-            Column(
-              mainAxisSize: MainAxisSize.max,
-              children: [
-                LinearProgressIndicator(),
-                Expanded(
-                  child: Center(
-                    child: CircularProgressIndicator(),
-                  ),
-                ),
-              ],
+            Center(
+              child: CircularProgressIndicator(),
             )
         ],
       ),

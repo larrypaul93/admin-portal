@@ -4,7 +4,7 @@ class Constants {
 }
 
 // TODO remove version once #46609 is fixed
-const String kClientVersion = '5.0.78';
+const String kClientVersion = '5.0.84';
 const String kMinServerVersion = '5.0.4';
 
 const String kAppName = 'Invoice Ninja';
@@ -116,8 +116,8 @@ const double kBorderRadius = 2;
 const double kTabletLayoutWidth = 1100;
 const double kTabletDialogPadding = 250;
 
-const double kTableColumnWidthMin = 40;
-const double kTableColumnWidthMax = 120;
+const double kTableColumnWidthMin = 80;
+const double kTableColumnWidthMax = 200;
 
 const int kTableListWidthCutoff = 550;
 const int kDefaultAnimationDuration = 500;
@@ -148,10 +148,10 @@ const double kLighterOpacity = .6;
 
 const int kMaxNumberOfCompanies = 10;
 const int kMaxNumberOfHistory = 50;
-const int kMaxRecordsPerApiPage = 5000;
 const int kMaxPostSeconds = 60;
 const int kMaxRawPostSeconds = 300;
 const int kMaxEntitiesPerBulkAction = 100;
+const int kRecordsPerPage = 20000;
 const int kMillisecondsToTimerRefreshData = 1000 * 60 * 5; // 5 minutes
 const int kMillisecondsToRefreshData = 1000 * 60 * 15; // 15 minutes
 const int kUpdatedAtBufferSeconds = 600;
@@ -555,6 +555,7 @@ const String kDefaultLightSelectedColor = '#e5f5ff';
 const String kDefaultLightBorderColor = '#dfdfdf';
 
 const String kReportGroupDay = 'day';
+const String kReportGroupWeek = 'week';
 const String kReportGroupMonth = 'month';
 const String kReportGroupYear = 'year';
 

@@ -110,6 +110,9 @@ abstract class UIState implements Built<UIState, UIStateBuilder> {
 
   String get previousRoute;
 
+  @nullable
+  EntityType get loadingEntityType;
+
   BuiltList<EntityType> get previewStack;
 
   BuiltList<BaseEntity> get filterStack;

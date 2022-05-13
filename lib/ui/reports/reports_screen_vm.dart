@@ -375,28 +375,15 @@ class ReportsScreenVM {
         }) {
           Timer(Duration(milliseconds: 100), () {
             final reportState = state.uiState.reportsUIState;
-            if (group != null && reportState.group != group) {
-              store.dispatch(UpdateReportSettings(
-                report: report ?? reportState.report,
-                group: group,
-                chart: chart,
-                subgroup: subgroup,
-                selectedGroup: '',
-                customStartDate: '',
-                customEndDate: '',
-                filters: BuiltMap<String, String>(),
-              ));
-            } else {
-              store.dispatch(UpdateReportSettings(
-                report: report ?? reportState.report,
-                group: group,
-                selectedGroup: selectedGroup,
-                subgroup: subgroup,
-                chart: chart,
-                customStartDate: customStartDate,
-                customEndDate: customEndDate,
-              ));
-            }
+            store.dispatch(UpdateReportSettings(
+              report: report ?? reportState.report,
+              group: group,
+              selectedGroup: selectedGroup,
+              subgroup: subgroup,
+              chart: chart,
+              customStartDate: customStartDate,
+              customEndDate: customEndDate,
+            ));
           });
         },
         onExportPressed: (context) async {
@@ -414,7 +401,10 @@ class ReportsScreenVM {
               csvData += '\n';
               for (var i = 0; i < row.length; i++) {
                 final column = reportResult.columns[i];
-                final value = row[i].renderText(context, column).trim();
+                final value = row[i]
+                    .renderText(context, column)
+                    .trim()
+                    .replaceAll('"', '""');
                 csvData += '"$value",';
               }
               csvData = csvData.substring(0, csvData.length - 1);
@@ -439,11 +429,13 @@ class ReportsScreenVM {
 
             groupTotals.rows.forEach((group) {
               final row = groupTotals.totals[group];
-              csvData += '$group,${row['count'].toInt()}';
+              csvData +=
+                  '"${group.trim().replaceAll('"', '""')}",${row['count'].toInt()}';
 
               columns.forEach((column) {
-                final value = row[column].toString();
-                csvData += value.contains(' ') ? ',"$value"' : ',$value';
+                final value =
+                    row[column].toString().trim().replaceAll('"', '""');
+                csvData += ',"$value"';
               });
 
               csvData += '\n';
@@ -519,49 +511,57 @@ GroupTotals calculateReportTotals({
 
   for (var i = 0; i < data.length; i++) {
     final row = data[i];
+    final columnIndex = columns.indexOf(reportState.group);
+
+    if (columnIndex == -1) {
+      print('## ERROR: colum not found - ${reportState.group}');
+      continue;
+    }
+
+    final groupCell = row[columnIndex];
+    String group = groupCell.stringValue;
+
+    if (groupCell is ReportAgeValue) {
+      final age = groupCell.doubleValue;
+      if (groupCell.value == -1) {
+        group = kAgeGroupPaid;
+      } else if (age < 30) {
+        group = kAgeGroup0;
+      } else if (age < 60) {
+        group = kAgeGroup30;
+      } else if (age < 90) {
+        group = kAgeGroup60;
+      } else if (age < 120) {
+        group = kAgeGroup90;
+      } else {
+        group = kAgeGroup120;
+      }
+    } else if (group.isNotEmpty && isValidDate(group)) {
+      group = convertDateTimeToSqlDate(DateTime.tryParse(group));
+      if (reportState.subgroup == kReportGroupYear) {
+        group = group.substring(0, 4) + '-01-01';
+      } else if (reportState.subgroup == kReportGroupMonth) {
+        group = group.substring(0, 7) + '-01';
+      } else if (reportState.subgroup == kReportGroupWeek) {
+        final date = DateTime.parse(group);
+        final dateWeek =
+            DateTime(date.year, date.month, date.day - date.weekday % 7);
+        group = convertDateTimeToSqlDate(dateWeek);
+      }
+    }
+
+    if (!totals.containsKey(group)) {
+      totals[group] = {'count': 0};
+    }
+
     for (var j = 0; j < row.length; j++) {
       final cell = row[j];
       final column = columns[j];
-      final columnIndex = columns.indexOf(reportState.group);
 
-      if (columnIndex == -1) {
-        print('## ERROR: colum not found - ${reportState.group}');
-        continue;
-      }
-
-      final groupCell = row[columnIndex];
-      String group = groupCell.stringValue;
-
-      if (groupCell is ReportAgeValue) {
-        final age = groupCell.doubleValue;
-        if (groupCell.value == -1) {
-          group = kAgeGroupPaid;
-        } else if (age < 30) {
-          group = kAgeGroup0;
-        } else if (age < 60) {
-          group = kAgeGroup30;
-        } else if (age < 90) {
-          group = kAgeGroup60;
-        } else if (age < 120) {
-          group = kAgeGroup90;
-        } else {
-          group = kAgeGroup120;
-        }
-      } else if (group.isNotEmpty && isValidDate(group)) {
-        group = convertDateTimeToSqlDate(DateTime.tryParse(group));
-        if (reportState.subgroup == kReportGroupYear) {
-          group = group.substring(0, 4) + '-01-01';
-        } else if (reportState.subgroup == kReportGroupMonth) {
-          group = group.substring(0, 7) + '-01';
-        }
-      }
-
-      if (!totals.containsKey(group)) {
-        totals[group] = {'count': 0};
-      }
       if (column == reportState.group) {
         totals[group]['count'] += 1;
       }
+
       if (cell is ReportNumberValue ||
           cell is ReportAgeValue ||
           cell is ReportDurationValue) {
@@ -570,6 +570,7 @@ GroupTotals calculateReportTotals({
         }
 
         if (cell is ReportNumberValue &&
+            cell.currencyId != null &&
             cell.currencyId != company.currencyId) {
           double cellValue = cell.value;
           var rate = cell.exchangeRate;

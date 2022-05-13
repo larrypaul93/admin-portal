@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 // Package imports:
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:invoiceninja_flutter/ui/app/loading_indicator.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 // Project imports:
@@ -103,24 +104,26 @@ class EditScaffold extends StatelessWidget {
       },
       child: FocusTraversalGroup(
         child: Scaffold(
-          body: showUpgradeBanner
-              ? Column(
-                  children: [
-                    InkWell(
-                      child: IconMessage(
-                        upgradeMessage,
-                        color: Colors.orange,
-                      ),
-                      onTap: state.userCompany.isOwner && !isApple()
-                          ? () async {
-                              launch(state.userCompany.ninjaPortalUrl);
-                            }
-                          : null,
-                    ),
-                    Expanded(child: body),
-                  ],
-                )
-              : body,
+          body: state.companies.isEmpty
+              ? LoadingIndicator()
+              : showUpgradeBanner
+                  ? Column(
+                      children: [
+                        InkWell(
+                          child: IconMessage(
+                            upgradeMessage,
+                            color: Colors.orange,
+                          ),
+                          onTap: state.userCompany.isOwner && !isApple()
+                              ? () async {
+                                  launch(state.userCompany.ninjaPortalUrl);
+                                }
+                              : null,
+                        ),
+                        Expanded(child: body),
+                      ],
+                    )
+                  : body,
           drawer: isDesktop(context) ? MenuDrawerBuilder() : null,
           appBar: AppBar(
             centerTitle: false,

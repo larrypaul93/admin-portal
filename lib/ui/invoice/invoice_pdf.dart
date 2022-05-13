@@ -199,7 +199,7 @@ class _InvoicePdfViewState extends State<InvoicePdfView> {
     }
 
     return Scaffold(
-        backgroundColor: Colors.grey,
+        backgroundColor: Colors.grey.shade300,
         appBar: widget.showAppBar
             ? AppBar(
                 centerTitle: false,
@@ -298,6 +298,7 @@ class _InvoicePdfViewState extends State<InvoicePdfView> {
                     canChangeOrientation: false,
                     canChangePageFormat: false,
                     canDebug: false,
+                    maxPageWidth: 800,
                   ));
   }
 }

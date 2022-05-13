@@ -382,6 +382,24 @@ void handleTaskAction(
           StopTasksRequest(snackBarCompleter<Null>(context, message), taskIds));
       break;
     case EntityAction.invoiceTask:
+    case EntityAction.addToInvoice:
+      String lastClientId = '';
+      bool hasMultipleClients = false;
+      tasks.forEach((task) {
+        final clientId = (task as TaskEntity).clientId ?? '';
+        if (clientId.isNotEmpty) {
+          if (lastClientId.isNotEmpty && lastClientId != clientId) {
+            hasMultipleClients = true;
+          }
+          lastClientId = clientId;
+        }
+      });
+      if (hasMultipleClients) {
+        showErrorDialog(
+            context: context, message: localization.multipleClientError);
+        return;
+      }
+
       tasks.sort((taskA, taskB) {
         final taskAEntity = taskA as TaskEntity;
         final taskBEntity = taskB as TaskEntity;
@@ -435,11 +453,20 @@ void handleTaskAction(
       });
 
       if (items.isNotEmpty) {
-        createEntity(
+        if (action == EntityAction.invoiceTask) {
+          createEntity(
+              context: context,
+              entity:
+                  InvoiceEntity(state: state, client: client).rebuild((b) => b
+                    ..lineItems.addAll(items)
+                    ..projectId = projectId));
+        } else {
+          addToInvoiceDialog(
             context: context,
-            entity: InvoiceEntity(state: state, client: client).rebuild((b) => b
-              ..lineItems.addAll(items)
-              ..projectId = projectId));
+            clientId: task.clientId,
+            items: items,
+          );
+        }
       }
       break;
     case EntityAction.clone:

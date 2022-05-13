@@ -234,6 +234,15 @@ class _DeviceSettingsState extends State<DeviceSettings>
                   ),
                   if (isDesktop(context)) ...[
                     SwitchListTile(
+                      title: Text(localization.enableTooltips),
+                      subtitle: Text(localization.enableTooltipsHelp),
+                      value: prefState.enableTooltips,
+                      onChanged: (value) =>
+                          viewModel.onEnableTooltipsChanged(context, value),
+                      activeColor: Theme.of(context).colorScheme.secondary,
+                      secondary: Icon(MdiIcons.tooltip),
+                    ),
+                    SwitchListTile(
                       title: Text(localization.enableTouchEvents),
                       subtitle: Text(localization.enableTouchEventsHelp),
                       value: prefState.enableTouchEvents,
@@ -251,7 +260,18 @@ class _DeviceSettingsState extends State<DeviceSettings>
                       activeColor: Theme.of(context).colorScheme.secondary,
                       secondary: Icon(MdiIcons.filePdfBox),
                     ),
+                    if (kIsWeb)
+                      SwitchListTile(
+                        title: Text(localization.alternatePdfViewer),
+                        subtitle: Text(localization.alternatePdfViewerHelp),
+                        value: prefState.enableJSPDF,
+                        onChanged: (value) =>
+                            viewModel.onEnableJSPDFChanged(context, value),
+                        activeColor: Theme.of(context).colorScheme.secondary,
+                        secondary: Icon(MdiIcons.filePdfBox),
+                      ),
                   ],
+                  /*
                   SwitchListTile(
                     title: Text(localization.persistUi),
                     subtitle: Text(localization.persistUiHelp),
@@ -261,6 +281,7 @@ class _DeviceSettingsState extends State<DeviceSettings>
                     activeColor: Theme.of(context).colorScheme.secondary,
                     secondary: Icon(Icons.save_alt),
                   ),
+                  */
                   SwitchListTile(
                     title: Text(localization.persistData),
                     subtitle: Text(localization.persistDataHelp),
@@ -280,6 +301,10 @@ class _DeviceSettingsState extends State<DeviceSettings>
                       leading: Icon(Icons.refresh),
                       title: Text(localization.refreshData),
                       subtitle: LiveText(() {
+                        if (state.userCompanyState.lastUpdated == 0) {
+                          return '';
+                        }
+
                         return localization.lastUpdated +
                             ': ' +
                             timeago.format(

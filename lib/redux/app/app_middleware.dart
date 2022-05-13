@@ -6,6 +6,7 @@ import 'dart:math';
 // Flutter imports:
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:invoiceninja_flutter/redux/settings/settings_actions.dart';
 
 // Package imports:
 import 'package:path_provider/path_provider.dart';
@@ -229,22 +230,12 @@ Middleware<AppState> _createLoadState(
 
       AppBuilder.of(action.context).rebuild();
       store.dispatch(LoadStateSuccess(appState));
-
-      if (store.state.company.isLarge) {
-        store.dispatch(LoadClients(
-            completer: Completer<Null>()
-              ..future.catchError((Object error) {
-                store.dispatch(UserLogout());
-              })));
-      } else {
-        store.dispatch(RefreshData(
-            completer: Completer<Null>()
-              ..future.then((value) {
-                AppBuilder.of(navigatorKey.currentContext).rebuild();
-              }).catchError((Object error) {
-                store.dispatch(UserLogout());
-              })));
-      }
+      store.dispatch(RefreshData(
+          completer: Completer<Null>()
+            ..future.then((value) {
+              AppBuilder.of(navigatorKey.currentContext).rebuild();
+              store.dispatch(UpdatedSetting());
+            })));
 
       if (uiState.currentRoute != LoginScreen.route &&
           uiState.currentRoute.isNotEmpty &&
@@ -323,9 +314,9 @@ List<String> _getRoutes(AppState state) {
       final bool isNew = state.getUIState(entityType)?.isCreatingNew ?? false;
       if (isNew) {
         route += '/edit';
-      } else if (entityType != EntityType.product) {
-        route += '/view';
       }
+    } else if (part == 'view') {
+      // do nothing
     } else {
       if (![kMain, kDashboard, kSettings].contains(part) &&
           entityType == null) {

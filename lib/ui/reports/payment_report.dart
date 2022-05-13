@@ -1,5 +1,6 @@
 // Package imports:
 import 'package:built_collection/built_collection.dart';
+import 'package:invoiceninja_flutter/redux/reports/reports_selectors.dart';
 import 'package:memoize/memoize.dart';
 
 // Project imports:
@@ -15,11 +16,21 @@ enum PaymentReportFields {
   number,
   amount,
   client,
+  client_number,
   client_balance,
   client_address1,
   client_address2,
+  client_vat_number,
+  client_city,
+  client_postal_code,
+  client_country,
   client_shipping_address1,
   client_shipping_address2,
+  client_state,
+  client_shipping_city,
+  client_shipping_state,
+  client_shipping_postal_code,
+  client_shipping_country,
   transaction_reference,
   date,
   type,
@@ -177,6 +188,36 @@ ReportResult paymentReport(
         case PaymentReportFields.client_shipping_address2:
           value = client.shippingAddress2;
           break;
+        case PaymentReportFields.client_state:
+          value = client.state;
+          break;
+        case PaymentReportFields.client_shipping_city:
+          value = client.shippingCity;
+          break;
+        case PaymentReportFields.client_shipping_state:
+          value = client.shippingState;
+          break;
+        case PaymentReportFields.client_shipping_postal_code:
+          value = client.shippingPostalCode;
+          break;
+        case PaymentReportFields.client_shipping_country:
+          value = staticState.countryMap[client.shippingCountryId]?.name ?? '';
+          break;
+        case PaymentReportFields.client_city:
+          value = client.city;
+          break;
+        case PaymentReportFields.client_country:
+          value = staticState.countryMap[client.countryId]?.name ?? '';
+          break;
+        case PaymentReportFields.client_postal_code:
+          value = client.postalCode;
+          break;
+        case PaymentReportFields.client_vat_number:
+          value = client.vatNumber;
+          break;
+        case PaymentReportFields.client_number:
+          value = client.number;
+          break;
         case PaymentReportFields.transaction_reference:
           value = payment.transactionReference;
           break;
@@ -184,16 +225,32 @@ ReportResult paymentReport(
           value = payment.date;
           break;
         case PaymentReportFields.payment1:
-          value = payment.customValue1;
+          value = presentCustomField(
+            value: payment.customValue1,
+            customFieldType: CustomFieldType.payment1,
+            company: userCompany.company,
+          );
           break;
         case PaymentReportFields.payment2:
-          value = payment.customValue2;
+          value = presentCustomField(
+            value: payment.customValue2,
+            customFieldType: CustomFieldType.payment2,
+            company: userCompany.company,
+          );
           break;
         case PaymentReportFields.payment3:
-          value = payment.customValue3;
+          value = presentCustomField(
+            value: payment.customValue3,
+            customFieldType: CustomFieldType.payment3,
+            company: userCompany.company,
+          );
           break;
         case PaymentReportFields.payment4:
-          value = payment.customValue4;
+          value = presentCustomField(
+            value: payment.customValue4,
+            customFieldType: CustomFieldType.payment4,
+            company: userCompany.company,
+          );
           break;
         case PaymentReportFields.exchange_rate:
           value = payment.exchangeRate;

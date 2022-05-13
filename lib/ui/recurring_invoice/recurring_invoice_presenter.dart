@@ -10,6 +10,7 @@ import 'package:invoiceninja_flutter/data/models/models.dart';
 import 'package:invoiceninja_flutter/data/models/recurring_invoice_model.dart';
 import 'package:invoiceninja_flutter/redux/app/app_state.dart';
 import 'package:invoiceninja_flutter/ui/app/entities/entity_status_chip.dart';
+import 'package:invoiceninja_flutter/ui/app/link_text.dart';
 import 'package:invoiceninja_flutter/ui/app/presenters/entity_presenter.dart';
 import 'package:invoiceninja_flutter/utils/formatting.dart';
 import 'package:invoiceninja_flutter/utils/localization.dart';
@@ -61,9 +62,8 @@ class RecurringInvoicePresenter extends EntityPresenter {
             ? localization.pending
             : invoice.number);
       case RecurringInvoiceFields.client:
-        return Text((state.clientState.map[invoice.clientId] ??
-                ClientEntity(id: invoice.clientId))
-            .listDisplayName);
+        final client = state.clientState.get(invoice.clientId);
+        return LinkTextRelatedEntity(entity: client, relation: invoice);
       case RecurringInvoiceFields.date:
         return Text(formatDate(invoice.date, context));
       case RecurringInvoiceFields.reminder1Sent:
@@ -89,9 +89,9 @@ class RecurringInvoicePresenter extends EntityPresenter {
       case RecurringInvoiceFields.customValue4:
         return Text(presentCustomField(context, invoice.customValue4));
       case RecurringInvoiceFields.publicNotes:
-        return Text(invoice.publicNotes);
+        return TableTooltip(message: invoice.publicNotes);
       case RecurringInvoiceFields.privateNotes:
-        return Text(invoice.privateNotes);
+        return TableTooltip(message: invoice.privateNotes);
       case RecurringInvoiceFields.discount:
         return Text(invoice.isAmountDiscount
             ? formatNumber(invoice.discount, context,

@@ -130,6 +130,13 @@ class _$UIStateSerializer implements StructuredSerializer<UIState> {
           specifiedType: const FullType(ReportsUIState)),
     ];
     Object value;
+    value = object.loadingEntityType;
+    if (value != null) {
+      result
+        ..add('loadingEntityType')
+        ..add(serializers.serialize(value,
+            specifiedType: const FullType(EntityType)));
+    }
     value = object.filter;
     if (value != null) {
       result
@@ -162,6 +169,10 @@ class _$UIStateSerializer implements StructuredSerializer<UIState> {
         case 'previousRoute':
           result.previousRoute = serializers.deserialize(value,
               specifiedType: const FullType(String)) as String;
+          break;
+        case 'loadingEntityType':
+          result.loadingEntityType = serializers.deserialize(value,
+              specifiedType: const FullType(EntityType)) as EntityType;
           break;
         case 'previewStack':
           result.previewStack.replace(serializers.deserialize(value,
@@ -329,6 +340,8 @@ class _$UIState extends UIState {
   @override
   final String previousRoute;
   @override
+  final EntityType loadingEntityType;
+  @override
   final BuiltList<EntityType> previewStack;
   @override
   final BuiltList<BaseEntity> filterStack;
@@ -404,6 +417,7 @@ class _$UIState extends UIState {
       {this.selectedCompanyIndex,
       this.currentRoute,
       this.previousRoute,
+      this.loadingEntityType,
       this.previewStack,
       this.filterStack,
       this.filter,
@@ -527,6 +541,7 @@ class _$UIState extends UIState {
         selectedCompanyIndex == other.selectedCompanyIndex &&
         currentRoute == other.currentRoute &&
         previousRoute == other.previousRoute &&
+        loadingEntityType == other.loadingEntityType &&
         previewStack == other.previewStack &&
         filterStack == other.filterStack &&
         filter == other.filter &&
@@ -612,6 +627,7 @@ class _$UIState extends UIState {
           ..add('selectedCompanyIndex', selectedCompanyIndex)
           ..add('currentRoute', currentRoute)
           ..add('previousRoute', previousRoute)
+          ..add('loadingEntityType', loadingEntityType)
           ..add('previewStack', previewStack)
           ..add('filterStack', filterStack)
           ..add('filter', filter)
@@ -666,6 +682,11 @@ class UIStateBuilder implements Builder<UIState, UIStateBuilder> {
   String get previousRoute => _$this._previousRoute;
   set previousRoute(String previousRoute) =>
       _$this._previousRoute = previousRoute;
+
+  EntityType _loadingEntityType;
+  EntityType get loadingEntityType => _$this._loadingEntityType;
+  set loadingEntityType(EntityType loadingEntityType) =>
+      _$this._loadingEntityType = loadingEntityType;
 
   ListBuilder<EntityType> _previewStack;
   ListBuilder<EntityType> get previewStack =>
@@ -881,6 +902,7 @@ class UIStateBuilder implements Builder<UIState, UIStateBuilder> {
       _selectedCompanyIndex = $v.selectedCompanyIndex;
       _currentRoute = $v.currentRoute;
       _previousRoute = $v.previousRoute;
+      _loadingEntityType = $v.loadingEntityType;
       _previewStack = $v.previewStack.toBuilder();
       _filterStack = $v.filterStack.toBuilder();
       _filter = $v.filter;
@@ -943,6 +965,7 @@ class UIStateBuilder implements Builder<UIState, UIStateBuilder> {
                   currentRoute, 'UIState', 'currentRoute'),
               previousRoute: BuiltValueNullFieldError.checkNotNull(
                   previousRoute, 'UIState', 'previousRoute'),
+              loadingEntityType: loadingEntityType,
               previewStack: previewStack.build(),
               filterStack: filterStack.build(),
               filter: filter,

@@ -271,7 +271,7 @@ class _ClientPdfViewState extends State<ClientPdfView> {
     );
 
     return Scaffold(
-      backgroundColor: Colors.grey,
+      backgroundColor: Colors.grey.shade300,
       appBar: widget.showAppBar
           ? AppBar(
               centerTitle: false,
@@ -468,6 +468,7 @@ class _ClientPdfViewState extends State<ClientPdfView> {
                     canChangeOrientation: false,
                     canChangePageFormat: false,
                     canDebug: false,
+                    maxPageWidth: 800,
                   ),
           ),
         ],
