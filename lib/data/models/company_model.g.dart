@@ -141,6 +141,9 @@ class _$CompanyEntitySerializer implements StructuredSerializer<CompanyEntity> {
       'report_include_drafts',
       serializers.serialize(object.reportIncludeDrafts,
           specifiedType: const FullType(bool)),
+      'use_quote_terms_on_conversion',
+      serializers.serialize(object.useQuoteTermsOnConversion,
+          specifiedType: const FullType(bool)),
       'groups',
       serializers.serialize(object.groups,
           specifiedType:
@@ -308,6 +311,9 @@ class _$CompanyEntitySerializer implements StructuredSerializer<CompanyEntity> {
           specifiedType: const FullType(int)),
       'calculate_expense_tax_by_amount',
       serializers.serialize(object.calculateExpenseTaxByAmount,
+          specifiedType: const FullType(bool)),
+      'stop_on_unpaid_recurring ',
+      serializers.serialize(object.stopOnUnpaidRecurring,
           specifiedType: const FullType(bool)),
       'created_at',
       serializers.serialize(object.createdAt,
@@ -514,6 +520,10 @@ class _$CompanyEntitySerializer implements StructuredSerializer<CompanyEntity> {
           break;
         case 'report_include_drafts':
           result.reportIncludeDrafts = serializers.deserialize(value,
+              specifiedType: const FullType(bool)) as bool;
+          break;
+        case 'use_quote_terms_on_conversion':
+          result.useQuoteTermsOnConversion = serializers.deserialize(value,
               specifiedType: const FullType(bool)) as bool;
           break;
         case 'groups':
@@ -756,6 +766,10 @@ class _$CompanyEntitySerializer implements StructuredSerializer<CompanyEntity> {
           break;
         case 'calculate_expense_tax_by_amount':
           result.calculateExpenseTaxByAmount = serializers.deserialize(value,
+              specifiedType: const FullType(bool)) as bool;
+          break;
+        case 'stop_on_unpaid_recurring ':
+          result.stopOnUnpaidRecurring = serializers.deserialize(value,
               specifiedType: const FullType(bool)) as bool;
           break;
         case 'isChanged':
@@ -1447,6 +1461,8 @@ class _$CompanyEntity extends CompanyEntity {
   @override
   final bool reportIncludeDrafts;
   @override
+  final bool useQuoteTermsOnConversion;
+  @override
   final BuiltList<GroupEntity> groups;
   @override
   final BuiltList<ActivityEntity> activities;
@@ -1537,6 +1553,8 @@ class _$CompanyEntity extends CompanyEntity {
   @override
   final bool calculateExpenseTaxByAmount;
   @override
+  final bool stopOnUnpaidRecurring;
+  @override
   final bool isChanged;
   @override
   final int createdAt;
@@ -1595,6 +1613,7 @@ class _$CompanyEntity extends CompanyEntity {
       this.markdownEmailEnabled,
       this.useCommaAsDecimalPlace,
       this.reportIncludeDrafts,
+      this.useQuoteTermsOnConversion,
       this.groups,
       this.activities,
       this.taxRates,
@@ -1640,6 +1659,7 @@ class _$CompanyEntity extends CompanyEntity {
       this.settings,
       this.enabledModules,
       this.calculateExpenseTaxByAmount,
+      this.stopOnUnpaidRecurring,
       this.isChanged,
       this.createdAt,
       this.updatedAt,
@@ -1720,6 +1740,8 @@ class _$CompanyEntity extends CompanyEntity {
         useCommaAsDecimalPlace, 'CompanyEntity', 'useCommaAsDecimalPlace');
     BuiltValueNullFieldError.checkNotNull(
         reportIncludeDrafts, 'CompanyEntity', 'reportIncludeDrafts');
+    BuiltValueNullFieldError.checkNotNull(useQuoteTermsOnConversion,
+        'CompanyEntity', 'useQuoteTermsOnConversion');
     BuiltValueNullFieldError.checkNotNull(groups, 'CompanyEntity', 'groups');
     BuiltValueNullFieldError.checkNotNull(
         activities, 'CompanyEntity', 'activities');
@@ -1802,6 +1824,8 @@ class _$CompanyEntity extends CompanyEntity {
     BuiltValueNullFieldError.checkNotNull(calculateExpenseTaxByAmount,
         'CompanyEntity', 'calculateExpenseTaxByAmount');
     BuiltValueNullFieldError.checkNotNull(
+        stopOnUnpaidRecurring, 'CompanyEntity', 'stopOnUnpaidRecurring');
+    BuiltValueNullFieldError.checkNotNull(
         createdAt, 'CompanyEntity', 'createdAt');
     BuiltValueNullFieldError.checkNotNull(
         updatedAt, 'CompanyEntity', 'updatedAt');
@@ -1857,6 +1881,7 @@ class _$CompanyEntity extends CompanyEntity {
         markdownEmailEnabled == other.markdownEmailEnabled &&
         useCommaAsDecimalPlace == other.useCommaAsDecimalPlace &&
         reportIncludeDrafts == other.reportIncludeDrafts &&
+        useQuoteTermsOnConversion == other.useQuoteTermsOnConversion &&
         groups == other.groups &&
         activities == other.activities &&
         taxRates == other.taxRates &&
@@ -1902,6 +1927,7 @@ class _$CompanyEntity extends CompanyEntity {
         settings == other.settings &&
         enabledModules == other.enabledModules &&
         calculateExpenseTaxByAmount == other.calculateExpenseTaxByAmount &&
+        stopOnUnpaidRecurring == other.stopOnUnpaidRecurring &&
         isChanged == other.isChanged &&
         createdAt == other.createdAt &&
         updatedAt == other.updatedAt &&
@@ -1995,6 +2021,7 @@ class _$CompanyEntity extends CompanyEntity {
           ..add('markdownEmailEnabled', markdownEmailEnabled)
           ..add('useCommaAsDecimalPlace', useCommaAsDecimalPlace)
           ..add('reportIncludeDrafts', reportIncludeDrafts)
+          ..add('useQuoteTermsOnConversion', useQuoteTermsOnConversion)
           ..add('groups', groups)
           ..add('activities', activities)
           ..add('taxRates', taxRates)
@@ -2040,6 +2067,7 @@ class _$CompanyEntity extends CompanyEntity {
           ..add('settings', settings)
           ..add('enabledModules', enabledModules)
           ..add('calculateExpenseTaxByAmount', calculateExpenseTaxByAmount)
+          ..add('stopOnUnpaidRecurring', stopOnUnpaidRecurring)
           ..add('isChanged', isChanged)
           ..add('createdAt', createdAt)
           ..add('updatedAt', updatedAt)
@@ -2227,6 +2255,11 @@ class CompanyEntityBuilder
   bool get reportIncludeDrafts => _$this._reportIncludeDrafts;
   set reportIncludeDrafts(bool reportIncludeDrafts) =>
       _$this._reportIncludeDrafts = reportIncludeDrafts;
+
+  bool _useQuoteTermsOnConversion;
+  bool get useQuoteTermsOnConversion => _$this._useQuoteTermsOnConversion;
+  set useQuoteTermsOnConversion(bool useQuoteTermsOnConversion) =>
+      _$this._useQuoteTermsOnConversion = useQuoteTermsOnConversion;
 
   ListBuilder<GroupEntity> _groups;
   ListBuilder<GroupEntity> get groups =>
@@ -2477,6 +2510,11 @@ class CompanyEntityBuilder
   set calculateExpenseTaxByAmount(bool calculateExpenseTaxByAmount) =>
       _$this._calculateExpenseTaxByAmount = calculateExpenseTaxByAmount;
 
+  bool _stopOnUnpaidRecurring;
+  bool get stopOnUnpaidRecurring => _$this._stopOnUnpaidRecurring;
+  set stopOnUnpaidRecurring(bool stopOnUnpaidRecurring) =>
+      _$this._stopOnUnpaidRecurring = stopOnUnpaidRecurring;
+
   bool _isChanged;
   bool get isChanged => _$this._isChanged;
   set isChanged(bool isChanged) => _$this._isChanged = isChanged;
@@ -2558,6 +2596,7 @@ class CompanyEntityBuilder
       _markdownEmailEnabled = $v.markdownEmailEnabled;
       _useCommaAsDecimalPlace = $v.useCommaAsDecimalPlace;
       _reportIncludeDrafts = $v.reportIncludeDrafts;
+      _useQuoteTermsOnConversion = $v.useQuoteTermsOnConversion;
       _groups = $v.groups.toBuilder();
       _activities = $v.activities.toBuilder();
       _taxRates = $v.taxRates.toBuilder();
@@ -2603,6 +2642,7 @@ class CompanyEntityBuilder
       _settings = $v.settings.toBuilder();
       _enabledModules = $v.enabledModules;
       _calculateExpenseTaxByAmount = $v.calculateExpenseTaxByAmount;
+      _stopOnUnpaidRecurring = $v.stopOnUnpaidRecurring;
       _isChanged = $v.isChanged;
       _createdAt = $v.createdAt;
       _updatedAt = $v.updatedAt;
@@ -2684,6 +2724,7 @@ class CompanyEntityBuilder
               markdownEmailEnabled: BuiltValueNullFieldError.checkNotNull(markdownEmailEnabled, 'CompanyEntity', 'markdownEmailEnabled'),
               useCommaAsDecimalPlace: BuiltValueNullFieldError.checkNotNull(useCommaAsDecimalPlace, 'CompanyEntity', 'useCommaAsDecimalPlace'),
               reportIncludeDrafts: BuiltValueNullFieldError.checkNotNull(reportIncludeDrafts, 'CompanyEntity', 'reportIncludeDrafts'),
+              useQuoteTermsOnConversion: BuiltValueNullFieldError.checkNotNull(useQuoteTermsOnConversion, 'CompanyEntity', 'useQuoteTermsOnConversion'),
               groups: groups.build(),
               activities: activities.build(),
               taxRates: taxRates.build(),
@@ -2729,6 +2770,7 @@ class CompanyEntityBuilder
               settings: settings.build(),
               enabledModules: BuiltValueNullFieldError.checkNotNull(enabledModules, 'CompanyEntity', 'enabledModules'),
               calculateExpenseTaxByAmount: BuiltValueNullFieldError.checkNotNull(calculateExpenseTaxByAmount, 'CompanyEntity', 'calculateExpenseTaxByAmount'),
+              stopOnUnpaidRecurring: BuiltValueNullFieldError.checkNotNull(stopOnUnpaidRecurring, 'CompanyEntity', 'stopOnUnpaidRecurring'),
               isChanged: isChanged,
               createdAt: BuiltValueNullFieldError.checkNotNull(createdAt, 'CompanyEntity', 'createdAt'),
               updatedAt: BuiltValueNullFieldError.checkNotNull(updatedAt, 'CompanyEntity', 'updatedAt'),

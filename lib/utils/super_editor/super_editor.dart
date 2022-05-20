@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:invoiceninja_flutter/utils/markdown.dart';
 import 'package:invoiceninja_flutter/utils/super_editor/toolbar.dart';
 import 'package:super_editor/super_editor.dart';
 
