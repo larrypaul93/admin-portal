@@ -275,6 +275,34 @@ abstract class ProductEntity extends Object
         response =
             stateA.name.toLowerCase().compareTo(stateB.name.toLowerCase());
         break;
+      case ProductFields.sku:
+        response =
+            productA.sku.toLowerCase().compareTo(productB.sku.toLowerCase());
+        break;
+      case ProductFields.upc:
+        response =
+            productA.upc.toLowerCase().compareTo(productB.upc.toLowerCase());
+        break;
+      case ProductFields.partNo:
+        response = productA.partNo
+            .toLowerCase()
+            .compareTo(productB.partNo.toLowerCase());
+        break;
+      case ProductFields.onHand:
+        response = productA.onHand
+            .toLowerCase()
+            .compareTo(productB.onHand.toLowerCase());
+        break;
+      case ProductFields.category:
+        response = productA?.category?.displayName
+            ?.toLowerCase()
+            ?.compareTo(productB?.category?.displayName?.toLowerCase());
+        break;
+      case ProductFields.subCategory:
+        response = productA?.subCategory?.displayName
+            ?.toLowerCase()
+            ?.compareTo(productB?.subCategory?.displayName?.toLowerCase());
+        break;
       case ProductFields.customValue1:
         response = productA.customValue1
             .toLowerCase()

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:invoiceninja_flutter/constants.dart';
 import 'package:invoiceninja_flutter/data/models/contact_model.dart';
+import 'package:invoiceninja_flutter/redux/product/product_actions.dart';
 import 'package:redux/redux.dart';
 import 'package:invoiceninja_flutter/main_app.dart';
 import 'package:invoiceninja_flutter/redux/app/app_actions.dart';
@@ -220,17 +222,21 @@ Middleware<AppState> _loadContacts(ContactRepository repository) {
     final AppState state = store.state;
 
     store.dispatch(LoadContactsRequest());
-    repository.loadList(state.credentials).then((data) {
+    repository.loadList(state.credentials, action.page).then((data) {
       store.dispatch(LoadContactsSuccess(data));
 
-      if (action.completer != null) {
-        action.completer.complete(null);
-      }
-      /*
-      if (state.productState.isStale) {
+      if (data.length == kRecordsPerPage) {
+        store.dispatch(LoadContacts(
+          completer: action.completer,
+          page: action.page + 1,
+        ));
+      } else {
+        if (action.completer != null) {
+          action.completer.complete(null);
+        }
+        // store.dispatch(LoadProducts());
         store.dispatch(LoadProducts());
       }
-      */
     }).catchError((Object error) {
       print(error);
       store.dispatch(LoadContactsFailure(error));

@@ -424,6 +424,19 @@ class MenuDrawer extends StatelessWidget {
                               title: localization.clients,
                               iconTooltip: localization.newClient,
                             ),
+
+                            DrawerTile(
+                              company: company,
+                              entityType: EntityType.contact,
+                              icon: getEntityIcon(EntityType.contact),
+                              title: localization.contacts,
+                            ),
+                            DrawerTile(
+                              company: company,
+                              entityType: EntityType.category,
+                              icon: getEntityIcon(EntityType.category),
+                              title: localization.category,
+                            ),
                             DrawerTile(
                               company: company,
                               entityType: EntityType.product,
@@ -495,19 +508,6 @@ class MenuDrawer extends StatelessWidget {
                               iconTooltip: localization.newExpense,
                             ),
                             // STARTER: menu - do not remove comment
-                            DrawerTile(
-                              company: company,
-                              entityType: EntityType.category,
-                              icon: getEntityIcon(EntityType.category),
-                              title: localization.category,
-                            ),
-
-                            DrawerTile(
-                              company: company,
-                              entityType: EntityType.contact,
-                              icon: getEntityIcon(EntityType.contact),
-                              title: localization.contacts,
-                            ),
 
                             DrawerTile(
                               company: company,

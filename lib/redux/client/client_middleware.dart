@@ -3,6 +3,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:invoiceninja_flutter/constants.dart';
+import 'package:invoiceninja_flutter/redux/contact/contact_actions.dart';
 
 // Package imports:
 import 'package:redux/redux.dart';
@@ -281,7 +282,8 @@ Middleware<AppState> _loadClients(ClientRepository repository) {
         if (action.completer != null) {
           action.completer.complete(null);
         }
-        store.dispatch(LoadProducts());
+        // store.dispatch(LoadProducts());
+        store.dispatch(LoadContacts());
       }
     }).catchError((Object error) {
       print(error);

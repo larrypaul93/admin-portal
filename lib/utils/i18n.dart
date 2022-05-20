@@ -26,6 +26,14 @@ mixin LocalizationsProvider on LocaleCodeAware {
       'removed_category': 'Successfully removed category',
       'restored_category': 'Successfully restored category',
       'search_category': 'Search Category',
+      'onHand': 'On Hand',
+      'sku': 'SKU',
+      'part_no': 'Part No',
+      'upc': 'UPC',
+      'sub_category': 'Sub Category',
+      'sku_prefix': 'SKU Prefix',
+      'next_number': 'Next Number',
+      'search_categorys': 'Search Categories',
 
       'stop_on_unpaid': 'Stop On Unpaid',
       'stop_on_unpaid_help':

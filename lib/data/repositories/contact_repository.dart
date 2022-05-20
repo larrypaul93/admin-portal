@@ -27,8 +27,10 @@ class ContactRepository {
     return contactResponse.data;
   }
 
-  Future<BuiltList<ContactEntity>> loadList(Credentials credentials) async {
-    final String url = credentials.url + '/contacts?';
+  Future<BuiltList<ContactEntity>> loadList(
+      Credentials credentials, int page) async {
+    final String url =
+        credentials.url + '/contacts?per_page=$kRecordsPerPage&page=$page';
     final dynamic response = await webClient.get(url, credentials.token);
 
     final ContactListResponse contactResponse =

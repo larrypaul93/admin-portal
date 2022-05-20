@@ -1,6 +1,7 @@
 import 'package:built_value/built_value.dart';
 import 'package:built_collection/built_collection.dart';
 import 'package:built_value/serializer.dart';
+import 'package:diacritic/diacritic.dart';
 import 'package:invoiceninja_flutter/constants.dart';
 import 'package:invoiceninja_flutter/data/models/group_model.dart';
 import 'package:invoiceninja_flutter/redux/app/app_state.dart';
@@ -324,8 +325,13 @@ abstract class ContactEntity extends Object
 
     switch (sortField) {
       // STARTER: sort switch - do not remove comment
+      case ContactFields.fullName:
+        response = removeDiacritics(contactA.fullName)
+            .toLowerCase()
+            .compareTo(removeDiacritics(contactB.fullName).toLowerCase());
+        break;
       default:
-        print('## ERROR: sort by contact.$sortField is not implemented');
+        //print('## ERROR: sort by contact.$sortField is not implemented');
         break;
     }
 

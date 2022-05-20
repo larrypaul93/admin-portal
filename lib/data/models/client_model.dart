@@ -439,7 +439,10 @@ abstract class ClientEntity extends Object
 
   @override
   String get listDisplayName {
-    return displayName;
+    if (suffix.isEmpty)
+      return displayName;
+    else
+      return displayName + ' (' + suffix + ')';
   }
 
   bool getManualPaymentEmail(

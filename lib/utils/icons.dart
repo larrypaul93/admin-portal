@@ -153,6 +153,10 @@ IconData getEntityIcon(EntityType entityType) {
       return MdiIcons.label;
     case EntityType.subscription:
       return MdiIcons.shopping;
+    case EntityType.contact:
+      return MdiIcons.cardAccountDetails;
+    case EntityType.category:
+      return MdiIcons.cubeSend;
     default:
       return MdiIcons.crosshairsQuestion;
   }
