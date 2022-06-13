@@ -79,7 +79,7 @@ class TaskEditVM {
               index: taskTimes.length - 1,
               taskTime: taskTimes.firstWhere((time) => time.isRunning).stop));
         } else {
-          store.dispatch(AddTaskTime(TaskTime(), showAsRunning: true));
+          store.dispatch(AddTaskTime(TaskTime()));
         }
       },
       onSavePressed: (BuildContext context, [EntityAction action]) {
@@ -134,8 +134,7 @@ class TaskEditVM {
 
                 if (state.prefState.isEditorFullScreen(EntityType.task) &&
                     state.prefState.editAfterSaving) {
-                  editEntity(
-                      context: navigatorKey.currentContext, entity: savedTask);
+                  editEntity(entity: savedTask);
                 }
               }
 

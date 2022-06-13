@@ -17,7 +17,9 @@ import 'package:invoiceninja_flutter/data/models/group_model.dart';
 import 'package:invoiceninja_flutter/data/models/models.dart';
 import 'package:invoiceninja_flutter/data/models/payment_term_model.dart';
 import 'package:invoiceninja_flutter/data/models/system_log_model.dart';
+import 'package:invoiceninja_flutter/main_app.dart';
 import 'package:invoiceninja_flutter/utils/formatting.dart';
+import 'package:invoiceninja_flutter/utils/localization.dart';
 import 'package:invoiceninja_flutter/utils/strings.dart';
 
 part 'company_model.g.dart';
@@ -107,6 +109,10 @@ abstract class CompanyEntity extends Object
       reportIncludeDrafts: false,
       stopOnUnpaidRecurring: false,
       useQuoteTermsOnConversion: false,
+      enableApplyingPayments: false,
+      trackInventory: false,
+      stockNotificationThreshold: 0,
+      stockNotification: true,
       groups: BuiltList<GroupEntity>(),
       taxRates: BuiltList<TaxRateEntity>(),
       taskStatuses: BuiltList<TaskStatusEntity>(),
@@ -261,6 +267,18 @@ abstract class CompanyEntity extends Object
 
   @BuiltValueField(wireName: 'use_quote_terms_on_conversion')
   bool get useQuoteTermsOnConversion;
+
+  @BuiltValueField(wireName: 'enable_applying_payments')
+  bool get enableApplyingPayments;
+
+  @BuiltValueField(wireName: 'track_inventory')
+  bool get trackInventory;
+
+  @BuiltValueField(wireName: 'inventory_notification_threshold')
+  int get stockNotificationThreshold;
+
+  @BuiltValueField(wireName: 'stock_notification')
+  bool get stockNotification;
 
   BuiltList<GroupEntity> get groups;
 
@@ -611,6 +629,10 @@ abstract class CompanyEntity extends Object
     ..markdownEmailEnabled = true
     ..useCommaAsDecimalPlace = false
     ..useQuoteTermsOnConversion = false
+    ..enableApplyingPayments = false
+    ..trackInventory = false
+    ..stockNotificationThreshold = 0
+    ..stockNotification = true
     ..reportIncludeDrafts = false
     ..convertRateToClient = true
     ..stopOnUnpaidRecurring = false
@@ -706,13 +728,41 @@ abstract class GatewayEntity extends Object
 
     filter = filter.toLowerCase();
 
-    return name.toLowerCase().contains(filter);
+    if (name.toLowerCase().contains(filter)) {
+      return true;
+    }
+
+    final gatewayIds = options.keys.toList();
+    final localization = AppLocalization.of(navigatorKey.currentContext);
+
+    for (var i = 0; i < gatewayIds.length; i++) {
+      final gatewayTypeId = gatewayIds[i];
+      final gatewayType = localization.lookup(kGatewayTypes[gatewayTypeId]);
+
+      if (gatewayType.toLowerCase().contains(filter)) {
+        return true;
+      }
+    }
+
+    return false;
   }
 
   @override
   String matchesFilterValue(String filter) {
     if (filter == null || filter.isEmpty) {
       return null;
+    }
+
+    final gatewayIds = options.keys.toList();
+    final localization = AppLocalization.of(navigatorKey.currentContext);
+
+    for (var i = 0; i < gatewayIds.length; i++) {
+      final gatewayTypeId = gatewayIds[i];
+      final gatewayType = localization.lookup(kGatewayTypes[gatewayTypeId]);
+
+      if (gatewayType.toLowerCase().contains(filter)) {
+        return gatewayType;
+      }
     }
 
     return null;

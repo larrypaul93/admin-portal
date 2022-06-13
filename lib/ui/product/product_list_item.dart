@@ -62,13 +62,11 @@ class ProductListItem extends StatelessWidget {
           builder: (BuildContext context, BoxConstraints constraints) {
         return constraints.maxWidth > kTableListWidthCutoff
             ? InkWell(
-                onTap: () => onTap != null
-                    ? onTap()
-                    : selectEntity(entity: product, context: context),
+                onTap: () =>
+                    onTap != null ? onTap() : selectEntity(entity: product),
                 onLongPress: () => onLongPress != null
                     ? onLongPress()
-                    : selectEntity(
-                        entity: product, context: context, longPress: true),
+                    : selectEntity(entity: product, longPress: true),
                 child: Padding(
                   padding: const EdgeInsets.only(
                     left: 10,
@@ -148,13 +146,11 @@ class ProductListItem extends StatelessWidget {
                 ),
               )
             : ListTile(
-                onTap: () => onTap != null
-                    ? onTap()
-                    : selectEntity(entity: product, context: context),
+                onTap: () =>
+                    onTap != null ? onTap() : selectEntity(entity: product),
                 onLongPress: () => onLongPress != null
                     ? onLongPress()
-                    : selectEntity(
-                        entity: product, context: context, longPress: true),
+                    : selectEntity(entity: product, longPress: true),
                 leading: showCheckbox
                     ? IgnorePointer(
                         ignoring: listUIState.isInMultiselect(),
@@ -175,13 +171,13 @@ class ProductListItem extends StatelessWidget {
                         child: Text(
                           product.productKey +
                               (product.documents.isNotEmpty ? '  📎' : ''),
-                          style: Theme.of(context).textTheme.headline6,
+                          style: Theme.of(context).textTheme.subtitle1,
                         ),
                       ),
                       Text(
                           formatNumber(product.price, context,
                               roundToPrecision: false),
-                          style: Theme.of(context).textTheme.headline6),
+                          style: Theme.of(context).textTheme.subtitle1),
                     ],
                   ),
                 ),

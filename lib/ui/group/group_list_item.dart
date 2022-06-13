@@ -51,12 +51,10 @@ class GroupListItem extends StatelessWidget {
       entity: group,
       isSelected: false,
       child: ListTile(
-        onTap: () => onTap != null
-            ? onTap()
-            : selectEntity(entity: group, context: context),
+        onTap: () => onTap != null ? onTap() : selectEntity(entity: group),
         onLongPress: () => onLongPress != null
             ? onLongPress()
-            : selectEntity(entity: group, context: context, longPress: true),
+            : selectEntity(entity: group, longPress: true),
         leading: showCheckbox
             ? IgnorePointer(
                 ignoring: listUIState.isInMultiselect(),
@@ -75,11 +73,11 @@ class GroupListItem extends StatelessWidget {
               Expanded(
                 child: Text(
                   group.name,
-                  style: Theme.of(context).textTheme.headline6,
+                  style: Theme.of(context).textTheme.subtitle1,
                 ),
               ),
               Text(formatNumber(group.listDisplayAmount, context),
-                  style: Theme.of(context).textTheme.headline6),
+                  style: Theme.of(context).textTheme.subtitle1),
             ],
           ),
         ),

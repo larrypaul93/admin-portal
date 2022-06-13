@@ -263,6 +263,7 @@ abstract class AppState implements Built<AppState, AppStateBuilder> {
     if (prefState.isMobile ||
         !prefState.isPreviewVisible ||
         uiState.isEditing ||
+        (prefState.isModuleList && entityType.hasFullWidthViewer) ||
         entityType.isSetting ||
         (entityList.isEmpty && (entityUIState.selectedId ?? '').isEmpty)) {
       return false;

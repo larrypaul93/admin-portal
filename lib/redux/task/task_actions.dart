@@ -109,10 +109,9 @@ class EditTaskTime implements PersistUI {
 }
 
 class AddTaskTime implements PersistUI {
-  AddTaskTime(this.taskTime, {this.showAsRunning = false});
+  AddTaskTime(this.taskTime);
 
   final TaskTime taskTime;
-  final bool showAsRunning;
 }
 
 class UpdateTaskTime implements PersistUI {
@@ -362,7 +361,7 @@ void handleTaskAction(
 
   switch (action) {
     case EntityAction.edit:
-      editEntity(context: context, entity: task);
+      editEntity(entity: task);
       break;
     case EntityAction.start:
     case EntityAction.resume:

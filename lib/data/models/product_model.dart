@@ -74,6 +74,8 @@ class ProductFields {
   static const String onHand = 'onHand';
   static const String upc = 'upc';
   static const String vendor = 'vendor';
+  static const String stockQuantity = 'stock_quantity';
+  static const String notificationThreshold = 'notification_threshold';
 }
 
 abstract class ProductEntity extends Object
@@ -104,6 +106,9 @@ abstract class ProductEntity extends Object
       createdAt: 0,
       assignedUserId: '',
       createdUserId: '',
+      stockQuantity: 0,
+      stockNotificationThreshold: 0,
+      stockNotification: true,
       documents: BuiltList<DocumentEntity>(),
       categoryId: '',
       subCategoryId: '',
@@ -200,6 +205,14 @@ abstract class ProductEntity extends Object
 
   @nullable
   VendorEntity get vendor;
+  @BuiltValueField(wireName: 'in_stock_quantity')
+  int get stockQuantity;
+
+  @BuiltValueField(wireName: 'stock_notification_threshold')
+  int get stockNotificationThreshold;
+
+  @BuiltValueField(wireName: 'stock_notification')
+  bool get stockNotification;
 
   BuiltList<DocumentEntity> get documents;
 
@@ -404,6 +417,12 @@ abstract class ProductEntity extends Object
 
     return actions..addAll(super.getActions(userCompany: userCompany));
   }
+
+  // ignore: unused_element
+  static void _initializeBuilder(ProductEntityBuilder builder) => builder
+    ..stockQuantity = 0
+    ..stockNotification = true
+    ..stockNotificationThreshold = 0;
 
   static Serializer<ProductEntity> get serializer => _$productEntitySerializer;
 }

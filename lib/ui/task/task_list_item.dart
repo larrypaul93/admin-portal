@@ -101,15 +101,10 @@ class TaskListItem extends StatelessWidget {
           builder: (BuildContext context, BoxConstraints constraints) {
         return constraints.maxWidth > kTableListWidthCutoff
             ? InkWell(
-                onTap: () => onTap != null
-                    ? onTap()
-                    : selectEntity(
-                        entity: task,
-                        context: context,
-                      ),
+                onTap: () =>
+                    onTap != null ? onTap() : selectEntity(entity: task),
                 onLongPress: () => selectEntity(
                   entity: task,
-                  context: context,
                   longPress: true,
                 ),
                 child: Padding(
@@ -199,14 +194,9 @@ class TaskListItem extends StatelessWidget {
                 ),
               )
             : ListTile(
-                onTap: () => onTap != null
-                    ? onTap()
-                    : selectEntity(
-                        entity: task,
-                        context: context,
-                      ),
-                onLongPress: () => selectEntity(
-                    entity: task, context: context, longPress: true),
+                onTap: () =>
+                    onTap != null ? onTap() : selectEntity(entity: task),
+                onLongPress: () => selectEntity(entity: task, longPress: true),
                 leading: showCheckbox
                     ? IgnorePointer(
                         ignoring: listUIState.isInMultiselect(),
@@ -232,7 +222,7 @@ class TaskListItem extends StatelessWidget {
                               (task.documents.isNotEmpty ? '  📎' : ''),
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
-                          style: Theme.of(context).textTheme.headline6,
+                          style: Theme.of(context).textTheme.subtitle1,
                         ),
                       ),
                       duration,

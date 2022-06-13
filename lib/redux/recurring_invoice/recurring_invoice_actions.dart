@@ -450,7 +450,7 @@ void handleRecurringInvoiceAction(BuildContext context,
 
   switch (action) {
     case EntityAction.edit:
-      editEntity(context: context, entity: recurringInvoice);
+      editEntity(entity: recurringInvoice);
       break;
     case EntityAction.viewPdf:
       store.dispatch(
@@ -579,6 +579,15 @@ void handleRecurringInvoiceAction(BuildContext context,
           ),
         ),
       );
+      break;
+    case EntityAction.emailInvoice:
+      store.dispatch(SaveRecurringInvoiceRequest(
+          recurringInvoice: recurringInvoice,
+          action: action,
+          completer: snackBarCompleter<InvoiceEntity>(
+            context,
+            localization.emailedInvoice,
+          )));
       break;
   }
 }

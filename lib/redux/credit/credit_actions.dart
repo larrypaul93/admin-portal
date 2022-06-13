@@ -465,7 +465,7 @@ Future handleCreditAction(
 
   switch (action) {
     case EntityAction.edit:
-      editEntity(context: context, entity: credit);
+      editEntity(entity: credit);
       break;
     case EntityAction.viewPdf:
       store.dispatch(ShowPdfCredit(credit: credit, context: context));
@@ -498,9 +498,7 @@ Future handleCreditAction(
               TextButton(
                   onPressed: () {
                     Navigator.of(context).pop();
-                    editEntity(
-                        context: context,
-                        entity: state.clientState.get(credit.clientId));
+                    editEntity(entity: state.clientState.get(credit.clientId));
                   },
                   child: Text(localization.editClient.toUpperCase()))
             ]);
@@ -585,7 +583,6 @@ Future handleCreditAction(
           ..credits.addAll(credits
               .map((credit) => PaymentableEntity.fromCredit(credit))
               .toList())),
-        filterEntity: state.clientState.map[credit.clientId],
       );
       break;
     case EntityAction.download:
@@ -635,10 +632,10 @@ Future handleCreditAction(
     case EntityAction.printPdf:
       final invitation = credit.invitations.first;
       final url = invitation.downloadLink;
-      store.dispatch(StartLoading());
+      store.dispatch(StartSaving());
       final http.Response response =
           await WebClient().get(url, '', rawResponse: true);
-      store.dispatch(StopLoading());
+      store.dispatch(StopSaving());
       await Printing.layoutPdf(onLayout: (_) => response.bodyBytes);
       break;
     case EntityAction.more:

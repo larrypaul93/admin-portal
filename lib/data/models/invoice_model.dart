@@ -895,41 +895,43 @@ abstract class InvoiceEntity extends Object
             actions.add(EntityAction.stop);
           }
         }
+
+        if (!isCancelledOrReversed) {
+          if (multiselect) {
+            if (entityType == EntityType.quote) {
+              actions.add(EntityAction.bulkEmailQuote);
+            } else if (entityType == EntityType.credit) {
+              actions.add(EntityAction.bulkEmailCredit);
+            } else if (entityType == EntityType.invoice) {
+              actions.add(EntityAction.bulkEmailInvoice);
+            }
+          } else {
+            if (entityType == EntityType.quote) {
+              actions.add(EntityAction.emailQuote);
+            } else if (entityType == EntityType.credit) {
+              actions.add(EntityAction.emailCredit);
+            } else if (entityType == EntityType.invoice) {
+              actions.add(EntityAction.emailInvoice);
+            } else if (entityType == EntityType.recurringInvoice && isDraft) {
+              actions.add(EntityAction.emailInvoice);
+            }
+          }
+        }
       }
 
-      if (invitations.isNotEmpty) {
-        if (multiselect) {
-          if (!isRecurring) {
-            actions.add(EntityAction.bulkDownload);
-          }
-        } else {
-          actions.add(EntityAction.viewPdf);
-          if (!isRecurring) {
-            actions.add(EntityAction.printPdf);
-            actions.add(EntityAction.download);
-          }
+      if (multiselect) {
+        if (!isRecurring) {
+          actions.add(EntityAction.bulkDownload);
+        }
+      } else {
+        actions.add(EntityAction.viewPdf);
+        if (!isRecurring) {
+          actions.add(EntityAction.printPdf);
+          actions.add(EntityAction.download);
         }
       }
 
       if (userCompany.canEditEntity(this) && !isCancelledOrReversed) {
-        if (multiselect) {
-          if (entityType == EntityType.quote) {
-            actions.add(EntityAction.bulkEmailQuote);
-          } else if (entityType == EntityType.credit) {
-            actions.add(EntityAction.bulkEmailCredit);
-          } else if (entityType == EntityType.invoice) {
-            actions.add(EntityAction.bulkEmailInvoice);
-          }
-        } else {
-          if (entityType == EntityType.quote) {
-            actions.add(EntityAction.emailQuote);
-          } else if (entityType == EntityType.credit) {
-            actions.add(EntityAction.emailCredit);
-          } else if (entityType == EntityType.invoice) {
-            actions.add(EntityAction.emailInvoice);
-          }
-        }
-
         if (!isSent && !isRecurring) {
           actions.add(EntityAction.markSent);
         }
@@ -958,7 +960,7 @@ abstract class InvoiceEntity extends Object
         }
       }
 
-      if (invitations.isNotEmpty && !multiselect) {
+      if (!multiselect) {
         actions.add(EntityAction.clientPortal);
       }
     }

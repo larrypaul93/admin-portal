@@ -286,23 +286,22 @@ void handleVendorAction(
 
   switch (action) {
     case EntityAction.edit:
-      editEntity(context: context, entity: vendor);
+      editEntity(entity: vendor);
       break;
     case EntityAction.newExpense:
       createEntity(
         context: context,
         entity: ExpenseEntity(state: state, vendor: vendor),
-        filterEntity: vendor,
       );
       break;
     case EntityAction.newRecurringExpense:
       createEntity(
-          context: context,
-          entity: ExpenseEntity(
-              state: state,
-              vendor: vendor,
-              entityType: EntityType.recurringExpense),
-          filterEntity: vendor);
+        context: context,
+        entity: ExpenseEntity(
+            state: state,
+            vendor: vendor,
+            entityType: EntityType.recurringExpense),
+      );
       break;
     case EntityAction.restore:
       final message = vendorIds.length > 1

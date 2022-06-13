@@ -91,14 +91,10 @@ class RecurringExpenseListItem extends StatelessWidget {
           builder: (BuildContext context, BoxConstraints constraints) {
         return constraints.maxWidth > kTableListWidthCutoff
             ? InkWell(
-                onTap: () => onTap != null
-                    ? onTap()
-                    : selectEntity(
-                        entity: expense,
-                        context: context,
-                      ),
-                onLongPress: () => selectEntity(
-                    entity: expense, context: context, longPress: true),
+                onTap: () =>
+                    onTap != null ? onTap() : selectEntity(entity: expense),
+                onLongPress: () =>
+                    selectEntity(entity: expense, longPress: true),
                 child: Padding(
                   padding: const EdgeInsets.only(
                     left: 10,
@@ -187,14 +183,10 @@ class RecurringExpenseListItem extends StatelessWidget {
                 ),
               )
             : ListTile(
-                onTap: () => onTap != null
-                    ? onTap()
-                    : selectEntity(
-                        entity: expense,
-                        context: context,
-                      ),
-                onLongPress: () => selectEntity(
-                    entity: expense, context: context, longPress: true),
+                onTap: () =>
+                    onTap != null ? onTap() : selectEntity(entity: expense),
+                onLongPress: () =>
+                    selectEntity(entity: expense, longPress: true),
                 leading: showCheckbox
                     ? IgnorePointer(
                         ignoring: listUIState.isInMultiselect(),
@@ -217,14 +209,14 @@ class RecurringExpenseListItem extends StatelessWidget {
                                   ? expense.number
                                   : expense.publicNotes) +
                               (expense.documents.isNotEmpty ? '  📎' : ''),
-                          style: Theme.of(context).textTheme.headline6,
+                          style: Theme.of(context).textTheme.subtitle1,
                           maxLines: 1,
                         ),
                       ),
                       Text(
                           formatNumber(expense.convertedAmount, context,
                               currencyId: expense.currencyId),
-                          style: Theme.of(context).textTheme.headline6),
+                          style: Theme.of(context).textTheme.subtitle1),
                     ],
                   ),
                 ),

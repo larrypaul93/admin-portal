@@ -3,18 +3,13 @@ import 'package:flutter/material.dart';
 
 // Package imports:
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:invoiceninja_flutter/data/models/models.dart';
+import 'package:invoiceninja_flutter/data/models/quote_model.dart';
 import 'package:invoiceninja_flutter/data/models/contact_model.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
 // Project imports:
 import 'package:invoiceninja_flutter/constants.dart';
-import 'package:invoiceninja_flutter/data/models/client_model.dart';
-import 'package:invoiceninja_flutter/data/models/company_model.dart';
-import 'package:invoiceninja_flutter/data/models/credit_model.dart';
-import 'package:invoiceninja_flutter/data/models/design_model.dart';
-import 'package:invoiceninja_flutter/data/models/entities.dart';
-import 'package:invoiceninja_flutter/data/models/invoice_model.dart';
-import 'package:invoiceninja_flutter/data/models/quote_model.dart';
 import 'package:invoiceninja_flutter/redux/app/app_actions.dart';
 import 'package:invoiceninja_flutter/redux/app/app_state.dart';
 import 'package:invoiceninja_flutter/redux/settings/settings_actions.dart';
@@ -145,88 +140,104 @@ class _InvoiceDesignState extends State<InvoiceDesign>
                 ),
               ),
               FormCard(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: <Widget>[
-                  if (company.isModuleEnabled(EntityType.invoice)) ...[
-                    DesignPicker(
-                      label: localization.invoiceDesign,
-                      initialValue: settings.defaultInvoiceDesignId,
-                      onSelected: (value) {
-                        setState(() {
-                          _wasInvoiceDesignChanged = true;
-                        });
-                        viewModel.onSettingsChanged(settings.rebuild(
-                            (b) => b..defaultInvoiceDesignId = value.id));
-                      },
-                    ),
-                    if (!isFiltered &&
-                        _wasInvoiceDesignChanged &&
-                        state.userCompany.isAdmin)
-                      Padding(
-                        padding: const EdgeInsets.only(bottom: 8),
-                        child: CheckboxListTile(
-                          activeColor: Theme.of(context).colorScheme.secondary,
-                          title: Text(localization.updateAllRecords),
-                          value: _updateAllInvoiceDesigns,
-                          onChanged: (value) => setState(
-                            () => _updateAllInvoiceDesigns = value,
+                  if (state.isProPlan) ...[
+                    if (company.isModuleEnabled(EntityType.invoice)) ...[
+                      DesignPicker(
+                        label: localization.invoiceDesign,
+                        initialValue: settings.defaultInvoiceDesignId,
+                        onSelected: (value) {
+                          setState(() {
+                            _wasInvoiceDesignChanged = true;
+                          });
+                          viewModel.onSettingsChanged(settings.rebuild(
+                              (b) => b..defaultInvoiceDesignId = value.id));
+                        },
+                      ),
+                      if (!isFiltered &&
+                          _wasInvoiceDesignChanged &&
+                          state.userCompany.isAdmin)
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 8),
+                          child: CheckboxListTile(
+                            activeColor:
+                                Theme.of(context).colorScheme.secondary,
+                            title: Text(localization.updateAllRecords),
+                            value: _updateAllInvoiceDesigns,
+                            onChanged: (value) => setState(
+                              () => _updateAllInvoiceDesigns = value,
+                            ),
                           ),
                         ),
+                    ],
+                    if (company.isModuleEnabled(EntityType.quote)) ...[
+                      DesignPicker(
+                        label: localization.quoteDesign,
+                        initialValue: settings.defaultQuoteDesignId,
+                        onSelected: (value) {
+                          setState(() {
+                            _wasQuoteDesignChanged = true;
+                          });
+                          viewModel.onSettingsChanged(settings.rebuild(
+                              (b) => b..defaultQuoteDesignId = value.id));
+                        },
                       ),
-                  ],
-                  if (company.isModuleEnabled(EntityType.quote)) ...[
-                    DesignPicker(
-                      label: localization.quoteDesign,
-                      initialValue: settings.defaultQuoteDesignId,
-                      onSelected: (value) {
-                        setState(() {
-                          _wasQuoteDesignChanged = true;
-                        });
-                        viewModel.onSettingsChanged(settings.rebuild(
-                            (b) => b..defaultQuoteDesignId = value.id));
-                      },
-                    ),
-                    if (!isFiltered &&
-                        _wasQuoteDesignChanged &&
-                        state.userCompany.isAdmin)
-                      Padding(
-                        padding: const EdgeInsets.only(bottom: 8),
-                        child: CheckboxListTile(
-                          activeColor: Theme.of(context).colorScheme.secondary,
-                          title: Text(localization.updateAllRecords),
-                          value: _updateAllQuoteDesigns,
-                          onChanged: (value) => setState(
-                            () => _updateAllQuoteDesigns = value,
+                      if (!isFiltered &&
+                          _wasQuoteDesignChanged &&
+                          state.userCompany.isAdmin)
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 8),
+                          child: CheckboxListTile(
+                            activeColor:
+                                Theme.of(context).colorScheme.secondary,
+                            title: Text(localization.updateAllRecords),
+                            value: _updateAllQuoteDesigns,
+                            onChanged: (value) => setState(
+                              () => _updateAllQuoteDesigns = value,
+                            ),
                           ),
                         ),
+                    ],
+                    if (company.isModuleEnabled(EntityType.credit)) ...[
+                      DesignPicker(
+                        label: localization.creditDesign,
+                        initialValue: settings.defaultCreditDesignId,
+                        onSelected: (value) {
+                          setState(() {
+                            _wasCreditDesignChanged = true;
+                          });
+                          viewModel.onSettingsChanged(settings.rebuild(
+                              (b) => b..defaultCreditDesignId = value.id));
+                        },
                       ),
-                  ],
-                  if (company.isModuleEnabled(EntityType.credit)) ...[
-                    DesignPicker(
-                      label: localization.creditDesign,
-                      initialValue: settings.defaultCreditDesignId,
-                      onSelected: (value) {
-                        setState(() {
-                          _wasCreditDesignChanged = true;
-                        });
-                        viewModel.onSettingsChanged(settings.rebuild(
-                            (b) => b..defaultCreditDesignId = value.id));
-                      },
-                    ),
-                    if (!isFiltered &&
-                        _wasCreditDesignChanged &&
-                        state.userCompany.isAdmin)
-                      Padding(
-                        padding: const EdgeInsets.only(bottom: 8),
-                        child: CheckboxListTile(
-                          activeColor: Theme.of(context).colorScheme.secondary,
-                          title: Text(localization.updateAllRecords),
-                          value: _updateAllCreditDesigns,
-                          onChanged: (value) => setState(
-                            () => _updateAllCreditDesigns = value,
+                      if (!isFiltered &&
+                          _wasCreditDesignChanged &&
+                          state.userCompany.isAdmin)
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 8),
+                          child: CheckboxListTile(
+                            activeColor:
+                                Theme.of(context).colorScheme.secondary,
+                            title: Text(localization.updateAllRecords),
+                            value: _updateAllCreditDesigns,
+                            onChanged: (value) => setState(
+                              () => _updateAllCreditDesigns = value,
+                            ),
                           ),
                         ),
-                      ),
-                  ],
+                    ],
+                  ] else
+                    OutlinedButton(
+                      child: Text(localization.setDefaultDesign.toUpperCase()),
+                      onPressed: () {
+                        store.dispatch(ViewSettings(
+                          company: state.company,
+                          section: kSettingsCompanyDetails,
+                          tabIndex: 3,
+                        ));
+                      },
+                    ),
                   AppDropdownButton(
                     labelText: localization.pageLayout,
                     value: settings.pageLayout,
@@ -270,51 +281,92 @@ class _InvoiceDesignState extends State<InvoiceDesign>
                 ],
               ),
               FormCard(
-                isLast: true,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  LearnMoreUrl(
-                    url: 'https://fonts.google.com',
-                    child: EntityDropdown(
+                  isLast: true,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    LearnMoreUrl(
+                      url: 'https://fonts.google.com',
+                      child: EntityDropdown(
+                        entityType: EntityType.font,
+                        labelText: localization.primaryFont,
+                        entityId: settings.primaryFont,
+                        entityMap: memoizedFontMap(kGoogleFonts),
+                        onSelected: (font) => viewModel.onSettingsChanged(
+                            settings.rebuild((b) => b..primaryFont = font?.id)),
+                      ),
+                    ),
+                    EntityDropdown(
                       entityType: EntityType.font,
-                      labelText: localization.primaryFont,
-                      entityId: settings.primaryFont,
+                      labelText: localization.secondaryFont,
+                      entityId: settings.secondaryFont,
                       entityMap: memoizedFontMap(kGoogleFonts),
                       onSelected: (font) => viewModel.onSettingsChanged(
-                          settings.rebuild((b) => b..primaryFont = font?.id)),
+                          settings.rebuild((b) => b..secondaryFont = font?.id)),
                     ),
-                  ),
-                  EntityDropdown(
-                    entityType: EntityType.font,
-                    labelText: localization.secondaryFont,
-                    entityId: settings.secondaryFont,
-                    entityMap: memoizedFontMap(kGoogleFonts),
-                    onSelected: (font) => viewModel.onSettingsChanged(
-                        settings.rebuild((b) => b..secondaryFont = font?.id)),
-                  ),
-                  FormColorPicker(
-                    labelText: localization.primaryColor,
-                    onSelected: (value) => viewModel.onSettingsChanged(
-                        settings.rebuild((b) => b..primaryColor = value)),
-                    initialValue: settings.primaryColor,
-                  ),
-                  FormColorPicker(
-                    labelText: localization.secondaryColor,
-                    onSelected: (value) => viewModel.onSettingsChanged(
-                        settings.rebuild((b) => b..secondaryColor = value)),
-                    initialValue: settings.secondaryColor,
-                  ),
-                  SizedBox(height: 16),
+                    FormColorPicker(
+                      labelText: localization.primaryColor,
+                      onSelected: (value) => viewModel.onSettingsChanged(
+                          settings.rebuild((b) => b..primaryColor = value)),
+                      initialValue: settings.primaryColor,
+                    ),
+                    FormColorPicker(
+                      labelText: localization.secondaryColor,
+                      onSelected: (value) => viewModel.onSettingsChanged(
+                          settings.rebuild((b) => b..secondaryColor = value)),
+                      initialValue: settings.secondaryColor,
+                    ),
+                  ]),
+              FormCard(
+                children: [
                   BoolDropdownButton(
                     label: localization.emptyColumns,
-                    value: settings.hideEmptyColumnsOnPdf ?? false,
+                    value: !(settings.hideEmptyColumnsOnPdf ?? false),
                     iconData: MdiIcons.table,
                     onChanged: (value) => viewModel.onSettingsChanged(
-                      settings.rebuild((b) => b..hideEmptyColumnsOnPdf = value),
+                      settings
+                          .rebuild((b) => b..hideEmptyColumnsOnPdf = !value),
                     ),
-                    enabledLabel: localization.hide,
-                    disabledLabel: localization.show,
-                  )
+                    enabledLabel: localization.show,
+                    disabledLabel: localization.hide,
+                  ),
+                  BoolDropdownButton(
+                    label: localization.pageNumbering,
+                    value: settings.pageNumbering ?? false,
+                    iconData: Icons.numbers,
+                    onChanged: (value) => viewModel.onSettingsChanged(
+                      settings.rebuild((b) => b..pageNumbering = value),
+                    ),
+                    enabledLabel: localization.show,
+                    disabledLabel: localization.hide,
+                  ),
+                  AppDropdownButton(
+                    labelText: localization.pageNumberingAlignment,
+                    value: settings.pageNumberingAlignment,
+                    onChanged: (dynamic value) => viewModel.onSettingsChanged(
+                        settings
+                            .rebuild((b) => b..pageNumberingAlignment = value)),
+                    items: [
+                      DropdownMenuItem<String>(
+                        child: Text(localization.left),
+                        value: SettingsEntity.PAGE_NUMBER_ALIGN_LEFT,
+                      ),
+                      DropdownMenuItem<String>(
+                        child: Text(localization.center),
+                        value: SettingsEntity.PAGE_NUMBER_ALIGN_CENTER,
+                      ),
+                      DropdownMenuItem<String>(
+                          child: Text(localization.right),
+                          value: SettingsEntity.PAGE_NUMBER_ALIGN_RIGHT),
+                    ],
+                    /*
+                    items: kPageLayouts
+                        .map((pageLayout) => DropdownMenuItem<String>(
+                              value: pageLayout,
+                              child: Text(localization.lookup(pageLayout)),
+                            ))
+                        .toList(),
+                        */
+                  ),
                 ],
               ),
             ],

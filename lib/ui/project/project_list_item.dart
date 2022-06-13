@@ -64,13 +64,11 @@ class ProjectListItem extends StatelessWidget {
           builder: (BuildContext context, BoxConstraints constraints) {
         return constraints.maxWidth > kTableListWidthCutoff
             ? InkWell(
-                onTap: () => onTap != null
-                    ? onTap()
-                    : selectEntity(entity: project, context: context),
+                onTap: () =>
+                    onTap != null ? onTap() : selectEntity(entity: project),
                 onLongPress: () => onLongPress != null
                     ? onLongPress()
-                    : selectEntity(
-                        entity: project, context: context, longPress: true),
+                    : selectEntity(entity: project, longPress: true),
                 child: Padding(
                   padding: const EdgeInsets.only(
                     left: 10,
@@ -160,13 +158,11 @@ class ProjectListItem extends StatelessWidget {
                 ),
               )
             : ListTile(
-                onTap: () => onTap != null
-                    ? onTap()
-                    : selectEntity(entity: project, context: context),
+                onTap: () =>
+                    onTap != null ? onTap() : selectEntity(entity: project),
                 onLongPress: () => onLongPress != null
                     ? onLongPress()
-                    : selectEntity(
-                        entity: project, context: context, longPress: true),
+                    : selectEntity(entity: project, longPress: true),
                 leading: showCheckbox
                     ? IgnorePointer(
                         ignoring: listUIState.isInMultiselect(),
@@ -187,14 +183,14 @@ class ProjectListItem extends StatelessWidget {
                         child: Text(
                           project.name +
                               (project.documents.isNotEmpty ? '  📎' : ''),
-                          style: Theme.of(context).textTheme.headline6,
+                          style: Theme.of(context).textTheme.subtitle1,
                         ),
                       ),
                       Text(
                           formatDuration(
                               Duration(hours: project.budgetedHours.toInt()),
                               showSeconds: false),
-                          style: Theme.of(context).textTheme.headline6),
+                          style: Theme.of(context).textTheme.subtitle1),
                     ],
                   ),
                 ),

@@ -51,12 +51,10 @@ class TaxRateListItem extends StatelessWidget {
       entity: taxRate,
       isSelected: false,
       child: ListTile(
-        onTap: () => onTap != null
-            ? onTap()
-            : selectEntity(entity: taxRate, context: context),
+        onTap: () => onTap != null ? onTap() : selectEntity(entity: taxRate),
         onLongPress: () => onLongPress != null
             ? onLongPress()
-            : selectEntity(entity: taxRate, context: context, longPress: true),
+            : selectEntity(entity: taxRate, longPress: true),
         leading: showCheckbox
             ? IgnorePointer(
                 ignoring: listUIState.isInMultiselect(),
@@ -75,11 +73,11 @@ class TaxRateListItem extends StatelessWidget {
               Expanded(
                 child: Text(
                   '${taxRate.name} • ${formatNumber(taxRate.rate, context, formatNumberType: FormatNumberType.percent)}',
-                  style: Theme.of(context).textTheme.headline6,
+                  style: Theme.of(context).textTheme.subtitle1,
                 ),
               ),
               Text(formatNumber(taxRate.listDisplayAmount, context),
-                  style: Theme.of(context).textTheme.headline6),
+                  style: Theme.of(context).textTheme.subtitle1),
             ],
           ),
         ),

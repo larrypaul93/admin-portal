@@ -504,8 +504,10 @@ class _InvoiceEditItemsDesktopState extends State<InvoiceEditItemsDesktop> {
     }
 
     if (lineItems.where((item) => item.isEmpty).isEmpty) {
-      lineItems
-          .add(InvoiceItemEntity(quantity: company.defaultQuantity ? 1 : 0));
+      lineItems.add(InvoiceItemEntity(
+          quantity: company.defaultQuantity || !company.enableProductQuantity
+              ? 1
+              : 0));
     }
 
     tableHeaderColumns.addAll([
@@ -577,11 +579,21 @@ class _InvoiceEditItemsDesktopState extends State<InvoiceEditItemsDesktop> {
                                 final options = productIds
                                     .map((productId) =>
                                         productState.map[productId])
-                                    .where((product) => product.productKey
-                                        .toLowerCase()
-                                        .contains(textEditingValue.text
-                                            .toLowerCase()))
-                                    .toList();
+                                    .where((product) {
+                                  final filter =
+                                      textEditingValue.text.toLowerCase();
+                                  final productKey =
+                                      product.productKey.toLowerCase();
+
+                                  if (company.showProductDetails &&
+                                      product.notes
+                                          .toLowerCase()
+                                          .contains(filter)) {
+                                    return true;
+                                  }
+
+                                  return productKey.contains(filter);
+                                }).toList();
 
                                 if (options.length == 1 &&
                                     options[0].productKey.toLowerCase() ==
@@ -615,53 +627,60 @@ class _InvoiceEditItemsDesktopState extends State<InvoiceEditItemsDesktop> {
                                       currency?.precision ?? 2);
                                 }
 
-                                final updatedItem = item.rebuild((b) => b
-                                  ..productKey = product.productKey
-                                  ..notes =
-                                      item.isTask ? item.notes : product.notes
-                                  ..productCost = item.productCost
-                                  ..cost = item.isTask && item.cost != 0
-                                      ? item.cost
-                                      : cost
-                                  ..quantity = item.isTask || item.quantity != 0
-                                      ? item.quantity
-                                      : viewModel.state.company.defaultQuantity
-                                          ? 1
-                                          : product.quantity
-                                  ..customValue1 = product.customValue1
-                                  ..customValue2 = product.customValue2
-                                  ..customValue3 = product.customValue3
-                                  ..customValue4 = product.customValue4
-                                  ..taxName1 =
-                                      company.numberOfItemTaxRates >= 1 &&
-                                              product.taxName1.isNotEmpty
-                                          ? product.taxName1
-                                          : item.taxName1
-                                  ..taxRate1 =
-                                      company.numberOfItemTaxRates >= 1 &&
-                                              product.taxName1.isNotEmpty
-                                          ? product.taxRate1
-                                          : item.taxRate1
-                                  ..taxName2 =
-                                      company.numberOfItemTaxRates >= 2 &&
-                                              product.taxName2.isNotEmpty
-                                          ? product.taxName2
-                                          : item.taxName2
-                                  ..taxRate2 =
-                                      company.numberOfItemTaxRates >= 2 &&
-                                              product.taxName2.isNotEmpty
-                                          ? product.taxRate2
-                                          : item.taxRate2
-                                  ..taxName3 =
-                                      company.numberOfItemTaxRates >= 3 &&
-                                              product.taxName3.isNotEmpty
-                                          ? product.taxName3
-                                          : item.taxName3
-                                  ..taxRate3 =
-                                      company.numberOfItemTaxRates >= 3 &&
-                                              product.taxName3.isNotEmpty
-                                          ? product.taxRate3
-                                          : item.taxRate3);
+                                final updatedItem = company.fillProducts
+                                    ? item.rebuild((b) => b
+                                      ..productKey = product.productKey
+                                      ..notes = item.isTask
+                                          ? item.notes
+                                          : product.notes
+                                      ..productCost = item.productCost
+                                      ..cost = item.isTask && item.cost != 0
+                                          ? item.cost
+                                          : cost
+                                      ..quantity =
+                                          item.isTask || item.quantity != 0
+                                              ? item.quantity
+                                              : viewModel.state.company
+                                                      .defaultQuantity
+                                                  ? 1
+                                                  : product.quantity
+                                      ..customValue1 = product.customValue1
+                                      ..customValue2 = product.customValue2
+                                      ..customValue3 = product.customValue3
+                                      ..customValue4 = product.customValue4
+                                      ..taxName1 =
+                                          company.numberOfItemTaxRates >= 1 &&
+                                                  product.taxName1.isNotEmpty
+                                              ? product.taxName1
+                                              : item.taxName1
+                                      ..taxRate1 =
+                                          company.numberOfItemTaxRates >= 1 &&
+                                                  product.taxName1.isNotEmpty
+                                              ? product.taxRate1
+                                              : item.taxRate1
+                                      ..taxName2 =
+                                          company.numberOfItemTaxRates >= 2 &&
+                                                  product.taxName2.isNotEmpty
+                                              ? product.taxName2
+                                              : item.taxName2
+                                      ..taxRate2 =
+                                          company.numberOfItemTaxRates >= 2 &&
+                                                  product.taxName2.isNotEmpty
+                                              ? product.taxRate2
+                                              : item.taxRate2
+                                      ..taxName3 =
+                                          company.numberOfItemTaxRates >= 3 &&
+                                                  product.taxName3.isNotEmpty
+                                              ? product.taxName3
+                                              : item.taxName3
+                                      ..taxRate3 =
+                                          company.numberOfItemTaxRates >= 3 &&
+                                                  product.taxName3.isNotEmpty
+                                              ? product.taxRate3
+                                              : item.taxRate3)
+                                    : item.rebuild((b) =>
+                                        b..productKey = product.productKey);
+
                                 _onChanged(updatedItem, index, debounce: false);
                                 _updateTable();
                               },
@@ -708,6 +727,8 @@ class _InvoiceEditItemsDesktopState extends State<InvoiceEditItemsDesktop> {
                                             itemCount: options.length,
                                             itemBuilder: (BuildContext context,
                                                 int index) {
+                                              final entity =
+                                                  options.elementAt(index);
                                               return Container(
                                                 color: highlightedIndex == index
                                                     ? convertHexStringToColor(state
@@ -721,8 +742,13 @@ class _InvoiceEditItemsDesktopState extends State<InvoiceEditItemsDesktop> {
                                                     EntityAutocompleteListTile(
                                                   onTap: (entity) =>
                                                       onSelected(entity),
-                                                  entity:
-                                                      options.elementAt(index),
+                                                  subtitle: entity
+                                                              is ProductEntity &&
+                                                          company
+                                                              .showProductDetails
+                                                      ? entity.notes
+                                                      : null,
+                                                  entity: entity,
                                                 ),
                                               );
                                             },

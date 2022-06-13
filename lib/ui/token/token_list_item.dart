@@ -54,12 +54,10 @@ class TokenListItem extends StatelessWidget {
               ? tokenUIState.editing.id
               : tokenUIState.selectedId),
       child: ListTile(
-        onTap: () => onTap != null
-            ? onTap()
-            : selectEntity(entity: token, context: context),
+        onTap: () => onTap != null ? onTap() : selectEntity(entity: token),
         onLongPress: () => onLongPress != null
             ? onLongPress()
-            : selectEntity(entity: token, context: context, longPress: true),
+            : selectEntity(entity: token, longPress: true),
         leading: showCheckbox
             ? IgnorePointer(
                 ignoring: listUIState.isInMultiselect(),
@@ -73,7 +71,7 @@ class TokenListItem extends StatelessWidget {
             : null,
         title: Text(
           token.name,
-          style: Theme.of(context).textTheme.headline6,
+          style: Theme.of(context).textTheme.subtitle1,
         ),
         subtitle: Column(
           crossAxisAlignment: CrossAxisAlignment.start,

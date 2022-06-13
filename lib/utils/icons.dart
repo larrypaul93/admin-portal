@@ -97,6 +97,10 @@ IconData getEntityActionIcon(EntityAction entityAction) {
       return MdiIcons.fileAccount;
     case EntityAction.changeStatus:
       return Icons.adjust;
+    case EntityAction.cancel:
+      return Icons.cancel_outlined;
+    case EntityAction.save:
+      return Icons.cloud_upload;
     default:
       return null;
   }
@@ -192,7 +196,7 @@ IconData getSettingIcon(String section) {
       return Icons.person;
     case kSettingsLocalization:
       return Icons.language;
-    case kSettingsOnlinePayments:
+    case kSettingsPaymentSettings:
     case kSettingsCompanyGateways:
       return MdiIcons.creditCard;
     case kSettingsTaxSettings:

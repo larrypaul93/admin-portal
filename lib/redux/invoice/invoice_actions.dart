@@ -512,7 +512,7 @@ void handleInvoiceAction(BuildContext context, List<BaseEntity> invoices,
 
   switch (action) {
     case EntityAction.edit:
-      editEntity(context: context, entity: invoice);
+      editEntity(entity: invoice);
       break;
     case EntityAction.viewPdf:
       store.dispatch(ShowPdfInvoice(invoice: invoice, context: context));
@@ -545,13 +545,18 @@ void handleInvoiceAction(BuildContext context, List<BaseEntity> invoices,
             ..designId = designId));
       break;
     case EntityAction.cancelInvoice:
-      store.dispatch(CancelInvoicesRequest(
-          snackBarCompleter<Null>(
-              context,
-              invoiceIds.length == 1
-                  ? localization.cancelledInvoice
-                  : localization.cancelledInvoices),
-          invoiceIds));
+      confirmCallback(
+          context: context,
+          message: localization.cancelInvoice,
+          callback: (_) {
+            store.dispatch(CancelInvoicesRequest(
+                snackBarCompleter<Null>(
+                    context,
+                    invoiceIds.length == 1
+                        ? localization.cancelledInvoice
+                        : localization.cancelledInvoices),
+                invoiceIds));
+          });
       break;
     case EntityAction.markPaid:
       store.dispatch(MarkInvoicesPaidRequest(
@@ -579,9 +584,7 @@ void handleInvoiceAction(BuildContext context, List<BaseEntity> invoices,
               TextButton(
                   onPressed: () {
                     Navigator.of(context).pop();
-                    editEntity(
-                        context: context,
-                        entity: state.clientState.get(invoice.clientId));
+                    editEntity(entity: state.clientState.get(invoice.clientId));
                   },
                   child: Text(localization.editClient.toUpperCase()))
             ]);
@@ -652,7 +655,6 @@ void handleInvoiceAction(BuildContext context, List<BaseEntity> invoices,
               .where((invoice) => !(invoice as InvoiceEntity).isPaid)
               .map((invoice) => PaymentableEntity.fromInvoice(invoice))
               .toList())),
-        filterEntity: state.clientState.map[invoice.clientId],
       );
       break;
     case EntityAction.download:
@@ -702,10 +704,10 @@ void handleInvoiceAction(BuildContext context, List<BaseEntity> invoices,
     case EntityAction.printPdf:
       final invitation = invoice.invitations.first;
       final url = invitation.downloadLink;
-      store.dispatch(StartLoading());
+      store.dispatch(StartSaving());
       final http.Response response =
           await WebClient().get(url, '', rawResponse: true);
-      store.dispatch(StopLoading());
+      store.dispatch(StopSaving());
       await Printing.layoutPdf(onLayout: (_) => response.bodyBytes);
       break;
     case EntityAction.more:

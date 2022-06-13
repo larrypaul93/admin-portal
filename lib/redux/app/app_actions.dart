@@ -94,6 +94,8 @@ class DismissNativeWarning implements PersistUI {}
 
 class DismissNativeWarningPermanently implements PersistUI, PersistPrefs {}
 
+class DismissGatewayWarningPermanently implements PersistUI, PersistPrefs {}
+
 class ViewMainScreen {
   ViewMainScreen({this.addDelay = false});
 
@@ -124,6 +126,12 @@ class LoadStaticSuccess implements PersistStatic {
 
 class ToggleEditorLayout implements PersistPrefs {
   ToggleEditorLayout(this.entityType);
+
+  final EntityType entityType;
+}
+
+class ToggleViewerLayout implements PersistPrefs {
+  ToggleViewerLayout(this.entityType);
 
   final EntityType entityType;
 }
@@ -282,13 +290,13 @@ class FilterCompany implements PersistUI {
 }
 
 void filterByEntity({
-  @required BuildContext context,
   @required BaseEntity entity,
 }) {
   if (entity.isNew) {
     return;
   }
 
+  final context = navigatorKey.currentContext;
   final store = StoreProvider.of<AppState>(context);
   store.dispatch(FilterByEntity(entity: entity));
 }
@@ -303,7 +311,6 @@ void viewEntitiesByType({
 
   checkForChanges(
       store: store,
-      context: navigatorKey.currentContext,
       callback: () {
         if (filterEntity != null) {
           if (uiState.filterEntityType != filterEntity.entityType ||
@@ -452,7 +459,6 @@ void viewEntityById({
 
   checkForChanges(
       store: store,
-      context: navigatorKey.currentContext,
       force: force,
       callback: () {
         if (addToStack) {
@@ -492,6 +498,21 @@ void viewEntityById({
           showErrorDialog(
               context: navigatorKey.currentContext,
               message: localization.failedToFindRecord);
+          return;
+        }
+
+        if (isDesktop(navigatorKey.currentContext) &&
+            entityType.hasFullWidthViewer) {
+          if (!state.prefState.isViewerFullScreen(entityType))
+            store.dispatch(ToggleViewerLayout(entityType));
+          final filterEntity =
+              store.state.getEntityMap(entityType)[entityId] as BaseEntity;
+          viewEntitiesByType(
+              entityType: filterEntity.entityType.relatedTypes
+                  .where((entityType) =>
+                      state.userCompany.canViewOrCreate(entityType))
+                  .first,
+              filterEntity: filterEntity);
           return;
         }
 
@@ -674,7 +695,6 @@ void createEntityByType({
 
   checkForChanges(
       store: store,
-      context: context,
       force: force,
       callback: () {
         if (state.uiState.previewStack.isNotEmpty) {
@@ -919,7 +939,6 @@ void createEntity({
   BuildContext context,
   BaseEntity entity,
   bool force = false,
-  BaseEntity filterEntity,
   Completer completer,
   Completer cancelCompleter,
 }) {
@@ -933,18 +952,8 @@ void createEntity({
 
   checkForChanges(
       store: store,
-      context: context,
       force: force,
       callback: () {
-        if (filterEntity != null &&
-            uiState.filterEntityType != filterEntity.entityType &&
-            uiState.filterEntityId != filterEntity.id) {
-          filterByEntity(
-            context: context,
-            entity: filterEntity,
-          );
-        }
-
         if (uiState.previewStack.isNotEmpty) {
           store.dispatch(ClearPreviewStack());
         }
@@ -1141,13 +1150,13 @@ void createEntity({
 }
 
 void editEntity({
-  @required BuildContext context,
   @required BaseEntity entity,
   int subIndex,
   bool force = false,
   bool fullScreen = true,
   Completer completer,
 }) {
+  final context = navigatorKey.currentContext;
   final store = StoreProvider.of<AppState>(context);
   final state = store.state;
   final localization = AppLocalization.of(context);
@@ -1155,7 +1164,6 @@ void editEntity({
 
   checkForChanges(
       store: store,
-      context: context,
       force: force,
       callback: () {
         if (state.prefState.isDesktop) {
@@ -1230,8 +1238,7 @@ void editEntity({
             break;
           case EntityType.task:
             store.dispatch(EditTask(
-              task: (entity as TaskEntity).rebuild(
-                  (b) => b..showAsRunning = (entity as TaskEntity).isRunning),
+              task: entity,
               taskTimeIndex: subIndex,
               completer: completer,
             ));
@@ -1475,12 +1482,12 @@ void handleEntitiesActions(List<BaseEntity> entities, EntityAction action,
 }
 
 void selectEntity({
-  @required BuildContext context,
   @required BaseEntity entity,
   bool longPress = false,
   bool forceView = false,
   BaseEntity filterEntity,
 }) {
+  final context = navigatorKey.currentContext;
   final store = StoreProvider.of<AppState>(navigatorKey.currentContext);
   final state = store.state;
   final uiState = state.uiState;
@@ -1496,7 +1503,7 @@ void selectEntity({
         state.uiState.currentRoute != DashboardScreenBuilder.route) {
       handleEntityAction(entity, EntityAction.toggleMultiselect);
     } else {
-      editEntity(context: context, entity: entity);
+      editEntity(entity: entity);
     }
   } else if (isInMultiselect && forceView != true) {
     handleEntityAction(entity, EntityAction.toggleMultiselect);
@@ -1504,7 +1511,8 @@ void selectEntity({
     if (uiState.isEditing && entityUIState.editingId == entity.id) {
       viewEntitiesByType(entityType: entity.entityType);
     } else {
-      if (!state.prefState.isPreviewVisible) {
+      if (!entity.entityType.hasFullWidthViewer &&
+          !state.prefState.isPreviewVisible) {
         store.dispatch(TogglePreviewSidebar());
       }
       viewEntity(entity: entity);
@@ -1520,7 +1528,7 @@ void selectEntity({
     if (entityUIState.tabIndex > 0) {
       store.dispatch(PreviewEntity());
     } else if (state.prefState.tapSelectedToEdit) {
-      editEntity(context: context, entity: entity);
+      editEntity(entity: entity);
     } else if (state.prefState.isModuleTable) {
       store.dispatch(TogglePreviewSidebar());
     }
@@ -1566,14 +1574,10 @@ void inspectEntity({
 
 void checkForChanges({
   @required Store<AppState> store,
-  @required BuildContext context,
   @required Function callback,
   bool force = false,
 }) {
-  if (context == null) {
-    print('WARNING: context is null in hasChanges');
-    return;
-  }
+  final context = navigatorKey.currentContext;
 
   if (force) {
     store.dispatch(DiscardChanges());

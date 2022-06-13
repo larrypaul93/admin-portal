@@ -55,12 +55,10 @@ class DocumentListItem extends StatelessWidget {
       userCompany: userCompany,
       entity: document,
       child: ListTile(
-        onTap: () => onTap != null
-            ? onTap()
-            : selectEntity(entity: document, context: context),
+        onTap: () => onTap != null ? onTap() : selectEntity(entity: document),
         onLongPress: () => onLongPress != null
             ? onLongPress()
-            : selectEntity(entity: document, context: context, longPress: true),
+            : selectEntity(entity: document, longPress: true),
         leading: showCheckbox
             ? IgnorePointer(
                 ignoring: listUIState.isInMultiselect(),
@@ -79,11 +77,11 @@ class DocumentListItem extends StatelessWidget {
               Expanded(
                 child: Text(
                   document.name,
-                  style: Theme.of(context).textTheme.headline6,
+                  style: Theme.of(context).textTheme.subtitle1,
                 ),
               ),
               Text(formatNumber(document.listDisplayAmount, context),
-                  style: Theme.of(context).textTheme.headline6),
+                  style: Theme.of(context).textTheme.subtitle1),
             ],
           ),
         ),

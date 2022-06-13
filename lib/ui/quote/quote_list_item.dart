@@ -68,12 +68,10 @@ class QuoteListItem extends StatelessWidget {
             builder: (BuildContext context, BoxConstraints constraints) {
           return constraints.maxWidth > kTableListWidthCutoff
               ? InkWell(
-                  onTap: () => selectEntity(
-                      entity: quote,
-                      context: context,
-                      forceView: !showCheckbox),
-                  onLongPress: () => selectEntity(
-                      entity: quote, context: context, longPress: true),
+                  onTap: () =>
+                      selectEntity(entity: quote, forceView: !showCheckbox),
+                  onLongPress: () =>
+                      selectEntity(entity: quote, longPress: true),
                   child: Padding(
                     padding: const EdgeInsets.only(
                       left: 10,
@@ -163,12 +161,10 @@ class QuoteListItem extends StatelessWidget {
                   ),
                 )
               : ListTile(
-                  onTap: () => selectEntity(
-                      entity: quote,
-                      context: context,
-                      forceView: !showCheckbox),
-                  onLongPress: () => selectEntity(
-                      entity: quote, context: context, longPress: true),
+                  onTap: () =>
+                      selectEntity(entity: quote, forceView: !showCheckbox),
+                  onLongPress: () =>
+                      selectEntity(entity: quote, longPress: true),
                   leading: isInMultiselect
                       ? IgnorePointer(
                           ignoring: listUIState.isInMultiselect(),
@@ -189,7 +185,7 @@ class QuoteListItem extends StatelessWidget {
                         Expanded(
                           child: Text(
                             client.displayName,
-                            style: Theme.of(context).textTheme.headline6,
+                            style: Theme.of(context).textTheme.subtitle1,
                             overflow: TextOverflow.ellipsis,
                           ),
                         ),
@@ -197,7 +193,7 @@ class QuoteListItem extends StatelessWidget {
                         Text(
                             formatNumber(quote.amount, context,
                                 clientId: quote.clientId),
-                            style: Theme.of(context).textTheme.headline6),
+                            style: Theme.of(context).textTheme.subtitle1),
                       ],
                     ),
                   ),

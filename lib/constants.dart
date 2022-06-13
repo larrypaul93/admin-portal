@@ -4,7 +4,7 @@ class Constants {
 }
 
 // TODO remove version once #46609 is fixed
-const String kClientVersion = '5.0.84';
+const String kClientVersion = '5.0.85';
 const String kMinServerVersion = '5.0.4';
 
 const String kAppName = 'Invoice Ninja';
@@ -104,7 +104,8 @@ const kProductPlans = [
 
 const double kMobileLayoutWidth = 700;
 const double kMobileDialogPadding = 12;
-const double kDrawerWidth = 272;
+const double kDrawerWidthMobile = 272;
+const double kDrawerWidthDesktop = 210;
 const double kTableColumnGap = 16;
 const double kTopBottomBarHeight = 50;
 const double kDialogWidth = 400;
@@ -415,7 +416,7 @@ const String kSettingsPaymentTermView = 'payment_term/view';
 const String kSettingsPaymentTermEdit = 'payment_term/edit';
 const String kSettingsUserDetails = 'user_details';
 const String kSettingsLocalization = 'localization';
-const String kSettingsOnlinePayments = 'online_payments';
+const String kSettingsPaymentSettings = 'payment_settings';
 const String kSettingsCompanyGateways = 'company_gateways';
 const String kSettingsCompanyGatewaysView = 'company_gateways/view';
 const String kSettingsCompanyGatewaysEdit = 'company_gateways/edit';

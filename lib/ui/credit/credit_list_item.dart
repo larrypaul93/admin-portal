@@ -70,13 +70,11 @@ class CreditListItem extends StatelessWidget {
           builder: (BuildContext context, BoxConstraints constraints) {
         return constraints.maxWidth > kTableListWidthCutoff
             ? InkWell(
-                onTap: () => onTap != null
-                    ? onTap()
-                    : selectEntity(entity: credit, context: context),
+                onTap: () =>
+                    onTap != null ? onTap() : selectEntity(entity: credit),
                 onLongPress: () => onLongPress != null
                     ? onLongPress()
-                    : selectEntity(
-                        entity: credit, context: context, longPress: true),
+                    : selectEntity(entity: credit, longPress: true),
                 child: Padding(
                   padding: const EdgeInsets.only(
                     left: 10,
@@ -164,13 +162,11 @@ class CreditListItem extends StatelessWidget {
                 ),
               )
             : ListTile(
-                onTap: () => onTap != null
-                    ? onTap()
-                    : selectEntity(entity: credit, context: context),
+                onTap: () =>
+                    onTap != null ? onTap() : selectEntity(entity: credit),
                 onLongPress: () => onLongPress != null
                     ? onLongPress()
-                    : selectEntity(
-                        entity: credit, context: context, longPress: true),
+                    : selectEntity(entity: credit, longPress: true),
                 leading: showCheckbox
                     ? IgnorePointer(
                         ignoring: listUIState.isInMultiselect(),
@@ -190,7 +186,7 @@ class CreditListItem extends StatelessWidget {
                       Expanded(
                         child: Text(
                           client.displayName,
-                          style: Theme.of(context).textTheme.headline6,
+                          style: Theme.of(context).textTheme.subtitle1,
                           overflow: TextOverflow.ellipsis,
                         ),
                       ),
@@ -202,7 +198,7 @@ class CreditListItem extends StatelessWidget {
                                   : credit.amount,
                               context,
                               clientId: credit.clientId),
-                          style: Theme.of(context).textTheme.headline6),
+                          style: Theme.of(context).textTheme.subtitle1),
                     ],
                   ),
                 ),

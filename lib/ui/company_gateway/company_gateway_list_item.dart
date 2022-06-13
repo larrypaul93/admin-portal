@@ -55,7 +55,7 @@ class CompanyGatewayListItem extends StatelessWidget {
       entity: companyGateway,
       isSelected: false,
       child: ListTile(
-        onTap: () => selectEntity(entity: companyGateway, context: context),
+        onTap: () => selectEntity(entity: companyGateway),
         trailing: onRemovePressed == null
             ? null
             : Padding(
@@ -83,11 +83,11 @@ class CompanyGatewayListItem extends StatelessWidget {
               Expanded(
                 child: Text(
                   companyGateway.listDisplayName,
-                  style: Theme.of(context).textTheme.headline6,
+                  style: Theme.of(context).textTheme.subtitle1,
                 ),
               ),
               Text(formatNumber(companyGateway.listDisplayAmount, context),
-                  style: Theme.of(context).textTheme.headline6),
+                  style: Theme.of(context).textTheme.subtitle1),
             ],
           ),
         ),

@@ -50,12 +50,10 @@ class UserListItem extends StatelessWidget {
       entity: user,
       isSelected: false,
       child: ListTile(
-        onTap: () => onTap != null
-            ? onTap()
-            : selectEntity(entity: user, context: context),
+        onTap: () => onTap != null ? onTap() : selectEntity(entity: user),
         onLongPress: () => onLongPress != null
             ? onLongPress()
-            : selectEntity(entity: user, context: context, longPress: true),
+            : selectEntity(entity: user, longPress: true),
         leading: showCheckbox
             ? IgnorePointer(
                 ignoring: listUIState.isInMultiselect(),
@@ -74,11 +72,11 @@ class UserListItem extends StatelessWidget {
               Expanded(
                 child: Text(
                   user.listDisplayName,
-                  style: Theme.of(context).textTheme.headline6,
+                  style: Theme.of(context).textTheme.subtitle1,
                 ),
               ),
               Text(formatNumber(user.listDisplayAmount, context),
-                  style: Theme.of(context).textTheme.headline6),
+                  style: Theme.of(context).textTheme.subtitle1),
             ],
           ),
         ),

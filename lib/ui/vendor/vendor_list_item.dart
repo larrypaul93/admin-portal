@@ -61,13 +61,11 @@ class VendorListItem extends StatelessWidget {
           builder: (BuildContext context, BoxConstraints constraints) {
         return constraints.maxWidth > kTableListWidthCutoff
             ? InkWell(
-                onTap: () => onTap != null
-                    ? onTap()
-                    : selectEntity(entity: vendor, context: context),
+                onTap: () =>
+                    onTap != null ? onTap() : selectEntity(entity: vendor),
                 onLongPress: () => onLongPress != null
                     ? onLongPress()
-                    : selectEntity(
-                        entity: vendor, context: context, longPress: true),
+                    : selectEntity(entity: vendor, longPress: true),
                 child: Padding(
                   padding: const EdgeInsets.only(
                     left: 10,
@@ -155,13 +153,11 @@ class VendorListItem extends StatelessWidget {
                 ),
               )
             : ListTile(
-                onTap: () => onTap != null
-                    ? onTap()
-                    : selectEntity(entity: vendor, context: context),
+                onTap: () =>
+                    onTap != null ? onTap() : selectEntity(entity: vendor),
                 onLongPress: () => onLongPress != null
                     ? onLongPress()
-                    : selectEntity(
-                        entity: vendor, context: context, longPress: true),
+                    : selectEntity(entity: vendor, longPress: true),
                 leading: showCheckbox
                     ? IgnorePointer(
                         ignoring: listUIState.isInMultiselect(),
@@ -181,14 +177,14 @@ class VendorListItem extends StatelessWidget {
                       Expanded(
                         child: Text(
                           vendor.name + (documents.isNotEmpty ? '  📎' : ''),
-                          style: Theme.of(context).textTheme.headline6,
+                          style: Theme.of(context).textTheme.subtitle1,
                         ),
                       ),
                       /*
                     Text(
                         formatNumber(vendor.balance, context,
                             vendorId: vendor.id),
-                        style: Theme.of(context).textTheme.headline6),
+                        style: Theme.of(context).textTheme.subtitle1),
                      */
                     ],
                   ),

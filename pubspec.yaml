@@ -1,6 +1,6 @@
 name: invoiceninja_flutter
 description: Client for Invoice Ninja
-version: 5.0.84+84
+version: 5.0.85+85
 homepage: https://invoiceninja.com
 documentation: https://invoiceninja.github.io
 publish_to: none
@@ -41,7 +41,7 @@ dependencies:
     git:
       url: https://github.com/theyakka/qr.flutter.git
   local_auth: ^1.1.6
-  sentry_flutter: ^6.1.2
+  sentry_flutter: ^6.5.1
   image_picker: ^0.8.3+1
   flutter_colorpicker: ^1.0.3
   flutter_json_viewer: ^1.0.1

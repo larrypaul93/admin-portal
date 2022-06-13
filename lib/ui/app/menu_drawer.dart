@@ -94,13 +94,13 @@ class MenuDrawer extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.start,
         children: <Widget>[
           _companyLogo(company),
-          SizedBox(width: 15, height: kTopBottomBarHeight),
+          SizedBox(width: 12, height: kTopBottomBarHeight),
           Expanded(
             child: Text(
               company.displayName.isEmpty
                   ? localization.newCompany
                   : company.displayName,
-              style: Theme.of(context).textTheme.headline6,
+              style: Theme.of(context).textTheme.subtitle1,
               overflow: TextOverflow.ellipsis,
             ),
           ),
@@ -143,8 +143,11 @@ class MenuDrawer extends StatelessWidget {
               children: <Widget>[
                 SizedBox(width: 2),
                 Icon(Icons.add_circle, size: 32),
-                SizedBox(width: 20),
-                Text(localization.addCompany),
+                SizedBox(width: 15),
+                Text(
+                  localization.addCompany,
+                  style: Theme.of(context).textTheme.subtitle1,
+                ),
               ],
             ),
           ),
@@ -154,8 +157,11 @@ class MenuDrawer extends StatelessWidget {
             children: <Widget>[
               SizedBox(width: 2),
               Icon(Icons.logout, size: 32),
-              SizedBox(width: 20),
-              Text(localization.logout),
+              SizedBox(width: 15),
+              Text(
+                localization.logout,
+                style: Theme.of(context).textTheme.subtitle1,
+              ),
             ],
           ),
         ),
@@ -210,8 +216,11 @@ class MenuDrawer extends StatelessWidget {
                       children: <Widget>[
                         SizedBox(width: 2),
                         Icon(Icons.add_circle, size: 32),
-                        SizedBox(width: 20),
-                        Text(localization.addCompany),
+                        SizedBox(width: 15),
+                        Text(
+                          localization.addCompany,
+                          style: Theme.of(context).textTheme.subtitle1,
+                        ),
                       ],
                     ),
                   ),
@@ -221,8 +230,11 @@ class MenuDrawer extends StatelessWidget {
                     children: <Widget>[
                       SizedBox(width: 2),
                       Icon(Icons.logout, size: 32),
-                      SizedBox(width: 20),
-                      Text(localization.logout),
+                      SizedBox(width: 15),
+                      Text(
+                        localization.logout,
+                        style: Theme.of(context).textTheme.subtitle1,
+                      ),
                     ],
                   ),
                 ),
@@ -255,7 +267,11 @@ class MenuDrawer extends StatelessWidget {
 
     return FocusTraversalGroup(
       child: Container(
-        width: state.isMenuCollapsed ? 65 : kDrawerWidth,
+        width: state.isMenuCollapsed
+            ? 65
+            : isDesktop(context)
+                ? kDrawerWidthDesktop
+                : kDrawerWidthMobile,
         child: Drawer(
           child: SafeArea(
             child: Column(
@@ -321,7 +337,7 @@ class MenuDrawer extends StatelessWidget {
                                   message: localization.companyDisabledWarning,
                                   child: ListTile(
                                     contentPadding:
-                                        const EdgeInsets.only(left: 20),
+                                        const EdgeInsets.only(left: 12),
                                     onTap: () {
                                       // TODO once v4 is sunset change to ViewSettings
                                       launch(
@@ -379,13 +395,15 @@ class MenuDrawer extends StatelessWidget {
                                     dense: true,
                                     tileColor: Colors.green,
                                     leading: Padding(
-                                      padding: const EdgeInsets.only(left: 4),
+                                      padding: const EdgeInsets.only(left: 9),
                                       child: Icon(
                                         Icons.arrow_circle_up,
                                         size: 22,
                                         color: Colors.white,
                                       ),
                                     ),
+                                    contentPadding:
+                                        const EdgeInsets.only(left: 12),
                                     title: state.isMenuCollapsed
                                         ? SizedBox()
                                         : Text(
@@ -579,13 +597,14 @@ class DrawerTile extends StatefulWidget {
 }
 
 class _DrawerTileState extends State<DrawerTile> {
-  //bool _isHovered = false;
+  bool _isHovered = false;
 
   @override
   Widget build(BuildContext context) {
     final store = StoreProvider.of<AppState>(context);
     final state = store.state;
     final uiState = state.uiState;
+    final prefState = state.prefState;
     final userCompany = state.userCompany;
     final NavigatorState navigator = Navigator.of(context);
 
@@ -612,12 +631,12 @@ class _DrawerTileState extends State<DrawerTile> {
       route = widget.entityType.name;
     }
 
-    final isSelected =
-        uiState.currentRoute.startsWith('/${toSnakeCase(route)}') &&
-            (state.uiState.filterEntityType == null ||
-                !state.prefState.isFilterVisible);
+    final isSelected = uiState.filterEntityType != null &&
+            prefState.isViewerFullScreen(uiState.filterEntityType) &&
+            (prefState.isPreviewVisible || uiState.isList)
+        ? widget.entityType == uiState.filterEntityType
+        : uiState.currentRoute.startsWith('/${toSnakeCase(route)}');
 
-    final prefState = state.prefState;
     final inactiveColor = prefState
             .customColors[PrefState.THEME_SIDEBAR_INACTIVE_BACKGROUND_COLOR] ??
         '';
@@ -657,43 +676,82 @@ class _DrawerTileState extends State<DrawerTile> {
       }
     }
 
-    Widget trailingWidget;
-    if (!state.isMenuCollapsed) {
-      if (widget.title == localization.dashboard) {
-        trailingWidget = IconButton(
-          icon: Icon(
-            Icons.search,
-            color: textColor,
-          ),
-          onPressed: () {
-            if (isMobile(context)) {
-              navigator.pop();
-            }
-            store.dispatch(ViewDashboard(
-                filter: uiState.mainRoute == 'dashboard' && uiState.filter == ''
-                    ? null
-                    : ''));
-          },
+    final onTap = () {
+      if (widget.entityType != null) {
+        viewEntitiesByType(
+          entityType: widget.entityType,
         );
-      } else if (userCompany.canCreate(widget.entityType)) {
-        trailingWidget = IconButton(
-          tooltip: prefState.enableTooltips ? widget.iconTooltip : null,
-          icon: Icon(
-            Icons.add_circle_outline,
-            color: textColor,
-          ),
-          onPressed: () {
-            if (isMobile(context)) {
-              navigator.pop();
-            }
-            createEntityByType(
-              context: context,
-              entityType: widget.entityType,
-              applyFilter: false,
-            );
-          },
+      } else {
+        widget.onTap();
+      }
+    };
+
+    final onLongPress = () {
+      if (widget.onLongPress != null) {
+        widget.onLongPress();
+      } else if (widget.entityType != null) {
+        createEntityByType(
+          context: context,
+          entityType: widget.entityType,
+          applyFilter: false,
         );
       }
+    };
+
+    if (state.isMenuCollapsed) {
+      return Tooltip(
+        message: prefState.enableTooltips ? widget.title : '',
+        child: ColoredBox(
+          color: color,
+          child: InkWell(
+              onTap: onTap,
+              onLongPress: onLongPress,
+              child: SizedBox(
+                height: 40,
+                child: Icon(
+                  widget.icon,
+                  color: textColor,
+                ),
+              )),
+        ),
+      );
+    }
+
+    Widget iconWidget;
+    if (widget.title == localization.dashboard) {
+      iconWidget = IconButton(
+        icon: Icon(
+          Icons.search,
+          color: textColor,
+        ),
+        onPressed: () {
+          if (isMobile(context)) {
+            navigator.pop();
+          }
+          store.dispatch(ViewDashboard(
+              filter: uiState.mainRoute == 'dashboard' && uiState.filter == ''
+                  ? null
+                  : ''));
+        },
+      );
+    } else if (userCompany.canCreate(widget.entityType)) {
+      iconWidget = IconButton(
+        tooltip: prefState.enableTooltips ? widget.iconTooltip : null,
+        icon: Icon(
+          Icons.add_circle_outline,
+          color: textColor,
+        ),
+        onPressed: () {
+          if (isMobile(context)) {
+            navigator.pop();
+          }
+          createEntityByType(
+            context: context,
+            entityType: widget.entityType,
+            applyFilter: false,
+          );
+        },
+      );
     }
 
     bool isLoading = false;
@@ -708,57 +766,40 @@ class _DrawerTileState extends State<DrawerTile> {
       child: Opacity(
         opacity: isSelected ? 1 : .8,
         child: ListTile(
+          contentPadding: const EdgeInsets.only(left: 12),
           dense: true,
-          leading: Padding(
-            padding: const EdgeInsets.only(left: 4),
-            child: isLoading
-                ? SizedBox(
-                    child: CircularProgressIndicator(),
-                    width: 22,
-                    height: 22,
-                  )
-                : Icon(
-                    widget.icon,
-                    size: 22,
-                    color: textColor,
-                  ),
-          ),
-          title: state.isMenuCollapsed
-              ? SizedBox()
-              : Text(
-                  widget.title,
-                  key: ValueKey('menu_${widget.title}'),
-                  style: Theme.of(context).textTheme.bodyText1.copyWith(
-                        fontSize: 14,
-                        color: textColor,
-                      ),
-                ),
-          onTap: () {
-            if (widget.entityType != null) {
-              viewEntitiesByType(
-                entityType: widget.entityType,
-              );
-            } else {
-              widget.onTap();
-            }
-          },
-          onLongPress: () => widget.onLongPress != null
-              ? widget.onLongPress()
-              : widget.entityType != null
-                  ? createEntityByType(
-                      context: context,
-                      entityType: widget.entityType,
-                      applyFilter: false,
+          leading: _isHovered && isDesktop(context) && iconWidget != null
+              ? iconWidget
+              : isLoading
+                  ? SizedBox(
+                      child: CircularProgressIndicator(),
+                      width: 22,
+                      height: 22,
                     )
-                  : null,
-          /*
-              trailing: _isHovered ||
-                      !RendererBinding.instance.mouseTracker.mouseIsConnected
-                  ? trailingWidget
-                  : null,
-
-               */
-          trailing: state.isMenuCollapsed ? null : trailingWidget,
+                  : FocusTraversalGroup(
+                      descendantsAreTraversable: false,
+                      child: IconButton(
+                        icon: Icon(widget.icon),
+                        color: textColor,
+                        onPressed: onTap,
+                      ),
+                    ),
+          title: Text(
+            widget.title,
+            key: ValueKey('menu_${widget.title}'),
+            style: Theme.of(context).textTheme.bodyText1.copyWith(
+                  fontSize: 14,
+                  color: textColor,
+                ),
+          ),
+          onTap: onTap,
+          onLongPress: onLongPress,
+          trailing: isMobile(context)
+              ? Padding(
+                  padding: const EdgeInsets.only(right: 12),
+                  child: iconWidget,
+                )
+              : null,
         ),
       ),
     );
@@ -771,8 +812,8 @@ class _DrawerTileState extends State<DrawerTile> {
     }
 
     return MouseRegion(
-      //onEnter: (event) => setState(() => _isHovered = true),
-      //onExit: (event) => setState(() => _isHovered = false),
+      onEnter: (event) => setState(() => _isHovered = true),
+      onExit: (event) => setState(() => _isHovered = false),
       child: child,
     );
   }
@@ -1104,7 +1145,7 @@ void _showConnectStripe(BuildContext context) {
             Navigator.of(context).pop();
             final store = StoreProvider.of<AppState>(context);
             final gateway = getUnconnectedStripeAccount(store.state);
-            editEntity(context: context, entity: gateway);
+            editEntity(entity: gateway);
           },
         ),
       ]);
@@ -1160,7 +1201,7 @@ void _showAbout(BuildContext context) async {
                     ),
                     title: Text(
                       'Invoice Ninja',
-                      style: Theme.of(context).textTheme.headline6,
+                      style: Theme.of(context).textTheme.subtitle1,
                     ),
                     subtitle: Text(state.appVersion),
                     onTap: () {
@@ -1331,7 +1372,7 @@ void _showAbout(BuildContext context) async {
                         onPressed: () => _showUpdate(context),
                       ),
                   ],
-                  if (daysActive > 100)
+                  if (daysActive > 30)
                     AppButton(
                       label: localization.reviewApp.toUpperCase(),
                       iconData: Icons.star,

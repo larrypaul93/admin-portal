@@ -58,13 +58,11 @@ class PaymentTermListItem extends StatelessWidget {
               ? paymentTermUIState.editing.id
               : paymentTermUIState.selectedId),
       child: ListTile(
-        onTap: () => onTap != null
-            ? onTap()
-            : selectEntity(entity: paymentTerm, context: context),
+        onTap: () =>
+            onTap != null ? onTap() : selectEntity(entity: paymentTerm),
         onLongPress: () => onLongPress != null
             ? onLongPress()
-            : selectEntity(
-                entity: paymentTerm, context: context, longPress: true),
+            : selectEntity(entity: paymentTerm, longPress: true),
         leading: showCheckbox
             ? IgnorePointer(
                 ignoring: listUIState.isInMultiselect(),
@@ -83,11 +81,11 @@ class PaymentTermListItem extends StatelessWidget {
               Expanded(
                 child: Text(
                   paymentTerm.name,
-                  style: Theme.of(context).textTheme.headline6,
+                  style: Theme.of(context).textTheme.subtitle1,
                 ),
               ),
               Text(formatNumber(paymentTerm.listDisplayAmount, context),
-                  style: Theme.of(context).textTheme.headline6),
+                  style: Theme.of(context).textTheme.subtitle1),
             ],
           ),
         ),

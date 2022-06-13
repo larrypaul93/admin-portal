@@ -40,7 +40,9 @@ class ProductPresenter extends EntityPresenter {
       ProductFields.category,
       ProductFields.vendor,
       ProductFields.subCategory,
-      ProductFields.upc
+      ProductFields.upc,
+      ProductFields.stockQuantity,
+      ProductFields.notificationThreshold,
     ];
   }
 
@@ -119,6 +121,13 @@ class ProductPresenter extends EntityPresenter {
 
       case ProductFields.upc:
         return Text(product.upc);
+      case ProductFields.stockQuantity:
+        return Text(formatNumber(product.stockQuantity.toDouble(), context,
+            formatNumberType: FormatNumberType.int));
+      case ProductFields.notificationThreshold:
+        return Text(formatNumber(
+            product.stockNotificationThreshold.toDouble(), context,
+            formatNumberType: FormatNumberType.int));
     }
 
     return super.getField(field: field, context: context);

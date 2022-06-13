@@ -60,6 +60,8 @@ PrefState prefReducer(
           historySidebarReducer(state.historySidebarMode, action)
       ..hideDesktopWarning =
           hideDesktopWarningReducer(state.hideDesktopWarning, action)
+      ..hideGatewayWarning =
+          hideGatewayWarningReducer(state.hideGatewayWarning, action)
       ..textScaleFactor = textScaleFactorReducer(state.textScaleFactor, action)
       ..isMenuVisible = menuVisibleReducer(state.isMenuVisible, action)
       ..isHistoryVisible = historyVisibleReducer(state.isHistoryVisible, action)
@@ -80,6 +82,8 @@ PrefState prefReducer(
       ..customColors.replace(customColorsReducer(state.customColors, action))
       ..useSidebarEditor
           .replace(sidebarEditorReducer(state.useSidebarEditor, action))
+      ..useSidebarViewer
+          .replace(sidebarViewerReducer(state.useSidebarViewer, action))
       ..sortFields.replace(sortFieldsReducer(state.sortFields, action))
       ..editAfterSaving = editAfterSavingReducer(state.editAfterSaving, action)
       ..enableTouchEvents =
@@ -173,6 +177,17 @@ Reducer<BuiltMap<EntityType, bool>> sidebarEditorReducer = combineReducers([
   }),
 ]);
 
+Reducer<BuiltMap<EntityType, bool>> sidebarViewerReducer = combineReducers([
+  TypedReducer<BuiltMap<EntityType, bool>, ToggleViewerLayout>((value, action) {
+    final entityType = action.entityType.baseType;
+    if (value.containsKey(entityType)) {
+      return value.rebuild((b) => b..[entityType] = !value[entityType]);
+    } else {
+      return value.rebuild((b) => b..[entityType] = true);
+    }
+  }),
+]);
+
 Reducer<bool> menuVisibleReducer = combineReducers([
   TypedReducer<bool, UpdateUserPreferences>((value, action) {
     return action.sidebar == AppSidebar.menu ? !value : value;
@@ -217,6 +232,12 @@ Reducer<String> filterReducer = combineReducers([
 
 Reducer<bool> hideDesktopWarningReducer = combineReducers([
   TypedReducer<bool, DismissNativeWarningPermanently>((filter, action) {
+    return true;
+  }),
+]);
+
+Reducer<bool> hideGatewayWarningReducer = combineReducers([
+  TypedReducer<bool, DismissGatewayWarningPermanently>((filter, action) {
     return true;
   }),
 ]);
