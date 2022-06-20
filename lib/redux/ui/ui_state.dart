@@ -38,6 +38,7 @@ import 'package:invoiceninja_flutter/ui/auth/login_vm.dart';
 import 'package:invoiceninja_flutter/utils/strings.dart';
 
 // STARTER: import - do not remove comment
+import 'package:invoiceninja_flutter/redux/purchase_order/purchase_order_state.dart';
 import 'package:invoiceninja_flutter/redux/category/category_state.dart';
 
 import 'package:invoiceninja_flutter/redux/contact/contact_state.dart';
@@ -89,6 +90,8 @@ abstract class UIState implements Built<UIState, UIStateBuilder> {
       paymentUIState: PaymentUIState(sortFields[EntityType.payment]),
       quoteUIState: QuoteUIState(sortFields[EntityType.quote]),
       // STARTER: constructor - do not remove comment
+      purchaseOrderUIState:
+          PurchaseOrderUIState(sortFields[EntityType.purchaseOrder]),
       categoryUIState: CategoryUIState(sortFields[EntityType.category]),
 
       contactUIState: ContactUIState(sortFields[EntityType.contact]),
@@ -140,6 +143,7 @@ abstract class UIState implements Built<UIState, UIStateBuilder> {
   InvoiceUIState get invoiceUIState;
 
   // STARTER: properties - do not remove comment
+  PurchaseOrderUIState get purchaseOrderUIState;
   CategoryUIState get categoryUIState;
 
   ContactUIState get contactUIState;

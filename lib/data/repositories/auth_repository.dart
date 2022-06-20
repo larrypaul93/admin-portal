@@ -54,14 +54,15 @@ class AuthRepository {
     @required String idToken,
     @required String accessToken,
     @required String referralCode,
+    @required String provider,
   }) async {
     final credentials = {
       'terms_of_service': true,
       'privacy_policy': true,
       'token_name': _tokenName,
       'id_token': idToken,
-      //'access_token': accessToken,
-      'provider': 'google',
+      'access_token': accessToken,
+      'provider': provider,
       'platform': getPlatformName(),
     };
 
@@ -102,10 +103,11 @@ class AuthRepository {
       @required String accessToken,
       @required String url,
       @required String secret,
-      @required String platform}) async {
+      @required String platform,
+      @required String provider}) async {
     final credentials = {
       'id_token': idToken,
-      'provider': 'google',
+      'provider': provider,
     };
     url = formatApiUrl(url) + '/oauth_login';
 

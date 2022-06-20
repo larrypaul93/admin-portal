@@ -16,6 +16,42 @@ mixin LocalizationsProvider on LocaleCodeAware {
   static final Map<String, Map<String, String>> _localizedValues = {
     'en': {
       // STARTER: lang key - do not remove comment
+      'purchase_order_total': 'Purchase Order Total',
+      'email_purchase_order': 'Email Purchase Order',
+      'disconnected_email': 'Successfully connected email',
+      'connect_email': 'Connect Email',
+      'disconnect_email': 'Disconnect Email',
+      'use_web_app_to_connect_microsoft':
+          'Please use the web app to connect to Microsoft',
+      'email_provider': 'Email Provider',
+      'connect_microsoft': 'Connect Microsoft',
+      'disconnect_microsoft': 'Disconnect Microsoft',
+      'connected_microsoft': 'Successfully connected Microsoft',
+      'disconnected_microsoft': 'Successfully disconnected Microsoft',
+      'microsoft_sign_in': 'Login with Microsoft',
+      'microsoft_sign_up': 'Sign up with Microsoft',
+      'emailed_purchase_order': 'Successfully queued purchase order to be sent',
+      'emailed_purchase_orders':
+          'Successfully queued purchase orders to be sent',
+      'enable_react_app': 'Change to the React web app',
+      'purchase_order_design': 'Purchase Order Design',
+      'purchase_order_terms': 'Purchase Order Terms',
+      'purchase_order_footer': 'Purchase Order Footer',
+      'require_purchase_order_signature': 'Purchase Order Signature',
+      'require_purchase_order_signature_help':
+          'Require vendor to provide their signature.',
+      'purchase_order': 'Purchase Order',
+      'purchase_orders': 'Purchase Orders',
+      'new_purchase_order': 'New Purchase Order',
+      'edit_purchase_order': 'Edit Purchase Order',
+      'created_purchase_order': 'Successfully created purchase order',
+      'updated_purchase_order': 'Successfully updated purchase order',
+      'archived_purchase_order': 'Successfully archived purchase order',
+      'deleted_purchase_order': 'Successfully deleted purchase order',
+      'removed_purchase_order': 'Successfully removed purchase order',
+      'restored_purchase_order': 'Successfully restored purchase order',
+      'search_purchase_order': 'Search Purchase Order',
+      'search_purchase_orders': 'Search Purchase Orders',
       'login_url': 'Login URL',
       'enable_applying_payments': 'Enable Applying Payments',
       'enable_applying_payments_help':
@@ -70721,12 +70757,6 @@ mixin LocalizationsProvider on LocaleCodeAware {
       _localizedValues['en']['login_url'];
 
   // STARTER: lang field - do not remove comment
-  // String get category =>
-  //     _localizedValues[localeCode]['category'] ??
-  //     _localizedValues['en']['category'];
-  // String get category =>
-  //     _localizedValues[localeCode]['category'] ??
-  //     _localizedValues['en']['category'];
   String get newCategory =>
       _localizedValues[localeCode]['new_category'] ??
       _localizedValues['en']['new_category'];
@@ -70782,6 +70812,131 @@ mixin LocalizationsProvider on LocaleCodeAware {
   String get searchContact =>
       _localizedValues[localeCode]['search_contact'] ??
       _localizedValues['en']['search_contact'];
+  String get purchaseOrder =>
+      _localizedValues[localeCode]['purchase_order'] ??
+      _localizedValues['en']['purchase_order'];
+
+  String get purchaseOrders =>
+      _localizedValues[localeCode]['purchase_orders'] ??
+      _localizedValues['en']['purchase_orders'];
+
+  String get newPurchaseOrder =>
+      _localizedValues[localeCode]['new_purchase_order'] ??
+      _localizedValues['en']['new_purchase_order'];
+
+  String get createdPurchaseOrder =>
+      _localizedValues[localeCode]['created_purchase_order'] ??
+      _localizedValues['en']['created_purchase_order'];
+
+  String get updatedPurchaseOrder =>
+      _localizedValues[localeCode]['updated_purchase_order'] ??
+      _localizedValues['en']['updated_purchase_order'];
+
+  String get archivedPurchaseOrder =>
+      _localizedValues[localeCode]['archived_purchase_order'] ??
+      _localizedValues['en']['archived_purchase_order'];
+
+  String get deletedPurchaseOrder =>
+      _localizedValues[localeCode]['deleted_purchase_order'] ??
+      _localizedValues['en']['deleted_purchase_order'];
+
+  String get restoredPurchaseOrder =>
+      _localizedValues[localeCode]['restored_purchase_order'] ??
+      _localizedValues['en']['restored_purchase_order'];
+
+  String get editPurchaseOrder =>
+      _localizedValues[localeCode]['edit_purchase_order'] ??
+      _localizedValues['en']['edit_purchase_order'];
+
+  String get searchPurchaseOrder =>
+      _localizedValues[localeCode]['search_purchase_order'] ??
+      _localizedValues['en']['search_purchase_order'];
+
+  String get requirePurchaseOrderSignature =>
+      _localizedValues[localeCode]['require_purchase_order_signature'] ??
+      _localizedValues['en']['require_purchase_order_signature'];
+
+  String get requirePurchaseOrderSignatureHelp =>
+      _localizedValues[localeCode]['require_purchase_order_signature_help'] ??
+      _localizedValues['en']['require_purchase_order_signature_help'];
+
+  String get purchaseOrderTerms =>
+      _localizedValues[localeCode]['purchase_order_terms'] ??
+      _localizedValues['en']['purchase_order_terms'];
+
+  String get purchaseOrderFooter =>
+      _localizedValues[localeCode]['purchase_order_footer'] ??
+      _localizedValues['en']['purchase_order_footer'];
+
+  String get purchaseOrderDesign =>
+      _localizedValues[localeCode]['purchase_order_design'] ??
+      _localizedValues['en']['purchase_order_design'];
+
+  String get enableReactApp =>
+      _localizedValues[localeCode]['enable_react_app'] ??
+      _localizedValues['en']['enable_react_app'];
+
+  String get emailedPurchaseOrder =>
+      _localizedValues[localeCode]['emailed_purchase_orderk'] ??
+      _localizedValues['en']['emailed_purchase_order'];
+
+  String get emailedPurchaseOrders =>
+      _localizedValues[localeCode]['emailed_purchase_orders'] ??
+      _localizedValues['en']['emailed_purchase_orders'];
+
+  String get microsoftSignUp =>
+      _localizedValues[localeCode]['microsoft_sign_up'] ??
+      _localizedValues['en']['microsoft_sign_up'];
+
+  String get microsoftSignIn =>
+      _localizedValues[localeCode]['microsoft_sign_in'] ??
+      _localizedValues['en']['microsoft_sign_in'];
+
+  String get disconnectedMicrosoft =>
+      _localizedValues[localeCode]['disconnected_microsoft'] ??
+      _localizedValues['en']['disconnected_microsoft'];
+
+  String get connectMicrosoft =>
+      _localizedValues[localeCode]['connect_microsoft'] ??
+      _localizedValues['en']['connect_microsoft'];
+
+  String get disconnectMicrosoft =>
+      _localizedValues[localeCode]['disconnect_microsoft'] ??
+      _localizedValues['en']['disconnect_microsoft'];
+
+  String get connectedMicrosoft =>
+      _localizedValues[localeCode]['connected_microsoft'] ??
+      _localizedValues['en']['connected_microsoft'];
+
+  String get emailProvider =>
+      _localizedValues[localeCode]['email_provider'] ??
+      _localizedValues['en']['email_provider'];
+
+  String get useWebAppToConnectMicrosoft =>
+      _localizedValues[localeCode]['use_web_app_to_connect_microsoft'] ??
+      _localizedValues['en']['use_web_app_to_connect_microsoft'];
+
+  String get connectEmail =>
+      _localizedValues[localeCode]['connect_email'] ??
+      _localizedValues['en']['connect_email'];
+
+  String get disconnectEmail =>
+      _localizedValues[localeCode]['disconnect_email'] ??
+      _localizedValues['en']['disconnect_email'];
+
+  String get disconnectedEmail =>
+      _localizedValues[localeCode]['disconnected_email'] ??
+      _localizedValues['en']['disconnected_email'];
+
+  String get emailPurchaseOrder =>
+      _localizedValues[localeCode]['email_purchase_order'] ??
+      _localizedValues['en']['email_purchase_order'];
+
+  String get purchaseOrderTotal =>
+      _localizedValues[localeCode]['purchase_order_total'] ??
+      _localizedValues['en']['purchase_order_total'];
+
+// STARTER: lang field - do not remove comment
 
   String lookup(String key) {
     final lookupKey = toSnakeCase(key);

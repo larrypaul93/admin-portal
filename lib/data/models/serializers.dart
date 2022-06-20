@@ -32,6 +32,7 @@ import 'package:invoiceninja_flutter/redux/payment/payment_state.dart';
 import 'package:invoiceninja_flutter/redux/payment_term/payment_term_state.dart';
 import 'package:invoiceninja_flutter/redux/product/product_state.dart';
 import 'package:invoiceninja_flutter/redux/project/project_state.dart';
+import 'package:invoiceninja_flutter/redux/purchase_order/purchase_order_state.dart';
 import 'package:invoiceninja_flutter/redux/quote/quote_state.dart';
 import 'package:invoiceninja_flutter/redux/recurring_expense/recurring_expense_state.dart';
 import 'package:invoiceninja_flutter/redux/recurring_invoice/recurring_invoice_state.dart';
@@ -119,6 +120,8 @@ part 'serializers.g.dart';
   TaxRateItemResponse,
   TaxRateListResponse,
   // STARTER: serializers - do not remove comment
+  InvoiceListResponse,
+  InvoiceItemResponse,
   CategoryEntity,
   CategoryListResponse,
   CategoryItemResponse,

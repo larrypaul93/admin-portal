@@ -53,10 +53,12 @@ class _InvoiceDesignState extends State<InvoiceDesign>
   bool _wasInvoiceDesignChanged = false;
   bool _wasQuoteDesignChanged = false;
   bool _wasCreditDesignChanged = false;
+  bool _wasPurchaseOrderDesignChanged = false;
 
   bool _updateAllInvoiceDesigns = false;
   bool _updateAllQuoteDesigns = false;
   bool _updateAllCreditDesigns = false;
+  bool _updateAllPurchaseOrderDesigns = false;
 
   @override
   void initState() {
@@ -223,6 +225,34 @@ class _InvoiceDesignState extends State<InvoiceDesign>
                             value: _updateAllCreditDesigns,
                             onChanged: (value) => setState(
                               () => _updateAllCreditDesigns = value,
+                            ),
+                          ),
+                        ),
+                    ],
+                    if (company.isModuleEnabled(EntityType.purchaseOrder)) ...[
+                      DesignPicker(
+                        label: localization.purchaseOrderDesign,
+                        initialValue: settings.defaultPurchaseOrderDesignId,
+                        onSelected: (value) {
+                          setState(() {
+                            _wasPurchaseOrderDesignChanged = true;
+                          });
+                          viewModel.onSettingsChanged(settings.rebuild((b) =>
+                              b..defaultPurchaseOrderDesignId = value.id));
+                        },
+                      ),
+                      if (!isFiltered &&
+                          _wasPurchaseOrderDesignChanged &&
+                          state.userCompany.isAdmin)
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 8),
+                          child: CheckboxListTile(
+                            activeColor:
+                                Theme.of(context).colorScheme.secondary,
+                            title: Text(localization.updateAllRecords),
+                            value: _updateAllPurchaseOrderDesigns,
+                            onChanged: (value) => setState(
+                              () => _updateAllPurchaseOrderDesigns = value,
                             ),
                           ),
                         ),

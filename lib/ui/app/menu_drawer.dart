@@ -384,6 +384,7 @@ class MenuDrawer extends StatelessWidget {
                                   ),
                                 ),
                             if (state.userCompany.isOwner &&
+                                state.isHosted &&
                                 !isPaidAccount(context) &&
                                 !isApple())
                               Material(
@@ -517,6 +518,12 @@ class MenuDrawer extends StatelessWidget {
                               icon: getEntityIcon(EntityType.vendor),
                               title: localization.vendors,
                               iconTooltip: localization.newVendor,
+                            ),
+                            DrawerTile(
+                              company: company,
+                              entityType: EntityType.purchaseOrder,
+                              icon: getEntityIcon(EntityType.purchaseOrder),
+                              title: localization.purchaseOrders,
                             ),
                             DrawerTile(
                               company: company,
@@ -703,16 +710,19 @@ class _DrawerTileState extends State<DrawerTile> {
         message: prefState.enableTooltips ? widget.title : '',
         child: ColoredBox(
           color: color,
-          child: InkWell(
-              onTap: onTap,
-              onLongPress: onLongPress,
-              child: SizedBox(
-                height: 40,
-                child: Icon(
-                  widget.icon,
-                  color: textColor,
-                ),
-              )),
+          child: Opacity(
+            opacity: isSelected ? 1 : .8,
+            child: InkWell(
+                onTap: onTap,
+                onLongPress: onLongPress,
+                child: SizedBox(
+                  height: 40,
+                  child: Icon(
+                    widget.icon,
+                    color: textColor,
+                  ),
+                )),
+          ),
         ),
       );
     }
@@ -771,10 +781,13 @@ class _DrawerTileState extends State<DrawerTile> {
           leading: _isHovered && isDesktop(context) && iconWidget != null
               ? iconWidget
               : isLoading
-                  ? SizedBox(
-                      child: CircularProgressIndicator(),
-                      width: 22,
-                      height: 22,
+                  ? Padding(
+                      padding: const EdgeInsets.only(left: 10),
+                      child: SizedBox(
+                        child: CircularProgressIndicator(),
+                        width: 22,
+                        height: 22,
+                      ),
                     )
                   : FocusTraversalGroup(
                       descendantsAreTraversable: false,

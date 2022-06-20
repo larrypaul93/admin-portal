@@ -55,6 +55,21 @@ class CreditStatusColors {
   }
 }
 
+class PurchaseOrderStatusColors {
+  PurchaseOrderStatusColors(this._colorTheme);
+
+  final ColorTheme _colorTheme;
+
+  Map<String, Color> get colors {
+    return {
+      kPurchaseOrderStatusDraft: _colorTheme.colorGray,
+      kPurchaseOrderStatusSent: _colorTheme.colorInfo,
+      kPurchaseOrderStatusAccepted: _colorTheme.colorSuccess,
+      kPurchaseOrderStatusCancelled: _colorTheme.colorGray,
+    };
+  }
+}
+
 class QuoteStatusColors {
   QuoteStatusColors(this._colorTheme);
 
@@ -101,6 +116,7 @@ class ExpenseStatusColors {
       kExpenseStatusLogged: _colorTheme.colorGray,
       kExpenseStatusPending: _colorTheme.colorPrimary,
       kExpenseStatusInvoiced: _colorTheme.colorSuccess,
+      kExpenseStatusPaid: _colorTheme.colorInfo,
     };
   }
 }

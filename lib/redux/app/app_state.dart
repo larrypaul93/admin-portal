@@ -9,6 +9,7 @@ import 'package:built_collection/built_collection.dart';
 import 'package:built_value/built_value.dart';
 import 'package:built_value/serializer.dart';
 import 'package:invoiceninja_flutter/ui/contact/contact_screen.dart';
+import 'package:invoiceninja_flutter/ui/purchase_order/purchase_order_screen.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
 // Project imports:
@@ -89,6 +90,9 @@ import 'package:invoiceninja_flutter/utils/formatting.dart';
 import 'package:invoiceninja_flutter/utils/platforms.dart';
 
 // STARTER: import - do not remove comment
+import 'package:invoiceninja_flutter/redux/purchase_order/purchase_order_state.dart';
+import 'package:invoiceninja_flutter/ui/purchase_order/edit/purchase_order_edit_vm.dart';
+import 'package:invoiceninja_flutter/redux/purchase_order/purchase_order_selectors.dart';
 import 'package:invoiceninja_flutter/redux/category/category_state.dart';
 import 'package:invoiceninja_flutter/ui/category/edit/category_edit_vm.dart';
 import 'package:invoiceninja_flutter/redux/category/category_selectors.dart';
@@ -297,6 +301,8 @@ abstract class AppState implements Built<AppState, AppStateBuilder> {
       case EntityType.invoice:
         return invoiceState.map;
       // STARTER: states switch map - do not remove comment
+      case EntityType.purchaseOrder:
+        return purchaseOrderState.map;
       case EntityType.category:
         return categoryState.map;
 
@@ -383,6 +389,8 @@ abstract class AppState implements Built<AppState, AppStateBuilder> {
       case EntityType.invoice:
         return invoiceState.list;
       // STARTER: states switch list - do not remove comment
+      case EntityType.purchaseOrder:
+        return purchaseOrderState.list;
       case EntityType.category:
         return categoryState.list;
 
@@ -458,6 +466,8 @@ abstract class AppState implements Built<AppState, AppStateBuilder> {
       case EntityType.invoice:
         return invoiceUIState;
       // STARTER: states switch - do not remove comment
+      case EntityType.purchaseOrder:
+        return purchaseOrderUIState;
       case EntityType.category:
         return categoryUIState;
 
@@ -534,6 +544,12 @@ abstract class AppState implements Built<AppState, AppStateBuilder> {
   ListUIState get invoiceListState => uiState.invoiceUIState.listUIState;
 
   // STARTER: state getters - do not remove comment
+  PurchaseOrderState get purchaseOrderState =>
+      userCompanyState.purchaseOrderState;
+  ListUIState get purchaseOrderListState =>
+      uiState.purchaseOrderUIState.listUIState;
+  PurchaseOrderUIState get purchaseOrderUIState => uiState.purchaseOrderUIState;
+
   CategoryState get categoryState => userCompanyState.categoryState;
   ListUIState get categoryListState => uiState.categoryUIState.listUIState;
   CategoryUIState get categoryUIState => uiState.categoryUIState;
@@ -712,6 +728,9 @@ abstract class AppState implements Built<AppState, AppStateBuilder> {
       case CreditEditScreen.route:
         return hasCreditChanges(creditUIState.editing, creditState.map);
       // STARTER: has changes - do not remove comment
+      case PurchaseOrderEditScreen.route:
+        return hasPurchaseOrderChanges(
+            purchaseOrderUIState.editing, purchaseOrderState.map);
       case CategoryEditScreen.route:
         return hasCategoryChanges(categoryUIState.editing, categoryState.map);
 
@@ -721,11 +740,9 @@ abstract class AppState implements Built<AppState, AppStateBuilder> {
       case RecurringExpenseEditScreen.route:
         return hasRecurringExpenseChanges(
             recurringExpenseUIState.editing, recurringExpenseState.map);
-
       case SubscriptionEditScreen.route:
         return hasSubscriptionChanges(
             subscriptionUIState.editing, subscriptionState.map);
-
       case TaskStatusEditScreen.route:
         return hasTaskStatusChanges(
             taskStatusUIState.editing, taskStatusState.map);
@@ -792,6 +809,9 @@ abstract class AppState implements Built<AppState, AppStateBuilder> {
   }
 
   bool get reportErrors => account?.reportErrors ?? false;
+
+  int get recordsPerPage =>
+      isHosted ? kHostedRecordsPerPage : kSelfhostedRecordsPerPage;
 
   bool get isHosted => account == null ? authState.isHosted : account.isHosted;
 
@@ -877,7 +897,8 @@ abstract class AppState implements Built<AppState, AppStateBuilder> {
       RecurringInvoiceScreen.route,
       RecurringExpenseScreen.route,
       TaskScreen.route,
-      ContactScreen.route
+      ContactScreen.route,
+      PurchaseOrderScreen.route,
     ].contains(mainRoute)) {
       if (isEmail || isPdf) {
         isFullScreen = true;

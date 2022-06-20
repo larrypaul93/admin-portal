@@ -52,7 +52,6 @@ class EntityType extends EnumClass {
   static const EntityType webhook = _$webhook;
   static const EntityType token = _$token;
   static const EntityType paymentTerm = _$paymentTerm;
-  static const EntityType quoteItem = _$quoteItem;
   static const EntityType contact = _$contact;
   static const EntityType vendorContact = _$vendorContact;
   static const EntityType country = _$country;
@@ -66,6 +65,7 @@ class EntityType extends EnumClass {
   static const EntityType timezone = _$timezone;
   static const EntityType dateFormat = _$dateFormat;
   static const EntityType font = _$font;
+  static const EntityType purchaseOrder = _$purchaseOrder;
 
   String get plural {
     if (this == EntityType.expenseCategory) {
@@ -158,6 +158,7 @@ class EntityType extends EnumClass {
         ];
       case EntityType.vendor:
         return [
+          EntityType.purchaseOrder,
           EntityType.expense,
           EntityType.recurringExpense,
         ];

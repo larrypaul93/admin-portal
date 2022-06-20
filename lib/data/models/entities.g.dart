@@ -38,7 +38,6 @@ const EntityType _$subscription = const EntityType._('subscription');
 const EntityType _$webhook = const EntityType._('webhook');
 const EntityType _$token = const EntityType._('token');
 const EntityType _$paymentTerm = const EntityType._('paymentTerm');
-const EntityType _$quoteItem = const EntityType._('quoteItem');
 const EntityType _$contact = const EntityType._('contact');
 const EntityType _$vendorContact = const EntityType._('vendorContact');
 const EntityType _$country = const EntityType._('country');
@@ -52,6 +51,7 @@ const EntityType _$document = const EntityType._('document');
 const EntityType _$timezone = const EntityType._('timezone');
 const EntityType _$dateFormat = const EntityType._('dateFormat');
 const EntityType _$font = const EntityType._('font');
+const EntityType _$purchaseOrder = const EntityType._('purchaseOrder');
 
 EntityType _$typeValueOf(String name) {
   switch (name) {
@@ -119,8 +119,6 @@ EntityType _$typeValueOf(String name) {
       return _$token;
     case 'paymentTerm':
       return _$paymentTerm;
-    case 'quoteItem':
-      return _$quoteItem;
     case 'contact':
       return _$contact;
     case 'vendorContact':
@@ -147,6 +145,8 @@ EntityType _$typeValueOf(String name) {
       return _$dateFormat;
     case 'font':
       return _$font;
+    case 'purchaseOrder':
+      return _$purchaseOrder;
     default:
       throw new ArgumentError(name);
   }
@@ -186,7 +186,6 @@ final BuiltSet<EntityType> _$typeValues =
   _$webhook,
   _$token,
   _$paymentTerm,
-  _$quoteItem,
   _$contact,
   _$vendorContact,
   _$country,
@@ -200,6 +199,7 @@ final BuiltSet<EntityType> _$typeValues =
   _$timezone,
   _$dateFormat,
   _$font,
+  _$purchaseOrder,
 ]);
 
 const EntityState _$active = const EntityState._('active');

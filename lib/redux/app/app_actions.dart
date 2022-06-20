@@ -66,6 +66,7 @@ import 'package:invoiceninja_flutter/utils/localization.dart';
 import 'package:invoiceninja_flutter/utils/platforms.dart';
 
 // STARTER: import - do not remove comment
+import 'package:invoiceninja_flutter/redux/purchase_order/purchase_order_actions.dart';
 import 'package:invoiceninja_flutter/redux/category/category_actions.dart';
 
 import 'package:invoiceninja_flutter/redux/contact/contact_actions.dart';
@@ -385,6 +386,9 @@ void viewEntitiesByType({
             action = ViewGroupList();
             break;
           // STARTER: view list - do not remove comment
+          case EntityType.purchaseOrder:
+            action = ViewPurchaseOrderList();
+            break;
           case EntityType.category:
             action = ViewCategoryList();
             break;
@@ -602,6 +606,12 @@ void viewEntityById({
             ));
             break;
           // STARTER: view - do not remove comment
+          case EntityType.purchaseOrder:
+            store.dispatch(ViewPurchaseOrder(
+              purchaseOrderId: entityId,
+              force: force,
+            ));
+            break;
           case EntityType.category:
             store.dispatch(ViewCategory(
               categoryId: entityId,
@@ -841,6 +851,15 @@ void createEntityByType({
             ));
             break;
           // STARTER: create type - do not remove comment
+          case EntityType.purchaseOrder:
+            store.dispatch(EditPurchaseOrder(
+              force: force,
+              purchaseOrder: InvoiceEntity(
+                state: state,
+                entityType: EntityType.purchaseOrder,
+              ),
+            ));
+            break;
           case EntityType.category:
             store.dispatch(EditCategory(
               force: force,
@@ -1059,6 +1078,13 @@ void createEntity({
             ));
             break;
           // STARTER: create - do not remove comment
+          case EntityType.purchaseOrder:
+            store.dispatch(EditPurchaseOrder(
+              purchaseOrder: entity,
+              force: force,
+              completer: completer,
+            ));
+            break;
           case EntityType.category:
             store.dispatch(EditCategory(
               category: entity,
@@ -1261,6 +1287,10 @@ void editEntity({
             ));
             break;
           // STARTER: edit - do not remove comment
+          case EntityType.purchaseOrder:
+            store.dispatch(
+                EditPurchaseOrder(purchaseOrder: entity, completer: completer));
+            break;
           case EntityType.category:
             store
                 .dispatch(EditCategory(category: entity, completer: completer));
@@ -1268,7 +1298,6 @@ void editEntity({
 
           case EntityType.contact:
             store.dispatch(EditContact(contact: entity, completer: completer));
-            break;
 
           case EntityType.recurringExpense:
             store.dispatch(EditRecurringExpense(
@@ -1437,13 +1466,15 @@ void handleEntitiesActions(List<BaseEntity> entities, EntityAction action,
       handleDocumentAction(context, entities, action);
       break;
     // STARTER: actions - do not remove comment
+    case EntityType.purchaseOrder:
+      handlePurchaseOrderAction(context, entities, action);
+      break;
     case EntityType.category:
       handleCategoryAction(context, entities, action);
       break;
 
     case EntityType.contact:
       handleContactAction(context, entities, action);
-      break;
 
     case EntityType.recurringExpense:
       handleRecurringExpenseAction(context, entities, action);

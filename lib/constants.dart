@@ -152,7 +152,8 @@ const int kMaxNumberOfHistory = 50;
 const int kMaxPostSeconds = 60;
 const int kMaxRawPostSeconds = 300;
 const int kMaxEntitiesPerBulkAction = 100;
-const int kRecordsPerPage = 20000;
+const int kHostedRecordsPerPage = 20000;
+const int kSelfhostedRecordsPerPage = 5000;
 const int kMillisecondsToTimerRefreshData = 1000 * 60 * 5; // 5 minutes
 const int kMillisecondsToRefreshData = 1000 * 60 * 15; // 15 minutes
 const int kUpdatedAtBufferSeconds = 600;
@@ -246,6 +247,18 @@ const kCreditStatuses = {
   kCreditStatusSent: 'sent',
   kCreditStatusPartial: 'partial',
   kCreditStatusApplied: 'applied',
+};
+
+const String kPurchaseOrderStatusDraft = '1';
+const String kPurchaseOrderStatusSent = '2';
+const String kPurchaseOrderStatusAccepted = '3';
+const String kPurchaseOrderStatusCancelled = '4';
+
+const kPurchaseOrderStatuses = {
+  kPurchaseOrderStatusDraft: 'draft',
+  kPurchaseOrderStatusSent: 'sent',
+  kPurchaseOrderStatusAccepted: 'accepted',
+  kPurchaseOrderStatusCancelled: 'cancelled',
 };
 
 const String kGatewayTypeCreditCard = '1';
@@ -584,6 +597,7 @@ const Map<int, String> kModules = {
   kModuleProjects: 'projects',
   kModuleTasks: 'tasks',
   kModuleVendors: 'vendors',
+  kModulePurchaseOrders: 'purchase_orders',
   kModuleExpenses: 'expenses',
   kModuleRecurringExpenses: 'recurring_expenses',
   //kModuleTickets: 'tickets',
