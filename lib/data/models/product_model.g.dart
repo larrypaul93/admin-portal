@@ -370,7 +370,7 @@ class _$ProductEntitySerializer implements StructuredSerializer<ProductEntity> {
         case 'vendor':
           result.vendor.replace(serializers.deserialize(value,
               specifiedType: const FullType(VendorEntity)) as VendorEntity);
-               break;
+          break;
         case 'in_stock_quantity':
           result.stockQuantity = serializers.deserialize(value,
               specifiedType: const FullType(int)) as int;
@@ -664,6 +664,7 @@ class _$ProductEntity extends ProductEntity {
   final CategoryEntity subCategory;
   @override
   final VendorEntity vendor;
+  @override
   final int stockQuantity;
   @override
   final int stockNotificationThreshold;
@@ -855,25 +856,14 @@ class _$ProductEntity extends ProductEntity {
                                                                 $jc(
                                                                     $jc(
                                                                         $jc(
-                                                                            $jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc(0, productKey.hashCode), notes.hashCode), cost.hashCode), price.hashCode), quantity.hashCode), taxName1.hashCode), taxRate1.hashCode), taxName2.hashCode), taxRate2.hashCode), taxName3.hashCode), taxRate3.hashCode), customValue1.hashCode), customValue2.hashCode), customValue3.hashCode), customValue4.hashCode),
-                                                                                categoryId.hashCode),
-                                                                            subCategoryId.hashCode),
-                                                                        partNo.hashCode),
-                                                                    onHand.hashCode),
-                                                                upc.hashCode),
-                                                            vendorId.hashCode),
-                                                        sku.hashCode),
-                                                    category.hashCode),
-                                                subCategory.hashCode),
-                                            vendor.hashCode),
-                                                                            $jc($jc($jc($jc($jc($jc($jc($jc($jc(0, productKey.hashCode), notes.hashCode), cost.hashCode), price.hashCode), quantity.hashCode), taxName1.hashCode), taxRate1.hashCode), taxName2.hashCode),
-                                                                                taxRate2.hashCode),
-                                                                            taxName3.hashCode),
-                                                                        taxRate3.hashCode),
-                                                                    customValue1.hashCode),
-                                                                customValue2.hashCode),
-                                                            customValue3.hashCode),
-                                                        customValue4.hashCode),
+                                                                            $jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc(0, productKey.hashCode), notes.hashCode), cost.hashCode), price.hashCode), quantity.hashCode), taxName1.hashCode), taxRate1.hashCode), taxName2.hashCode), taxRate2.hashCode), taxName3.hashCode), taxRate3.hashCode), customValue1.hashCode), customValue2.hashCode), customValue3.hashCode), customValue4.hashCode), categoryId.hashCode), subCategoryId.hashCode), partNo.hashCode),
+                                                                                onHand.hashCode),
+                                                                            upc.hashCode),
+                                                                        vendorId.hashCode),
+                                                                    sku.hashCode),
+                                                                category.hashCode),
+                                                            subCategory.hashCode),
+                                                        vendor.hashCode),
                                                     stockQuantity.hashCode),
                                                 stockNotificationThreshold.hashCode),
                                             stockNotification.hashCode),
@@ -1040,6 +1030,7 @@ class ProductEntityBuilder
   VendorEntityBuilder get vendor =>
       _$this._vendor ??= new VendorEntityBuilder();
   set vendor(VendorEntityBuilder vendor) => _$this._vendor = vendor;
+
   int _stockQuantity;
   int get stockQuantity => _$this._stockQuantity;
   set stockQuantity(int stockQuantity) => _$this._stockQuantity = stockQuantity;
@@ -1216,6 +1207,7 @@ class ProductEntityBuilder
         _subCategory?.build();
         _$failedField = 'vendor';
         _vendor?.build();
+
         _$failedField = 'documents';
         documents.build();
       } catch (e) {

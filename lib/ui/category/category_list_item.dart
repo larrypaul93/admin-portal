@@ -53,10 +53,13 @@ class CategoryListItem extends StatelessWidget {
       child: ListTile(
         onTap: () => onTap != null
             ? onTap()
-            : selectEntity(entity: category, context: context),
+            : selectEntity(
+                entity: category, /* context: context */
+              ),
         onLongPress: () => onLongPress != null
             ? onLongPress()
-            : selectEntity(entity: category, context: context, longPress: true),
+            : selectEntity(
+                entity: category, /* context: context, */ longPress: true),
         leading: showCheckbox
             ? IgnorePointer(
                 ignoring: listUIState.isInMultiselect(),

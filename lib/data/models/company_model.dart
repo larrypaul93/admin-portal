@@ -16,6 +16,7 @@ import 'package:invoiceninja_flutter/data/models/contact_model.dart';
 import 'package:invoiceninja_flutter/data/models/group_model.dart';
 import 'package:invoiceninja_flutter/data/models/models.dart';
 import 'package:invoiceninja_flutter/data/models/payment_term_model.dart';
+import 'package:invoiceninja_flutter/data/models/service_report.dart';
 import 'package:invoiceninja_flutter/data/models/system_log_model.dart';
 import 'package:invoiceninja_flutter/main_app.dart';
 import 'package:invoiceninja_flutter/utils/formatting.dart';
@@ -126,6 +127,7 @@ abstract class CompanyEntity extends Object
       contacts: BuiltList<ContactEntity>(),
       products: BuiltList<ProductEntity>(),
       categories: BuiltList<CategoryEntity>(),
+      serviceReports: BuiltList<ServiceReportEntity>(),
       invoices: BuiltList<InvoiceEntity>(),
       recurringInvoices: BuiltList<InvoiceEntity>(),
       recurringExpenses: BuiltList<ExpenseEntity>(),
@@ -305,6 +307,9 @@ abstract class CompanyEntity extends Object
 
   BuiltList<ProductEntity> get products;
   BuiltList<CategoryEntity> get categories;
+
+  @BuiltValueField(wireName: 'service_reports')
+  BuiltList<ServiceReportEntity> get serviceReports;
 
   BuiltList<InvoiceEntity> get invoices;
 

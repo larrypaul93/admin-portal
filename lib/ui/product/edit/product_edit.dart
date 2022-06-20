@@ -143,7 +143,7 @@ class _ProductEditState extends State<ProductEdit> {
       ..sku = _skuController.text.trim()
       ..partNo = _partNoController.text.trim()
       ..upc = _upcController.text.trim()
-      ..onHand = _onHandController.text.trim())
+      ..onHand = _onHandController.text.trim()
       ..stockQuantity = parseInt(_stockQuantityController.text.trim())
       ..stockNotificationThreshold =
           parseInt(_notificationThresholdController.text.trim()));

@@ -306,6 +306,25 @@ class InvoiceEditDetailsState extends State<InvoiceEditDetails> {
                   },
                 ),
             ],
+            AppDropdownButton<String>(
+              labelText: 'Service No',
+              value: '',
+              blankValue: null,
+              onChanged: (dynamic value) => viewModel.onChanged(
+                  invoice.rebuild((b) => b..remainingCycles = value)),
+              items: [
+                DropdownMenuItem(
+                  child: Text(localization.endless),
+                  value: '',
+                ),
+                ...company.serviceReports
+                    .map((report) => DropdownMenuItem(
+                          child: Text(report.displayName),
+                          value: report.reportNo,
+                        ))
+                    .toList()
+              ],
+            ),
             DecoratedFormField(
               label: localization.poNumber,
               controller: _poNumberController,

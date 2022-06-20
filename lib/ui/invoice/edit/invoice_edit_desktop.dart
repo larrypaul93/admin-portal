@@ -477,6 +477,23 @@ class InvoiceEditDesktopState extends State<InvoiceEditDesktop>
                       onTypeChanged: (value) => viewModel.onChanged(
                           invoice.rebuild((b) => b..isAmountDiscount = value)),
                     ),
+                    AppDropdownButton<String>(
+                      labelText: 'Service No',
+                      value: '',
+                      onChanged: (dynamic value) => {null},
+                      items: [
+                        DropdownMenuItem(
+                          child: Text('Select Report No.'),
+                          value: '',
+                        ),
+                        ...company.serviceReports
+                            .map((report) => DropdownMenuItem(
+                                  child: Text(report.displayName),
+                                  value: report.reportNo,
+                                ))
+                            .toList()
+                      ],
+                    ),
                     if (entityType == EntityType.recurringInvoice)
                       AppDropdownButton<String>(
                         labelText: localization.autoBill,

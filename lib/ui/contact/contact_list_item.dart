@@ -53,10 +53,13 @@ class ContactListItem extends StatelessWidget {
       child: ListTile(
         onTap: () => onTap != null
             ? onTap()
-            : selectEntity(entity: contact, context: context),
+            : selectEntity(
+                entity: contact, /* context: context */
+              ),
         onLongPress: () => onLongPress != null
             ? onLongPress()
-            : selectEntity(entity: contact, context: context, longPress: true),
+            : selectEntity(
+                entity: contact, /* context: context, */ longPress: true),
         leading: showCheckbox
             ? IgnorePointer(
                 ignoring: listUIState.isInMultiselect(),

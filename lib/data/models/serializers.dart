@@ -13,6 +13,7 @@ import 'package:invoiceninja_flutter/data/models/health_check_model.dart';
 import 'package:invoiceninja_flutter/data/models/import_model.dart';
 import 'package:invoiceninja_flutter/data/models/models.dart';
 import 'package:invoiceninja_flutter/data/models/payment_term_model.dart';
+import 'package:invoiceninja_flutter/data/models/service_report.dart';
 import 'package:invoiceninja_flutter/data/models/system_log_model.dart';
 import 'package:invoiceninja_flutter/redux/app/app_state.dart';
 import 'package:invoiceninja_flutter/redux/auth/auth_state.dart';
@@ -121,6 +122,10 @@ part 'serializers.g.dart';
   CategoryEntity,
   CategoryListResponse,
   CategoryItemResponse,
+
+  ServiceReportEntity,
+  ServiceReportListResponse,
+  ServiceReportItemResponse,
 
   ContactEntity,
   ContactListResponse,

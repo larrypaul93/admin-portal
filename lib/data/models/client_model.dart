@@ -169,6 +169,7 @@ abstract class ClientEntity extends Object
         suffix: '',
         legalBusinessName: '',
         region: '',
+        gdId: '',
         phoneHome: '',
         phoneMain: '',
         phoneTollFree: '',
@@ -341,6 +342,10 @@ abstract class ClientEntity extends Object
   @nullable
   @BuiltValueField(wireName: 'phone_home')
   String get phoneHome;
+
+  @nullable
+  @BuiltValueField(wireName: 'gd_id')
+  String get gdId;
 
   @nullable
   @BuiltValueField(wireName: 'phone_main')

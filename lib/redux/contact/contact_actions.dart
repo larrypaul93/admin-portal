@@ -278,7 +278,7 @@ void handleContactAction(
 
   switch (action) {
     case EntityAction.edit:
-      editEntity(context: context, entity: contact);
+      editEntity(/* context: context, */ entity: contact);
       break;
     case EntityAction.restore:
       store.dispatch(RestoreContactsRequest(

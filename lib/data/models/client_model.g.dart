@@ -313,6 +313,13 @@ class _$ClientEntitySerializer implements StructuredSerializer<ClientEntity> {
         ..add(serializers.serialize(value,
             specifiedType: const FullType(String)));
     }
+    value = object.gdId;
+    if (value != null) {
+      result
+        ..add('gd_id')
+        ..add(serializers.serialize(value,
+            specifiedType: const FullType(String)));
+    }
     value = object.phoneMain;
     if (value != null) {
       result
@@ -622,6 +629,10 @@ class _$ClientEntitySerializer implements StructuredSerializer<ClientEntity> {
           break;
         case 'phone_home':
           result.phoneHome = serializers.deserialize(value,
+              specifiedType: const FullType(String)) as String;
+          break;
+        case 'gd_id':
+          result.gdId = serializers.deserialize(value,
               specifiedType: const FullType(String)) as String;
           break;
         case 'phone_main':
@@ -1052,6 +1063,8 @@ class _$ClientEntity extends ClientEntity {
   @override
   final String phoneHome;
   @override
+  final String gdId;
+  @override
   final String phoneMain;
   @override
   final String phoneTollFree;
@@ -1167,6 +1180,7 @@ class _$ClientEntity extends ClientEntity {
       this.region,
       this.fax,
       this.phoneHome,
+      this.gdId,
       this.phoneMain,
       this.phoneTollFree,
       this.phoneCell,
@@ -1339,6 +1353,7 @@ class _$ClientEntity extends ClientEntity {
         region == other.region &&
         fax == other.fax &&
         phoneHome == other.phoneHome &&
+        gdId == other.gdId &&
         phoneMain == other.phoneMain &&
         phoneTollFree == other.phoneTollFree &&
         phoneCell == other.phoneCell &&
@@ -1397,7 +1412,7 @@ class _$ClientEntity extends ClientEntity {
                                                                 $jc(
                                                                     $jc(
                                                                         $jc(
-                                                                            $jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc(0, groupId.hashCode), name.hashCode), displayName.hashCode), balance.hashCode), creditBalance.hashCode), paidToDate.hashCode), clientHash.hashCode), address1.hashCode), address2.hashCode), city.hashCode), state.hashCode), postalCode.hashCode), countryId.hashCode), phone.hashCode), privateNotes.hashCode), publicNotes.hashCode), website.hashCode), industryId.hashCode), sizeId.hashCode), vatNumber.hashCode), idNumber.hashCode), number.hashCode), shippingAddress1.hashCode), shippingAddress2.hashCode), shippingCity.hashCode), shippingState.hashCode), shippingPostalCode.hashCode), shippingCountryId.hashCode), settings.hashCode), lastLogin.hashCode), customValue1.hashCode), customValue2.hashCode), customValue3.hashCode), customValue4.hashCode), suffix.hashCode), legalBusinessName.hashCode), email.hashCode), region.hashCode), fax.hashCode), phoneHome.hashCode), phoneMain.hashCode), phoneTollFree.hashCode), phoneCell.hashCode), homeAddress1.hashCode), homeAddress2.hashCode), homeCity.hashCode), homeState.hashCode), homePostalCode.hashCode), homeCountryId.hashCode), headOfficeAddress1.hashCode), headOfficeAddress2.hashCode), headOfficeCity.hashCode), headOfficeState.hashCode), headOfficePostalCode.hashCode), headOfficeCountryId.hashCode), mainAddress1.hashCode),
+                                                                            $jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc(0, groupId.hashCode), name.hashCode), displayName.hashCode), balance.hashCode), creditBalance.hashCode), paidToDate.hashCode), clientHash.hashCode), address1.hashCode), address2.hashCode), city.hashCode), state.hashCode), postalCode.hashCode), countryId.hashCode), phone.hashCode), privateNotes.hashCode), publicNotes.hashCode), website.hashCode), industryId.hashCode), sizeId.hashCode), vatNumber.hashCode), idNumber.hashCode), number.hashCode), shippingAddress1.hashCode), shippingAddress2.hashCode), shippingCity.hashCode), shippingState.hashCode), shippingPostalCode.hashCode), shippingCountryId.hashCode), settings.hashCode), lastLogin.hashCode), customValue1.hashCode), customValue2.hashCode), customValue3.hashCode), customValue4.hashCode), suffix.hashCode), legalBusinessName.hashCode), email.hashCode), region.hashCode), fax.hashCode), phoneHome.hashCode), gdId.hashCode), phoneMain.hashCode), phoneTollFree.hashCode), phoneCell.hashCode), homeAddress1.hashCode), homeAddress2.hashCode), homeCity.hashCode), homeState.hashCode), homePostalCode.hashCode), homeCountryId.hashCode), headOfficeAddress1.hashCode), headOfficeAddress2.hashCode), headOfficeCity.hashCode), headOfficeState.hashCode), headOfficePostalCode.hashCode), headOfficeCountryId.hashCode), mainAddress1.hashCode),
                                                                                 mainAddress2.hashCode),
                                                                             mainCity.hashCode),
                                                                         mainState.hashCode),
@@ -1463,6 +1478,7 @@ class _$ClientEntity extends ClientEntity {
           ..add('region', region)
           ..add('fax', fax)
           ..add('phoneHome', phoneHome)
+          ..add('gdId', gdId)
           ..add('phoneMain', phoneMain)
           ..add('phoneTollFree', phoneTollFree)
           ..add('phoneCell', phoneCell)
@@ -1678,6 +1694,10 @@ class ClientEntityBuilder
   String get phoneHome => _$this._phoneHome;
   set phoneHome(String phoneHome) => _$this._phoneHome = phoneHome;
 
+  String _gdId;
+  String get gdId => _$this._gdId;
+  set gdId(String gdId) => _$this._gdId = gdId;
+
   String _phoneMain;
   String get phoneMain => _$this._phoneMain;
   set phoneMain(String phoneMain) => _$this._phoneMain = phoneMain;
@@ -1890,6 +1910,7 @@ class ClientEntityBuilder
       _region = $v.region;
       _fax = $v.fax;
       _phoneHome = $v.phoneHome;
+      _gdId = $v.gdId;
       _phoneMain = $v.phoneMain;
       _phoneTollFree = $v.phoneTollFree;
       _phoneCell = $v.phoneCell;
@@ -1997,6 +2018,7 @@ class ClientEntityBuilder
               region: region,
               fax: fax,
               phoneHome: phoneHome,
+              gdId: gdId,
               phoneMain: phoneMain,
               phoneTollFree: phoneTollFree,
               phoneCell: phoneCell,

@@ -277,7 +277,7 @@ void handleCategoryAction(
 
   switch (action) {
     case EntityAction.edit:
-      editEntity(context: context, entity: category);
+      editEntity(/* context: context, */ entity: category);
       break;
     case EntityAction.restore:
       store.dispatch(RestoreCategoriesRequest(

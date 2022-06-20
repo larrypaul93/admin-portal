@@ -156,6 +156,9 @@ Serializers _$serializers = (new Serializers().toBuilder()
       ..add(RegistrationFieldEntity.serializer)
       ..add(ReportSettingsEntity.serializer)
       ..add(ReportsUIState.serializer)
+      ..add(ServiceReportEntity.serializer)
+      ..add(ServiceReportItemResponse.serializer)
+      ..add(ServiceReportListResponse.serializer)
       ..add(SettingsEntity.serializer)
       ..add(SettingsUIState.serializer)
       ..add(SizeEntity.serializer)
@@ -406,6 +409,10 @@ Serializers _$serializers = (new Serializers().toBuilder()
           const FullType(BuiltList, const [const FullType(CategoryEntity)]),
           () => new ListBuilder<CategoryEntity>())
       ..addBuilderFactory(
+          const FullType(
+              BuiltList, const [const FullType(ServiceReportEntity)]),
+          () => new ListBuilder<ServiceReportEntity>())
+      ..addBuilderFactory(
           const FullType(BuiltList, const [const FullType(InvoiceEntity)]),
           () => new ListBuilder<InvoiceEntity>())
       ..addBuilderFactory(
@@ -519,6 +526,10 @@ Serializers _$serializers = (new Serializers().toBuilder()
       ..addBuilderFactory(
           const FullType(BuiltList, const [const FullType(ProjectEntity)]),
           () => new ListBuilder<ProjectEntity>())
+      ..addBuilderFactory(
+          const FullType(
+              BuiltList, const [const FullType(ServiceReportEntity)]),
+          () => new ListBuilder<ServiceReportEntity>())
       ..addBuilderFactory(
           const FullType(BuiltList, const [const FullType(SizeEntity)]),
           () => new ListBuilder<SizeEntity>())
