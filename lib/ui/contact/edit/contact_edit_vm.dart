@@ -22,7 +22,6 @@ import 'package:invoiceninja_flutter/ui/app/dialogs/error_dialog.dart';
 import 'package:invoiceninja_flutter/ui/contact/edit/contact_edit.dart';
 import 'package:invoiceninja_flutter/ui/contact/view/contact_view_vm.dart';
 import 'package:invoiceninja_flutter/utils/completers.dart';
-import 'package:invoiceninja_flutter/utils/localization.dart';
 
 class ContactEditScreen extends StatelessWidget {
   const ContactEditScreen({Key key}) : super(key: key);

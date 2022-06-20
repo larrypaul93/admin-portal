@@ -3,9 +3,7 @@ import 'package:flutter/material.dart';
 
 // Project imports:
 import 'package:invoiceninja_flutter/constants.dart';
-import 'package:invoiceninja_flutter/ui/app/screen_imports.dart';
 import 'package:invoiceninja_flutter/ui/app/scrollable_listview.dart';
-import 'package:invoiceninja_flutter/ui/client/edit/client_edit.dart';
 import 'package:invoiceninja_flutter/ui/contact/edit/contact_edit_billing_address.dart';
 import 'package:invoiceninja_flutter/ui/contact/edit/contact_edit_details.dart';
 import 'package:invoiceninja_flutter/ui/contact/edit/contact_edit_head_office_address.dart';

@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'package:invoiceninja_flutter/redux/app/app_actions.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:invoiceninja_flutter/utils/completers.dart';
 import 'package:invoiceninja_flutter/utils/localization.dart';

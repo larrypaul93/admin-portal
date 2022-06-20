@@ -4,7 +4,6 @@ import 'package:invoiceninja_flutter/data/models/contact_model.dart';
 import 'package:redux/redux.dart';
 
 // Project imports:
-import 'package:invoiceninja_flutter/data/models/client_model.dart';
 import 'package:invoiceninja_flutter/data/models/entities.dart';
 import 'package:invoiceninja_flutter/data/models/invoice_model.dart';
 import 'package:invoiceninja_flutter/redux/app/app_actions.dart';

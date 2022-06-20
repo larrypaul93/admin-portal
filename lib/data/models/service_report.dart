@@ -100,7 +100,7 @@ abstract class ServiceReportEntity extends Object
 
   int compareTo(
       ServiceReportEntity report, String sortField, bool sortAscending) {
-    int response = 0;
+    const int response = 0;
     final reportA = sortAscending ? this : report;
     final reportB = sortAscending ? report : this;
 

@@ -1,13 +1,11 @@
 import 'dart:async';
 import 'package:invoiceninja_flutter/data/models/category_model.dart';
-import 'package:invoiceninja_flutter/ui/app/entities/entity_actions_dialog.dart';
 import 'package:invoiceninja_flutter/ui/app/tables/entity_list.dart';
 import 'package:invoiceninja_flutter/ui/category/category_list_item.dart';
 import 'package:invoiceninja_flutter/ui/category/category_presenter.dart';
 import 'package:redux/redux.dart';
 import 'package:invoiceninja_flutter/redux/app/app_actions.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:built_collection/built_collection.dart';

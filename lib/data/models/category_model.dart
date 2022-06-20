@@ -131,7 +131,7 @@ abstract class CategoryEntity extends Object
   }
 
   int compareTo(CategoryEntity category, String sortField, bool sortAscending) {
-    int response = 0;
+    const int response = 0;
     final categoryA = sortAscending ? this : category;
     final categoryB = sortAscending ? category : this;
 

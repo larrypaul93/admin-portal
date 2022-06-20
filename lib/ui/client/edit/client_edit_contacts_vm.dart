@@ -1,17 +1,11 @@
 // Flutter imports:
-import 'dart:async';
 
 import 'package:flutter/material.dart';
 
 // Package imports:
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:invoiceninja_flutter/data/models/contact_model.dart';
-import 'package:invoiceninja_flutter/redux/app/app_actions.dart';
-import 'package:invoiceninja_flutter/redux/contact/contact_actions.dart';
 import 'package:invoiceninja_flutter/redux/static/static_state.dart';
-import 'package:invoiceninja_flutter/redux/ui/ui_actions.dart';
-import 'package:invoiceninja_flutter/ui/client/edit/client_edit.dart';
-import 'package:invoiceninja_flutter/ui/contact/edit/contact_edit.dart';
 import 'package:invoiceninja_flutter/ui/contact/edit/contact_edit_desktop.dart';
 import 'package:invoiceninja_flutter/ui/contact/edit/contact_edit_vm.dart';
 import 'package:redux/redux.dart';
