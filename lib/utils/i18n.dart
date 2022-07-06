@@ -99,6 +99,7 @@ mixin LocalizationsProvider on LocaleCodeAware {
       'restored_category': 'Successfully restored category',
       'search_category': 'Search Category',
       'onHand': 'On Hand',
+      'service_report': 'Service Report No',
       'sku': 'SKU',
       'part_no': 'Part No',
       'upc': 'UPC',
@@ -65919,6 +65920,8 @@ mixin LocalizationsProvider on LocaleCodeAware {
   String get headOfficeCountry =>
       _localizedValues[localeCode]['head_office_country'] ?? '';
 
+  String get serviceReport =>
+      _localizedValues[localeCode]['service_report'] ?? '';
   String get website => _localizedValues[localeCode]['website'] ?? '';
 
   String get vatNumber => _localizedValues[localeCode]['vat_number'] ?? '';

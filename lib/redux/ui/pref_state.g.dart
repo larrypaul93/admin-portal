@@ -649,7 +649,7 @@ class _$PrefState extends PrefState {
   final BuiltMap<String, CompanyPrefState> companyPrefs;
 
   factory _$PrefState([void Function(PrefStateBuilder) updates]) =>
-      (new PrefStateBuilder()..update(updates)).build();
+      (new PrefStateBuilder()..update(updates))._build();
 
   _$PrefState._(
       {this.appLayout,
@@ -683,64 +683,64 @@ class _$PrefState extends PrefState {
       this.sortFields,
       this.companyPrefs})
       : super._() {
-    BuiltValueNullFieldError.checkNotNull(appLayout, 'PrefState', 'appLayout');
+    BuiltValueNullFieldError.checkNotNull(appLayout, r'PrefState', 'appLayout');
     BuiltValueNullFieldError.checkNotNull(
-        moduleLayout, 'PrefState', 'moduleLayout');
+        moduleLayout, r'PrefState', 'moduleLayout');
     BuiltValueNullFieldError.checkNotNull(
-        menuSidebarMode, 'PrefState', 'menuSidebarMode');
+        menuSidebarMode, r'PrefState', 'menuSidebarMode');
     BuiltValueNullFieldError.checkNotNull(
-        historySidebarMode, 'PrefState', 'historySidebarMode');
+        historySidebarMode, r'PrefState', 'historySidebarMode');
     BuiltValueNullFieldError.checkNotNull(
-        useSidebarEditor, 'PrefState', 'useSidebarEditor');
+        useSidebarEditor, r'PrefState', 'useSidebarEditor');
     BuiltValueNullFieldError.checkNotNull(
-        useSidebarViewer, 'PrefState', 'useSidebarViewer');
+        useSidebarViewer, r'PrefState', 'useSidebarViewer');
     BuiltValueNullFieldError.checkNotNull(
-        customColors, 'PrefState', 'customColors');
+        customColors, r'PrefState', 'customColors');
     BuiltValueNullFieldError.checkNotNull(
-        isPreviewVisible, 'PrefState', 'isPreviewVisible');
+        isPreviewVisible, r'PrefState', 'isPreviewVisible');
     BuiltValueNullFieldError.checkNotNull(
-        isMenuVisible, 'PrefState', 'isMenuVisible');
+        isMenuVisible, r'PrefState', 'isMenuVisible');
     BuiltValueNullFieldError.checkNotNull(
-        showKanban, 'PrefState', 'showKanban');
+        showKanban, r'PrefState', 'showKanban');
     BuiltValueNullFieldError.checkNotNull(
-        showPdfPreview, 'PrefState', 'showPdfPreview');
+        showPdfPreview, r'PrefState', 'showPdfPreview');
     BuiltValueNullFieldError.checkNotNull(
-        enableTouchEvents, 'PrefState', 'enableTouchEvents');
+        enableTouchEvents, r'PrefState', 'enableTouchEvents');
     BuiltValueNullFieldError.checkNotNull(
-        isHistoryVisible, 'PrefState', 'isHistoryVisible');
+        isHistoryVisible, r'PrefState', 'isHistoryVisible');
     BuiltValueNullFieldError.checkNotNull(
-        enableDarkMode, 'PrefState', 'enableDarkMode');
+        enableDarkMode, r'PrefState', 'enableDarkMode');
     BuiltValueNullFieldError.checkNotNull(
-        isFilterVisible, 'PrefState', 'isFilterVisible');
+        isFilterVisible, r'PrefState', 'isFilterVisible');
     BuiltValueNullFieldError.checkNotNull(
-        persistData, 'PrefState', 'persistData');
-    BuiltValueNullFieldError.checkNotNull(persistUI, 'PrefState', 'persistUI');
+        persistData, r'PrefState', 'persistData');
+    BuiltValueNullFieldError.checkNotNull(persistUI, r'PrefState', 'persistUI');
     BuiltValueNullFieldError.checkNotNull(longPressSelectionIsDefault,
-        'PrefState', 'longPressSelectionIsDefault');
+        r'PrefState', 'longPressSelectionIsDefault');
     BuiltValueNullFieldError.checkNotNull(
-        requireAuthentication, 'PrefState', 'requireAuthentication');
+        requireAuthentication, r'PrefState', 'requireAuthentication');
     BuiltValueNullFieldError.checkNotNull(
-        tapSelectedToEdit, 'PrefState', 'tapSelectedToEdit');
+        tapSelectedToEdit, r'PrefState', 'tapSelectedToEdit');
     BuiltValueNullFieldError.checkNotNull(
-        enableJSPDF, 'PrefState', 'enableJSPDF');
+        enableJSPDF, r'PrefState', 'enableJSPDF');
     BuiltValueNullFieldError.checkNotNull(
-        rowsPerPage, 'PrefState', 'rowsPerPage');
+        rowsPerPage, r'PrefState', 'rowsPerPage');
     BuiltValueNullFieldError.checkNotNull(
-        enableTooltips, 'PrefState', 'enableTooltips');
+        enableTooltips, r'PrefState', 'enableTooltips');
     BuiltValueNullFieldError.checkNotNull(
-        colorTheme, 'PrefState', 'colorTheme');
+        colorTheme, r'PrefState', 'colorTheme');
     BuiltValueNullFieldError.checkNotNull(
-        hideDesktopWarning, 'PrefState', 'hideDesktopWarning');
+        hideDesktopWarning, r'PrefState', 'hideDesktopWarning');
     BuiltValueNullFieldError.checkNotNull(
-        hideGatewayWarning, 'PrefState', 'hideGatewayWarning');
+        hideGatewayWarning, r'PrefState', 'hideGatewayWarning');
     BuiltValueNullFieldError.checkNotNull(
-        editAfterSaving, 'PrefState', 'editAfterSaving');
+        editAfterSaving, r'PrefState', 'editAfterSaving');
     BuiltValueNullFieldError.checkNotNull(
-        textScaleFactor, 'PrefState', 'textScaleFactor');
+        textScaleFactor, r'PrefState', 'textScaleFactor');
     BuiltValueNullFieldError.checkNotNull(
-        sortFields, 'PrefState', 'sortFields');
+        sortFields, r'PrefState', 'sortFields');
     BuiltValueNullFieldError.checkNotNull(
-        companyPrefs, 'PrefState', 'companyPrefs');
+        companyPrefs, r'PrefState', 'companyPrefs');
   }
 
   @override
@@ -831,7 +831,7 @@ class _$PrefState extends PrefState {
 
   @override
   String toString() {
-    return (newBuiltValueToStringHelper('PrefState')
+    return (newBuiltValueToStringHelper(r'PrefState')
           ..add('appLayout', appLayout)
           ..add('moduleLayout', moduleLayout)
           ..add('menuSidebarMode', menuSidebarMode)
@@ -1071,47 +1071,49 @@ class PrefStateBuilder implements Builder<PrefState, PrefStateBuilder> {
   }
 
   @override
-  _$PrefState build() {
+  PrefState build() => _build();
+
+  _$PrefState _build() {
     _$PrefState _$result;
     try {
       _$result = _$v ??
           new _$PrefState._(
               appLayout: BuiltValueNullFieldError.checkNotNull(
-                  appLayout, 'PrefState', 'appLayout'),
+                  appLayout, r'PrefState', 'appLayout'),
               moduleLayout: BuiltValueNullFieldError.checkNotNull(
-                  moduleLayout, 'PrefState', 'moduleLayout'),
+                  moduleLayout, r'PrefState', 'moduleLayout'),
               menuSidebarMode: BuiltValueNullFieldError.checkNotNull(
-                  menuSidebarMode, 'PrefState', 'menuSidebarMode'),
+                  menuSidebarMode, r'PrefState', 'menuSidebarMode'),
               historySidebarMode: BuiltValueNullFieldError.checkNotNull(
-                  historySidebarMode, 'PrefState', 'historySidebarMode'),
+                  historySidebarMode, r'PrefState', 'historySidebarMode'),
               useSidebarEditor: useSidebarEditor.build(),
               useSidebarViewer: useSidebarViewer.build(),
               customColors: customColors.build(),
               isPreviewVisible: BuiltValueNullFieldError.checkNotNull(
-                  isPreviewVisible, 'PrefState', 'isPreviewVisible'),
+                  isPreviewVisible, r'PrefState', 'isPreviewVisible'),
               isMenuVisible: BuiltValueNullFieldError.checkNotNull(
-                  isMenuVisible, 'PrefState', 'isMenuVisible'),
+                  isMenuVisible, r'PrefState', 'isMenuVisible'),
               showKanban: BuiltValueNullFieldError.checkNotNull(
-                  showKanban, 'PrefState', 'showKanban'),
+                  showKanban, r'PrefState', 'showKanban'),
               showPdfPreview:
-                  BuiltValueNullFieldError.checkNotNull(showPdfPreview, 'PrefState', 'showPdfPreview'),
-              enableTouchEvents: BuiltValueNullFieldError.checkNotNull(enableTouchEvents, 'PrefState', 'enableTouchEvents'),
-              isHistoryVisible: BuiltValueNullFieldError.checkNotNull(isHistoryVisible, 'PrefState', 'isHistoryVisible'),
-              enableDarkMode: BuiltValueNullFieldError.checkNotNull(enableDarkMode, 'PrefState', 'enableDarkMode'),
-              isFilterVisible: BuiltValueNullFieldError.checkNotNull(isFilterVisible, 'PrefState', 'isFilterVisible'),
-              persistData: BuiltValueNullFieldError.checkNotNull(persistData, 'PrefState', 'persistData'),
-              persistUI: BuiltValueNullFieldError.checkNotNull(persistUI, 'PrefState', 'persistUI'),
-              longPressSelectionIsDefault: BuiltValueNullFieldError.checkNotNull(longPressSelectionIsDefault, 'PrefState', 'longPressSelectionIsDefault'),
-              requireAuthentication: BuiltValueNullFieldError.checkNotNull(requireAuthentication, 'PrefState', 'requireAuthentication'),
-              tapSelectedToEdit: BuiltValueNullFieldError.checkNotNull(tapSelectedToEdit, 'PrefState', 'tapSelectedToEdit'),
-              enableJSPDF: BuiltValueNullFieldError.checkNotNull(enableJSPDF, 'PrefState', 'enableJSPDF'),
-              rowsPerPage: BuiltValueNullFieldError.checkNotNull(rowsPerPage, 'PrefState', 'rowsPerPage'),
-              enableTooltips: BuiltValueNullFieldError.checkNotNull(enableTooltips, 'PrefState', 'enableTooltips'),
-              colorTheme: BuiltValueNullFieldError.checkNotNull(colorTheme, 'PrefState', 'colorTheme'),
-              hideDesktopWarning: BuiltValueNullFieldError.checkNotNull(hideDesktopWarning, 'PrefState', 'hideDesktopWarning'),
-              hideGatewayWarning: BuiltValueNullFieldError.checkNotNull(hideGatewayWarning, 'PrefState', 'hideGatewayWarning'),
-              editAfterSaving: BuiltValueNullFieldError.checkNotNull(editAfterSaving, 'PrefState', 'editAfterSaving'),
-              textScaleFactor: BuiltValueNullFieldError.checkNotNull(textScaleFactor, 'PrefState', 'textScaleFactor'),
+                  BuiltValueNullFieldError.checkNotNull(showPdfPreview, r'PrefState', 'showPdfPreview'),
+              enableTouchEvents: BuiltValueNullFieldError.checkNotNull(enableTouchEvents, r'PrefState', 'enableTouchEvents'),
+              isHistoryVisible: BuiltValueNullFieldError.checkNotNull(isHistoryVisible, r'PrefState', 'isHistoryVisible'),
+              enableDarkMode: BuiltValueNullFieldError.checkNotNull(enableDarkMode, r'PrefState', 'enableDarkMode'),
+              isFilterVisible: BuiltValueNullFieldError.checkNotNull(isFilterVisible, r'PrefState', 'isFilterVisible'),
+              persistData: BuiltValueNullFieldError.checkNotNull(persistData, r'PrefState', 'persistData'),
+              persistUI: BuiltValueNullFieldError.checkNotNull(persistUI, r'PrefState', 'persistUI'),
+              longPressSelectionIsDefault: BuiltValueNullFieldError.checkNotNull(longPressSelectionIsDefault, r'PrefState', 'longPressSelectionIsDefault'),
+              requireAuthentication: BuiltValueNullFieldError.checkNotNull(requireAuthentication, r'PrefState', 'requireAuthentication'),
+              tapSelectedToEdit: BuiltValueNullFieldError.checkNotNull(tapSelectedToEdit, r'PrefState', 'tapSelectedToEdit'),
+              enableJSPDF: BuiltValueNullFieldError.checkNotNull(enableJSPDF, r'PrefState', 'enableJSPDF'),
+              rowsPerPage: BuiltValueNullFieldError.checkNotNull(rowsPerPage, r'PrefState', 'rowsPerPage'),
+              enableTooltips: BuiltValueNullFieldError.checkNotNull(enableTooltips, r'PrefState', 'enableTooltips'),
+              colorTheme: BuiltValueNullFieldError.checkNotNull(colorTheme, r'PrefState', 'colorTheme'),
+              hideDesktopWarning: BuiltValueNullFieldError.checkNotNull(hideDesktopWarning, r'PrefState', 'hideDesktopWarning'),
+              hideGatewayWarning: BuiltValueNullFieldError.checkNotNull(hideGatewayWarning, r'PrefState', 'hideGatewayWarning'),
+              editAfterSaving: BuiltValueNullFieldError.checkNotNull(editAfterSaving, r'PrefState', 'editAfterSaving'),
+              textScaleFactor: BuiltValueNullFieldError.checkNotNull(textScaleFactor, r'PrefState', 'textScaleFactor'),
               sortFields: sortFields.build(),
               companyPrefs: companyPrefs.build());
     } catch (_) {
@@ -1130,7 +1132,7 @@ class PrefStateBuilder implements Builder<PrefState, PrefStateBuilder> {
         companyPrefs.build();
       } catch (e) {
         throw new BuiltValueNestedFieldError(
-            'PrefState', _$failedField, e.toString());
+            r'PrefState', _$failedField, e.toString());
       }
       rethrow;
     }
@@ -1147,12 +1149,13 @@ class _$PrefStateSortField extends PrefStateSortField {
 
   factory _$PrefStateSortField(
           [void Function(PrefStateSortFieldBuilder) updates]) =>
-      (new PrefStateSortFieldBuilder()..update(updates)).build();
+      (new PrefStateSortFieldBuilder()..update(updates))._build();
 
   _$PrefStateSortField._({this.field, this.ascending}) : super._() {
-    BuiltValueNullFieldError.checkNotNull(field, 'PrefStateSortField', 'field');
     BuiltValueNullFieldError.checkNotNull(
-        ascending, 'PrefStateSortField', 'ascending');
+        field, r'PrefStateSortField', 'field');
+    BuiltValueNullFieldError.checkNotNull(
+        ascending, r'PrefStateSortField', 'ascending');
   }
 
   @override
@@ -1180,7 +1183,7 @@ class _$PrefStateSortField extends PrefStateSortField {
 
   @override
   String toString() {
-    return (newBuiltValueToStringHelper('PrefStateSortField')
+    return (newBuiltValueToStringHelper(r'PrefStateSortField')
           ..add('field', field)
           ..add('ascending', ascending))
         .toString();
@@ -1223,13 +1226,15 @@ class PrefStateSortFieldBuilder
   }
 
   @override
-  _$PrefStateSortField build() {
+  PrefStateSortField build() => _build();
+
+  _$PrefStateSortField _build() {
     final _$result = _$v ??
         new _$PrefStateSortField._(
             field: BuiltValueNullFieldError.checkNotNull(
-                field, 'PrefStateSortField', 'field'),
+                field, r'PrefStateSortField', 'field'),
             ascending: BuiltValueNullFieldError.checkNotNull(
-                ascending, 'PrefStateSortField', 'ascending'));
+                ascending, r'PrefStateSortField', 'ascending'));
     replace(_$result);
     return _$result;
   }
@@ -1241,11 +1246,11 @@ class _$CompanyPrefState extends CompanyPrefState {
 
   factory _$CompanyPrefState(
           [void Function(CompanyPrefStateBuilder) updates]) =>
-      (new CompanyPrefStateBuilder()..update(updates)).build();
+      (new CompanyPrefStateBuilder()..update(updates))._build();
 
   _$CompanyPrefState._({this.historyList}) : super._() {
     BuiltValueNullFieldError.checkNotNull(
-        historyList, 'CompanyPrefState', 'historyList');
+        historyList, r'CompanyPrefState', 'historyList');
   }
 
   @override
@@ -1270,7 +1275,7 @@ class _$CompanyPrefState extends CompanyPrefState {
 
   @override
   String toString() {
-    return (newBuiltValueToStringHelper('CompanyPrefState')
+    return (newBuiltValueToStringHelper(r'CompanyPrefState')
           ..add('historyList', historyList))
         .toString();
   }
@@ -1309,7 +1314,9 @@ class CompanyPrefStateBuilder
   }
 
   @override
-  _$CompanyPrefState build() {
+  CompanyPrefState build() => _build();
+
+  _$CompanyPrefState _build() {
     _$CompanyPrefState _$result;
     try {
       _$result =
@@ -1321,7 +1328,7 @@ class CompanyPrefStateBuilder
         historyList.build();
       } catch (e) {
         throw new BuiltValueNestedFieldError(
-            'CompanyPrefState', _$failedField, e.toString());
+            r'CompanyPrefState', _$failedField, e.toString());
       }
       rethrow;
     }
@@ -1339,13 +1346,13 @@ class _$HistoryRecord extends HistoryRecord {
   final int timestamp;
 
   factory _$HistoryRecord([void Function(HistoryRecordBuilder) updates]) =>
-      (new HistoryRecordBuilder()..update(updates)).build();
+      (new HistoryRecordBuilder()..update(updates))._build();
 
   _$HistoryRecord._({this.id, this.entityType, this.timestamp}) : super._() {
     BuiltValueNullFieldError.checkNotNull(
-        entityType, 'HistoryRecord', 'entityType');
+        entityType, r'HistoryRecord', 'entityType');
     BuiltValueNullFieldError.checkNotNull(
-        timestamp, 'HistoryRecord', 'timestamp');
+        timestamp, r'HistoryRecord', 'timestamp');
   }
 
   @override
@@ -1373,7 +1380,7 @@ class _$HistoryRecord extends HistoryRecord {
 
   @override
   String toString() {
-    return (newBuiltValueToStringHelper('HistoryRecord')
+    return (newBuiltValueToStringHelper(r'HistoryRecord')
           ..add('id', id)
           ..add('entityType', entityType)
           ..add('timestamp', timestamp))
@@ -1422,17 +1429,19 @@ class HistoryRecordBuilder
   }
 
   @override
-  _$HistoryRecord build() {
+  HistoryRecord build() => _build();
+
+  _$HistoryRecord _build() {
     final _$result = _$v ??
         new _$HistoryRecord._(
             id: id,
             entityType: BuiltValueNullFieldError.checkNotNull(
-                entityType, 'HistoryRecord', 'entityType'),
+                entityType, r'HistoryRecord', 'entityType'),
             timestamp: BuiltValueNullFieldError.checkNotNull(
-                timestamp, 'HistoryRecord', 'timestamp'));
+                timestamp, r'HistoryRecord', 'timestamp'));
     replace(_$result);
     return _$result;
   }
 }
 
-// ignore_for_file: always_put_control_body_on_new_line,always_specify_types,annotate_overrides,avoid_annotating_with_dynamic,avoid_as,avoid_catches_without_on_clauses,avoid_returning_this,deprecated_member_use_from_same_package,lines_longer_than_80_chars,omit_local_variable_types,prefer_expression_function_bodies,sort_constructors_first,test_types_in_equals,unnecessary_const,unnecessary_new
+// ignore_for_file: always_put_control_body_on_new_line,always_specify_types,annotate_overrides,avoid_annotating_with_dynamic,avoid_as,avoid_catches_without_on_clauses,avoid_returning_this,deprecated_member_use_from_same_package,lines_longer_than_80_chars,no_leading_underscores_for_local_identifiers,omit_local_variable_types,prefer_expression_function_bodies,sort_constructors_first,test_types_in_equals,unnecessary_const,unnecessary_new,unnecessary_lambdas

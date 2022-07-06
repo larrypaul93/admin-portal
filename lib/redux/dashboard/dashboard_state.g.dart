@@ -202,7 +202,7 @@ class _$DashboardUIState extends DashboardUIState {
 
   factory _$DashboardUIState(
           [void Function(DashboardUIStateBuilder) updates]) =>
-      (new DashboardUIStateBuilder()..update(updates)).build();
+      (new DashboardUIStateBuilder()..update(updates))._build();
 
   _$DashboardUIState._(
       {this.settings,
@@ -211,13 +211,13 @@ class _$DashboardUIState extends DashboardUIState {
       this.showSidebar})
       : super._() {
     BuiltValueNullFieldError.checkNotNull(
-        settings, 'DashboardUIState', 'settings');
+        settings, r'DashboardUIState', 'settings');
     BuiltValueNullFieldError.checkNotNull(
-        selectedEntityType, 'DashboardUIState', 'selectedEntityType');
+        selectedEntityType, r'DashboardUIState', 'selectedEntityType');
     BuiltValueNullFieldError.checkNotNull(
-        selectedEntities, 'DashboardUIState', 'selectedEntities');
+        selectedEntities, r'DashboardUIState', 'selectedEntities');
     BuiltValueNullFieldError.checkNotNull(
-        showSidebar, 'DashboardUIState', 'showSidebar');
+        showSidebar, r'DashboardUIState', 'showSidebar');
   }
 
   @override
@@ -249,7 +249,7 @@ class _$DashboardUIState extends DashboardUIState {
 
   @override
   String toString() {
-    return (newBuiltValueToStringHelper('DashboardUIState')
+    return (newBuiltValueToStringHelper(r'DashboardUIState')
           ..add('settings', settings)
           ..add('selectedEntityType', selectedEntityType)
           ..add('selectedEntities', selectedEntities)
@@ -311,17 +311,21 @@ class DashboardUIStateBuilder
   }
 
   @override
-  _$DashboardUIState build() {
+  DashboardUIState build() => _build();
+
+  _$DashboardUIState _build() {
     _$DashboardUIState _$result;
     try {
       _$result = _$v ??
           new _$DashboardUIState._(
               settings: settings.build(),
               selectedEntityType: BuiltValueNullFieldError.checkNotNull(
-                  selectedEntityType, 'DashboardUIState', 'selectedEntityType'),
+                  selectedEntityType,
+                  r'DashboardUIState',
+                  'selectedEntityType'),
               selectedEntities: selectedEntities.build(),
               showSidebar: BuiltValueNullFieldError.checkNotNull(
-                  showSidebar, 'DashboardUIState', 'showSidebar'));
+                  showSidebar, r'DashboardUIState', 'showSidebar'));
     } catch (_) {
       String _$failedField;
       try {
@@ -332,7 +336,7 @@ class DashboardUIStateBuilder
         selectedEntities.build();
       } catch (e) {
         throw new BuiltValueNestedFieldError(
-            'DashboardUIState', _$failedField, e.toString());
+            r'DashboardUIState', _$failedField, e.toString());
       }
       rethrow;
     }
@@ -365,7 +369,7 @@ class _$DashboardUISettings extends DashboardUISettings {
 
   factory _$DashboardUISettings(
           [void Function(DashboardUISettingsBuilder) updates]) =>
-      (new DashboardUISettingsBuilder()..update(updates)).build();
+      (new DashboardUISettingsBuilder()..update(updates))._build();
 
   _$DashboardUISettings._(
       {this.dateRange,
@@ -380,25 +384,25 @@ class _$DashboardUISettings extends DashboardUISettings {
       this.includeTaxes})
       : super._() {
     BuiltValueNullFieldError.checkNotNull(
-        dateRange, 'DashboardUISettings', 'dateRange');
+        dateRange, r'DashboardUISettings', 'dateRange');
     BuiltValueNullFieldError.checkNotNull(
-        customStartDate, 'DashboardUISettings', 'customStartDate');
+        customStartDate, r'DashboardUISettings', 'customStartDate');
     BuiltValueNullFieldError.checkNotNull(
-        customEndDate, 'DashboardUISettings', 'customEndDate');
+        customEndDate, r'DashboardUISettings', 'customEndDate');
     BuiltValueNullFieldError.checkNotNull(
-        enableComparison, 'DashboardUISettings', 'enableComparison');
+        enableComparison, r'DashboardUISettings', 'enableComparison');
     BuiltValueNullFieldError.checkNotNull(
-        compareDateRange, 'DashboardUISettings', 'compareDateRange');
+        compareDateRange, r'DashboardUISettings', 'compareDateRange');
     BuiltValueNullFieldError.checkNotNull(compareCustomStartDate,
-        'DashboardUISettings', 'compareCustomStartDate');
+        r'DashboardUISettings', 'compareCustomStartDate');
     BuiltValueNullFieldError.checkNotNull(
-        compareCustomEndDate, 'DashboardUISettings', 'compareCustomEndDate');
+        compareCustomEndDate, r'DashboardUISettings', 'compareCustomEndDate');
     BuiltValueNullFieldError.checkNotNull(
-        offset, 'DashboardUISettings', 'offset');
+        offset, r'DashboardUISettings', 'offset');
     BuiltValueNullFieldError.checkNotNull(
-        currencyId, 'DashboardUISettings', 'currencyId');
+        currencyId, r'DashboardUISettings', 'currencyId');
     BuiltValueNullFieldError.checkNotNull(
-        includeTaxes, 'DashboardUISettings', 'includeTaxes');
+        includeTaxes, r'DashboardUISettings', 'includeTaxes');
   }
 
   @override
@@ -451,7 +455,7 @@ class _$DashboardUISettings extends DashboardUISettings {
 
   @override
   String toString() {
-    return (newBuiltValueToStringHelper('DashboardUISettings')
+    return (newBuiltValueToStringHelper(r'DashboardUISettings')
           ..add('dateRange', dateRange)
           ..add('customStartDate', customStartDate)
           ..add('customEndDate', customEndDate)
@@ -548,31 +552,33 @@ class DashboardUISettingsBuilder
   }
 
   @override
-  _$DashboardUISettings build() {
+  DashboardUISettings build() => _build();
+
+  _$DashboardUISettings _build() {
     final _$result = _$v ??
         new _$DashboardUISettings._(
             dateRange: BuiltValueNullFieldError.checkNotNull(
-                dateRange, 'DashboardUISettings', 'dateRange'),
+                dateRange, r'DashboardUISettings', 'dateRange'),
             customStartDate: BuiltValueNullFieldError.checkNotNull(
-                customStartDate, 'DashboardUISettings', 'customStartDate'),
+                customStartDate, r'DashboardUISettings', 'customStartDate'),
             customEndDate: BuiltValueNullFieldError.checkNotNull(
-                customEndDate, 'DashboardUISettings', 'customEndDate'),
+                customEndDate, r'DashboardUISettings', 'customEndDate'),
             enableComparison: BuiltValueNullFieldError.checkNotNull(
-                enableComparison, 'DashboardUISettings', 'enableComparison'),
+                enableComparison, r'DashboardUISettings', 'enableComparison'),
             compareDateRange: BuiltValueNullFieldError.checkNotNull(
-                compareDateRange, 'DashboardUISettings', 'compareDateRange'),
+                compareDateRange, r'DashboardUISettings', 'compareDateRange'),
             compareCustomStartDate: BuiltValueNullFieldError.checkNotNull(
                 compareCustomStartDate,
-                'DashboardUISettings',
+                r'DashboardUISettings',
                 'compareCustomStartDate'),
             compareCustomEndDate: BuiltValueNullFieldError.checkNotNull(
-                compareCustomEndDate, 'DashboardUISettings', 'compareCustomEndDate'),
-            offset: BuiltValueNullFieldError.checkNotNull(offset, 'DashboardUISettings', 'offset'),
-            currencyId: BuiltValueNullFieldError.checkNotNull(currencyId, 'DashboardUISettings', 'currencyId'),
-            includeTaxes: BuiltValueNullFieldError.checkNotNull(includeTaxes, 'DashboardUISettings', 'includeTaxes'));
+                compareCustomEndDate, r'DashboardUISettings', 'compareCustomEndDate'),
+            offset: BuiltValueNullFieldError.checkNotNull(offset, r'DashboardUISettings', 'offset'),
+            currencyId: BuiltValueNullFieldError.checkNotNull(currencyId, r'DashboardUISettings', 'currencyId'),
+            includeTaxes: BuiltValueNullFieldError.checkNotNull(includeTaxes, r'DashboardUISettings', 'includeTaxes'));
     replace(_$result);
     return _$result;
   }
 }
 
-// ignore_for_file: always_put_control_body_on_new_line,always_specify_types,annotate_overrides,avoid_annotating_with_dynamic,avoid_as,avoid_catches_without_on_clauses,avoid_returning_this,deprecated_member_use_from_same_package,lines_longer_than_80_chars,omit_local_variable_types,prefer_expression_function_bodies,sort_constructors_first,test_types_in_equals,unnecessary_const,unnecessary_new
+// ignore_for_file: always_put_control_body_on_new_line,always_specify_types,annotate_overrides,avoid_annotating_with_dynamic,avoid_as,avoid_catches_without_on_clauses,avoid_returning_this,deprecated_member_use_from_same_package,lines_longer_than_80_chars,no_leading_underscores_for_local_identifiers,omit_local_variable_types,prefer_expression_function_bodies,sort_constructors_first,test_types_in_equals,unnecessary_const,unnecessary_new,unnecessary_lambdas

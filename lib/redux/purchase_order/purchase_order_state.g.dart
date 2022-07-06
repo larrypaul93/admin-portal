@@ -161,11 +161,11 @@ class _$PurchaseOrderState extends PurchaseOrderState {
 
   factory _$PurchaseOrderState(
           [void Function(PurchaseOrderStateBuilder) updates]) =>
-      (new PurchaseOrderStateBuilder()..update(updates)).build();
+      (new PurchaseOrderStateBuilder()..update(updates))._build();
 
   _$PurchaseOrderState._({this.map, this.list}) : super._() {
-    BuiltValueNullFieldError.checkNotNull(map, 'PurchaseOrderState', 'map');
-    BuiltValueNullFieldError.checkNotNull(list, 'PurchaseOrderState', 'list');
+    BuiltValueNullFieldError.checkNotNull(map, r'PurchaseOrderState', 'map');
+    BuiltValueNullFieldError.checkNotNull(list, r'PurchaseOrderState', 'list');
   }
 
   @override
@@ -193,7 +193,7 @@ class _$PurchaseOrderState extends PurchaseOrderState {
 
   @override
   String toString() {
-    return (newBuiltValueToStringHelper('PurchaseOrderState')
+    return (newBuiltValueToStringHelper(r'PurchaseOrderState')
           ..add('map', map)
           ..add('list', list))
         .toString();
@@ -237,7 +237,9 @@ class PurchaseOrderStateBuilder
   }
 
   @override
-  _$PurchaseOrderState build() {
+  PurchaseOrderState build() => _build();
+
+  _$PurchaseOrderState _build() {
     _$PurchaseOrderState _$result;
     try {
       _$result = _$v ??
@@ -251,7 +253,7 @@ class PurchaseOrderStateBuilder
         list.build();
       } catch (e) {
         throw new BuiltValueNestedFieldError(
-            'PurchaseOrderState', _$failedField, e.toString());
+            r'PurchaseOrderState', _$failedField, e.toString());
       }
       rethrow;
     }
@@ -280,7 +282,7 @@ class _$PurchaseOrderUIState extends PurchaseOrderUIState {
 
   factory _$PurchaseOrderUIState(
           [void Function(PurchaseOrderUIStateBuilder) updates]) =>
-      (new PurchaseOrderUIStateBuilder()..update(updates)).build();
+      (new PurchaseOrderUIStateBuilder()..update(updates))._build();
 
   _$PurchaseOrderUIState._(
       {this.editing,
@@ -293,9 +295,9 @@ class _$PurchaseOrderUIState extends PurchaseOrderUIState {
       this.cancelCompleter})
       : super._() {
     BuiltValueNullFieldError.checkNotNull(
-        listUIState, 'PurchaseOrderUIState', 'listUIState');
+        listUIState, r'PurchaseOrderUIState', 'listUIState');
     BuiltValueNullFieldError.checkNotNull(
-        tabIndex, 'PurchaseOrderUIState', 'tabIndex');
+        tabIndex, r'PurchaseOrderUIState', 'tabIndex');
   }
 
   @override
@@ -342,7 +344,7 @@ class _$PurchaseOrderUIState extends PurchaseOrderUIState {
 
   @override
   String toString() {
-    return (newBuiltValueToStringHelper('PurchaseOrderUIState')
+    return (newBuiltValueToStringHelper(r'PurchaseOrderUIState')
           ..add('editing', editing)
           ..add('editingItemIndex', editingItemIndex)
           ..add('listUIState', listUIState)
@@ -428,7 +430,9 @@ class PurchaseOrderUIStateBuilder
   }
 
   @override
-  _$PurchaseOrderUIState build() {
+  PurchaseOrderUIState build() => _build();
+
+  _$PurchaseOrderUIState _build() {
     _$PurchaseOrderUIState _$result;
     try {
       _$result = _$v ??
@@ -439,7 +443,7 @@ class PurchaseOrderUIStateBuilder
               selectedId: selectedId,
               forceSelected: forceSelected,
               tabIndex: BuiltValueNullFieldError.checkNotNull(
-                  tabIndex, 'PurchaseOrderUIState', 'tabIndex'),
+                  tabIndex, r'PurchaseOrderUIState', 'tabIndex'),
               saveCompleter: saveCompleter,
               cancelCompleter: cancelCompleter);
     } catch (_) {
@@ -452,7 +456,7 @@ class PurchaseOrderUIStateBuilder
         listUIState.build();
       } catch (e) {
         throw new BuiltValueNestedFieldError(
-            'PurchaseOrderUIState', _$failedField, e.toString());
+            r'PurchaseOrderUIState', _$failedField, e.toString());
       }
       rethrow;
     }
@@ -461,4 +465,4 @@ class PurchaseOrderUIStateBuilder
   }
 }
 
-// ignore_for_file: always_put_control_body_on_new_line,always_specify_types,annotate_overrides,avoid_annotating_with_dynamic,avoid_as,avoid_catches_without_on_clauses,avoid_returning_this,deprecated_member_use_from_same_package,lines_longer_than_80_chars,omit_local_variable_types,prefer_expression_function_bodies,sort_constructors_first,test_types_in_equals,unnecessary_const,unnecessary_new
+// ignore_for_file: always_put_control_body_on_new_line,always_specify_types,annotate_overrides,avoid_annotating_with_dynamic,avoid_as,avoid_catches_without_on_clauses,avoid_returning_this,deprecated_member_use_from_same_package,lines_longer_than_80_chars,no_leading_underscores_for_local_identifiers,omit_local_variable_types,prefer_expression_function_bodies,sort_constructors_first,test_types_in_equals,unnecessary_const,unnecessary_new,unnecessary_lambdas

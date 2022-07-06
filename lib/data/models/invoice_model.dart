@@ -105,6 +105,11 @@ class InvoiceFields {
   static const String clientCountry = 'client_country';
   static const String quote = 'quote';
   static const String recurringInvoice = 'recurring_invoice';
+
+  static const String serviceReportId = 'service_report_id';
+  static const String requiredSignature = 'required_signature';
+  static const String interest = 'interest';
+  static const String attachPdf = 'attach_pdf';
 }
 
 class InvoiceTotalFields {
@@ -144,92 +149,95 @@ abstract class InvoiceEntity extends Object
       );
     }
     return _$InvoiceEntity._(
-      id: id ?? BaseEntity.nextId,
-      entityType: entityType ?? EntityType.invoice,
-      isChanged: false,
-      amount: 0,
-      balance: 0,
-      paidToDate: 0,
-      clientId: client?.id ?? '',
-      statusId: kInvoiceStatusDraft,
-      number: '',
-      discount: 0,
-      taxAmount: 0,
-      poNumber: '',
-      projectId: '',
-      vendorId: '',
-      date: convertDateTimeToSqlDate(),
-      dueDate: '',
-      publicNotes: '',
-      privateNotes: '',
-      terms: '',
-      footer: '',
-      designId: '',
-      taxName1: (company?.numberOfInvoiceTaxRates ?? 0) >= 1
-          ? settings.defaultTaxName1 ?? ''
-          : '',
-      taxRate1: (company?.numberOfInvoiceTaxRates ?? 0) >= 1
-          ? settings.defaultTaxRate1 ?? 0.0
-          : 0,
-      taxName2: (company?.numberOfInvoiceTaxRates ?? 0) >= 2
-          ? settings.defaultTaxName2 ?? ''
-          : '',
-      taxRate2: (company?.numberOfInvoiceTaxRates ?? 0) >= 2
-          ? settings.defaultTaxRate2 ?? 0.0
-          : 0,
-      taxName3: (company?.numberOfInvoiceTaxRates ?? 0) >= 3
-          ? settings.defaultTaxName3 ?? ''
-          : '',
-      taxRate3: (company?.numberOfInvoiceTaxRates ?? 0) >= 3
-          ? settings.defaultTaxRate3 ?? 0.0
-          : 0,
-      isAmountDiscount: false,
-      partial: 0.0,
-      partialDueDate: '',
-      autoBillEnabled: false,
-      customValue1: '',
-      customValue2: '',
-      customValue3: '',
-      customValue4: '',
-      customTaxes1: company?.enableCustomSurchargeTaxes1 ?? false,
-      customTaxes2: company?.enableCustomSurchargeTaxes2 ?? false,
-      customTaxes3: company?.enableCustomSurchargeTaxes3 ?? false,
-      customTaxes4: company?.enableCustomSurchargeTaxes4 ?? false,
-      invoiceId: '',
-      customSurcharge1: 0,
-      customSurcharge2: 0,
-      customSurcharge3: 0,
-      customSurcharge4: 0,
-      filename: '',
-      subscriptionId: '',
-      recurringDates: BuiltList<InvoiceScheduleEntity>(),
-      lineItems: BuiltList<InvoiceItemEntity>(),
-      usesInclusiveTaxes: company?.settings?.enableInclusiveTaxes ?? false,
-      documents: BuiltList<DocumentEntity>(),
-      activities: BuiltList<ActivityEntity>(),
-      invitations: client == null
-          ? BuiltList<InvitationEntity>()
-          : BuiltList(client.emailContacts
-              .map((contact) => InvitationEntity(contactId: contact.id))
-              .toList()),
-      updatedAt: 0,
-      archivedAt: 0,
-      isDeleted: false,
-      createdUserId: '',
-      assignedUserId: user?.id ?? '',
-      createdAt: 0,
-      loadedAt: 0,
-      reminder1Sent: '',
-      reminder2Sent: '',
-      reminder3Sent: '',
-      reminderLastSent: '',
-      exchangeRate: exchangeRate,
-      lastSentDate: '',
-      nextSendDate: convertDateTimeToSqlDate(),
-      frequencyId: kFrequencyMonthly,
-      remainingCycles: -1,
-      dueDateDays: 'terms',
-    );
+        id: id ?? BaseEntity.nextId,
+        entityType: entityType ?? EntityType.invoice,
+        isChanged: false,
+        amount: 0,
+        balance: 0,
+        paidToDate: 0,
+        clientId: client?.id ?? '',
+        statusId: kInvoiceStatusDraft,
+        number: '',
+        discount: 0,
+        taxAmount: 0,
+        poNumber: '',
+        projectId: '',
+        vendorId: '',
+        date: convertDateTimeToSqlDate(),
+        dueDate: '',
+        publicNotes: '',
+        privateNotes: '',
+        terms: '',
+        footer: '',
+        designId: '',
+        taxName1: (company?.numberOfInvoiceTaxRates ?? 0) >= 1
+            ? settings.defaultTaxName1 ?? ''
+            : '',
+        taxRate1: (company?.numberOfInvoiceTaxRates ?? 0) >= 1
+            ? settings.defaultTaxRate1 ?? 0.0
+            : 0,
+        taxName2: (company?.numberOfInvoiceTaxRates ?? 0) >= 2
+            ? settings.defaultTaxName2 ?? ''
+            : '',
+        taxRate2: (company?.numberOfInvoiceTaxRates ?? 0) >= 2
+            ? settings.defaultTaxRate2 ?? 0.0
+            : 0,
+        taxName3: (company?.numberOfInvoiceTaxRates ?? 0) >= 3
+            ? settings.defaultTaxName3 ?? ''
+            : '',
+        taxRate3: (company?.numberOfInvoiceTaxRates ?? 0) >= 3
+            ? settings.defaultTaxRate3 ?? 0.0
+            : 0,
+        isAmountDiscount: false,
+        partial: 0.0,
+        partialDueDate: '',
+        autoBillEnabled: false,
+        customValue1: '',
+        customValue2: '',
+        customValue3: '',
+        customValue4: '',
+        customTaxes1: company?.enableCustomSurchargeTaxes1 ?? false,
+        customTaxes2: company?.enableCustomSurchargeTaxes2 ?? false,
+        customTaxes3: company?.enableCustomSurchargeTaxes3 ?? false,
+        customTaxes4: company?.enableCustomSurchargeTaxes4 ?? false,
+        invoiceId: '',
+        customSurcharge1: 0,
+        customSurcharge2: 0,
+        customSurcharge3: 0,
+        customSurcharge4: 0,
+        filename: '',
+        subscriptionId: '',
+        recurringDates: BuiltList<InvoiceScheduleEntity>(),
+        lineItems: BuiltList<InvoiceItemEntity>(),
+        usesInclusiveTaxes: company?.settings?.enableInclusiveTaxes ?? false,
+        documents: BuiltList<DocumentEntity>(),
+        activities: BuiltList<ActivityEntity>(),
+        invitations: client == null
+            ? BuiltList<InvitationEntity>()
+            : BuiltList(client.emailContacts
+                .map((contact) => InvitationEntity(contactId: contact.id))
+                .toList()),
+        updatedAt: 0,
+        archivedAt: 0,
+        isDeleted: false,
+        createdUserId: '',
+        assignedUserId: user?.id ?? '',
+        createdAt: 0,
+        loadedAt: 0,
+        reminder1Sent: '',
+        reminder2Sent: '',
+        reminder3Sent: '',
+        reminderLastSent: '',
+        exchangeRate: exchangeRate,
+        lastSentDate: '',
+        nextSendDate: convertDateTimeToSqlDate(),
+        frequencyId: kFrequencyMonthly,
+        remainingCycles: -1,
+        dueDateDays: 'terms',
+        attachPdf: false,
+        interest: false,
+        interestPaid: 0,
+        requiredSignature: false);
   }
 
   InvoiceEntity._();
@@ -270,6 +278,10 @@ abstract class InvoiceEntity extends Object
     ..number = ''
     ..date = convertDateTimeToSqlDate()
     ..dueDate = ''
+    ..attachPdf = false
+    ..requiredSignature = false
+    ..serviceReportId = null
+    ..interest = false
     ..documents.clear()
     ..lineItems.replace(lineItems
         .where(
@@ -319,6 +331,7 @@ abstract class InvoiceEntity extends Object
 
   double get balance;
 
+  @override
   @BuiltValueField(wireName: 'paid_to_date')
   double get paidToDate;
 
@@ -352,6 +365,7 @@ abstract class InvoiceEntity extends Object
   @BuiltValueField(wireName: 'date')
   String get date;
 
+  @override
   @BuiltValueField(wireName: 'due_date')
   String get dueDate;
 
@@ -406,6 +420,7 @@ abstract class InvoiceEntity extends Object
   @BuiltValueField(wireName: 'total_taxes')
   double get taxAmount;
 
+  @override
   @BuiltValueField(wireName: 'partial_due_date')
   String get partialDueDate;
 
@@ -504,6 +519,23 @@ abstract class InvoiceEntity extends Object
 
   @BuiltValueField(wireName: 'auto_bill_enabled')
   bool get autoBillEnabled;
+
+  @nullable
+  @BuiltValueField(wireName: 'service_report_id')
+  String get serviceReportId;
+
+  @BuiltValueField(wireName: 'attach_pdf')
+  bool get attachPdf;
+
+  @BuiltValueField(wireName: 'required_signature')
+  bool get requiredSignature;
+
+  @override
+  bool get interest;
+
+  @override
+  @BuiltValueField(wireName: 'interest_paid')
+  double get interestPaid;
 
   @nullable
   String get filename;
@@ -1342,6 +1374,9 @@ class ProductItemFields {
   static const String custom2 = 'product2';
   static const String custom3 = 'product3';
   static const String custom4 = 'product4';
+  static const String sku = 'sku';
+  static const String serviced = 'serviced';
+
   /*
   static const String custom1 = 'custom1';
   static const String custom2 = 'custom2';
@@ -1393,6 +1428,8 @@ abstract class InvoiceItemEntity
       customValue3: '',
       customValue4: '',
       discount: 0,
+      sku: '',
+      serviced: '',
       createdAt: DateTime.now().microsecondsSinceEpoch,
     );
   }
@@ -1416,6 +1453,12 @@ abstract class InvoiceItemEntity
   String get notes;
 
   double get cost;
+
+  @nullable
+  String get sku;
+
+  @nullable
+  String get serviced;
 
   @BuiltValueField(wireName: 'product_cost')
   double get productCost;

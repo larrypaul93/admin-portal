@@ -43,6 +43,16 @@ abstract class CalculateInvoiceTotal {
 
   bool get usesInclusiveTaxes;
 
+  bool get interest;
+
+  double get interestPaid;
+
+  String get partialDueDate;
+
+  String get dueDate;
+
+  double get paidToDate;
+
   BuiltList<InvoiceItemEntity> get lineItems;
 
   double _calculateTaxAmount(
@@ -299,8 +309,40 @@ abstract class CalculateInvoiceTotal {
     return total;
   }
 
+  double calculateTotalWithInterest({@required int precision}) {
+    final total = calculateTotal(precision: precision);
+    final calcInterest = calculateInterest(precision: precision);
+    return total + calcInterest;
+  }
+
+  double calculateInterest({@required int precision}) {
+    final total = calculateTotal(precision: precision);
+    double calcInterest = 0;
+    int ageInDays = 0;
+
+    if (!interest) {
+      return 0;
+    }
+
+    final now = DateTime.now();
+    final dueDate = DateTime.tryParse(
+        partialDueDate == null || partialDueDate.isEmpty
+            ? this.dueDate
+            : partialDueDate);
+
+    if (dueDate != null) {
+      ageInDays = now.difference(dueDate).inDays;
+    }
+    if (ageInDays > 30) {
+      calcInterest =
+          round(0.1 * (total - paidToDate) / 100 * ageInDays, precision);
+    }
+    print(calcInterest);
+    return calcInterest;
+  }
+
   double calculateSubtotal({@required int precision}) {
-    var total = 0.0;
+    var total = 0.0 + interestPaid;
 
     lineItems.forEach((item) {
       final double qty = round(item.quantity, 5);

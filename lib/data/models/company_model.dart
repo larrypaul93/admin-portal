@@ -129,6 +129,7 @@ abstract class CompanyEntity extends Object
       products: BuiltList<ProductEntity>(),
       categories: BuiltList<CategoryEntity>(),
       serviceReports: BuiltList<ServiceReportEntity>(),
+      serviceReportsMap: BuiltMap<String, ServiceReportEntity>(),
       invoices: BuiltList<InvoiceEntity>(),
       recurringInvoices: BuiltList<InvoiceEntity>(),
       recurringExpenses: BuiltList<ExpenseEntity>(),
@@ -312,6 +313,8 @@ abstract class CompanyEntity extends Object
 
   @BuiltValueField(wireName: 'service_reports')
   BuiltList<ServiceReportEntity> get serviceReports;
+
+  BuiltMap<String, ServiceReportEntity> get serviceReportsMap;
 
   BuiltList<InvoiceEntity> get invoices;
 

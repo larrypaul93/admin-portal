@@ -232,10 +232,10 @@ class _$GroupListResponse extends GroupListResponse {
 
   factory _$GroupListResponse(
           [void Function(GroupListResponseBuilder) updates]) =>
-      (new GroupListResponseBuilder()..update(updates)).build();
+      (new GroupListResponseBuilder()..update(updates))._build();
 
   _$GroupListResponse._({this.data}) : super._() {
-    BuiltValueNullFieldError.checkNotNull(data, 'GroupListResponse', 'data');
+    BuiltValueNullFieldError.checkNotNull(data, r'GroupListResponse', 'data');
   }
 
   @override
@@ -260,7 +260,8 @@ class _$GroupListResponse extends GroupListResponse {
 
   @override
   String toString() {
-    return (newBuiltValueToStringHelper('GroupListResponse')..add('data', data))
+    return (newBuiltValueToStringHelper(r'GroupListResponse')
+          ..add('data', data))
         .toString();
   }
 }
@@ -297,7 +298,9 @@ class GroupListResponseBuilder
   }
 
   @override
-  _$GroupListResponse build() {
+  GroupListResponse build() => _build();
+
+  _$GroupListResponse _build() {
     _$GroupListResponse _$result;
     try {
       _$result = _$v ?? new _$GroupListResponse._(data: data.build());
@@ -308,7 +311,7 @@ class GroupListResponseBuilder
         data.build();
       } catch (e) {
         throw new BuiltValueNestedFieldError(
-            'GroupListResponse', _$failedField, e.toString());
+            r'GroupListResponse', _$failedField, e.toString());
       }
       rethrow;
     }
@@ -323,10 +326,10 @@ class _$GroupItemResponse extends GroupItemResponse {
 
   factory _$GroupItemResponse(
           [void Function(GroupItemResponseBuilder) updates]) =>
-      (new GroupItemResponseBuilder()..update(updates)).build();
+      (new GroupItemResponseBuilder()..update(updates))._build();
 
   _$GroupItemResponse._({this.data}) : super._() {
-    BuiltValueNullFieldError.checkNotNull(data, 'GroupItemResponse', 'data');
+    BuiltValueNullFieldError.checkNotNull(data, r'GroupItemResponse', 'data');
   }
 
   @override
@@ -351,7 +354,8 @@ class _$GroupItemResponse extends GroupItemResponse {
 
   @override
   String toString() {
-    return (newBuiltValueToStringHelper('GroupItemResponse')..add('data', data))
+    return (newBuiltValueToStringHelper(r'GroupItemResponse')
+          ..add('data', data))
         .toString();
   }
 }
@@ -387,7 +391,9 @@ class GroupItemResponseBuilder
   }
 
   @override
-  _$GroupItemResponse build() {
+  GroupItemResponse build() => _build();
+
+  _$GroupItemResponse _build() {
     _$GroupItemResponse _$result;
     try {
       _$result = _$v ?? new _$GroupItemResponse._(data: data.build());
@@ -398,7 +404,7 @@ class GroupItemResponseBuilder
         data.build();
       } catch (e) {
         throw new BuiltValueNestedFieldError(
-            'GroupItemResponse', _$failedField, e.toString());
+            r'GroupItemResponse', _$failedField, e.toString());
       }
       rethrow;
     }
@@ -432,7 +438,7 @@ class _$GroupEntity extends GroupEntity {
   final String id;
 
   factory _$GroupEntity([void Function(GroupEntityBuilder) updates]) =>
-      (new GroupEntityBuilder()..update(updates)).build();
+      (new GroupEntityBuilder()..update(updates))._build();
 
   _$GroupEntity._(
       {this.name,
@@ -447,17 +453,17 @@ class _$GroupEntity extends GroupEntity {
       this.assignedUserId,
       this.id})
       : super._() {
-    BuiltValueNullFieldError.checkNotNull(name, 'GroupEntity', 'name');
-    BuiltValueNullFieldError.checkNotNull(settings, 'GroupEntity', 'settings');
+    BuiltValueNullFieldError.checkNotNull(name, r'GroupEntity', 'name');
+    BuiltValueNullFieldError.checkNotNull(settings, r'GroupEntity', 'settings');
     BuiltValueNullFieldError.checkNotNull(
-        documents, 'GroupEntity', 'documents');
+        documents, r'GroupEntity', 'documents');
     BuiltValueNullFieldError.checkNotNull(
-        createdAt, 'GroupEntity', 'createdAt');
+        createdAt, r'GroupEntity', 'createdAt');
     BuiltValueNullFieldError.checkNotNull(
-        updatedAt, 'GroupEntity', 'updatedAt');
+        updatedAt, r'GroupEntity', 'updatedAt');
     BuiltValueNullFieldError.checkNotNull(
-        archivedAt, 'GroupEntity', 'archivedAt');
-    BuiltValueNullFieldError.checkNotNull(id, 'GroupEntity', 'id');
+        archivedAt, r'GroupEntity', 'archivedAt');
+    BuiltValueNullFieldError.checkNotNull(id, r'GroupEntity', 'id');
   }
 
   @override
@@ -511,7 +517,7 @@ class _$GroupEntity extends GroupEntity {
 
   @override
   String toString() {
-    return (newBuiltValueToStringHelper('GroupEntity')
+    return (newBuiltValueToStringHelper(r'GroupEntity')
           ..add('name', name)
           ..add('settings', settings)
           ..add('documents', documents)
@@ -614,27 +620,29 @@ class GroupEntityBuilder implements Builder<GroupEntity, GroupEntityBuilder> {
   }
 
   @override
-  _$GroupEntity build() {
+  GroupEntity build() => _build();
+
+  _$GroupEntity _build() {
     _$GroupEntity _$result;
     try {
       _$result = _$v ??
           new _$GroupEntity._(
               name: BuiltValueNullFieldError.checkNotNull(
-                  name, 'GroupEntity', 'name'),
+                  name, r'GroupEntity', 'name'),
               settings: settings.build(),
               documents: documents.build(),
               isChanged: isChanged,
               createdAt: BuiltValueNullFieldError.checkNotNull(
-                  createdAt, 'GroupEntity', 'createdAt'),
+                  createdAt, r'GroupEntity', 'createdAt'),
               updatedAt: BuiltValueNullFieldError.checkNotNull(
-                  updatedAt, 'GroupEntity', 'updatedAt'),
+                  updatedAt, r'GroupEntity', 'updatedAt'),
               archivedAt: BuiltValueNullFieldError.checkNotNull(
-                  archivedAt, 'GroupEntity', 'archivedAt'),
+                  archivedAt, r'GroupEntity', 'archivedAt'),
               isDeleted: isDeleted,
               createdUserId: createdUserId,
               assignedUserId: assignedUserId,
               id: BuiltValueNullFieldError.checkNotNull(
-                  id, 'GroupEntity', 'id'));
+                  id, r'GroupEntity', 'id'));
     } catch (_) {
       String _$failedField;
       try {
@@ -644,7 +652,7 @@ class GroupEntityBuilder implements Builder<GroupEntity, GroupEntityBuilder> {
         documents.build();
       } catch (e) {
         throw new BuiltValueNestedFieldError(
-            'GroupEntity', _$failedField, e.toString());
+            r'GroupEntity', _$failedField, e.toString());
       }
       rethrow;
     }
@@ -653,4 +661,4 @@ class GroupEntityBuilder implements Builder<GroupEntity, GroupEntityBuilder> {
   }
 }
 
-// ignore_for_file: always_put_control_body_on_new_line,always_specify_types,annotate_overrides,avoid_annotating_with_dynamic,avoid_as,avoid_catches_without_on_clauses,avoid_returning_this,deprecated_member_use_from_same_package,lines_longer_than_80_chars,omit_local_variable_types,prefer_expression_function_bodies,sort_constructors_first,test_types_in_equals,unnecessary_const,unnecessary_new
+// ignore_for_file: always_put_control_body_on_new_line,always_specify_types,annotate_overrides,avoid_annotating_with_dynamic,avoid_as,avoid_catches_without_on_clauses,avoid_returning_this,deprecated_member_use_from_same_package,lines_longer_than_80_chars,no_leading_underscores_for_local_identifiers,omit_local_variable_types,prefer_expression_function_bodies,sort_constructors_first,test_types_in_equals,unnecessary_const,unnecessary_new,unnecessary_lambdas

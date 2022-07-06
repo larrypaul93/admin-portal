@@ -231,10 +231,10 @@ class _$TaxRateListResponse extends TaxRateListResponse {
 
   factory _$TaxRateListResponse(
           [void Function(TaxRateListResponseBuilder) updates]) =>
-      (new TaxRateListResponseBuilder()..update(updates)).build();
+      (new TaxRateListResponseBuilder()..update(updates))._build();
 
   _$TaxRateListResponse._({this.data}) : super._() {
-    BuiltValueNullFieldError.checkNotNull(data, 'TaxRateListResponse', 'data');
+    BuiltValueNullFieldError.checkNotNull(data, r'TaxRateListResponse', 'data');
   }
 
   @override
@@ -260,7 +260,7 @@ class _$TaxRateListResponse extends TaxRateListResponse {
 
   @override
   String toString() {
-    return (newBuiltValueToStringHelper('TaxRateListResponse')
+    return (newBuiltValueToStringHelper(r'TaxRateListResponse')
           ..add('data', data))
         .toString();
   }
@@ -298,7 +298,9 @@ class TaxRateListResponseBuilder
   }
 
   @override
-  _$TaxRateListResponse build() {
+  TaxRateListResponse build() => _build();
+
+  _$TaxRateListResponse _build() {
     _$TaxRateListResponse _$result;
     try {
       _$result = _$v ?? new _$TaxRateListResponse._(data: data.build());
@@ -309,7 +311,7 @@ class TaxRateListResponseBuilder
         data.build();
       } catch (e) {
         throw new BuiltValueNestedFieldError(
-            'TaxRateListResponse', _$failedField, e.toString());
+            r'TaxRateListResponse', _$failedField, e.toString());
       }
       rethrow;
     }
@@ -324,10 +326,10 @@ class _$TaxRateItemResponse extends TaxRateItemResponse {
 
   factory _$TaxRateItemResponse(
           [void Function(TaxRateItemResponseBuilder) updates]) =>
-      (new TaxRateItemResponseBuilder()..update(updates)).build();
+      (new TaxRateItemResponseBuilder()..update(updates))._build();
 
   _$TaxRateItemResponse._({this.data}) : super._() {
-    BuiltValueNullFieldError.checkNotNull(data, 'TaxRateItemResponse', 'data');
+    BuiltValueNullFieldError.checkNotNull(data, r'TaxRateItemResponse', 'data');
   }
 
   @override
@@ -353,7 +355,7 @@ class _$TaxRateItemResponse extends TaxRateItemResponse {
 
   @override
   String toString() {
-    return (newBuiltValueToStringHelper('TaxRateItemResponse')
+    return (newBuiltValueToStringHelper(r'TaxRateItemResponse')
           ..add('data', data))
         .toString();
   }
@@ -390,7 +392,9 @@ class TaxRateItemResponseBuilder
   }
 
   @override
-  _$TaxRateItemResponse build() {
+  TaxRateItemResponse build() => _build();
+
+  _$TaxRateItemResponse _build() {
     _$TaxRateItemResponse _$result;
     try {
       _$result = _$v ?? new _$TaxRateItemResponse._(data: data.build());
@@ -401,7 +405,7 @@ class TaxRateItemResponseBuilder
         data.build();
       } catch (e) {
         throw new BuiltValueNestedFieldError(
-            'TaxRateItemResponse', _$failedField, e.toString());
+            r'TaxRateItemResponse', _$failedField, e.toString());
       }
       rethrow;
     }
@@ -433,7 +437,7 @@ class _$TaxRateEntity extends TaxRateEntity {
   final String id;
 
   factory _$TaxRateEntity([void Function(TaxRateEntityBuilder) updates]) =>
-      (new TaxRateEntityBuilder()..update(updates)).build();
+      (new TaxRateEntityBuilder()..update(updates))._build();
 
   _$TaxRateEntity._(
       {this.name,
@@ -447,15 +451,15 @@ class _$TaxRateEntity extends TaxRateEntity {
       this.assignedUserId,
       this.id})
       : super._() {
-    BuiltValueNullFieldError.checkNotNull(name, 'TaxRateEntity', 'name');
-    BuiltValueNullFieldError.checkNotNull(rate, 'TaxRateEntity', 'rate');
+    BuiltValueNullFieldError.checkNotNull(name, r'TaxRateEntity', 'name');
+    BuiltValueNullFieldError.checkNotNull(rate, r'TaxRateEntity', 'rate');
     BuiltValueNullFieldError.checkNotNull(
-        createdAt, 'TaxRateEntity', 'createdAt');
+        createdAt, r'TaxRateEntity', 'createdAt');
     BuiltValueNullFieldError.checkNotNull(
-        updatedAt, 'TaxRateEntity', 'updatedAt');
+        updatedAt, r'TaxRateEntity', 'updatedAt');
     BuiltValueNullFieldError.checkNotNull(
-        archivedAt, 'TaxRateEntity', 'archivedAt');
-    BuiltValueNullFieldError.checkNotNull(id, 'TaxRateEntity', 'id');
+        archivedAt, r'TaxRateEntity', 'archivedAt');
+    BuiltValueNullFieldError.checkNotNull(id, r'TaxRateEntity', 'id');
   }
 
   @override
@@ -504,7 +508,7 @@ class _$TaxRateEntity extends TaxRateEntity {
 
   @override
   String toString() {
-    return (newBuiltValueToStringHelper('TaxRateEntity')
+    return (newBuiltValueToStringHelper(r'TaxRateEntity')
           ..add('name', name)
           ..add('rate', rate)
           ..add('isChanged', isChanged)
@@ -597,28 +601,30 @@ class TaxRateEntityBuilder
   }
 
   @override
-  _$TaxRateEntity build() {
+  TaxRateEntity build() => _build();
+
+  _$TaxRateEntity _build() {
     final _$result = _$v ??
         new _$TaxRateEntity._(
             name: BuiltValueNullFieldError.checkNotNull(
-                name, 'TaxRateEntity', 'name'),
+                name, r'TaxRateEntity', 'name'),
             rate: BuiltValueNullFieldError.checkNotNull(
-                rate, 'TaxRateEntity', 'rate'),
+                rate, r'TaxRateEntity', 'rate'),
             isChanged: isChanged,
             createdAt: BuiltValueNullFieldError.checkNotNull(
-                createdAt, 'TaxRateEntity', 'createdAt'),
+                createdAt, r'TaxRateEntity', 'createdAt'),
             updatedAt: BuiltValueNullFieldError.checkNotNull(
-                updatedAt, 'TaxRateEntity', 'updatedAt'),
+                updatedAt, r'TaxRateEntity', 'updatedAt'),
             archivedAt: BuiltValueNullFieldError.checkNotNull(
-                archivedAt, 'TaxRateEntity', 'archivedAt'),
+                archivedAt, r'TaxRateEntity', 'archivedAt'),
             isDeleted: isDeleted,
             createdUserId: createdUserId,
             assignedUserId: assignedUserId,
             id: BuiltValueNullFieldError.checkNotNull(
-                id, 'TaxRateEntity', 'id'));
+                id, r'TaxRateEntity', 'id'));
     replace(_$result);
     return _$result;
   }
 }
 
-// ignore_for_file: always_put_control_body_on_new_line,always_specify_types,annotate_overrides,avoid_annotating_with_dynamic,avoid_as,avoid_catches_without_on_clauses,avoid_returning_this,deprecated_member_use_from_same_package,lines_longer_than_80_chars,omit_local_variable_types,prefer_expression_function_bodies,sort_constructors_first,test_types_in_equals,unnecessary_const,unnecessary_new
+// ignore_for_file: always_put_control_body_on_new_line,always_specify_types,annotate_overrides,avoid_annotating_with_dynamic,avoid_as,avoid_catches_without_on_clauses,avoid_returning_this,deprecated_member_use_from_same_package,lines_longer_than_80_chars,no_leading_underscores_for_local_identifiers,omit_local_variable_types,prefer_expression_function_bodies,sort_constructors_first,test_types_in_equals,unnecessary_const,unnecessary_new,unnecessary_lambdas

@@ -154,11 +154,11 @@ class _$PaymentState extends PaymentState {
   final BuiltList<String> list;
 
   factory _$PaymentState([void Function(PaymentStateBuilder) updates]) =>
-      (new PaymentStateBuilder()..update(updates)).build();
+      (new PaymentStateBuilder()..update(updates))._build();
 
   _$PaymentState._({this.map, this.list}) : super._() {
-    BuiltValueNullFieldError.checkNotNull(map, 'PaymentState', 'map');
-    BuiltValueNullFieldError.checkNotNull(list, 'PaymentState', 'list');
+    BuiltValueNullFieldError.checkNotNull(map, r'PaymentState', 'map');
+    BuiltValueNullFieldError.checkNotNull(list, r'PaymentState', 'list');
   }
 
   @override
@@ -182,7 +182,7 @@ class _$PaymentState extends PaymentState {
 
   @override
   String toString() {
-    return (newBuiltValueToStringHelper('PaymentState')
+    return (newBuiltValueToStringHelper(r'PaymentState')
           ..add('map', map)
           ..add('list', list))
         .toString();
@@ -226,7 +226,9 @@ class PaymentStateBuilder
   }
 
   @override
-  _$PaymentState build() {
+  PaymentState build() => _build();
+
+  _$PaymentState _build() {
     _$PaymentState _$result;
     try {
       _$result =
@@ -240,7 +242,7 @@ class PaymentStateBuilder
         list.build();
       } catch (e) {
         throw new BuiltValueNestedFieldError(
-            'PaymentState', _$failedField, e.toString());
+            r'PaymentState', _$failedField, e.toString());
       }
       rethrow;
     }
@@ -266,7 +268,7 @@ class _$PaymentUIState extends PaymentUIState {
   final Completer<Null> cancelCompleter;
 
   factory _$PaymentUIState([void Function(PaymentUIStateBuilder) updates]) =>
-      (new PaymentUIStateBuilder()..update(updates)).build();
+      (new PaymentUIStateBuilder()..update(updates))._build();
 
   _$PaymentUIState._(
       {this.editing,
@@ -278,9 +280,9 @@ class _$PaymentUIState extends PaymentUIState {
       this.cancelCompleter})
       : super._() {
     BuiltValueNullFieldError.checkNotNull(
-        listUIState, 'PaymentUIState', 'listUIState');
+        listUIState, r'PaymentUIState', 'listUIState');
     BuiltValueNullFieldError.checkNotNull(
-        tabIndex, 'PaymentUIState', 'tabIndex');
+        tabIndex, r'PaymentUIState', 'tabIndex');
   }
 
   @override
@@ -321,7 +323,7 @@ class _$PaymentUIState extends PaymentUIState {
 
   @override
   String toString() {
-    return (newBuiltValueToStringHelper('PaymentUIState')
+    return (newBuiltValueToStringHelper(r'PaymentUIState')
           ..add('editing', editing)
           ..add('listUIState', listUIState)
           ..add('selectedId', selectedId)
@@ -400,7 +402,9 @@ class PaymentUIStateBuilder
   }
 
   @override
-  _$PaymentUIState build() {
+  PaymentUIState build() => _build();
+
+  _$PaymentUIState _build() {
     _$PaymentUIState _$result;
     try {
       _$result = _$v ??
@@ -410,7 +414,7 @@ class PaymentUIStateBuilder
               selectedId: selectedId,
               forceSelected: forceSelected,
               tabIndex: BuiltValueNullFieldError.checkNotNull(
-                  tabIndex, 'PaymentUIState', 'tabIndex'),
+                  tabIndex, r'PaymentUIState', 'tabIndex'),
               saveCompleter: saveCompleter,
               cancelCompleter: cancelCompleter);
     } catch (_) {
@@ -422,7 +426,7 @@ class PaymentUIStateBuilder
         listUIState.build();
       } catch (e) {
         throw new BuiltValueNestedFieldError(
-            'PaymentUIState', _$failedField, e.toString());
+            r'PaymentUIState', _$failedField, e.toString());
       }
       rethrow;
     }
@@ -431,4 +435,4 @@ class PaymentUIStateBuilder
   }
 }
 
-// ignore_for_file: always_put_control_body_on_new_line,always_specify_types,annotate_overrides,avoid_annotating_with_dynamic,avoid_as,avoid_catches_without_on_clauses,avoid_returning_this,deprecated_member_use_from_same_package,lines_longer_than_80_chars,omit_local_variable_types,prefer_expression_function_bodies,sort_constructors_first,test_types_in_equals,unnecessary_const,unnecessary_new
+// ignore_for_file: always_put_control_body_on_new_line,always_specify_types,annotate_overrides,avoid_annotating_with_dynamic,avoid_as,avoid_catches_without_on_clauses,avoid_returning_this,deprecated_member_use_from_same_package,lines_longer_than_80_chars,no_leading_underscores_for_local_identifiers,omit_local_variable_types,prefer_expression_function_bodies,sort_constructors_first,test_types_in_equals,unnecessary_const,unnecessary_new,unnecessary_lambdas

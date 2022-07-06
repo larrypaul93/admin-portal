@@ -151,11 +151,11 @@ class _$QuoteState extends QuoteState {
   final BuiltList<String> list;
 
   factory _$QuoteState([void Function(QuoteStateBuilder) updates]) =>
-      (new QuoteStateBuilder()..update(updates)).build();
+      (new QuoteStateBuilder()..update(updates))._build();
 
   _$QuoteState._({this.map, this.list}) : super._() {
-    BuiltValueNullFieldError.checkNotNull(map, 'QuoteState', 'map');
-    BuiltValueNullFieldError.checkNotNull(list, 'QuoteState', 'list');
+    BuiltValueNullFieldError.checkNotNull(map, r'QuoteState', 'map');
+    BuiltValueNullFieldError.checkNotNull(list, r'QuoteState', 'list');
   }
 
   @override
@@ -179,7 +179,7 @@ class _$QuoteState extends QuoteState {
 
   @override
   String toString() {
-    return (newBuiltValueToStringHelper('QuoteState')
+    return (newBuiltValueToStringHelper(r'QuoteState')
           ..add('map', map)
           ..add('list', list))
         .toString();
@@ -222,7 +222,9 @@ class QuoteStateBuilder implements Builder<QuoteState, QuoteStateBuilder> {
   }
 
   @override
-  _$QuoteState build() {
+  QuoteState build() => _build();
+
+  _$QuoteState _build() {
     _$QuoteState _$result;
     try {
       _$result =
@@ -236,7 +238,7 @@ class QuoteStateBuilder implements Builder<QuoteState, QuoteStateBuilder> {
         list.build();
       } catch (e) {
         throw new BuiltValueNestedFieldError(
-            'QuoteState', _$failedField, e.toString());
+            r'QuoteState', _$failedField, e.toString());
       }
       rethrow;
     }
@@ -266,7 +268,7 @@ class _$QuoteUIState extends QuoteUIState {
   final Completer<Null> cancelCompleter;
 
   factory _$QuoteUIState([void Function(QuoteUIStateBuilder) updates]) =>
-      (new QuoteUIStateBuilder()..update(updates)).build();
+      (new QuoteUIStateBuilder()..update(updates))._build();
 
   _$QuoteUIState._(
       {this.editing,
@@ -280,8 +282,9 @@ class _$QuoteUIState extends QuoteUIState {
       this.cancelCompleter})
       : super._() {
     BuiltValueNullFieldError.checkNotNull(
-        listUIState, 'QuoteUIState', 'listUIState');
-    BuiltValueNullFieldError.checkNotNull(tabIndex, 'QuoteUIState', 'tabIndex');
+        listUIState, r'QuoteUIState', 'listUIState');
+    BuiltValueNullFieldError.checkNotNull(
+        tabIndex, r'QuoteUIState', 'tabIndex');
   }
 
   @override
@@ -329,7 +332,7 @@ class _$QuoteUIState extends QuoteUIState {
 
   @override
   String toString() {
-    return (newBuiltValueToStringHelper('QuoteUIState')
+    return (newBuiltValueToStringHelper(r'QuoteUIState')
           ..add('editing', editing)
           ..add('editingItemIndex', editingItemIndex)
           ..add('historyActivityId', historyActivityId)
@@ -422,7 +425,9 @@ class QuoteUIStateBuilder
   }
 
   @override
-  _$QuoteUIState build() {
+  QuoteUIState build() => _build();
+
+  _$QuoteUIState _build() {
     _$QuoteUIState _$result;
     try {
       _$result = _$v ??
@@ -434,7 +439,7 @@ class QuoteUIStateBuilder
               selectedId: selectedId,
               forceSelected: forceSelected,
               tabIndex: BuiltValueNullFieldError.checkNotNull(
-                  tabIndex, 'QuoteUIState', 'tabIndex'),
+                  tabIndex, r'QuoteUIState', 'tabIndex'),
               saveCompleter: saveCompleter,
               cancelCompleter: cancelCompleter);
     } catch (_) {
@@ -447,7 +452,7 @@ class QuoteUIStateBuilder
         listUIState.build();
       } catch (e) {
         throw new BuiltValueNestedFieldError(
-            'QuoteUIState', _$failedField, e.toString());
+            r'QuoteUIState', _$failedField, e.toString());
       }
       rethrow;
     }
@@ -456,4 +461,4 @@ class QuoteUIStateBuilder
   }
 }
 
-// ignore_for_file: always_put_control_body_on_new_line,always_specify_types,annotate_overrides,avoid_annotating_with_dynamic,avoid_as,avoid_catches_without_on_clauses,avoid_returning_this,deprecated_member_use_from_same_package,lines_longer_than_80_chars,omit_local_variable_types,prefer_expression_function_bodies,sort_constructors_first,test_types_in_equals,unnecessary_const,unnecessary_new
+// ignore_for_file: always_put_control_body_on_new_line,always_specify_types,annotate_overrides,avoid_annotating_with_dynamic,avoid_as,avoid_catches_without_on_clauses,avoid_returning_this,deprecated_member_use_from_same_package,lines_longer_than_80_chars,no_leading_underscores_for_local_identifiers,omit_local_variable_types,prefer_expression_function_bodies,sort_constructors_first,test_types_in_equals,unnecessary_const,unnecessary_new,unnecessary_lambdas

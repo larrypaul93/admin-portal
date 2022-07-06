@@ -219,7 +219,9 @@ Middleware<AppState> _loadContacts(ContactRepository repository) {
     final AppState state = store.state;
 
     store.dispatch(LoadContactsRequest());
-    repository.loadList(state.credentials, action.page).then((data) {
+    repository
+        .loadList(state.credentials, action.page, state.recordsPerPage)
+        .then((data) {
       store.dispatch(LoadContactsSuccess(data));
 
       if (data.length == state.recordsPerPage) {

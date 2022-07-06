@@ -27,6 +27,7 @@ import 'package:invoiceninja_flutter/redux/invoice/invoice_selectors.dart';
 import 'package:invoiceninja_flutter/ui/app/form_card.dart';
 import 'package:invoiceninja_flutter/ui/app/forms/app_dropdown_button.dart';
 import 'package:invoiceninja_flutter/ui/app/forms/app_tab_bar.dart';
+import 'package:invoiceninja_flutter/ui/app/forms/bool_dropdown_button.dart';
 import 'package:invoiceninja_flutter/ui/app/forms/client_picker.dart';
 import 'package:invoiceninja_flutter/ui/app/forms/custom_field.dart';
 import 'package:invoiceninja_flutter/ui/app/forms/custom_surcharges.dart';
@@ -34,6 +35,7 @@ import 'package:invoiceninja_flutter/ui/app/forms/date_picker.dart';
 import 'package:invoiceninja_flutter/ui/app/forms/decorated_form_field.dart';
 import 'package:invoiceninja_flutter/ui/app/forms/design_picker.dart';
 import 'package:invoiceninja_flutter/ui/app/forms/discount_field.dart';
+import 'package:invoiceninja_flutter/ui/app/forms/dynamic_selector.dart';
 import 'package:invoiceninja_flutter/ui/app/forms/project_picker.dart';
 import 'package:invoiceninja_flutter/ui/app/forms/user_picker.dart';
 import 'package:invoiceninja_flutter/ui/app/invoice/tax_rate_dropdown.dart';
@@ -211,6 +213,7 @@ class InvoiceEditDesktopState extends State<InvoiceEditDesktop>
     final localization = AppLocalization.of(context);
     final viewModel = widget.viewModel;
     final state = viewModel.state;
+    final serviceReportsState = state.serviceReportsState;
     final invoice = viewModel.invoice;
     final company = viewModel.company;
     final client = state.clientState.get(invoice.clientId);
@@ -477,23 +480,55 @@ class InvoiceEditDesktopState extends State<InvoiceEditDesktop>
                       onTypeChanged: (value) => viewModel.onChanged(
                           invoice.rebuild((b) => b..isAmountDiscount = value)),
                     ),
-                    AppDropdownButton<String>(
-                      labelText: 'Service No',
-                      value: '',
-                      onChanged: (dynamic value) => {null},
-                      items: [
-                        DropdownMenuItem(
-                          child: Text('Select Report No.'),
-                          value: '',
-                        ),
-                        ...company.serviceReports
-                            .map((report) => DropdownMenuItem(
-                                  child: Text(report.displayName),
-                                  value: report.reportNo,
-                                ))
-                            .toList()
-                      ],
+                    EntityDropdown(
+                      labelText: localization.lookup('serviceReport'),
+                      entityType: EntityType.serviceReport,
+                      onSelected: (SelectableEntity report) =>
+                          viewModel.onChanged(invoice
+                              .rebuild((b) => b..serviceReportId = report?.id)),
+                      entityId: invoice.serviceReportId,
+                      entityList: memoizedServiceReportList(
+                          serviceReportsState.map, client),
+                      //entityMap: serviceReportsState.map,
+                      allowClearing: true,
+                      /* overrideSuggestedLabel: (report) {
+                          print(report);
+                          print('report display');
+                          return report.listDisplayName;
+                        } */
                     ),
+                    BoolDropdownButton(
+                      label: localization.attachPdf,
+                      value: invoice.attachPdf,
+                      onChanged: (value) {
+                        widget.viewModel.onChanged(
+                            invoice.rebuild((b) => b..attachPdf = value));
+                      },
+                    ),
+                    BoolDropdownButton(
+                      label: 'Required Signature',
+                      value: invoice.requiredSignature,
+                      onChanged: (value) {
+                        widget.viewModel.onChanged(invoice
+                            .rebuild((b) => b..requiredSignature = value));
+                      },
+                    ),
+                    BoolDropdownButton(
+                      label: 'Enable Interest',
+                      value: invoice.interest,
+                      onChanged: (value) {
+                        widget.viewModel.onChanged(
+                            invoice.rebuild((b) => b..interest = value));
+                      },
+                    ),
+
+                    /* DynamicSelector(
+                      onChanged: (dynamic value) => {null},
+                      entityType: EntityType.serviceReport,
+                      entityId: null,
+                      entityIds: memoizedServiceReportList(
+                          serviceReportsState.map, client),
+                    ), */
                     if (entityType == EntityType.recurringInvoice)
                       AppDropdownButton<String>(
                         labelText: localization.autoBill,
@@ -798,6 +833,19 @@ class InvoiceEditDesktopState extends State<InvoiceEditDesktop>
                             right: kMobileDialogPadding,
                             left: kMobileDialogPadding / 2),
                         children: <Widget>[
+                          if (invoice.interestPaid > 0)
+                            TextFormField(
+                              enabled: false,
+                              decoration: InputDecoration(
+                                labelText: 'Interest Paid',
+                              ),
+                              textAlign: TextAlign.end,
+                              key: ValueKey(
+                                  '__invoice_interest_paid_${invoice.interestPaid}_${invoice.clientId}__'),
+                              initialValue: formatNumber(
+                                  invoice.interestPaid, context,
+                                  clientId: invoice.clientId),
+                            ),
                           TextFormField(
                             enabled: false,
                             decoration: InputDecoration(
@@ -889,6 +937,22 @@ class InvoiceEditDesktopState extends State<InvoiceEditDesktop>
                               onSavePressed:
                                   widget.entityViewModel.onSavePressed,
                             ),
+                          if (invoice.interest)
+                            TextFormField(
+                              enabled: false,
+                              decoration: InputDecoration(
+                                labelText: 'Interest',
+                              ),
+                              textAlign: TextAlign.end,
+                              key: ValueKey(
+                                  '__invoice_interest_${invoice.calculateInterest(precision: precisionForInvoice(state, invoice))}_${invoice.clientId}__'),
+                              initialValue: formatNumber(
+                                  invoice.calculateInterest(
+                                      precision:
+                                          precisionForInvoice(state, invoice)),
+                                  context,
+                                  clientId: invoice.clientId),
+                            ),
                           TextFormField(
                             enabled: false,
                             decoration: InputDecoration(
@@ -903,7 +967,10 @@ class InvoiceEditDesktopState extends State<InvoiceEditDesktop>
                                 invoice.calculateTotal(
                                         precision: precisionForInvoice(
                                             state, invoice)) -
-                                    invoice.paidToDate,
+                                    invoice.paidToDate +
+                                    invoice.calculateInterest(
+                                        precision: precisionForInvoice(
+                                            state, invoice)),
                                 context,
                                 clientId: invoice.clientId),
                           ),

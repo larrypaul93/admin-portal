@@ -154,11 +154,11 @@ class _$ContactState extends ContactState {
   final BuiltList<String> list;
 
   factory _$ContactState([void Function(ContactStateBuilder) updates]) =>
-      (new ContactStateBuilder()..update(updates)).build();
+      (new ContactStateBuilder()..update(updates))._build();
 
   _$ContactState._({this.map, this.list}) : super._() {
-    BuiltValueNullFieldError.checkNotNull(map, 'ContactState', 'map');
-    BuiltValueNullFieldError.checkNotNull(list, 'ContactState', 'list');
+    BuiltValueNullFieldError.checkNotNull(map, r'ContactState', 'map');
+    BuiltValueNullFieldError.checkNotNull(list, r'ContactState', 'list');
   }
 
   @override
@@ -182,7 +182,7 @@ class _$ContactState extends ContactState {
 
   @override
   String toString() {
-    return (newBuiltValueToStringHelper('ContactState')
+    return (newBuiltValueToStringHelper(r'ContactState')
           ..add('map', map)
           ..add('list', list))
         .toString();
@@ -226,7 +226,9 @@ class ContactStateBuilder
   }
 
   @override
-  _$ContactState build() {
+  ContactState build() => _build();
+
+  _$ContactState _build() {
     _$ContactState _$result;
     try {
       _$result =
@@ -240,7 +242,7 @@ class ContactStateBuilder
         list.build();
       } catch (e) {
         throw new BuiltValueNestedFieldError(
-            'ContactState', _$failedField, e.toString());
+            r'ContactState', _$failedField, e.toString());
       }
       rethrow;
     }
@@ -266,7 +268,7 @@ class _$ContactUIState extends ContactUIState {
   final Completer<Null> cancelCompleter;
 
   factory _$ContactUIState([void Function(ContactUIStateBuilder) updates]) =>
-      (new ContactUIStateBuilder()..update(updates)).build();
+      (new ContactUIStateBuilder()..update(updates))._build();
 
   _$ContactUIState._(
       {this.editing,
@@ -278,9 +280,9 @@ class _$ContactUIState extends ContactUIState {
       this.cancelCompleter})
       : super._() {
     BuiltValueNullFieldError.checkNotNull(
-        listUIState, 'ContactUIState', 'listUIState');
+        listUIState, r'ContactUIState', 'listUIState');
     BuiltValueNullFieldError.checkNotNull(
-        tabIndex, 'ContactUIState', 'tabIndex');
+        tabIndex, r'ContactUIState', 'tabIndex');
   }
 
   @override
@@ -321,7 +323,7 @@ class _$ContactUIState extends ContactUIState {
 
   @override
   String toString() {
-    return (newBuiltValueToStringHelper('ContactUIState')
+    return (newBuiltValueToStringHelper(r'ContactUIState')
           ..add('editing', editing)
           ..add('listUIState', listUIState)
           ..add('selectedId', selectedId)
@@ -400,7 +402,9 @@ class ContactUIStateBuilder
   }
 
   @override
-  _$ContactUIState build() {
+  ContactUIState build() => _build();
+
+  _$ContactUIState _build() {
     _$ContactUIState _$result;
     try {
       _$result = _$v ??
@@ -410,7 +414,7 @@ class ContactUIStateBuilder
               selectedId: selectedId,
               forceSelected: forceSelected,
               tabIndex: BuiltValueNullFieldError.checkNotNull(
-                  tabIndex, 'ContactUIState', 'tabIndex'),
+                  tabIndex, r'ContactUIState', 'tabIndex'),
               saveCompleter: saveCompleter,
               cancelCompleter: cancelCompleter);
     } catch (_) {
@@ -422,7 +426,7 @@ class ContactUIStateBuilder
         listUIState.build();
       } catch (e) {
         throw new BuiltValueNestedFieldError(
-            'ContactUIState', _$failedField, e.toString());
+            r'ContactUIState', _$failedField, e.toString());
       }
       rethrow;
     }
@@ -431,4 +435,4 @@ class ContactUIStateBuilder
   }
 }
 
-// ignore_for_file: always_put_control_body_on_new_line,always_specify_types,annotate_overrides,avoid_annotating_with_dynamic,avoid_as,avoid_catches_without_on_clauses,avoid_returning_this,deprecated_member_use_from_same_package,lines_longer_than_80_chars,omit_local_variable_types,prefer_expression_function_bodies,sort_constructors_first,test_types_in_equals,unnecessary_const,unnecessary_new
+// ignore_for_file: always_put_control_body_on_new_line,always_specify_types,annotate_overrides,avoid_annotating_with_dynamic,avoid_as,avoid_catches_without_on_clauses,avoid_returning_this,deprecated_member_use_from_same_package,lines_longer_than_80_chars,no_leading_underscores_for_local_identifiers,omit_local_variable_types,prefer_expression_function_bodies,sort_constructors_first,test_types_in_equals,unnecessary_const,unnecessary_new,unnecessary_lambdas

@@ -374,10 +374,10 @@ class _$TaskListResponse extends TaskListResponse {
 
   factory _$TaskListResponse(
           [void Function(TaskListResponseBuilder) updates]) =>
-      (new TaskListResponseBuilder()..update(updates)).build();
+      (new TaskListResponseBuilder()..update(updates))._build();
 
   _$TaskListResponse._({this.data}) : super._() {
-    BuiltValueNullFieldError.checkNotNull(data, 'TaskListResponse', 'data');
+    BuiltValueNullFieldError.checkNotNull(data, r'TaskListResponse', 'data');
   }
 
   @override
@@ -402,7 +402,7 @@ class _$TaskListResponse extends TaskListResponse {
 
   @override
   String toString() {
-    return (newBuiltValueToStringHelper('TaskListResponse')..add('data', data))
+    return (newBuiltValueToStringHelper(r'TaskListResponse')..add('data', data))
         .toString();
   }
 }
@@ -439,7 +439,9 @@ class TaskListResponseBuilder
   }
 
   @override
-  _$TaskListResponse build() {
+  TaskListResponse build() => _build();
+
+  _$TaskListResponse _build() {
     _$TaskListResponse _$result;
     try {
       _$result = _$v ?? new _$TaskListResponse._(data: data.build());
@@ -450,7 +452,7 @@ class TaskListResponseBuilder
         data.build();
       } catch (e) {
         throw new BuiltValueNestedFieldError(
-            'TaskListResponse', _$failedField, e.toString());
+            r'TaskListResponse', _$failedField, e.toString());
       }
       rethrow;
     }
@@ -465,10 +467,10 @@ class _$TaskItemResponse extends TaskItemResponse {
 
   factory _$TaskItemResponse(
           [void Function(TaskItemResponseBuilder) updates]) =>
-      (new TaskItemResponseBuilder()..update(updates)).build();
+      (new TaskItemResponseBuilder()..update(updates))._build();
 
   _$TaskItemResponse._({this.data}) : super._() {
-    BuiltValueNullFieldError.checkNotNull(data, 'TaskItemResponse', 'data');
+    BuiltValueNullFieldError.checkNotNull(data, r'TaskItemResponse', 'data');
   }
 
   @override
@@ -493,7 +495,7 @@ class _$TaskItemResponse extends TaskItemResponse {
 
   @override
   String toString() {
-    return (newBuiltValueToStringHelper('TaskItemResponse')..add('data', data))
+    return (newBuiltValueToStringHelper(r'TaskItemResponse')..add('data', data))
         .toString();
   }
 }
@@ -529,7 +531,9 @@ class TaskItemResponseBuilder
   }
 
   @override
-  _$TaskItemResponse build() {
+  TaskItemResponse build() => _build();
+
+  _$TaskItemResponse _build() {
     _$TaskItemResponse _$result;
     try {
       _$result = _$v ?? new _$TaskItemResponse._(data: data.build());
@@ -540,7 +544,7 @@ class TaskItemResponseBuilder
         data.build();
       } catch (e) {
         throw new BuiltValueNestedFieldError(
-            'TaskItemResponse', _$failedField, e.toString());
+            r'TaskItemResponse', _$failedField, e.toString());
       }
       rethrow;
     }
@@ -556,7 +560,7 @@ class _$TaskTime extends TaskTime {
   final DateTime endDate;
 
   factory _$TaskTime([void Function(TaskTimeBuilder) updates]) =>
-      (new TaskTimeBuilder()..update(updates)).build();
+      (new TaskTimeBuilder()..update(updates))._build();
 
   _$TaskTime._({this.startDate, this.endDate}) : super._();
 
@@ -584,7 +588,7 @@ class _$TaskTime extends TaskTime {
 
   @override
   String toString() {
-    return (newBuiltValueToStringHelper('TaskTime')
+    return (newBuiltValueToStringHelper(r'TaskTime')
           ..add('startDate', startDate)
           ..add('endDate', endDate))
         .toString();
@@ -626,7 +630,9 @@ class TaskTimeBuilder implements Builder<TaskTime, TaskTimeBuilder> {
   }
 
   @override
-  _$TaskTime build() {
+  TaskTime build() => _build();
+
+  _$TaskTime _build() {
     final _$result =
         _$v ?? new _$TaskTime._(startDate: startDate, endDate: endDate);
     replace(_$result);
@@ -683,7 +689,7 @@ class _$TaskEntity extends TaskEntity {
   final String id;
 
   factory _$TaskEntity([void Function(TaskEntityBuilder) updates]) =>
-      (new TaskEntityBuilder()..update(updates)).build();
+      (new TaskEntityBuilder()..update(updates))._build();
 
   _$TaskEntity._(
       {this.description,
@@ -711,29 +717,34 @@ class _$TaskEntity extends TaskEntity {
       this.id})
       : super._() {
     BuiltValueNullFieldError.checkNotNull(
-        description, 'TaskEntity', 'description');
-    BuiltValueNullFieldError.checkNotNull(number, 'TaskEntity', 'number');
-    BuiltValueNullFieldError.checkNotNull(duration, 'TaskEntity', 'duration');
-    BuiltValueNullFieldError.checkNotNull(invoiceId, 'TaskEntity', 'invoiceId');
-    BuiltValueNullFieldError.checkNotNull(clientId, 'TaskEntity', 'clientId');
-    BuiltValueNullFieldError.checkNotNull(rate, 'TaskEntity', 'rate');
-    BuiltValueNullFieldError.checkNotNull(projectId, 'TaskEntity', 'projectId');
-    BuiltValueNullFieldError.checkNotNull(timeLog, 'TaskEntity', 'timeLog');
+        description, r'TaskEntity', 'description');
+    BuiltValueNullFieldError.checkNotNull(number, r'TaskEntity', 'number');
+    BuiltValueNullFieldError.checkNotNull(duration, r'TaskEntity', 'duration');
     BuiltValueNullFieldError.checkNotNull(
-        customValue1, 'TaskEntity', 'customValue1');
+        invoiceId, r'TaskEntity', 'invoiceId');
+    BuiltValueNullFieldError.checkNotNull(clientId, r'TaskEntity', 'clientId');
+    BuiltValueNullFieldError.checkNotNull(rate, r'TaskEntity', 'rate');
     BuiltValueNullFieldError.checkNotNull(
-        customValue2, 'TaskEntity', 'customValue2');
+        projectId, r'TaskEntity', 'projectId');
+    BuiltValueNullFieldError.checkNotNull(timeLog, r'TaskEntity', 'timeLog');
     BuiltValueNullFieldError.checkNotNull(
-        customValue3, 'TaskEntity', 'customValue3');
+        customValue1, r'TaskEntity', 'customValue1');
     BuiltValueNullFieldError.checkNotNull(
-        customValue4, 'TaskEntity', 'customValue4');
-    BuiltValueNullFieldError.checkNotNull(statusId, 'TaskEntity', 'statusId');
-    BuiltValueNullFieldError.checkNotNull(documents, 'TaskEntity', 'documents');
-    BuiltValueNullFieldError.checkNotNull(createdAt, 'TaskEntity', 'createdAt');
-    BuiltValueNullFieldError.checkNotNull(updatedAt, 'TaskEntity', 'updatedAt');
+        customValue2, r'TaskEntity', 'customValue2');
     BuiltValueNullFieldError.checkNotNull(
-        archivedAt, 'TaskEntity', 'archivedAt');
-    BuiltValueNullFieldError.checkNotNull(id, 'TaskEntity', 'id');
+        customValue3, r'TaskEntity', 'customValue3');
+    BuiltValueNullFieldError.checkNotNull(
+        customValue4, r'TaskEntity', 'customValue4');
+    BuiltValueNullFieldError.checkNotNull(statusId, r'TaskEntity', 'statusId');
+    BuiltValueNullFieldError.checkNotNull(
+        documents, r'TaskEntity', 'documents');
+    BuiltValueNullFieldError.checkNotNull(
+        createdAt, r'TaskEntity', 'createdAt');
+    BuiltValueNullFieldError.checkNotNull(
+        updatedAt, r'TaskEntity', 'updatedAt');
+    BuiltValueNullFieldError.checkNotNull(
+        archivedAt, r'TaskEntity', 'archivedAt');
+    BuiltValueNullFieldError.checkNotNull(id, r'TaskEntity', 'id');
   }
 
   @override
@@ -817,7 +828,7 @@ class _$TaskEntity extends TaskEntity {
 
   @override
   String toString() {
-    return (newBuiltValueToStringHelper('TaskEntity')
+    return (newBuiltValueToStringHelper(r'TaskEntity')
           ..add('description', description)
           ..add('number', number)
           ..add('duration', duration)
@@ -989,43 +1000,45 @@ class TaskEntityBuilder implements Builder<TaskEntity, TaskEntityBuilder> {
   }
 
   @override
-  _$TaskEntity build() {
+  TaskEntity build() => _build();
+
+  _$TaskEntity _build() {
     _$TaskEntity _$result;
     try {
       _$result = _$v ??
           new _$TaskEntity._(
               description: BuiltValueNullFieldError.checkNotNull(
-                  description, 'TaskEntity', 'description'),
+                  description, r'TaskEntity', 'description'),
               number: BuiltValueNullFieldError.checkNotNull(
-                  number, 'TaskEntity', 'number'),
+                  number, r'TaskEntity', 'number'),
               duration: BuiltValueNullFieldError.checkNotNull(
-                  duration, 'TaskEntity', 'duration'),
+                  duration, r'TaskEntity', 'duration'),
               invoiceId: BuiltValueNullFieldError.checkNotNull(
-                  invoiceId, 'TaskEntity', 'invoiceId'),
+                  invoiceId, r'TaskEntity', 'invoiceId'),
               clientId: BuiltValueNullFieldError.checkNotNull(
-                  clientId, 'TaskEntity', 'clientId'),
+                  clientId, r'TaskEntity', 'clientId'),
               rate: BuiltValueNullFieldError.checkNotNull(
-                  rate, 'TaskEntity', 'rate'),
+                  rate, r'TaskEntity', 'rate'),
               projectId: BuiltValueNullFieldError.checkNotNull(
-                  projectId, 'TaskEntity', 'projectId'),
+                  projectId, r'TaskEntity', 'projectId'),
               timeLog: BuiltValueNullFieldError.checkNotNull(
-                  timeLog, 'TaskEntity', 'timeLog'),
+                  timeLog, r'TaskEntity', 'timeLog'),
               customValue1:
-                  BuiltValueNullFieldError.checkNotNull(customValue1, 'TaskEntity', 'customValue1'),
-              customValue2: BuiltValueNullFieldError.checkNotNull(customValue2, 'TaskEntity', 'customValue2'),
-              customValue3: BuiltValueNullFieldError.checkNotNull(customValue3, 'TaskEntity', 'customValue3'),
-              customValue4: BuiltValueNullFieldError.checkNotNull(customValue4, 'TaskEntity', 'customValue4'),
-              statusId: BuiltValueNullFieldError.checkNotNull(statusId, 'TaskEntity', 'statusId'),
+                  BuiltValueNullFieldError.checkNotNull(customValue1, r'TaskEntity', 'customValue1'),
+              customValue2: BuiltValueNullFieldError.checkNotNull(customValue2, r'TaskEntity', 'customValue2'),
+              customValue3: BuiltValueNullFieldError.checkNotNull(customValue3, r'TaskEntity', 'customValue3'),
+              customValue4: BuiltValueNullFieldError.checkNotNull(customValue4, r'TaskEntity', 'customValue4'),
+              statusId: BuiltValueNullFieldError.checkNotNull(statusId, r'TaskEntity', 'statusId'),
               statusOrder: statusOrder,
               documents: documents.build(),
               isChanged: isChanged,
-              createdAt: BuiltValueNullFieldError.checkNotNull(createdAt, 'TaskEntity', 'createdAt'),
-              updatedAt: BuiltValueNullFieldError.checkNotNull(updatedAt, 'TaskEntity', 'updatedAt'),
-              archivedAt: BuiltValueNullFieldError.checkNotNull(archivedAt, 'TaskEntity', 'archivedAt'),
+              createdAt: BuiltValueNullFieldError.checkNotNull(createdAt, r'TaskEntity', 'createdAt'),
+              updatedAt: BuiltValueNullFieldError.checkNotNull(updatedAt, r'TaskEntity', 'updatedAt'),
+              archivedAt: BuiltValueNullFieldError.checkNotNull(archivedAt, r'TaskEntity', 'archivedAt'),
               isDeleted: isDeleted,
               createdUserId: createdUserId,
               assignedUserId: assignedUserId,
-              id: BuiltValueNullFieldError.checkNotNull(id, 'TaskEntity', 'id'));
+              id: BuiltValueNullFieldError.checkNotNull(id, r'TaskEntity', 'id'));
     } catch (_) {
       String _$failedField;
       try {
@@ -1033,7 +1046,7 @@ class TaskEntityBuilder implements Builder<TaskEntity, TaskEntityBuilder> {
         documents.build();
       } catch (e) {
         throw new BuiltValueNestedFieldError(
-            'TaskEntity', _$failedField, e.toString());
+            r'TaskEntity', _$failedField, e.toString());
       }
       rethrow;
     }
@@ -1042,4 +1055,4 @@ class TaskEntityBuilder implements Builder<TaskEntity, TaskEntityBuilder> {
   }
 }
 
-// ignore_for_file: always_put_control_body_on_new_line,always_specify_types,annotate_overrides,avoid_annotating_with_dynamic,avoid_as,avoid_catches_without_on_clauses,avoid_returning_this,deprecated_member_use_from_same_package,lines_longer_than_80_chars,omit_local_variable_types,prefer_expression_function_bodies,sort_constructors_first,test_types_in_equals,unnecessary_const,unnecessary_new
+// ignore_for_file: always_put_control_body_on_new_line,always_specify_types,annotate_overrides,avoid_annotating_with_dynamic,avoid_as,avoid_catches_without_on_clauses,avoid_returning_this,deprecated_member_use_from_same_package,lines_longer_than_80_chars,no_leading_underscores_for_local_identifiers,omit_local_variable_types,prefer_expression_function_bodies,sort_constructors_first,test_types_in_equals,unnecessary_const,unnecessary_new,unnecessary_lambdas

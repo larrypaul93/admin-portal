@@ -229,10 +229,10 @@ class _$TokenListResponse extends TokenListResponse {
 
   factory _$TokenListResponse(
           [void Function(TokenListResponseBuilder) updates]) =>
-      (new TokenListResponseBuilder()..update(updates)).build();
+      (new TokenListResponseBuilder()..update(updates))._build();
 
   _$TokenListResponse._({this.data}) : super._() {
-    BuiltValueNullFieldError.checkNotNull(data, 'TokenListResponse', 'data');
+    BuiltValueNullFieldError.checkNotNull(data, r'TokenListResponse', 'data');
   }
 
   @override
@@ -257,7 +257,8 @@ class _$TokenListResponse extends TokenListResponse {
 
   @override
   String toString() {
-    return (newBuiltValueToStringHelper('TokenListResponse')..add('data', data))
+    return (newBuiltValueToStringHelper(r'TokenListResponse')
+          ..add('data', data))
         .toString();
   }
 }
@@ -294,7 +295,9 @@ class TokenListResponseBuilder
   }
 
   @override
-  _$TokenListResponse build() {
+  TokenListResponse build() => _build();
+
+  _$TokenListResponse _build() {
     _$TokenListResponse _$result;
     try {
       _$result = _$v ?? new _$TokenListResponse._(data: data.build());
@@ -305,7 +308,7 @@ class TokenListResponseBuilder
         data.build();
       } catch (e) {
         throw new BuiltValueNestedFieldError(
-            'TokenListResponse', _$failedField, e.toString());
+            r'TokenListResponse', _$failedField, e.toString());
       }
       rethrow;
     }
@@ -320,10 +323,10 @@ class _$TokenItemResponse extends TokenItemResponse {
 
   factory _$TokenItemResponse(
           [void Function(TokenItemResponseBuilder) updates]) =>
-      (new TokenItemResponseBuilder()..update(updates)).build();
+      (new TokenItemResponseBuilder()..update(updates))._build();
 
   _$TokenItemResponse._({this.data}) : super._() {
-    BuiltValueNullFieldError.checkNotNull(data, 'TokenItemResponse', 'data');
+    BuiltValueNullFieldError.checkNotNull(data, r'TokenItemResponse', 'data');
   }
 
   @override
@@ -348,7 +351,8 @@ class _$TokenItemResponse extends TokenItemResponse {
 
   @override
   String toString() {
-    return (newBuiltValueToStringHelper('TokenItemResponse')..add('data', data))
+    return (newBuiltValueToStringHelper(r'TokenItemResponse')
+          ..add('data', data))
         .toString();
   }
 }
@@ -384,7 +388,9 @@ class TokenItemResponseBuilder
   }
 
   @override
-  _$TokenItemResponse build() {
+  TokenItemResponse build() => _build();
+
+  _$TokenItemResponse _build() {
     _$TokenItemResponse _$result;
     try {
       _$result = _$v ?? new _$TokenItemResponse._(data: data.build());
@@ -395,7 +401,7 @@ class TokenItemResponseBuilder
         data.build();
       } catch (e) {
         throw new BuiltValueNestedFieldError(
-            'TokenItemResponse', _$failedField, e.toString());
+            r'TokenItemResponse', _$failedField, e.toString());
       }
       rethrow;
     }
@@ -429,7 +435,7 @@ class _$TokenEntity extends TokenEntity {
   final String id;
 
   factory _$TokenEntity([void Function(TokenEntityBuilder) updates]) =>
-      (new TokenEntityBuilder()..update(updates)).build();
+      (new TokenEntityBuilder()..update(updates))._build();
 
   _$TokenEntity._(
       {this.isSystem,
@@ -444,16 +450,16 @@ class _$TokenEntity extends TokenEntity {
       this.assignedUserId,
       this.id})
       : super._() {
-    BuiltValueNullFieldError.checkNotNull(isSystem, 'TokenEntity', 'isSystem');
-    BuiltValueNullFieldError.checkNotNull(token, 'TokenEntity', 'token');
-    BuiltValueNullFieldError.checkNotNull(name, 'TokenEntity', 'name');
+    BuiltValueNullFieldError.checkNotNull(isSystem, r'TokenEntity', 'isSystem');
+    BuiltValueNullFieldError.checkNotNull(token, r'TokenEntity', 'token');
+    BuiltValueNullFieldError.checkNotNull(name, r'TokenEntity', 'name');
     BuiltValueNullFieldError.checkNotNull(
-        createdAt, 'TokenEntity', 'createdAt');
+        createdAt, r'TokenEntity', 'createdAt');
     BuiltValueNullFieldError.checkNotNull(
-        updatedAt, 'TokenEntity', 'updatedAt');
+        updatedAt, r'TokenEntity', 'updatedAt');
     BuiltValueNullFieldError.checkNotNull(
-        archivedAt, 'TokenEntity', 'archivedAt');
-    BuiltValueNullFieldError.checkNotNull(id, 'TokenEntity', 'id');
+        archivedAt, r'TokenEntity', 'archivedAt');
+    BuiltValueNullFieldError.checkNotNull(id, r'TokenEntity', 'id');
   }
 
   @override
@@ -507,7 +513,7 @@ class _$TokenEntity extends TokenEntity {
 
   @override
   String toString() {
-    return (newBuiltValueToStringHelper('TokenEntity')
+    return (newBuiltValueToStringHelper(r'TokenEntity')
           ..add('isSystem', isSystem)
           ..add('token', token)
           ..add('name', name)
@@ -605,29 +611,32 @@ class TokenEntityBuilder implements Builder<TokenEntity, TokenEntityBuilder> {
   }
 
   @override
-  _$TokenEntity build() {
+  TokenEntity build() => _build();
+
+  _$TokenEntity _build() {
     final _$result = _$v ??
         new _$TokenEntity._(
             isSystem: BuiltValueNullFieldError.checkNotNull(
-                isSystem, 'TokenEntity', 'isSystem'),
+                isSystem, r'TokenEntity', 'isSystem'),
             token: BuiltValueNullFieldError.checkNotNull(
-                token, 'TokenEntity', 'token'),
+                token, r'TokenEntity', 'token'),
             name: BuiltValueNullFieldError.checkNotNull(
-                name, 'TokenEntity', 'name'),
+                name, r'TokenEntity', 'name'),
             isChanged: isChanged,
             createdAt: BuiltValueNullFieldError.checkNotNull(
-                createdAt, 'TokenEntity', 'createdAt'),
+                createdAt, r'TokenEntity', 'createdAt'),
             updatedAt: BuiltValueNullFieldError.checkNotNull(
-                updatedAt, 'TokenEntity', 'updatedAt'),
+                updatedAt, r'TokenEntity', 'updatedAt'),
             archivedAt: BuiltValueNullFieldError.checkNotNull(
-                archivedAt, 'TokenEntity', 'archivedAt'),
+                archivedAt, r'TokenEntity', 'archivedAt'),
             isDeleted: isDeleted,
             createdUserId: createdUserId,
             assignedUserId: assignedUserId,
-            id: BuiltValueNullFieldError.checkNotNull(id, 'TokenEntity', 'id'));
+            id: BuiltValueNullFieldError.checkNotNull(
+                id, r'TokenEntity', 'id'));
     replace(_$result);
     return _$result;
   }
 }
 
-// ignore_for_file: always_put_control_body_on_new_line,always_specify_types,annotate_overrides,avoid_annotating_with_dynamic,avoid_as,avoid_catches_without_on_clauses,avoid_returning_this,deprecated_member_use_from_same_package,lines_longer_than_80_chars,omit_local_variable_types,prefer_expression_function_bodies,sort_constructors_first,test_types_in_equals,unnecessary_const,unnecessary_new
+// ignore_for_file: always_put_control_body_on_new_line,always_specify_types,annotate_overrides,avoid_annotating_with_dynamic,avoid_as,avoid_catches_without_on_clauses,avoid_returning_this,deprecated_member_use_from_same_package,lines_longer_than_80_chars,no_leading_underscores_for_local_identifiers,omit_local_variable_types,prefer_expression_function_bodies,sort_constructors_first,test_types_in_equals,unnecessary_const,unnecessary_new,unnecessary_lambdas

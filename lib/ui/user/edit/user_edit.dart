@@ -350,6 +350,7 @@ class _UserEditState extends State<UserEdit>
                         ...<EntityType>[
                           EntityType.client,
                           EntityType.product,
+                          EntityType.category,
                           EntityType.invoice,
                           EntityType.payment,
                           EntityType.recurringInvoice,

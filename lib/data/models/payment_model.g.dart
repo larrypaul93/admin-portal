@@ -534,10 +534,10 @@ class _$PaymentListResponse extends PaymentListResponse {
 
   factory _$PaymentListResponse(
           [void Function(PaymentListResponseBuilder) updates]) =>
-      (new PaymentListResponseBuilder()..update(updates)).build();
+      (new PaymentListResponseBuilder()..update(updates))._build();
 
   _$PaymentListResponse._({this.data}) : super._() {
-    BuiltValueNullFieldError.checkNotNull(data, 'PaymentListResponse', 'data');
+    BuiltValueNullFieldError.checkNotNull(data, r'PaymentListResponse', 'data');
   }
 
   @override
@@ -563,7 +563,7 @@ class _$PaymentListResponse extends PaymentListResponse {
 
   @override
   String toString() {
-    return (newBuiltValueToStringHelper('PaymentListResponse')
+    return (newBuiltValueToStringHelper(r'PaymentListResponse')
           ..add('data', data))
         .toString();
   }
@@ -601,7 +601,9 @@ class PaymentListResponseBuilder
   }
 
   @override
-  _$PaymentListResponse build() {
+  PaymentListResponse build() => _build();
+
+  _$PaymentListResponse _build() {
     _$PaymentListResponse _$result;
     try {
       _$result = _$v ?? new _$PaymentListResponse._(data: data.build());
@@ -612,7 +614,7 @@ class PaymentListResponseBuilder
         data.build();
       } catch (e) {
         throw new BuiltValueNestedFieldError(
-            'PaymentListResponse', _$failedField, e.toString());
+            r'PaymentListResponse', _$failedField, e.toString());
       }
       rethrow;
     }
@@ -627,10 +629,10 @@ class _$PaymentItemResponse extends PaymentItemResponse {
 
   factory _$PaymentItemResponse(
           [void Function(PaymentItemResponseBuilder) updates]) =>
-      (new PaymentItemResponseBuilder()..update(updates)).build();
+      (new PaymentItemResponseBuilder()..update(updates))._build();
 
   _$PaymentItemResponse._({this.data}) : super._() {
-    BuiltValueNullFieldError.checkNotNull(data, 'PaymentItemResponse', 'data');
+    BuiltValueNullFieldError.checkNotNull(data, r'PaymentItemResponse', 'data');
   }
 
   @override
@@ -656,7 +658,7 @@ class _$PaymentItemResponse extends PaymentItemResponse {
 
   @override
   String toString() {
-    return (newBuiltValueToStringHelper('PaymentItemResponse')
+    return (newBuiltValueToStringHelper(r'PaymentItemResponse')
           ..add('data', data))
         .toString();
   }
@@ -693,7 +695,9 @@ class PaymentItemResponseBuilder
   }
 
   @override
-  _$PaymentItemResponse build() {
+  PaymentItemResponse build() => _build();
+
+  _$PaymentItemResponse _build() {
     _$PaymentItemResponse _$result;
     try {
       _$result = _$v ?? new _$PaymentItemResponse._(data: data.build());
@@ -704,7 +708,7 @@ class PaymentItemResponseBuilder
         data.build();
       } catch (e) {
         throw new BuiltValueNestedFieldError(
-            'PaymentItemResponse', _$failedField, e.toString());
+            r'PaymentItemResponse', _$failedField, e.toString());
       }
       rethrow;
     }
@@ -790,7 +794,7 @@ class _$PaymentEntity extends PaymentEntity {
   final String id;
 
   factory _$PaymentEntity([void Function(PaymentEntityBuilder) updates]) =>
-      (new PaymentEntityBuilder()..update(updates)).build();
+      (new PaymentEntityBuilder()..update(updates))._build();
 
   _$PaymentEntity._(
       {this.amount,
@@ -831,59 +835,59 @@ class _$PaymentEntity extends PaymentEntity {
       this.assignedUserId,
       this.id})
       : super._() {
-    BuiltValueNullFieldError.checkNotNull(amount, 'PaymentEntity', 'amount');
-    BuiltValueNullFieldError.checkNotNull(applied, 'PaymentEntity', 'applied');
+    BuiltValueNullFieldError.checkNotNull(amount, r'PaymentEntity', 'amount');
+    BuiltValueNullFieldError.checkNotNull(applied, r'PaymentEntity', 'applied');
     BuiltValueNullFieldError.checkNotNull(
-        refunded, 'PaymentEntity', 'refunded');
-    BuiltValueNullFieldError.checkNotNull(number, 'PaymentEntity', 'number');
+        refunded, r'PaymentEntity', 'refunded');
+    BuiltValueNullFieldError.checkNotNull(number, r'PaymentEntity', 'number');
     BuiltValueNullFieldError.checkNotNull(
-        clientId, 'PaymentEntity', 'clientId');
+        clientId, r'PaymentEntity', 'clientId');
     BuiltValueNullFieldError.checkNotNull(
-        statusId, 'PaymentEntity', 'statusId');
+        statusId, r'PaymentEntity', 'statusId');
     BuiltValueNullFieldError.checkNotNull(
-        transactionReference, 'PaymentEntity', 'transactionReference');
-    BuiltValueNullFieldError.checkNotNull(date, 'PaymentEntity', 'date');
-    BuiltValueNullFieldError.checkNotNull(typeId, 'PaymentEntity', 'typeId');
+        transactionReference, r'PaymentEntity', 'transactionReference');
+    BuiltValueNullFieldError.checkNotNull(date, r'PaymentEntity', 'date');
+    BuiltValueNullFieldError.checkNotNull(typeId, r'PaymentEntity', 'typeId');
     BuiltValueNullFieldError.checkNotNull(
-        privateNotes, 'PaymentEntity', 'privateNotes');
+        privateNotes, r'PaymentEntity', 'privateNotes');
     BuiltValueNullFieldError.checkNotNull(
-        customValue1, 'PaymentEntity', 'customValue1');
+        customValue1, r'PaymentEntity', 'customValue1');
     BuiltValueNullFieldError.checkNotNull(
-        customValue2, 'PaymentEntity', 'customValue2');
+        customValue2, r'PaymentEntity', 'customValue2');
     BuiltValueNullFieldError.checkNotNull(
-        customValue3, 'PaymentEntity', 'customValue3');
+        customValue3, r'PaymentEntity', 'customValue3');
     BuiltValueNullFieldError.checkNotNull(
-        customValue4, 'PaymentEntity', 'customValue4');
+        customValue4, r'PaymentEntity', 'customValue4');
     BuiltValueNullFieldError.checkNotNull(
-        exchangeRate, 'PaymentEntity', 'exchangeRate');
+        exchangeRate, r'PaymentEntity', 'exchangeRate');
     BuiltValueNullFieldError.checkNotNull(
-        exchangeCurrencyId, 'PaymentEntity', 'exchangeCurrencyId');
+        exchangeCurrencyId, r'PaymentEntity', 'exchangeCurrencyId');
     BuiltValueNullFieldError.checkNotNull(
-        isManual, 'PaymentEntity', 'isManual');
+        isManual, r'PaymentEntity', 'isManual');
     BuiltValueNullFieldError.checkNotNull(
-        projectId, 'PaymentEntity', 'projectId');
+        projectId, r'PaymentEntity', 'projectId');
     BuiltValueNullFieldError.checkNotNull(
-        vendorId, 'PaymentEntity', 'vendorId');
+        vendorId, r'PaymentEntity', 'vendorId');
     BuiltValueNullFieldError.checkNotNull(
-        invitationId, 'PaymentEntity', 'invitationId');
+        invitationId, r'PaymentEntity', 'invitationId');
     BuiltValueNullFieldError.checkNotNull(
-        clientContactId, 'PaymentEntity', 'clientContactId');
+        clientContactId, r'PaymentEntity', 'clientContactId');
     BuiltValueNullFieldError.checkNotNull(
-        companyGatewayId, 'PaymentEntity', 'companyGatewayId');
+        companyGatewayId, r'PaymentEntity', 'companyGatewayId');
     BuiltValueNullFieldError.checkNotNull(
-        currencyId, 'PaymentEntity', 'currencyId');
+        currencyId, r'PaymentEntity', 'currencyId');
     BuiltValueNullFieldError.checkNotNull(
-        paymentables, 'PaymentEntity', 'paymentables');
+        paymentables, r'PaymentEntity', 'paymentables');
     BuiltValueNullFieldError.checkNotNull(
-        invoices, 'PaymentEntity', 'invoices');
-    BuiltValueNullFieldError.checkNotNull(credits, 'PaymentEntity', 'credits');
+        invoices, r'PaymentEntity', 'invoices');
+    BuiltValueNullFieldError.checkNotNull(credits, r'PaymentEntity', 'credits');
     BuiltValueNullFieldError.checkNotNull(
-        createdAt, 'PaymentEntity', 'createdAt');
+        createdAt, r'PaymentEntity', 'createdAt');
     BuiltValueNullFieldError.checkNotNull(
-        updatedAt, 'PaymentEntity', 'updatedAt');
+        updatedAt, r'PaymentEntity', 'updatedAt');
     BuiltValueNullFieldError.checkNotNull(
-        archivedAt, 'PaymentEntity', 'archivedAt');
-    BuiltValueNullFieldError.checkNotNull(id, 'PaymentEntity', 'id');
+        archivedAt, r'PaymentEntity', 'archivedAt');
+    BuiltValueNullFieldError.checkNotNull(id, r'PaymentEntity', 'id');
   }
 
   @override
@@ -981,7 +985,7 @@ class _$PaymentEntity extends PaymentEntity {
 
   @override
   String toString() {
-    return (newBuiltValueToStringHelper('PaymentEntity')
+    return (newBuiltValueToStringHelper(r'PaymentEntity')
           ..add('amount', amount)
           ..add('applied', applied)
           ..add('refunded', refunded)
@@ -1247,43 +1251,45 @@ class PaymentEntityBuilder
   }
 
   @override
-  _$PaymentEntity build() {
+  PaymentEntity build() => _build();
+
+  _$PaymentEntity _build() {
     _$PaymentEntity _$result;
     try {
       _$result = _$v ??
           new _$PaymentEntity._(
               amount: BuiltValueNullFieldError.checkNotNull(
-                  amount, 'PaymentEntity', 'amount'),
+                  amount, r'PaymentEntity', 'amount'),
               applied: BuiltValueNullFieldError.checkNotNull(
-                  applied, 'PaymentEntity', 'applied'),
+                  applied, r'PaymentEntity', 'applied'),
               refunded: BuiltValueNullFieldError.checkNotNull(
-                  refunded, 'PaymentEntity', 'refunded'),
+                  refunded, r'PaymentEntity', 'refunded'),
               number: BuiltValueNullFieldError.checkNotNull(
-                  number, 'PaymentEntity', 'number'),
+                  number, r'PaymentEntity', 'number'),
               clientId: BuiltValueNullFieldError.checkNotNull(
-                  clientId, 'PaymentEntity', 'clientId'),
+                  clientId, r'PaymentEntity', 'clientId'),
               statusId: BuiltValueNullFieldError.checkNotNull(
-                  statusId, 'PaymentEntity', 'statusId'),
+                  statusId, r'PaymentEntity', 'statusId'),
               transactionReference: BuiltValueNullFieldError.checkNotNull(
-                  transactionReference, 'PaymentEntity', 'transactionReference'),
+                  transactionReference, r'PaymentEntity', 'transactionReference'),
               date: BuiltValueNullFieldError.checkNotNull(
-                  date, 'PaymentEntity', 'date'),
-              typeId: BuiltValueNullFieldError.checkNotNull(
-                  typeId, 'PaymentEntity', 'typeId'),
-              privateNotes: BuiltValueNullFieldError.checkNotNull(privateNotes, 'PaymentEntity', 'privateNotes'),
-              customValue1: BuiltValueNullFieldError.checkNotNull(customValue1, 'PaymentEntity', 'customValue1'),
-              customValue2: BuiltValueNullFieldError.checkNotNull(customValue2, 'PaymentEntity', 'customValue2'),
-              customValue3: BuiltValueNullFieldError.checkNotNull(customValue3, 'PaymentEntity', 'customValue3'),
-              customValue4: BuiltValueNullFieldError.checkNotNull(customValue4, 'PaymentEntity', 'customValue4'),
-              exchangeRate: BuiltValueNullFieldError.checkNotNull(exchangeRate, 'PaymentEntity', 'exchangeRate'),
-              exchangeCurrencyId: BuiltValueNullFieldError.checkNotNull(exchangeCurrencyId, 'PaymentEntity', 'exchangeCurrencyId'),
-              isManual: BuiltValueNullFieldError.checkNotNull(isManual, 'PaymentEntity', 'isManual'),
-              projectId: BuiltValueNullFieldError.checkNotNull(projectId, 'PaymentEntity', 'projectId'),
-              vendorId: BuiltValueNullFieldError.checkNotNull(vendorId, 'PaymentEntity', 'vendorId'),
-              invitationId: BuiltValueNullFieldError.checkNotNull(invitationId, 'PaymentEntity', 'invitationId'),
-              clientContactId: BuiltValueNullFieldError.checkNotNull(clientContactId, 'PaymentEntity', 'clientContactId'),
-              companyGatewayId: BuiltValueNullFieldError.checkNotNull(companyGatewayId, 'PaymentEntity', 'companyGatewayId'),
-              currencyId: BuiltValueNullFieldError.checkNotNull(currencyId, 'PaymentEntity', 'currencyId'),
+                  date, r'PaymentEntity', 'date'),
+              typeId:
+                  BuiltValueNullFieldError.checkNotNull(typeId, r'PaymentEntity', 'typeId'),
+              privateNotes: BuiltValueNullFieldError.checkNotNull(privateNotes, r'PaymentEntity', 'privateNotes'),
+              customValue1: BuiltValueNullFieldError.checkNotNull(customValue1, r'PaymentEntity', 'customValue1'),
+              customValue2: BuiltValueNullFieldError.checkNotNull(customValue2, r'PaymentEntity', 'customValue2'),
+              customValue3: BuiltValueNullFieldError.checkNotNull(customValue3, r'PaymentEntity', 'customValue3'),
+              customValue4: BuiltValueNullFieldError.checkNotNull(customValue4, r'PaymentEntity', 'customValue4'),
+              exchangeRate: BuiltValueNullFieldError.checkNotNull(exchangeRate, r'PaymentEntity', 'exchangeRate'),
+              exchangeCurrencyId: BuiltValueNullFieldError.checkNotNull(exchangeCurrencyId, r'PaymentEntity', 'exchangeCurrencyId'),
+              isManual: BuiltValueNullFieldError.checkNotNull(isManual, r'PaymentEntity', 'isManual'),
+              projectId: BuiltValueNullFieldError.checkNotNull(projectId, r'PaymentEntity', 'projectId'),
+              vendorId: BuiltValueNullFieldError.checkNotNull(vendorId, r'PaymentEntity', 'vendorId'),
+              invitationId: BuiltValueNullFieldError.checkNotNull(invitationId, r'PaymentEntity', 'invitationId'),
+              clientContactId: BuiltValueNullFieldError.checkNotNull(clientContactId, r'PaymentEntity', 'clientContactId'),
+              companyGatewayId: BuiltValueNullFieldError.checkNotNull(companyGatewayId, r'PaymentEntity', 'companyGatewayId'),
+              currencyId: BuiltValueNullFieldError.checkNotNull(currencyId, r'PaymentEntity', 'currencyId'),
               isApplying: isApplying,
               sendEmail: sendEmail,
               gatewayRefund: gatewayRefund,
@@ -1291,13 +1297,13 @@ class PaymentEntityBuilder
               invoices: invoices.build(),
               credits: credits.build(),
               isChanged: isChanged,
-              createdAt: BuiltValueNullFieldError.checkNotNull(createdAt, 'PaymentEntity', 'createdAt'),
-              updatedAt: BuiltValueNullFieldError.checkNotNull(updatedAt, 'PaymentEntity', 'updatedAt'),
-              archivedAt: BuiltValueNullFieldError.checkNotNull(archivedAt, 'PaymentEntity', 'archivedAt'),
+              createdAt: BuiltValueNullFieldError.checkNotNull(createdAt, r'PaymentEntity', 'createdAt'),
+              updatedAt: BuiltValueNullFieldError.checkNotNull(updatedAt, r'PaymentEntity', 'updatedAt'),
+              archivedAt: BuiltValueNullFieldError.checkNotNull(archivedAt, r'PaymentEntity', 'archivedAt'),
               isDeleted: isDeleted,
               createdUserId: createdUserId,
               assignedUserId: assignedUserId,
-              id: BuiltValueNullFieldError.checkNotNull(id, 'PaymentEntity', 'id'));
+              id: BuiltValueNullFieldError.checkNotNull(id, r'PaymentEntity', 'id'));
     } catch (_) {
       String _$failedField;
       try {
@@ -1309,7 +1315,7 @@ class PaymentEntityBuilder
         credits.build();
       } catch (e) {
         throw new BuiltValueNestedFieldError(
-            'PaymentEntity', _$failedField, e.toString());
+            r'PaymentEntity', _$failedField, e.toString());
       }
       rethrow;
     }
@@ -1334,7 +1340,7 @@ class _$PaymentableEntity extends PaymentableEntity {
 
   factory _$PaymentableEntity(
           [void Function(PaymentableEntityBuilder) updates]) =>
-      (new PaymentableEntityBuilder()..update(updates)).build();
+      (new PaymentableEntityBuilder()..update(updates))._build();
 
   _$PaymentableEntity._(
       {this.createdAt,
@@ -1345,8 +1351,8 @@ class _$PaymentableEntity extends PaymentableEntity {
       this.id})
       : super._() {
     BuiltValueNullFieldError.checkNotNull(
-        amount, 'PaymentableEntity', 'amount');
-    BuiltValueNullFieldError.checkNotNull(id, 'PaymentableEntity', 'id');
+        amount, r'PaymentableEntity', 'amount');
+    BuiltValueNullFieldError.checkNotNull(id, r'PaymentableEntity', 'id');
   }
 
   @override
@@ -1384,7 +1390,7 @@ class _$PaymentableEntity extends PaymentableEntity {
 
   @override
   String toString() {
-    return (newBuiltValueToStringHelper('PaymentableEntity')
+    return (newBuiltValueToStringHelper(r'PaymentableEntity')
           ..add('createdAt', createdAt)
           ..add('updatedAt', updatedAt)
           ..add('invoiceId', invoiceId)
@@ -1451,7 +1457,9 @@ class PaymentableEntityBuilder
   }
 
   @override
-  _$PaymentableEntity build() {
+  PaymentableEntity build() => _build();
+
+  _$PaymentableEntity _build() {
     final _$result = _$v ??
         new _$PaymentableEntity._(
             createdAt: createdAt,
@@ -1459,12 +1467,12 @@ class PaymentableEntityBuilder
             invoiceId: invoiceId,
             creditId: creditId,
             amount: BuiltValueNullFieldError.checkNotNull(
-                amount, 'PaymentableEntity', 'amount'),
+                amount, r'PaymentableEntity', 'amount'),
             id: BuiltValueNullFieldError.checkNotNull(
-                id, 'PaymentableEntity', 'id'));
+                id, r'PaymentableEntity', 'id'));
     replace(_$result);
     return _$result;
   }
 }
 
-// ignore_for_file: always_put_control_body_on_new_line,always_specify_types,annotate_overrides,avoid_annotating_with_dynamic,avoid_as,avoid_catches_without_on_clauses,avoid_returning_this,deprecated_member_use_from_same_package,lines_longer_than_80_chars,omit_local_variable_types,prefer_expression_function_bodies,sort_constructors_first,test_types_in_equals,unnecessary_const,unnecessary_new
+// ignore_for_file: always_put_control_body_on_new_line,always_specify_types,annotate_overrides,avoid_annotating_with_dynamic,avoid_as,avoid_catches_without_on_clauses,avoid_returning_this,deprecated_member_use_from_same_package,lines_longer_than_80_chars,no_leading_underscores_for_local_identifiers,omit_local_variable_types,prefer_expression_function_bodies,sort_constructors_first,test_types_in_equals,unnecessary_const,unnecessary_new,unnecessary_lambdas

@@ -210,6 +210,12 @@ class _$CompanyEntitySerializer implements StructuredSerializer<CompanyEntity> {
       serializers.serialize(object.serviceReports,
           specifiedType: const FullType(
               BuiltList, const [const FullType(ServiceReportEntity)])),
+      'serviceReportsMap',
+      serializers.serialize(object.serviceReportsMap,
+          specifiedType: const FullType(BuiltMap, const [
+            const FullType(String),
+            const FullType(ServiceReportEntity)
+          ])),
       'invoices',
       serializers.serialize(object.invoices,
           specifiedType:
@@ -640,6 +646,13 @@ class _$CompanyEntitySerializer implements StructuredSerializer<CompanyEntity> {
                   specifiedType: const FullType(
                       BuiltList, const [const FullType(ServiceReportEntity)]))
               as BuiltList<Object>);
+          break;
+        case 'serviceReportsMap':
+          result.serviceReportsMap.replace(serializers.deserialize(value,
+              specifiedType: const FullType(BuiltMap, const [
+                const FullType(String),
+                const FullType(ServiceReportEntity)
+              ])));
           break;
         case 'invoices':
           result.invoices.replace(serializers.deserialize(value,
@@ -1545,6 +1558,8 @@ class _$CompanyEntity extends CompanyEntity {
   @override
   final BuiltList<ServiceReportEntity> serviceReports;
   @override
+  final BuiltMap<String, ServiceReportEntity> serviceReportsMap;
+  @override
   final BuiltList<InvoiceEntity> invoices;
   @override
   final BuiltList<InvoiceEntity> recurringInvoices;
@@ -1634,7 +1649,7 @@ class _$CompanyEntity extends CompanyEntity {
   final String id;
 
   factory _$CompanyEntity([void Function(CompanyEntityBuilder) updates]) =>
-      (new CompanyEntityBuilder()..update(updates)).build();
+      (new CompanyEntityBuilder()..update(updates))._build();
 
   _$CompanyEntity._(
       {this.enableCustomSurchargeTaxes1,
@@ -1691,6 +1706,7 @@ class _$CompanyEntity extends CompanyEntity {
       this.products,
       this.categories,
       this.serviceReports,
+      this.serviceReportsMap,
       this.invoices,
       this.recurringInvoices,
       this.recurringExpenses,
@@ -1737,179 +1753,181 @@ class _$CompanyEntity extends CompanyEntity {
       this.id})
       : super._() {
     BuiltValueNullFieldError.checkNotNull(enableCustomSurchargeTaxes1,
-        'CompanyEntity', 'enableCustomSurchargeTaxes1');
+        r'CompanyEntity', 'enableCustomSurchargeTaxes1');
     BuiltValueNullFieldError.checkNotNull(enableCustomSurchargeTaxes2,
-        'CompanyEntity', 'enableCustomSurchargeTaxes2');
+        r'CompanyEntity', 'enableCustomSurchargeTaxes2');
     BuiltValueNullFieldError.checkNotNull(enableCustomSurchargeTaxes3,
-        'CompanyEntity', 'enableCustomSurchargeTaxes3');
+        r'CompanyEntity', 'enableCustomSurchargeTaxes3');
     BuiltValueNullFieldError.checkNotNull(enableCustomSurchargeTaxes4,
-        'CompanyEntity', 'enableCustomSurchargeTaxes4');
-    BuiltValueNullFieldError.checkNotNull(sizeId, 'CompanyEntity', 'sizeId');
+        r'CompanyEntity', 'enableCustomSurchargeTaxes4');
+    BuiltValueNullFieldError.checkNotNull(sizeId, r'CompanyEntity', 'sizeId');
     BuiltValueNullFieldError.checkNotNull(
-        industryId, 'CompanyEntity', 'industryId');
+        industryId, r'CompanyEntity', 'industryId');
     BuiltValueNullFieldError.checkNotNull(
-        subdomain, 'CompanyEntity', 'subdomain');
+        subdomain, r'CompanyEntity', 'subdomain');
     BuiltValueNullFieldError.checkNotNull(
-        portalMode, 'CompanyEntity', 'portalMode');
+        portalMode, r'CompanyEntity', 'portalMode');
     BuiltValueNullFieldError.checkNotNull(
-        portalDomain, 'CompanyEntity', 'portalDomain');
+        portalDomain, r'CompanyEntity', 'portalDomain');
     BuiltValueNullFieldError.checkNotNull(
-        updateProducts, 'CompanyEntity', 'updateProducts');
+        updateProducts, r'CompanyEntity', 'updateProducts');
     BuiltValueNullFieldError.checkNotNull(convertProductExchangeRate,
-        'CompanyEntity', 'convertProductExchangeRate');
+        r'CompanyEntity', 'convertProductExchangeRate');
     BuiltValueNullFieldError.checkNotNull(
-        convertRateToClient, 'CompanyEntity', 'convertRateToClient');
+        convertRateToClient, r'CompanyEntity', 'convertRateToClient');
     BuiltValueNullFieldError.checkNotNull(
-        fillProducts, 'CompanyEntity', 'fillProducts');
+        fillProducts, r'CompanyEntity', 'fillProducts');
     BuiltValueNullFieldError.checkNotNull(
-        enableProductCost, 'CompanyEntity', 'enableProductCost');
+        enableProductCost, r'CompanyEntity', 'enableProductCost');
     BuiltValueNullFieldError.checkNotNull(
-        enableProductQuantity, 'CompanyEntity', 'enableProductQuantity');
+        enableProductQuantity, r'CompanyEntity', 'enableProductQuantity');
     BuiltValueNullFieldError.checkNotNull(
-        enableProductDiscount, 'CompanyEntity', 'enableProductDiscount');
+        enableProductDiscount, r'CompanyEntity', 'enableProductDiscount');
     BuiltValueNullFieldError.checkNotNull(
-        defaultTaskIsDateBased, 'CompanyEntity', 'defaultTaskIsDateBased');
+        defaultTaskIsDateBased, r'CompanyEntity', 'defaultTaskIsDateBased');
     BuiltValueNullFieldError.checkNotNull(
-        defaultQuantity, 'CompanyEntity', 'defaultQuantity');
+        defaultQuantity, r'CompanyEntity', 'defaultQuantity');
     BuiltValueNullFieldError.checkNotNull(
-        showProductDetails, 'CompanyEntity', 'showProductDetails');
+        showProductDetails, r'CompanyEntity', 'showProductDetails');
     BuiltValueNullFieldError.checkNotNull(
-        clientCanRegister, 'CompanyEntity', 'clientCanRegister');
-    BuiltValueNullFieldError.checkNotNull(isLarge, 'CompanyEntity', 'isLarge');
+        clientCanRegister, r'CompanyEntity', 'clientCanRegister');
+    BuiltValueNullFieldError.checkNotNull(isLarge, r'CompanyEntity', 'isLarge');
     BuiltValueNullFieldError.checkNotNull(
-        isDisabled, 'CompanyEntity', 'isDisabled');
+        isDisabled, r'CompanyEntity', 'isDisabled');
     BuiltValueNullFieldError.checkNotNull(
-        enableShopApi, 'CompanyEntity', 'enableShopApi');
+        enableShopApi, r'CompanyEntity', 'enableShopApi');
     BuiltValueNullFieldError.checkNotNull(
-        companyKey, 'CompanyEntity', 'companyKey');
+        companyKey, r'CompanyEntity', 'companyKey');
     BuiltValueNullFieldError.checkNotNull(
-        firstDayOfWeek, 'CompanyEntity', 'firstDayOfWeek');
+        firstDayOfWeek, r'CompanyEntity', 'firstDayOfWeek');
     BuiltValueNullFieldError.checkNotNull(
-        firstMonthOfYear, 'CompanyEntity', 'firstMonthOfYear');
+        firstMonthOfYear, r'CompanyEntity', 'firstMonthOfYear');
     BuiltValueNullFieldError.checkNotNull(
-        numberOfInvoiceTaxRates, 'CompanyEntity', 'numberOfInvoiceTaxRates');
+        numberOfInvoiceTaxRates, r'CompanyEntity', 'numberOfInvoiceTaxRates');
     BuiltValueNullFieldError.checkNotNull(
-        numberOfItemTaxRates, 'CompanyEntity', 'numberOfItemTaxRates');
+        numberOfItemTaxRates, r'CompanyEntity', 'numberOfItemTaxRates');
     BuiltValueNullFieldError.checkNotNull(
-        expenseInclusiveTaxes, 'CompanyEntity', 'expenseInclusiveTaxes');
+        expenseInclusiveTaxes, r'CompanyEntity', 'expenseInclusiveTaxes');
     BuiltValueNullFieldError.checkNotNull(
-        sessionTimeout, 'CompanyEntity', 'sessionTimeout');
+        sessionTimeout, r'CompanyEntity', 'sessionTimeout');
     BuiltValueNullFieldError.checkNotNull(
-        passwordTimeout, 'CompanyEntity', 'passwordTimeout');
+        passwordTimeout, r'CompanyEntity', 'passwordTimeout');
     BuiltValueNullFieldError.checkNotNull(
-        oauthPasswordRequired, 'CompanyEntity', 'oauthPasswordRequired');
+        oauthPasswordRequired, r'CompanyEntity', 'oauthPasswordRequired');
     BuiltValueNullFieldError.checkNotNull(
-        markdownEnabled, 'CompanyEntity', 'markdownEnabled');
+        markdownEnabled, r'CompanyEntity', 'markdownEnabled');
     BuiltValueNullFieldError.checkNotNull(
-        markdownEmailEnabled, 'CompanyEntity', 'markdownEmailEnabled');
+        markdownEmailEnabled, r'CompanyEntity', 'markdownEmailEnabled');
     BuiltValueNullFieldError.checkNotNull(
-        useCommaAsDecimalPlace, 'CompanyEntity', 'useCommaAsDecimalPlace');
+        useCommaAsDecimalPlace, r'CompanyEntity', 'useCommaAsDecimalPlace');
     BuiltValueNullFieldError.checkNotNull(
-        reportIncludeDrafts, 'CompanyEntity', 'reportIncludeDrafts');
+        reportIncludeDrafts, r'CompanyEntity', 'reportIncludeDrafts');
     BuiltValueNullFieldError.checkNotNull(useQuoteTermsOnConversion,
-        'CompanyEntity', 'useQuoteTermsOnConversion');
+        r'CompanyEntity', 'useQuoteTermsOnConversion');
     BuiltValueNullFieldError.checkNotNull(
-        enableApplyingPayments, 'CompanyEntity', 'enableApplyingPayments');
+        enableApplyingPayments, r'CompanyEntity', 'enableApplyingPayments');
     BuiltValueNullFieldError.checkNotNull(
-        trackInventory, 'CompanyEntity', 'trackInventory');
+        trackInventory, r'CompanyEntity', 'trackInventory');
     BuiltValueNullFieldError.checkNotNull(stockNotificationThreshold,
-        'CompanyEntity', 'stockNotificationThreshold');
+        r'CompanyEntity', 'stockNotificationThreshold');
     BuiltValueNullFieldError.checkNotNull(
-        stockNotification, 'CompanyEntity', 'stockNotification');
-    BuiltValueNullFieldError.checkNotNull(groups, 'CompanyEntity', 'groups');
+        stockNotification, r'CompanyEntity', 'stockNotification');
+    BuiltValueNullFieldError.checkNotNull(groups, r'CompanyEntity', 'groups');
     BuiltValueNullFieldError.checkNotNull(
-        activities, 'CompanyEntity', 'activities');
+        activities, r'CompanyEntity', 'activities');
     BuiltValueNullFieldError.checkNotNull(
-        taxRates, 'CompanyEntity', 'taxRates');
+        taxRates, r'CompanyEntity', 'taxRates');
     BuiltValueNullFieldError.checkNotNull(
-        taskStatuses, 'CompanyEntity', 'taskStatuses');
+        taskStatuses, r'CompanyEntity', 'taskStatuses');
     BuiltValueNullFieldError.checkNotNull(
-        taskStatusMap, 'CompanyEntity', 'taskStatusMap');
+        taskStatusMap, r'CompanyEntity', 'taskStatusMap');
     BuiltValueNullFieldError.checkNotNull(
-        companyGateways, 'CompanyEntity', 'companyGateways');
+        companyGateways, r'CompanyEntity', 'companyGateways');
     BuiltValueNullFieldError.checkNotNull(
-        expenseCategories, 'CompanyEntity', 'expenseCategories');
-    BuiltValueNullFieldError.checkNotNull(users, 'CompanyEntity', 'users');
-    BuiltValueNullFieldError.checkNotNull(clients, 'CompanyEntity', 'clients');
+        expenseCategories, r'CompanyEntity', 'expenseCategories');
+    BuiltValueNullFieldError.checkNotNull(users, r'CompanyEntity', 'users');
+    BuiltValueNullFieldError.checkNotNull(clients, r'CompanyEntity', 'clients');
     BuiltValueNullFieldError.checkNotNull(
-        contacts, 'CompanyEntity', 'contacts');
+        contacts, r'CompanyEntity', 'contacts');
     BuiltValueNullFieldError.checkNotNull(
-        products, 'CompanyEntity', 'products');
+        products, r'CompanyEntity', 'products');
     BuiltValueNullFieldError.checkNotNull(
-        categories, 'CompanyEntity', 'categories');
+        categories, r'CompanyEntity', 'categories');
     BuiltValueNullFieldError.checkNotNull(
-        serviceReports, 'CompanyEntity', 'serviceReports');
+        serviceReports, r'CompanyEntity', 'serviceReports');
     BuiltValueNullFieldError.checkNotNull(
-        invoices, 'CompanyEntity', 'invoices');
+        serviceReportsMap, r'CompanyEntity', 'serviceReportsMap');
     BuiltValueNullFieldError.checkNotNull(
-        recurringInvoices, 'CompanyEntity', 'recurringInvoices');
+        invoices, r'CompanyEntity', 'invoices');
     BuiltValueNullFieldError.checkNotNull(
-        recurringExpenses, 'CompanyEntity', 'recurringExpenses');
+        recurringInvoices, r'CompanyEntity', 'recurringInvoices');
     BuiltValueNullFieldError.checkNotNull(
-        payments, 'CompanyEntity', 'payments');
-    BuiltValueNullFieldError.checkNotNull(quotes, 'CompanyEntity', 'quotes');
-    BuiltValueNullFieldError.checkNotNull(credits, 'CompanyEntity', 'credits');
+        recurringExpenses, r'CompanyEntity', 'recurringExpenses');
     BuiltValueNullFieldError.checkNotNull(
-        purchaseOrders, 'CompanyEntity', 'purchaseOrders');
-    BuiltValueNullFieldError.checkNotNull(tasks, 'CompanyEntity', 'tasks');
+        payments, r'CompanyEntity', 'payments');
+    BuiltValueNullFieldError.checkNotNull(quotes, r'CompanyEntity', 'quotes');
+    BuiltValueNullFieldError.checkNotNull(credits, r'CompanyEntity', 'credits');
     BuiltValueNullFieldError.checkNotNull(
-        projects, 'CompanyEntity', 'projects');
+        purchaseOrders, r'CompanyEntity', 'purchaseOrders');
+    BuiltValueNullFieldError.checkNotNull(tasks, r'CompanyEntity', 'tasks');
     BuiltValueNullFieldError.checkNotNull(
-        expenses, 'CompanyEntity', 'expenses');
-    BuiltValueNullFieldError.checkNotNull(vendors, 'CompanyEntity', 'vendors');
-    BuiltValueNullFieldError.checkNotNull(designs, 'CompanyEntity', 'designs');
+        projects, r'CompanyEntity', 'projects');
     BuiltValueNullFieldError.checkNotNull(
-        documents, 'CompanyEntity', 'documents');
-    BuiltValueNullFieldError.checkNotNull(tokens, 'CompanyEntity', 'tokens');
+        expenses, r'CompanyEntity', 'expenses');
+    BuiltValueNullFieldError.checkNotNull(vendors, r'CompanyEntity', 'vendors');
+    BuiltValueNullFieldError.checkNotNull(designs, r'CompanyEntity', 'designs');
     BuiltValueNullFieldError.checkNotNull(
-        webhooks, 'CompanyEntity', 'webhooks');
+        documents, r'CompanyEntity', 'documents');
+    BuiltValueNullFieldError.checkNotNull(tokens, r'CompanyEntity', 'tokens');
     BuiltValueNullFieldError.checkNotNull(
-        subscriptions, 'CompanyEntity', 'subscriptions');
+        webhooks, r'CompanyEntity', 'webhooks');
     BuiltValueNullFieldError.checkNotNull(
-        paymentTerms, 'CompanyEntity', 'paymentTerms');
+        subscriptions, r'CompanyEntity', 'subscriptions');
     BuiltValueNullFieldError.checkNotNull(
-        systemLogs, 'CompanyEntity', 'systemLogs');
+        paymentTerms, r'CompanyEntity', 'paymentTerms');
     BuiltValueNullFieldError.checkNotNull(
-        clientRegistrationFields, 'CompanyEntity', 'clientRegistrationFields');
+        systemLogs, r'CompanyEntity', 'systemLogs');
     BuiltValueNullFieldError.checkNotNull(
-        customFields, 'CompanyEntity', 'customFields');
+        clientRegistrationFields, r'CompanyEntity', 'clientRegistrationFields');
     BuiltValueNullFieldError.checkNotNull(
-        slackWebhookUrl, 'CompanyEntity', 'slackWebhookUrl');
+        customFields, r'CompanyEntity', 'customFields');
     BuiltValueNullFieldError.checkNotNull(
-        googleAnalyticsKey, 'CompanyEntity', 'googleAnalyticsKey');
+        slackWebhookUrl, r'CompanyEntity', 'slackWebhookUrl');
     BuiltValueNullFieldError.checkNotNull(
-        markExpensesInvoiceable, 'CompanyEntity', 'markExpensesInvoiceable');
+        googleAnalyticsKey, r'CompanyEntity', 'googleAnalyticsKey');
     BuiltValueNullFieldError.checkNotNull(
-        markExpensesPaid, 'CompanyEntity', 'markExpensesPaid');
+        markExpensesInvoiceable, r'CompanyEntity', 'markExpensesInvoiceable');
     BuiltValueNullFieldError.checkNotNull(
-        invoiceExpenseDocuments, 'CompanyEntity', 'invoiceExpenseDocuments');
+        markExpensesPaid, r'CompanyEntity', 'markExpensesPaid');
     BuiltValueNullFieldError.checkNotNull(
-        invoiceTaskDocuments, 'CompanyEntity', 'invoiceTaskDocuments');
+        invoiceExpenseDocuments, r'CompanyEntity', 'invoiceExpenseDocuments');
     BuiltValueNullFieldError.checkNotNull(
-        invoiceTaskTimelog, 'CompanyEntity', 'invoiceTaskTimelog');
+        invoiceTaskDocuments, r'CompanyEntity', 'invoiceTaskDocuments');
     BuiltValueNullFieldError.checkNotNull(
-        invoiceTaskDatelog, 'CompanyEntity', 'invoiceTaskDatelog');
+        invoiceTaskTimelog, r'CompanyEntity', 'invoiceTaskTimelog');
     BuiltValueNullFieldError.checkNotNull(
-        autoStartTasks, 'CompanyEntity', 'autoStartTasks');
+        invoiceTaskDatelog, r'CompanyEntity', 'invoiceTaskDatelog');
     BuiltValueNullFieldError.checkNotNull(
-        showTasksTable, 'CompanyEntity', 'showTasksTable');
+        autoStartTasks, r'CompanyEntity', 'autoStartTasks');
     BuiltValueNullFieldError.checkNotNull(
-        showTaskEndDate, 'CompanyEntity', 'showTaskEndDate');
+        showTasksTable, r'CompanyEntity', 'showTasksTable');
     BuiltValueNullFieldError.checkNotNull(
-        settings, 'CompanyEntity', 'settings');
+        showTaskEndDate, r'CompanyEntity', 'showTaskEndDate');
     BuiltValueNullFieldError.checkNotNull(
-        enabledModules, 'CompanyEntity', 'enabledModules');
+        settings, r'CompanyEntity', 'settings');
+    BuiltValueNullFieldError.checkNotNull(
+        enabledModules, r'CompanyEntity', 'enabledModules');
     BuiltValueNullFieldError.checkNotNull(calculateExpenseTaxByAmount,
-        'CompanyEntity', 'calculateExpenseTaxByAmount');
+        r'CompanyEntity', 'calculateExpenseTaxByAmount');
     BuiltValueNullFieldError.checkNotNull(
-        stopOnUnpaidRecurring, 'CompanyEntity', 'stopOnUnpaidRecurring');
+        stopOnUnpaidRecurring, r'CompanyEntity', 'stopOnUnpaidRecurring');
     BuiltValueNullFieldError.checkNotNull(
-        createdAt, 'CompanyEntity', 'createdAt');
+        createdAt, r'CompanyEntity', 'createdAt');
     BuiltValueNullFieldError.checkNotNull(
-        updatedAt, 'CompanyEntity', 'updatedAt');
+        updatedAt, r'CompanyEntity', 'updatedAt');
     BuiltValueNullFieldError.checkNotNull(
-        archivedAt, 'CompanyEntity', 'archivedAt');
-    BuiltValueNullFieldError.checkNotNull(id, 'CompanyEntity', 'id');
+        archivedAt, r'CompanyEntity', 'archivedAt');
+    BuiltValueNullFieldError.checkNotNull(id, r'CompanyEntity', 'id');
   }
 
   @override
@@ -1977,6 +1995,7 @@ class _$CompanyEntity extends CompanyEntity {
         products == other.products &&
         categories == other.categories &&
         serviceReports == other.serviceReports &&
+        serviceReportsMap == other.serviceReportsMap &&
         invoices == other.invoices &&
         recurringInvoices == other.recurringInvoices &&
         recurringExpenses == other.recurringExpenses &&
@@ -2044,7 +2063,7 @@ class _$CompanyEntity extends CompanyEntity {
                                                                 $jc(
                                                                     $jc(
                                                                         $jc(
-                                                                            $jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc(0, enableCustomSurchargeTaxes1.hashCode), enableCustomSurchargeTaxes2.hashCode), enableCustomSurchargeTaxes3.hashCode), enableCustomSurchargeTaxes4.hashCode), sizeId.hashCode), industryId.hashCode), subdomain.hashCode), portalMode.hashCode), portalDomain.hashCode), updateProducts.hashCode), convertProductExchangeRate.hashCode), convertRateToClient.hashCode), fillProducts.hashCode), enableProductCost.hashCode), enableProductQuantity.hashCode), enableProductDiscount.hashCode), defaultTaskIsDateBased.hashCode), defaultQuantity.hashCode), showProductDetails.hashCode), clientCanRegister.hashCode), isLarge.hashCode), isDisabled.hashCode), enableShopApi.hashCode), companyKey.hashCode), firstDayOfWeek.hashCode), firstMonthOfYear.hashCode), numberOfInvoiceTaxRates.hashCode), numberOfItemTaxRates.hashCode), expenseInclusiveTaxes.hashCode), sessionTimeout.hashCode), passwordTimeout.hashCode), oauthPasswordRequired.hashCode), markdownEnabled.hashCode), markdownEmailEnabled.hashCode), useCommaAsDecimalPlace.hashCode), reportIncludeDrafts.hashCode), useQuoteTermsOnConversion.hashCode), enableApplyingPayments.hashCode), trackInventory.hashCode), stockNotificationThreshold.hashCode), stockNotification.hashCode), groups.hashCode), activities.hashCode), taxRates.hashCode), taskStatuses.hashCode), taskStatusMap.hashCode), companyGateways.hashCode), expenseCategories.hashCode), users.hashCode), clients.hashCode), contacts.hashCode), products.hashCode), categories.hashCode), serviceReports.hashCode), invoices.hashCode), recurringInvoices.hashCode), recurringExpenses.hashCode), payments.hashCode), quotes.hashCode), credits.hashCode), purchaseOrders.hashCode), tasks.hashCode), projects.hashCode), expenses.hashCode), vendors.hashCode), designs.hashCode), documents.hashCode), tokens.hashCode), webhooks.hashCode), subscriptions.hashCode), paymentTerms.hashCode), systemLogs.hashCode), clientRegistrationFields.hashCode), customFields.hashCode), slackWebhookUrl.hashCode), googleAnalyticsKey.hashCode), markExpensesInvoiceable.hashCode), markExpensesPaid.hashCode), invoiceExpenseDocuments.hashCode),
+                                                                            $jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc(0, enableCustomSurchargeTaxes1.hashCode), enableCustomSurchargeTaxes2.hashCode), enableCustomSurchargeTaxes3.hashCode), enableCustomSurchargeTaxes4.hashCode), sizeId.hashCode), industryId.hashCode), subdomain.hashCode), portalMode.hashCode), portalDomain.hashCode), updateProducts.hashCode), convertProductExchangeRate.hashCode), convertRateToClient.hashCode), fillProducts.hashCode), enableProductCost.hashCode), enableProductQuantity.hashCode), enableProductDiscount.hashCode), defaultTaskIsDateBased.hashCode), defaultQuantity.hashCode), showProductDetails.hashCode), clientCanRegister.hashCode), isLarge.hashCode), isDisabled.hashCode), enableShopApi.hashCode), companyKey.hashCode), firstDayOfWeek.hashCode), firstMonthOfYear.hashCode), numberOfInvoiceTaxRates.hashCode), numberOfItemTaxRates.hashCode), expenseInclusiveTaxes.hashCode), sessionTimeout.hashCode), passwordTimeout.hashCode), oauthPasswordRequired.hashCode), markdownEnabled.hashCode), markdownEmailEnabled.hashCode), useCommaAsDecimalPlace.hashCode), reportIncludeDrafts.hashCode), useQuoteTermsOnConversion.hashCode), enableApplyingPayments.hashCode), trackInventory.hashCode), stockNotificationThreshold.hashCode), stockNotification.hashCode), groups.hashCode), activities.hashCode), taxRates.hashCode), taskStatuses.hashCode), taskStatusMap.hashCode), companyGateways.hashCode), expenseCategories.hashCode), users.hashCode), clients.hashCode), contacts.hashCode), products.hashCode), categories.hashCode), serviceReports.hashCode), serviceReportsMap.hashCode), invoices.hashCode), recurringInvoices.hashCode), recurringExpenses.hashCode), payments.hashCode), quotes.hashCode), credits.hashCode), purchaseOrders.hashCode), tasks.hashCode), projects.hashCode), expenses.hashCode), vendors.hashCode), designs.hashCode), documents.hashCode), tokens.hashCode), webhooks.hashCode), subscriptions.hashCode), paymentTerms.hashCode), systemLogs.hashCode), clientRegistrationFields.hashCode), customFields.hashCode), slackWebhookUrl.hashCode), googleAnalyticsKey.hashCode), markExpensesInvoiceable.hashCode), markExpensesPaid.hashCode), invoiceExpenseDocuments.hashCode),
                                                                                 invoiceTaskDocuments.hashCode),
                                                                             invoiceTaskTimelog.hashCode),
                                                                         invoiceTaskDatelog.hashCode),
@@ -2068,7 +2087,7 @@ class _$CompanyEntity extends CompanyEntity {
 
   @override
   String toString() {
-    return (newBuiltValueToStringHelper('CompanyEntity')
+    return (newBuiltValueToStringHelper(r'CompanyEntity')
           ..add('enableCustomSurchargeTaxes1', enableCustomSurchargeTaxes1)
           ..add('enableCustomSurchargeTaxes2', enableCustomSurchargeTaxes2)
           ..add('enableCustomSurchargeTaxes3', enableCustomSurchargeTaxes3)
@@ -2123,6 +2142,7 @@ class _$CompanyEntity extends CompanyEntity {
           ..add('products', products)
           ..add('categories', categories)
           ..add('serviceReports', serviceReports)
+          ..add('serviceReportsMap', serviceReportsMap)
           ..add('invoices', invoices)
           ..add('recurringInvoices', recurringInvoices)
           ..add('recurringExpenses', recurringExpenses)
@@ -2446,6 +2466,14 @@ class CompanyEntityBuilder
   set serviceReports(ListBuilder<ServiceReportEntity> serviceReports) =>
       _$this._serviceReports = serviceReports;
 
+  MapBuilder<String, ServiceReportEntity> _serviceReportsMap;
+  MapBuilder<String, ServiceReportEntity> get serviceReportsMap =>
+      _$this._serviceReportsMap ??=
+          new MapBuilder<String, ServiceReportEntity>();
+  set serviceReportsMap(
+          MapBuilder<String, ServiceReportEntity> serviceReportsMap) =>
+      _$this._serviceReportsMap = serviceReportsMap;
+
   ListBuilder<InvoiceEntity> _invoices;
   ListBuilder<InvoiceEntity> get invoices =>
       _$this._invoices ??= new ListBuilder<InvoiceEntity>();
@@ -2736,6 +2764,7 @@ class CompanyEntityBuilder
       _products = $v.products.toBuilder();
       _categories = $v.categories.toBuilder();
       _serviceReports = $v.serviceReports.toBuilder();
+      _serviceReportsMap = $v.serviceReportsMap.toBuilder();
       _invoices = $v.invoices.toBuilder();
       _recurringInvoices = $v.recurringInvoices.toBuilder();
       _recurringExpenses = $v.recurringExpenses.toBuilder();
@@ -2797,66 +2826,68 @@ class CompanyEntityBuilder
   }
 
   @override
-  _$CompanyEntity build() {
+  CompanyEntity build() => _build();
+
+  _$CompanyEntity _build() {
     _$CompanyEntity _$result;
     try {
       _$result = _$v ??
           new _$CompanyEntity._(
               enableCustomSurchargeTaxes1: BuiltValueNullFieldError.checkNotNull(
                   enableCustomSurchargeTaxes1,
-                  'CompanyEntity',
+                  r'CompanyEntity',
                   'enableCustomSurchargeTaxes1'),
               enableCustomSurchargeTaxes2: BuiltValueNullFieldError.checkNotNull(
                   enableCustomSurchargeTaxes2,
-                  'CompanyEntity',
+                  r'CompanyEntity',
                   'enableCustomSurchargeTaxes2'),
               enableCustomSurchargeTaxes3: BuiltValueNullFieldError.checkNotNull(
                   enableCustomSurchargeTaxes3,
-                  'CompanyEntity',
+                  r'CompanyEntity',
                   'enableCustomSurchargeTaxes3'),
               enableCustomSurchargeTaxes4:
                   BuiltValueNullFieldError.checkNotNull(
                       enableCustomSurchargeTaxes4,
-                      'CompanyEntity',
+                      r'CompanyEntity',
                       'enableCustomSurchargeTaxes4'),
               sizeId: BuiltValueNullFieldError.checkNotNull(
-                  sizeId, 'CompanyEntity', 'sizeId'),
-              industryId: BuiltValueNullFieldError.checkNotNull(industryId, 'CompanyEntity', 'industryId'),
-              subdomain: BuiltValueNullFieldError.checkNotNull(subdomain, 'CompanyEntity', 'subdomain'),
-              portalMode: BuiltValueNullFieldError.checkNotNull(portalMode, 'CompanyEntity', 'portalMode'),
-              portalDomain: BuiltValueNullFieldError.checkNotNull(portalDomain, 'CompanyEntity', 'portalDomain'),
-              updateProducts: BuiltValueNullFieldError.checkNotNull(updateProducts, 'CompanyEntity', 'updateProducts'),
-              convertProductExchangeRate: BuiltValueNullFieldError.checkNotNull(convertProductExchangeRate, 'CompanyEntity', 'convertProductExchangeRate'),
-              convertRateToClient: BuiltValueNullFieldError.checkNotNull(convertRateToClient, 'CompanyEntity', 'convertRateToClient'),
-              fillProducts: BuiltValueNullFieldError.checkNotNull(fillProducts, 'CompanyEntity', 'fillProducts'),
-              enableProductCost: BuiltValueNullFieldError.checkNotNull(enableProductCost, 'CompanyEntity', 'enableProductCost'),
-              enableProductQuantity: BuiltValueNullFieldError.checkNotNull(enableProductQuantity, 'CompanyEntity', 'enableProductQuantity'),
-              enableProductDiscount: BuiltValueNullFieldError.checkNotNull(enableProductDiscount, 'CompanyEntity', 'enableProductDiscount'),
-              defaultTaskIsDateBased: BuiltValueNullFieldError.checkNotNull(defaultTaskIsDateBased, 'CompanyEntity', 'defaultTaskIsDateBased'),
-              defaultQuantity: BuiltValueNullFieldError.checkNotNull(defaultQuantity, 'CompanyEntity', 'defaultQuantity'),
-              showProductDetails: BuiltValueNullFieldError.checkNotNull(showProductDetails, 'CompanyEntity', 'showProductDetails'),
-              clientCanRegister: BuiltValueNullFieldError.checkNotNull(clientCanRegister, 'CompanyEntity', 'clientCanRegister'),
-              isLarge: BuiltValueNullFieldError.checkNotNull(isLarge, 'CompanyEntity', 'isLarge'),
-              isDisabled: BuiltValueNullFieldError.checkNotNull(isDisabled, 'CompanyEntity', 'isDisabled'),
-              enableShopApi: BuiltValueNullFieldError.checkNotNull(enableShopApi, 'CompanyEntity', 'enableShopApi'),
-              companyKey: BuiltValueNullFieldError.checkNotNull(companyKey, 'CompanyEntity', 'companyKey'),
-              firstDayOfWeek: BuiltValueNullFieldError.checkNotNull(firstDayOfWeek, 'CompanyEntity', 'firstDayOfWeek'),
-              firstMonthOfYear: BuiltValueNullFieldError.checkNotNull(firstMonthOfYear, 'CompanyEntity', 'firstMonthOfYear'),
-              numberOfInvoiceTaxRates: BuiltValueNullFieldError.checkNotNull(numberOfInvoiceTaxRates, 'CompanyEntity', 'numberOfInvoiceTaxRates'),
-              numberOfItemTaxRates: BuiltValueNullFieldError.checkNotNull(numberOfItemTaxRates, 'CompanyEntity', 'numberOfItemTaxRates'),
-              expenseInclusiveTaxes: BuiltValueNullFieldError.checkNotNull(expenseInclusiveTaxes, 'CompanyEntity', 'expenseInclusiveTaxes'),
-              sessionTimeout: BuiltValueNullFieldError.checkNotNull(sessionTimeout, 'CompanyEntity', 'sessionTimeout'),
-              passwordTimeout: BuiltValueNullFieldError.checkNotNull(passwordTimeout, 'CompanyEntity', 'passwordTimeout'),
-              oauthPasswordRequired: BuiltValueNullFieldError.checkNotNull(oauthPasswordRequired, 'CompanyEntity', 'oauthPasswordRequired'),
-              markdownEnabled: BuiltValueNullFieldError.checkNotNull(markdownEnabled, 'CompanyEntity', 'markdownEnabled'),
-              markdownEmailEnabled: BuiltValueNullFieldError.checkNotNull(markdownEmailEnabled, 'CompanyEntity', 'markdownEmailEnabled'),
-              useCommaAsDecimalPlace: BuiltValueNullFieldError.checkNotNull(useCommaAsDecimalPlace, 'CompanyEntity', 'useCommaAsDecimalPlace'),
-              reportIncludeDrafts: BuiltValueNullFieldError.checkNotNull(reportIncludeDrafts, 'CompanyEntity', 'reportIncludeDrafts'),
-              useQuoteTermsOnConversion: BuiltValueNullFieldError.checkNotNull(useQuoteTermsOnConversion, 'CompanyEntity', 'useQuoteTermsOnConversion'),
-              enableApplyingPayments: BuiltValueNullFieldError.checkNotNull(enableApplyingPayments, 'CompanyEntity', 'enableApplyingPayments'),
-              trackInventory: BuiltValueNullFieldError.checkNotNull(trackInventory, 'CompanyEntity', 'trackInventory'),
-              stockNotificationThreshold: BuiltValueNullFieldError.checkNotNull(stockNotificationThreshold, 'CompanyEntity', 'stockNotificationThreshold'),
-              stockNotification: BuiltValueNullFieldError.checkNotNull(stockNotification, 'CompanyEntity', 'stockNotification'),
+                  sizeId, r'CompanyEntity', 'sizeId'),
+              industryId: BuiltValueNullFieldError.checkNotNull(industryId, r'CompanyEntity', 'industryId'),
+              subdomain: BuiltValueNullFieldError.checkNotNull(subdomain, r'CompanyEntity', 'subdomain'),
+              portalMode: BuiltValueNullFieldError.checkNotNull(portalMode, r'CompanyEntity', 'portalMode'),
+              portalDomain: BuiltValueNullFieldError.checkNotNull(portalDomain, r'CompanyEntity', 'portalDomain'),
+              updateProducts: BuiltValueNullFieldError.checkNotNull(updateProducts, r'CompanyEntity', 'updateProducts'),
+              convertProductExchangeRate: BuiltValueNullFieldError.checkNotNull(convertProductExchangeRate, r'CompanyEntity', 'convertProductExchangeRate'),
+              convertRateToClient: BuiltValueNullFieldError.checkNotNull(convertRateToClient, r'CompanyEntity', 'convertRateToClient'),
+              fillProducts: BuiltValueNullFieldError.checkNotNull(fillProducts, r'CompanyEntity', 'fillProducts'),
+              enableProductCost: BuiltValueNullFieldError.checkNotNull(enableProductCost, r'CompanyEntity', 'enableProductCost'),
+              enableProductQuantity: BuiltValueNullFieldError.checkNotNull(enableProductQuantity, r'CompanyEntity', 'enableProductQuantity'),
+              enableProductDiscount: BuiltValueNullFieldError.checkNotNull(enableProductDiscount, r'CompanyEntity', 'enableProductDiscount'),
+              defaultTaskIsDateBased: BuiltValueNullFieldError.checkNotNull(defaultTaskIsDateBased, r'CompanyEntity', 'defaultTaskIsDateBased'),
+              defaultQuantity: BuiltValueNullFieldError.checkNotNull(defaultQuantity, r'CompanyEntity', 'defaultQuantity'),
+              showProductDetails: BuiltValueNullFieldError.checkNotNull(showProductDetails, r'CompanyEntity', 'showProductDetails'),
+              clientCanRegister: BuiltValueNullFieldError.checkNotNull(clientCanRegister, r'CompanyEntity', 'clientCanRegister'),
+              isLarge: BuiltValueNullFieldError.checkNotNull(isLarge, r'CompanyEntity', 'isLarge'),
+              isDisabled: BuiltValueNullFieldError.checkNotNull(isDisabled, r'CompanyEntity', 'isDisabled'),
+              enableShopApi: BuiltValueNullFieldError.checkNotNull(enableShopApi, r'CompanyEntity', 'enableShopApi'),
+              companyKey: BuiltValueNullFieldError.checkNotNull(companyKey, r'CompanyEntity', 'companyKey'),
+              firstDayOfWeek: BuiltValueNullFieldError.checkNotNull(firstDayOfWeek, r'CompanyEntity', 'firstDayOfWeek'),
+              firstMonthOfYear: BuiltValueNullFieldError.checkNotNull(firstMonthOfYear, r'CompanyEntity', 'firstMonthOfYear'),
+              numberOfInvoiceTaxRates: BuiltValueNullFieldError.checkNotNull(numberOfInvoiceTaxRates, r'CompanyEntity', 'numberOfInvoiceTaxRates'),
+              numberOfItemTaxRates: BuiltValueNullFieldError.checkNotNull(numberOfItemTaxRates, r'CompanyEntity', 'numberOfItemTaxRates'),
+              expenseInclusiveTaxes: BuiltValueNullFieldError.checkNotNull(expenseInclusiveTaxes, r'CompanyEntity', 'expenseInclusiveTaxes'),
+              sessionTimeout: BuiltValueNullFieldError.checkNotNull(sessionTimeout, r'CompanyEntity', 'sessionTimeout'),
+              passwordTimeout: BuiltValueNullFieldError.checkNotNull(passwordTimeout, r'CompanyEntity', 'passwordTimeout'),
+              oauthPasswordRequired: BuiltValueNullFieldError.checkNotNull(oauthPasswordRequired, r'CompanyEntity', 'oauthPasswordRequired'),
+              markdownEnabled: BuiltValueNullFieldError.checkNotNull(markdownEnabled, r'CompanyEntity', 'markdownEnabled'),
+              markdownEmailEnabled: BuiltValueNullFieldError.checkNotNull(markdownEmailEnabled, r'CompanyEntity', 'markdownEmailEnabled'),
+              useCommaAsDecimalPlace: BuiltValueNullFieldError.checkNotNull(useCommaAsDecimalPlace, r'CompanyEntity', 'useCommaAsDecimalPlace'),
+              reportIncludeDrafts: BuiltValueNullFieldError.checkNotNull(reportIncludeDrafts, r'CompanyEntity', 'reportIncludeDrafts'),
+              useQuoteTermsOnConversion: BuiltValueNullFieldError.checkNotNull(useQuoteTermsOnConversion, r'CompanyEntity', 'useQuoteTermsOnConversion'),
+              enableApplyingPayments: BuiltValueNullFieldError.checkNotNull(enableApplyingPayments, r'CompanyEntity', 'enableApplyingPayments'),
+              trackInventory: BuiltValueNullFieldError.checkNotNull(trackInventory, r'CompanyEntity', 'trackInventory'),
+              stockNotificationThreshold: BuiltValueNullFieldError.checkNotNull(stockNotificationThreshold, r'CompanyEntity', 'stockNotificationThreshold'),
+              stockNotification: BuiltValueNullFieldError.checkNotNull(stockNotification, r'CompanyEntity', 'stockNotification'),
               groups: groups.build(),
               activities: activities.build(),
               taxRates: taxRates.build(),
@@ -2870,6 +2901,7 @@ class CompanyEntityBuilder
               products: products.build(),
               categories: categories.build(),
               serviceReports: serviceReports.build(),
+              serviceReportsMap: serviceReportsMap.build(),
               invoices: invoices.build(),
               recurringInvoices: recurringInvoices.build(),
               recurringExpenses: recurringExpenses.build(),
@@ -2890,30 +2922,30 @@ class CompanyEntityBuilder
               systemLogs: systemLogs.build(),
               clientRegistrationFields: clientRegistrationFields.build(),
               customFields: customFields.build(),
-              slackWebhookUrl: BuiltValueNullFieldError.checkNotNull(slackWebhookUrl, 'CompanyEntity', 'slackWebhookUrl'),
-              googleAnalyticsKey: BuiltValueNullFieldError.checkNotNull(googleAnalyticsKey, 'CompanyEntity', 'googleAnalyticsKey'),
-              markExpensesInvoiceable: BuiltValueNullFieldError.checkNotNull(markExpensesInvoiceable, 'CompanyEntity', 'markExpensesInvoiceable'),
-              markExpensesPaid: BuiltValueNullFieldError.checkNotNull(markExpensesPaid, 'CompanyEntity', 'markExpensesPaid'),
-              invoiceExpenseDocuments: BuiltValueNullFieldError.checkNotNull(invoiceExpenseDocuments, 'CompanyEntity', 'invoiceExpenseDocuments'),
-              invoiceTaskDocuments: BuiltValueNullFieldError.checkNotNull(invoiceTaskDocuments, 'CompanyEntity', 'invoiceTaskDocuments'),
-              invoiceTaskTimelog: BuiltValueNullFieldError.checkNotNull(invoiceTaskTimelog, 'CompanyEntity', 'invoiceTaskTimelog'),
-              invoiceTaskDatelog: BuiltValueNullFieldError.checkNotNull(invoiceTaskDatelog, 'CompanyEntity', 'invoiceTaskDatelog'),
-              autoStartTasks: BuiltValueNullFieldError.checkNotNull(autoStartTasks, 'CompanyEntity', 'autoStartTasks'),
-              showTasksTable: BuiltValueNullFieldError.checkNotNull(showTasksTable, 'CompanyEntity', 'showTasksTable'),
-              showTaskEndDate: BuiltValueNullFieldError.checkNotNull(showTaskEndDate, 'CompanyEntity', 'showTaskEndDate'),
+              slackWebhookUrl: BuiltValueNullFieldError.checkNotNull(slackWebhookUrl, r'CompanyEntity', 'slackWebhookUrl'),
+              googleAnalyticsKey: BuiltValueNullFieldError.checkNotNull(googleAnalyticsKey, r'CompanyEntity', 'googleAnalyticsKey'),
+              markExpensesInvoiceable: BuiltValueNullFieldError.checkNotNull(markExpensesInvoiceable, r'CompanyEntity', 'markExpensesInvoiceable'),
+              markExpensesPaid: BuiltValueNullFieldError.checkNotNull(markExpensesPaid, r'CompanyEntity', 'markExpensesPaid'),
+              invoiceExpenseDocuments: BuiltValueNullFieldError.checkNotNull(invoiceExpenseDocuments, r'CompanyEntity', 'invoiceExpenseDocuments'),
+              invoiceTaskDocuments: BuiltValueNullFieldError.checkNotNull(invoiceTaskDocuments, r'CompanyEntity', 'invoiceTaskDocuments'),
+              invoiceTaskTimelog: BuiltValueNullFieldError.checkNotNull(invoiceTaskTimelog, r'CompanyEntity', 'invoiceTaskTimelog'),
+              invoiceTaskDatelog: BuiltValueNullFieldError.checkNotNull(invoiceTaskDatelog, r'CompanyEntity', 'invoiceTaskDatelog'),
+              autoStartTasks: BuiltValueNullFieldError.checkNotNull(autoStartTasks, r'CompanyEntity', 'autoStartTasks'),
+              showTasksTable: BuiltValueNullFieldError.checkNotNull(showTasksTable, r'CompanyEntity', 'showTasksTable'),
+              showTaskEndDate: BuiltValueNullFieldError.checkNotNull(showTaskEndDate, r'CompanyEntity', 'showTaskEndDate'),
               settings: settings.build(),
-              enabledModules: BuiltValueNullFieldError.checkNotNull(enabledModules, 'CompanyEntity', 'enabledModules'),
-              calculateExpenseTaxByAmount: BuiltValueNullFieldError.checkNotNull(calculateExpenseTaxByAmount, 'CompanyEntity', 'calculateExpenseTaxByAmount'),
-              stopOnUnpaidRecurring: BuiltValueNullFieldError.checkNotNull(stopOnUnpaidRecurring, 'CompanyEntity', 'stopOnUnpaidRecurring'),
+              enabledModules: BuiltValueNullFieldError.checkNotNull(enabledModules, r'CompanyEntity', 'enabledModules'),
+              calculateExpenseTaxByAmount: BuiltValueNullFieldError.checkNotNull(calculateExpenseTaxByAmount, r'CompanyEntity', 'calculateExpenseTaxByAmount'),
+              stopOnUnpaidRecurring: BuiltValueNullFieldError.checkNotNull(stopOnUnpaidRecurring, r'CompanyEntity', 'stopOnUnpaidRecurring'),
               isChanged: isChanged,
-              createdAt: BuiltValueNullFieldError.checkNotNull(createdAt, 'CompanyEntity', 'createdAt'),
-              updatedAt: BuiltValueNullFieldError.checkNotNull(updatedAt, 'CompanyEntity', 'updatedAt'),
-              archivedAt: BuiltValueNullFieldError.checkNotNull(archivedAt, 'CompanyEntity', 'archivedAt'),
+              createdAt: BuiltValueNullFieldError.checkNotNull(createdAt, r'CompanyEntity', 'createdAt'),
+              updatedAt: BuiltValueNullFieldError.checkNotNull(updatedAt, r'CompanyEntity', 'updatedAt'),
+              archivedAt: BuiltValueNullFieldError.checkNotNull(archivedAt, r'CompanyEntity', 'archivedAt'),
               isDeleted: isDeleted,
               createdUserId: createdUserId,
               assignedUserId: assignedUserId,
               entityType: entityType,
-              id: BuiltValueNullFieldError.checkNotNull(id, 'CompanyEntity', 'id'));
+              id: BuiltValueNullFieldError.checkNotNull(id, r'CompanyEntity', 'id'));
     } catch (_) {
       String _$failedField;
       try {
@@ -2943,6 +2975,8 @@ class CompanyEntityBuilder
         categories.build();
         _$failedField = 'serviceReports';
         serviceReports.build();
+        _$failedField = 'serviceReportsMap';
+        serviceReportsMap.build();
         _$failedField = 'invoices';
         invoices.build();
         _$failedField = 'recurringInvoices';
@@ -2988,7 +3022,7 @@ class CompanyEntityBuilder
         settings.build();
       } catch (e) {
         throw new BuiltValueNestedFieldError(
-            'CompanyEntity', _$failedField, e.toString());
+            r'CompanyEntity', _$failedField, e.toString());
       }
       rethrow;
     }
@@ -3018,7 +3052,7 @@ class _$GatewayEntity extends GatewayEntity {
   final String fields;
 
   factory _$GatewayEntity([void Function(GatewayEntityBuilder) updates]) =>
-      (new GatewayEntityBuilder()..update(updates)).build();
+      (new GatewayEntityBuilder()..update(updates))._build();
 
   _$GatewayEntity._(
       {this.id,
@@ -3031,19 +3065,19 @@ class _$GatewayEntity extends GatewayEntity {
       this.options,
       this.fields})
       : super._() {
-    BuiltValueNullFieldError.checkNotNull(id, 'GatewayEntity', 'id');
-    BuiltValueNullFieldError.checkNotNull(name, 'GatewayEntity', 'name');
+    BuiltValueNullFieldError.checkNotNull(id, r'GatewayEntity', 'id');
+    BuiltValueNullFieldError.checkNotNull(name, r'GatewayEntity', 'name');
     BuiltValueNullFieldError.checkNotNull(
-        isOffsite, 'GatewayEntity', 'isOffsite');
+        isOffsite, r'GatewayEntity', 'isOffsite');
     BuiltValueNullFieldError.checkNotNull(
-        isVisible, 'GatewayEntity', 'isVisible');
+        isVisible, r'GatewayEntity', 'isVisible');
     BuiltValueNullFieldError.checkNotNull(
-        sortOrder, 'GatewayEntity', 'sortOrder');
+        sortOrder, r'GatewayEntity', 'sortOrder');
     BuiltValueNullFieldError.checkNotNull(
-        defaultGatewayTypeId, 'GatewayEntity', 'defaultGatewayTypeId');
-    BuiltValueNullFieldError.checkNotNull(siteUrl, 'GatewayEntity', 'siteUrl');
-    BuiltValueNullFieldError.checkNotNull(options, 'GatewayEntity', 'options');
-    BuiltValueNullFieldError.checkNotNull(fields, 'GatewayEntity', 'fields');
+        defaultGatewayTypeId, r'GatewayEntity', 'defaultGatewayTypeId');
+    BuiltValueNullFieldError.checkNotNull(siteUrl, r'GatewayEntity', 'siteUrl');
+    BuiltValueNullFieldError.checkNotNull(options, r'GatewayEntity', 'options');
+    BuiltValueNullFieldError.checkNotNull(fields, r'GatewayEntity', 'fields');
   }
 
   @override
@@ -3089,7 +3123,7 @@ class _$GatewayEntity extends GatewayEntity {
 
   @override
   String toString() {
-    return (newBuiltValueToStringHelper('GatewayEntity')
+    return (newBuiltValueToStringHelper(r'GatewayEntity')
           ..add('id', id)
           ..add('name', name)
           ..add('isOffsite', isOffsite)
@@ -3179,30 +3213,32 @@ class GatewayEntityBuilder
   }
 
   @override
-  _$GatewayEntity build() {
+  GatewayEntity build() => _build();
+
+  _$GatewayEntity _build() {
     _$GatewayEntity _$result;
     try {
       _$result = _$v ??
           new _$GatewayEntity._(
               id: BuiltValueNullFieldError.checkNotNull(
-                  id, 'GatewayEntity', 'id'),
+                  id, r'GatewayEntity', 'id'),
               name: BuiltValueNullFieldError.checkNotNull(
-                  name, 'GatewayEntity', 'name'),
+                  name, r'GatewayEntity', 'name'),
               isOffsite: BuiltValueNullFieldError.checkNotNull(
-                  isOffsite, 'GatewayEntity', 'isOffsite'),
+                  isOffsite, r'GatewayEntity', 'isOffsite'),
               isVisible: BuiltValueNullFieldError.checkNotNull(
-                  isVisible, 'GatewayEntity', 'isVisible'),
+                  isVisible, r'GatewayEntity', 'isVisible'),
               sortOrder: BuiltValueNullFieldError.checkNotNull(
-                  sortOrder, 'GatewayEntity', 'sortOrder'),
+                  sortOrder, r'GatewayEntity', 'sortOrder'),
               defaultGatewayTypeId: BuiltValueNullFieldError.checkNotNull(
                   defaultGatewayTypeId,
-                  'GatewayEntity',
+                  r'GatewayEntity',
                   'defaultGatewayTypeId'),
               siteUrl: BuiltValueNullFieldError.checkNotNull(
-                  siteUrl, 'GatewayEntity', 'siteUrl'),
+                  siteUrl, r'GatewayEntity', 'siteUrl'),
               options: options.build(),
               fields: BuiltValueNullFieldError.checkNotNull(
-                  fields, 'GatewayEntity', 'fields'));
+                  fields, r'GatewayEntity', 'fields'));
     } catch (_) {
       String _$failedField;
       try {
@@ -3210,7 +3246,7 @@ class GatewayEntityBuilder
         options.build();
       } catch (e) {
         throw new BuiltValueNestedFieldError(
-            'GatewayEntity', _$failedField, e.toString());
+            r'GatewayEntity', _$failedField, e.toString());
       }
       rethrow;
     }
@@ -3229,15 +3265,15 @@ class _$GatewayOptionsEntity extends GatewayOptionsEntity {
 
   factory _$GatewayOptionsEntity(
           [void Function(GatewayOptionsEntityBuilder) updates]) =>
-      (new GatewayOptionsEntityBuilder()..update(updates)).build();
+      (new GatewayOptionsEntityBuilder()..update(updates))._build();
 
   _$GatewayOptionsEntity._(
       {this.supportRefunds, this.supportTokenBilling, this.webhooks})
       : super._() {
     BuiltValueNullFieldError.checkNotNull(
-        supportRefunds, 'GatewayOptionsEntity', 'supportRefunds');
+        supportRefunds, r'GatewayOptionsEntity', 'supportRefunds');
     BuiltValueNullFieldError.checkNotNull(
-        supportTokenBilling, 'GatewayOptionsEntity', 'supportTokenBilling');
+        supportTokenBilling, r'GatewayOptionsEntity', 'supportTokenBilling');
   }
 
   @override
@@ -3268,7 +3304,7 @@ class _$GatewayOptionsEntity extends GatewayOptionsEntity {
 
   @override
   String toString() {
-    return (newBuiltValueToStringHelper('GatewayOptionsEntity')
+    return (newBuiltValueToStringHelper(r'GatewayOptionsEntity')
           ..add('supportRefunds', supportRefunds)
           ..add('supportTokenBilling', supportTokenBilling)
           ..add('webhooks', webhooks))
@@ -3320,16 +3356,18 @@ class GatewayOptionsEntityBuilder
   }
 
   @override
-  _$GatewayOptionsEntity build() {
+  GatewayOptionsEntity build() => _build();
+
+  _$GatewayOptionsEntity _build() {
     _$GatewayOptionsEntity _$result;
     try {
       _$result = _$v ??
           new _$GatewayOptionsEntity._(
               supportRefunds: BuiltValueNullFieldError.checkNotNull(
-                  supportRefunds, 'GatewayOptionsEntity', 'supportRefunds'),
+                  supportRefunds, r'GatewayOptionsEntity', 'supportRefunds'),
               supportTokenBilling: BuiltValueNullFieldError.checkNotNull(
                   supportTokenBilling,
-                  'GatewayOptionsEntity',
+                  r'GatewayOptionsEntity',
                   'supportTokenBilling'),
               webhooks: _webhooks?.build());
     } catch (_) {
@@ -3339,7 +3377,7 @@ class GatewayOptionsEntityBuilder
         _webhooks?.build();
       } catch (e) {
         throw new BuiltValueNestedFieldError(
-            'GatewayOptionsEntity', _$failedField, e.toString());
+            r'GatewayOptionsEntity', _$failedField, e.toString());
       }
       rethrow;
     }
@@ -3374,7 +3412,7 @@ class _$UserCompanyEntity extends UserCompanyEntity {
 
   factory _$UserCompanyEntity(
           [void Function(UserCompanyEntityBuilder) updates]) =>
-      (new UserCompanyEntityBuilder()..update(updates)).build();
+      (new UserCompanyEntityBuilder()..update(updates))._build();
 
   _$UserCompanyEntity._(
       {this.isAdmin,
@@ -3390,15 +3428,15 @@ class _$UserCompanyEntity extends UserCompanyEntity {
       this.ninjaPortalUrl})
       : super._() {
     BuiltValueNullFieldError.checkNotNull(
-        isAdmin, 'UserCompanyEntity', 'isAdmin');
+        isAdmin, r'UserCompanyEntity', 'isAdmin');
     BuiltValueNullFieldError.checkNotNull(
-        isOwner, 'UserCompanyEntity', 'isOwner');
+        isOwner, r'UserCompanyEntity', 'isOwner');
     BuiltValueNullFieldError.checkNotNull(
-        permissionsUpdatedAt, 'UserCompanyEntity', 'permissionsUpdatedAt');
+        permissionsUpdatedAt, r'UserCompanyEntity', 'permissionsUpdatedAt');
     BuiltValueNullFieldError.checkNotNull(
-        permissions, 'UserCompanyEntity', 'permissions');
+        permissions, r'UserCompanyEntity', 'permissions');
     BuiltValueNullFieldError.checkNotNull(
-        ninjaPortalUrl, 'UserCompanyEntity', 'ninjaPortalUrl');
+        ninjaPortalUrl, r'UserCompanyEntity', 'ninjaPortalUrl');
   }
 
   @override
@@ -3453,7 +3491,7 @@ class _$UserCompanyEntity extends UserCompanyEntity {
 
   @override
   String toString() {
-    return (newBuiltValueToStringHelper('UserCompanyEntity')
+    return (newBuiltValueToStringHelper(r'UserCompanyEntity')
           ..add('isAdmin', isAdmin)
           ..add('isOwner', isOwner)
           ..add('permissionsUpdatedAt', permissionsUpdatedAt)
@@ -3560,21 +3598,23 @@ class UserCompanyEntityBuilder
   }
 
   @override
-  _$UserCompanyEntity build() {
+  UserCompanyEntity build() => _build();
+
+  _$UserCompanyEntity _build() {
     _$UserCompanyEntity _$result;
     try {
       _$result = _$v ??
           new _$UserCompanyEntity._(
               isAdmin: BuiltValueNullFieldError.checkNotNull(
-                  isAdmin, 'UserCompanyEntity', 'isAdmin'),
+                  isAdmin, r'UserCompanyEntity', 'isAdmin'),
               isOwner: BuiltValueNullFieldError.checkNotNull(
-                  isOwner, 'UserCompanyEntity', 'isOwner'),
+                  isOwner, r'UserCompanyEntity', 'isOwner'),
               permissionsUpdatedAt: BuiltValueNullFieldError.checkNotNull(
                   permissionsUpdatedAt,
-                  'UserCompanyEntity',
+                  r'UserCompanyEntity',
                   'permissionsUpdatedAt'),
               permissions: BuiltValueNullFieldError.checkNotNull(
-                  permissions, 'UserCompanyEntity', 'permissions'),
+                  permissions, r'UserCompanyEntity', 'permissions'),
               notifications: _notifications?.build(),
               company: _company?.build(),
               user: _user?.build(),
@@ -3582,7 +3622,7 @@ class UserCompanyEntityBuilder
               account: _account?.build(),
               settings: _settings?.build(),
               ninjaPortalUrl: BuiltValueNullFieldError.checkNotNull(
-                  ninjaPortalUrl, 'UserCompanyEntity', 'ninjaPortalUrl'));
+                  ninjaPortalUrl, r'UserCompanyEntity', 'ninjaPortalUrl'));
     } catch (_) {
       String _$failedField;
       try {
@@ -3600,7 +3640,7 @@ class UserCompanyEntityBuilder
         _settings?.build();
       } catch (e) {
         throw new BuiltValueNestedFieldError(
-            'UserCompanyEntity', _$failedField, e.toString());
+            r'UserCompanyEntity', _$failedField, e.toString());
       }
       rethrow;
     }
@@ -3623,7 +3663,7 @@ class _$UserSettingsEntity extends UserSettingsEntity {
 
   factory _$UserSettingsEntity(
           [void Function(UserSettingsEntityBuilder) updates]) =>
-      (new UserSettingsEntityBuilder()..update(updates)).build();
+      (new UserSettingsEntityBuilder()..update(updates))._build();
 
   _$UserSettingsEntity._(
       {this.accentColor,
@@ -3633,13 +3673,13 @@ class _$UserSettingsEntity extends UserSettingsEntity {
       this.includeDeletedClients})
       : super._() {
     BuiltValueNullFieldError.checkNotNull(
-        tableColumns, 'UserSettingsEntity', 'tableColumns');
+        tableColumns, r'UserSettingsEntity', 'tableColumns');
     BuiltValueNullFieldError.checkNotNull(
-        reportSettings, 'UserSettingsEntity', 'reportSettings');
+        reportSettings, r'UserSettingsEntity', 'reportSettings');
     BuiltValueNullFieldError.checkNotNull(
-        numberYearsActive, 'UserSettingsEntity', 'numberYearsActive');
+        numberYearsActive, r'UserSettingsEntity', 'numberYearsActive');
     BuiltValueNullFieldError.checkNotNull(
-        includeDeletedClients, 'UserSettingsEntity', 'includeDeletedClients');
+        includeDeletedClients, r'UserSettingsEntity', 'includeDeletedClients');
   }
 
   @override
@@ -3675,7 +3715,7 @@ class _$UserSettingsEntity extends UserSettingsEntity {
 
   @override
   String toString() {
-    return (newBuiltValueToStringHelper('UserSettingsEntity')
+    return (newBuiltValueToStringHelper(r'UserSettingsEntity')
           ..add('accentColor', accentColor)
           ..add('tableColumns', tableColumns)
           ..add('reportSettings', reportSettings)
@@ -3744,7 +3784,9 @@ class UserSettingsEntityBuilder
   }
 
   @override
-  _$UserSettingsEntity build() {
+  UserSettingsEntity build() => _build();
+
+  _$UserSettingsEntity _build() {
     _$UserSettingsEntity _$result;
     try {
       _$result = _$v ??
@@ -3753,10 +3795,12 @@ class UserSettingsEntityBuilder
               tableColumns: tableColumns.build(),
               reportSettings: reportSettings.build(),
               numberYearsActive: BuiltValueNullFieldError.checkNotNull(
-                  numberYearsActive, 'UserSettingsEntity', 'numberYearsActive'),
+                  numberYearsActive,
+                  r'UserSettingsEntity',
+                  'numberYearsActive'),
               includeDeletedClients: BuiltValueNullFieldError.checkNotNull(
                   includeDeletedClients,
-                  'UserSettingsEntity',
+                  r'UserSettingsEntity',
                   'includeDeletedClients'));
     } catch (_) {
       String _$failedField;
@@ -3767,7 +3811,7 @@ class UserSettingsEntityBuilder
         reportSettings.build();
       } catch (e) {
         throw new BuiltValueNestedFieldError(
-            'UserSettingsEntity', _$failedField, e.toString());
+            r'UserSettingsEntity', _$failedField, e.toString());
       }
       rethrow;
     }
@@ -3790,7 +3834,7 @@ class _$ReportSettingsEntity extends ReportSettingsEntity {
 
   factory _$ReportSettingsEntity(
           [void Function(ReportSettingsEntityBuilder) updates]) =>
-      (new ReportSettingsEntityBuilder()..update(updates)).build();
+      (new ReportSettingsEntityBuilder()..update(updates))._build();
 
   _$ReportSettingsEntity._(
       {this.sortColumn,
@@ -3800,15 +3844,15 @@ class _$ReportSettingsEntity extends ReportSettingsEntity {
       this.columns})
       : super._() {
     BuiltValueNullFieldError.checkNotNull(
-        sortColumn, 'ReportSettingsEntity', 'sortColumn');
+        sortColumn, r'ReportSettingsEntity', 'sortColumn');
     BuiltValueNullFieldError.checkNotNull(
-        sortAscending, 'ReportSettingsEntity', 'sortAscending');
+        sortAscending, r'ReportSettingsEntity', 'sortAscending');
     BuiltValueNullFieldError.checkNotNull(
-        sortTotalsIndex, 'ReportSettingsEntity', 'sortTotalsIndex');
+        sortTotalsIndex, r'ReportSettingsEntity', 'sortTotalsIndex');
     BuiltValueNullFieldError.checkNotNull(
-        sortTotalsAscending, 'ReportSettingsEntity', 'sortTotalsAscending');
+        sortTotalsAscending, r'ReportSettingsEntity', 'sortTotalsAscending');
     BuiltValueNullFieldError.checkNotNull(
-        columns, 'ReportSettingsEntity', 'columns');
+        columns, r'ReportSettingsEntity', 'columns');
   }
 
   @override
@@ -3844,7 +3888,7 @@ class _$ReportSettingsEntity extends ReportSettingsEntity {
 
   @override
   String toString() {
-    return (newBuiltValueToStringHelper('ReportSettingsEntity')
+    return (newBuiltValueToStringHelper(r'ReportSettingsEntity')
           ..add('sortColumn', sortColumn)
           ..add('sortAscending', sortAscending)
           ..add('sortTotalsIndex', sortTotalsIndex)
@@ -3911,20 +3955,22 @@ class ReportSettingsEntityBuilder
   }
 
   @override
-  _$ReportSettingsEntity build() {
+  ReportSettingsEntity build() => _build();
+
+  _$ReportSettingsEntity _build() {
     _$ReportSettingsEntity _$result;
     try {
       _$result = _$v ??
           new _$ReportSettingsEntity._(
               sortColumn: BuiltValueNullFieldError.checkNotNull(
-                  sortColumn, 'ReportSettingsEntity', 'sortColumn'),
+                  sortColumn, r'ReportSettingsEntity', 'sortColumn'),
               sortAscending: BuiltValueNullFieldError.checkNotNull(
-                  sortAscending, 'ReportSettingsEntity', 'sortAscending'),
+                  sortAscending, r'ReportSettingsEntity', 'sortAscending'),
               sortTotalsIndex: BuiltValueNullFieldError.checkNotNull(
-                  sortTotalsIndex, 'ReportSettingsEntity', 'sortTotalsIndex'),
+                  sortTotalsIndex, r'ReportSettingsEntity', 'sortTotalsIndex'),
               sortTotalsAscending: BuiltValueNullFieldError.checkNotNull(
                   sortTotalsAscending,
-                  'ReportSettingsEntity',
+                  r'ReportSettingsEntity',
                   'sortTotalsAscending'),
               columns: columns.build());
     } catch (_) {
@@ -3934,7 +3980,7 @@ class ReportSettingsEntityBuilder
         columns.build();
       } catch (e) {
         throw new BuiltValueNestedFieldError(
-            'ReportSettingsEntity', _$failedField, e.toString());
+            r'ReportSettingsEntity', _$failedField, e.toString());
       }
       rethrow;
     }
@@ -3949,10 +3995,10 @@ class _$CompanyItemResponse extends CompanyItemResponse {
 
   factory _$CompanyItemResponse(
           [void Function(CompanyItemResponseBuilder) updates]) =>
-      (new CompanyItemResponseBuilder()..update(updates)).build();
+      (new CompanyItemResponseBuilder()..update(updates))._build();
 
   _$CompanyItemResponse._({this.data}) : super._() {
-    BuiltValueNullFieldError.checkNotNull(data, 'CompanyItemResponse', 'data');
+    BuiltValueNullFieldError.checkNotNull(data, r'CompanyItemResponse', 'data');
   }
 
   @override
@@ -3978,7 +4024,7 @@ class _$CompanyItemResponse extends CompanyItemResponse {
 
   @override
   String toString() {
-    return (newBuiltValueToStringHelper('CompanyItemResponse')
+    return (newBuiltValueToStringHelper(r'CompanyItemResponse')
           ..add('data', data))
         .toString();
   }
@@ -4015,7 +4061,9 @@ class CompanyItemResponseBuilder
   }
 
   @override
-  _$CompanyItemResponse build() {
+  CompanyItemResponse build() => _build();
+
+  _$CompanyItemResponse _build() {
     _$CompanyItemResponse _$result;
     try {
       _$result = _$v ?? new _$CompanyItemResponse._(data: data.build());
@@ -4026,7 +4074,7 @@ class CompanyItemResponseBuilder
         data.build();
       } catch (e) {
         throw new BuiltValueNestedFieldError(
-            'CompanyItemResponse', _$failedField, e.toString());
+            r'CompanyItemResponse', _$failedField, e.toString());
       }
       rethrow;
     }
@@ -4043,13 +4091,13 @@ class _$RegistrationFieldEntity extends RegistrationFieldEntity {
 
   factory _$RegistrationFieldEntity(
           [void Function(RegistrationFieldEntityBuilder) updates]) =>
-      (new RegistrationFieldEntityBuilder()..update(updates)).build();
+      (new RegistrationFieldEntityBuilder()..update(updates))._build();
 
   _$RegistrationFieldEntity._({this.key, this.required}) : super._() {
     BuiltValueNullFieldError.checkNotNull(
-        key, 'RegistrationFieldEntity', 'key');
+        key, r'RegistrationFieldEntity', 'key');
     BuiltValueNullFieldError.checkNotNull(
-        required, 'RegistrationFieldEntity', 'required');
+        required, r'RegistrationFieldEntity', 'required');
   }
 
   @override
@@ -4077,7 +4125,7 @@ class _$RegistrationFieldEntity extends RegistrationFieldEntity {
 
   @override
   String toString() {
-    return (newBuiltValueToStringHelper('RegistrationFieldEntity')
+    return (newBuiltValueToStringHelper(r'RegistrationFieldEntity')
           ..add('key', key)
           ..add('required', required))
         .toString();
@@ -4121,16 +4169,18 @@ class RegistrationFieldEntityBuilder
   }
 
   @override
-  _$RegistrationFieldEntity build() {
+  RegistrationFieldEntity build() => _build();
+
+  _$RegistrationFieldEntity _build() {
     final _$result = _$v ??
         new _$RegistrationFieldEntity._(
             key: BuiltValueNullFieldError.checkNotNull(
-                key, 'RegistrationFieldEntity', 'key'),
+                key, r'RegistrationFieldEntity', 'key'),
             required: BuiltValueNullFieldError.checkNotNull(
-                required, 'RegistrationFieldEntity', 'required'));
+                required, r'RegistrationFieldEntity', 'required'));
     replace(_$result);
     return _$result;
   }
 }
 
-// ignore_for_file: always_put_control_body_on_new_line,always_specify_types,annotate_overrides,avoid_annotating_with_dynamic,avoid_as,avoid_catches_without_on_clauses,avoid_returning_this,deprecated_member_use_from_same_package,lines_longer_than_80_chars,omit_local_variable_types,prefer_expression_function_bodies,sort_constructors_first,test_types_in_equals,unnecessary_const,unnecessary_new
+// ignore_for_file: always_put_control_body_on_new_line,always_specify_types,annotate_overrides,avoid_annotating_with_dynamic,avoid_as,avoid_catches_without_on_clauses,avoid_returning_this,deprecated_member_use_from_same_package,lines_longer_than_80_chars,no_leading_underscores_for_local_identifiers,omit_local_variable_types,prefer_expression_function_bodies,sort_constructors_first,test_types_in_equals,unnecessary_const,unnecessary_new,unnecessary_lambdas

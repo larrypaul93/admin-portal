@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:invoiceninja_flutter/data/models/models.dart';
 import 'package:invoiceninja_flutter/redux/app/app_actions.dart';
+import 'package:invoiceninja_flutter/ui/app/forms/date_picker.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
 // Project imports:
@@ -57,6 +58,9 @@ class _InvoiceEditItemsDesktopState extends State<InvoiceEditItemsDesktop> {
   static const COLUMN_TAX2 = 'tax2';
   static const COLUMN_TAX3 = 'tax3';
   static const COLUMN_DISCOUNT = 'discount';
+
+  static const COLUMN_SKU = 'sku';
+  static const COLUMN_SERVICED = 'serviced';
 
   final _debouncer = Debouncer();
   TextEditingController _textEditingController;
@@ -214,6 +218,10 @@ class _InvoiceEditItemsDesktopState extends State<InvoiceEditItemsDesktop> {
       } else if (ProductItemFields.discount == column &&
           company.enableProductDiscount) {
         _columns.add(COLUMN_DISCOUNT);
+      } else if (ProductItemFields.sku == column) {
+        _columns.add(COLUMN_SKU);
+      } else if (ProductItemFields.serviced == column) {
+        _columns.add(COLUMN_SERVICED);
       }
     }
   }
@@ -342,6 +350,10 @@ class _InvoiceEditItemsDesktopState extends State<InvoiceEditItemsDesktop> {
       } else if (column == COLUMN_DISCOUNT) {
         label = translations['discount'] ?? localization.discount;
         isNumeric = true;
+      } else if (column == COLUMN_SKU) {
+        label = translations['sku'] ?? 'SKU';
+      } else if (column == COLUMN_SERVICED) {
+        label = translations['serviced'] ?? 'Serviced';
       }
       tableHeaderColumns.add(TableHeader(
         label,
@@ -457,6 +469,10 @@ class _InvoiceEditItemsDesktopState extends State<InvoiceEditItemsDesktop> {
                                     '',
                                 textAlign: TextAlign.right,
                               );
+                            } else if (column == COLUMN_SKU) {
+                              return Text(item.sku ?? '');
+                            } else if (column == COLUMN_SERVICED) {
+                              return Text(item.serviced ?? '');
                             }
                           })
                           .map((widget) => Expanded(
@@ -533,6 +549,7 @@ class _InvoiceEditItemsDesktopState extends State<InvoiceEditItemsDesktop> {
       child: Table(
         columnWidths: {
           _columns.indexOf(COLUMN_ITEM): FlexColumnWidth(1.3),
+          _columns.indexOf(COLUMN_SERVICED): FlexColumnWidth(1.3),
           _columns.indexOf(COLUMN_DESCRIPTION): FlexColumnWidth(2.2),
           _columns.length + 1: FixedColumnWidth(40),
         },
@@ -677,7 +694,8 @@ class _InvoiceEditItemsDesktopState extends State<InvoiceEditItemsDesktop> {
                                           company.numberOfItemTaxRates >= 3 &&
                                                   product.taxName3.isNotEmpty
                                               ? product.taxRate3
-                                              : item.taxRate3)
+                                              : item.taxRate3
+                                      ..sku = product.sku)
                                     : item.rebuild((b) =>
                                         b..productKey = product.productKey);
 
@@ -762,6 +780,202 @@ class _InvoiceEditItemsDesktopState extends State<InvoiceEditItemsDesktop> {
                             ),
                           ),
                         );
+                      } else if (column == COLUMN_SKU) {
+                        return Focus(
+                          onFocusChange: (hasFocus) {
+                            _autocompleteFocusIndex = index;
+                            _onFocusChange();
+                          },
+                          skipTraversal: true,
+                          child: Padding(
+                            padding:
+                                const EdgeInsets.only(right: kTableColumnGap),
+                            child: RawAutocomplete<ProductEntity>(
+                              key: ValueKey('__line_item_${index}_sku__'),
+                              textEditingController: _textEditingController,
+                              initialValue:
+                                  TextEditingValue(text: lineItems[index].sku),
+                              optionsBuilder:
+                                  (TextEditingValue textEditingValue) {
+                                final options = productIds
+                                    .map((productId) =>
+                                        productState.map[productId])
+                                    .where((product) {
+                                  final filter =
+                                      textEditingValue.text.toLowerCase();
+                                  final sku = product.sku.toLowerCase();
+                                  return sku.contains(filter);
+                                }).toList();
+
+                                if (options.length == 1 &&
+                                    options[0].sku.toLowerCase() ==
+                                        lineItems[index].sku.toLowerCase()) {
+                                  return <ProductEntity>[];
+                                }
+
+                                return options;
+                              },
+                              displayStringForOption: (product) => product.sku,
+                              onSelected: (product) {
+                                final item = lineItems[index];
+                                final client =
+                                    state.clientState.get(invoice.clientId);
+                                final currency = state
+                                    .staticState.currencyMap[client.currencyId];
+
+                                double cost = product.price;
+                                if (company.convertProductExchangeRate &&
+                                    invoice.clientId != null &&
+                                    client.currencyId != company.currencyId) {
+                                  double exchangeRate = invoice.exchangeRate;
+                                  if (!company.convertRateToClient &&
+                                      exchangeRate != 0) {
+                                    exchangeRate = 1 / exchangeRate;
+                                  }
+                                  cost = round(cost * exchangeRate,
+                                      currency?.precision ?? 2);
+                                }
+
+                                final updatedItem = company.fillProducts
+                                    ? item.rebuild((b) => b
+                                      ..productKey = product.productKey
+                                      ..notes = item.isTask
+                                          ? item.notes
+                                          : product.notes
+                                      ..productCost = item.productCost
+                                      ..cost = item.isTask && item.cost != 0
+                                          ? item.cost
+                                          : cost
+                                      ..quantity =
+                                          item.isTask || item.quantity != 0
+                                              ? item.quantity
+                                              : viewModel.state.company
+                                                      .defaultQuantity
+                                                  ? 1
+                                                  : product.quantity
+                                      ..customValue1 = product.customValue1
+                                      ..customValue2 = product.customValue2
+                                      ..customValue3 = product.customValue3
+                                      ..customValue4 = product.customValue4
+                                      ..taxName1 =
+                                          company.numberOfItemTaxRates >= 1 &&
+                                                  product.taxName1.isNotEmpty
+                                              ? product.taxName1
+                                              : item.taxName1
+                                      ..taxRate1 =
+                                          company.numberOfItemTaxRates >= 1 &&
+                                                  product.taxName1.isNotEmpty
+                                              ? product.taxRate1
+                                              : item.taxRate1
+                                      ..taxName2 =
+                                          company.numberOfItemTaxRates >= 2 &&
+                                                  product.taxName2.isNotEmpty
+                                              ? product.taxName2
+                                              : item.taxName2
+                                      ..taxRate2 =
+                                          company.numberOfItemTaxRates >= 2 &&
+                                                  product.taxName2.isNotEmpty
+                                              ? product.taxRate2
+                                              : item.taxRate2
+                                      ..taxName3 =
+                                          company.numberOfItemTaxRates >= 3 &&
+                                                  product.taxName3.isNotEmpty
+                                              ? product.taxName3
+                                              : item.taxName3
+                                      ..taxRate3 =
+                                          company.numberOfItemTaxRates >= 3 &&
+                                                  product.taxName3.isNotEmpty
+                                              ? product.taxRate3
+                                              : item.taxRate3
+                                      ..sku = product.sku)
+                                    : item.rebuild((b) => b
+                                      ..sku = product.sku
+                                      ..productKey = product.productKey);
+
+                                _onChanged(updatedItem, index, debounce: false);
+                                _updateTable();
+                              },
+                              fieldViewBuilder: (BuildContext context,
+                                  TextEditingController textEditingController,
+                                  FocusNode focusNode,
+                                  VoidCallback onFieldSubmitted) {
+                                return DecoratedFormField(
+                                  showClear: false,
+                                  autofocus: false,
+                                  controller: textEditingController,
+                                  keyboardType: TextInputType.text,
+                                  focusNode: focusNode,
+                                  onFieldSubmitted: (String value) {
+                                    onFieldSubmitted();
+                                  },
+                                  onChanged: (value) {
+                                    _onChanged(
+                                        lineItems[index]
+                                            .rebuild((b) => b..sku = value),
+                                        index);
+                                  },
+                                );
+                              },
+                              optionsViewBuilder: (BuildContext context,
+                                  AutocompleteOnSelected<ProductEntity>
+                                      onSelected,
+                                  Iterable<SelectableEntity> options) {
+                                final highlightedIndex =
+                                    AutocompleteHighlightedOption.of(context);
+                                return Theme(
+                                  data: theme,
+                                  child: Align(
+                                    alignment: Alignment.topLeft,
+                                    child: Material(
+                                      elevation: 4,
+                                      child: AppBorder(
+                                        child: Container(
+                                          color: Theme.of(context).cardColor,
+                                          width: 250,
+                                          constraints:
+                                              BoxConstraints(maxHeight: 270),
+                                          child: ScrollableListViewBuilder(
+                                            itemCount: options.length,
+                                            itemBuilder: (BuildContext context,
+                                                int index) {
+                                              final entity =
+                                                  options.elementAt(index);
+                                              return Container(
+                                                color: highlightedIndex == index
+                                                    ? convertHexStringToColor(state
+                                                            .prefState
+                                                            .enableDarkMode
+                                                        ? kDefaultDarkSelectedColor
+                                                        : kDefaultLightSelectedColor)
+                                                    : Theme.of(context)
+                                                        .cardColor,
+                                                child:
+                                                    EntityAutocompleteListTile(
+                                                  onTap: (entity) =>
+                                                      onSelected(entity),
+                                                  subtitle:
+                                                      entity is ProductEntity
+                                                          ? entity.sku
+                                                          : null,
+                                                  entity: entity,
+                                                  overrideSuggestedLabel:
+                                                      (entity) => entity
+                                                              is ProductEntity
+                                                          ? entity.sku
+                                                          : null,
+                                                ),
+                                              );
+                                            },
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                );
+                              },
+                            ),
+                          ),
+                        );
                       } else if (column == COLUMN_DESCRIPTION) {
                         return Focus(
                           onFocusChange: (hasFocus) => _onFocusChange(),
@@ -778,6 +992,26 @@ class _InvoiceEditItemsDesktopState extends State<InvoiceEditItemsDesktop> {
                                   lineItems[index]
                                       .rebuild((b) => b..notes = value),
                                   index),
+                            ),
+                          ),
+                        );
+                      } else if (column == COLUMN_SERVICED) {
+                        return Focus(
+                          onFocusChange: (hasFocus) => _onFocusChange(),
+                          skipTraversal: true,
+                          child: Padding(
+                            padding:
+                                const EdgeInsets.only(right: kTableColumnGap),
+                            child: DatePicker(
+                              labelText: 'Serviced',
+                              onSelected: (date, _) {
+                                _onChanged(
+                                    lineItems[index]
+                                        .rebuild((b) => b..serviced = date),
+                                    index);
+                              },
+                              selectedDate: lineItems[index].serviced,
+                              firstDate: DateTime.now(),
                             ),
                           ),
                         );

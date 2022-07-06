@@ -166,11 +166,11 @@ class _$InvoiceStatusListResponse extends InvoiceStatusListResponse {
 
   factory _$InvoiceStatusListResponse(
           [void Function(InvoiceStatusListResponseBuilder) updates]) =>
-      (new InvoiceStatusListResponseBuilder()..update(updates)).build();
+      (new InvoiceStatusListResponseBuilder()..update(updates))._build();
 
   _$InvoiceStatusListResponse._({this.data}) : super._() {
     BuiltValueNullFieldError.checkNotNull(
-        data, 'InvoiceStatusListResponse', 'data');
+        data, r'InvoiceStatusListResponse', 'data');
   }
 
   @override
@@ -196,7 +196,7 @@ class _$InvoiceStatusListResponse extends InvoiceStatusListResponse {
 
   @override
   String toString() {
-    return (newBuiltValueToStringHelper('InvoiceStatusListResponse')
+    return (newBuiltValueToStringHelper(r'InvoiceStatusListResponse')
           ..add('data', data))
         .toString();
   }
@@ -235,7 +235,9 @@ class InvoiceStatusListResponseBuilder
   }
 
   @override
-  _$InvoiceStatusListResponse build() {
+  InvoiceStatusListResponse build() => _build();
+
+  _$InvoiceStatusListResponse _build() {
     _$InvoiceStatusListResponse _$result;
     try {
       _$result = _$v ?? new _$InvoiceStatusListResponse._(data: data.build());
@@ -246,7 +248,7 @@ class InvoiceStatusListResponseBuilder
         data.build();
       } catch (e) {
         throw new BuiltValueNestedFieldError(
-            'InvoiceStatusListResponse', _$failedField, e.toString());
+            r'InvoiceStatusListResponse', _$failedField, e.toString());
       }
       rethrow;
     }
@@ -261,11 +263,11 @@ class _$InvoiceStatusItemResponse extends InvoiceStatusItemResponse {
 
   factory _$InvoiceStatusItemResponse(
           [void Function(InvoiceStatusItemResponseBuilder) updates]) =>
-      (new InvoiceStatusItemResponseBuilder()..update(updates)).build();
+      (new InvoiceStatusItemResponseBuilder()..update(updates))._build();
 
   _$InvoiceStatusItemResponse._({this.data}) : super._() {
     BuiltValueNullFieldError.checkNotNull(
-        data, 'InvoiceStatusItemResponse', 'data');
+        data, r'InvoiceStatusItemResponse', 'data');
   }
 
   @override
@@ -291,7 +293,7 @@ class _$InvoiceStatusItemResponse extends InvoiceStatusItemResponse {
 
   @override
   String toString() {
-    return (newBuiltValueToStringHelper('InvoiceStatusItemResponse')
+    return (newBuiltValueToStringHelper(r'InvoiceStatusItemResponse')
           ..add('data', data))
         .toString();
   }
@@ -330,7 +332,9 @@ class InvoiceStatusItemResponseBuilder
   }
 
   @override
-  _$InvoiceStatusItemResponse build() {
+  InvoiceStatusItemResponse build() => _build();
+
+  _$InvoiceStatusItemResponse _build() {
     _$InvoiceStatusItemResponse _$result;
     try {
       _$result = _$v ?? new _$InvoiceStatusItemResponse._(data: data.build());
@@ -341,7 +345,7 @@ class InvoiceStatusItemResponseBuilder
         data.build();
       } catch (e) {
         throw new BuiltValueNestedFieldError(
-            'InvoiceStatusItemResponse', _$failedField, e.toString());
+            r'InvoiceStatusItemResponse', _$failedField, e.toString());
       }
       rethrow;
     }
@@ -358,11 +362,11 @@ class _$InvoiceStatusEntity extends InvoiceStatusEntity {
 
   factory _$InvoiceStatusEntity(
           [void Function(InvoiceStatusEntityBuilder) updates]) =>
-      (new InvoiceStatusEntityBuilder()..update(updates)).build();
+      (new InvoiceStatusEntityBuilder()..update(updates))._build();
 
   _$InvoiceStatusEntity._({this.id, this.name}) : super._() {
-    BuiltValueNullFieldError.checkNotNull(id, 'InvoiceStatusEntity', 'id');
-    BuiltValueNullFieldError.checkNotNull(name, 'InvoiceStatusEntity', 'name');
+    BuiltValueNullFieldError.checkNotNull(id, r'InvoiceStatusEntity', 'id');
+    BuiltValueNullFieldError.checkNotNull(name, r'InvoiceStatusEntity', 'name');
   }
 
   @override
@@ -388,7 +392,7 @@ class _$InvoiceStatusEntity extends InvoiceStatusEntity {
 
   @override
   String toString() {
-    return (newBuiltValueToStringHelper('InvoiceStatusEntity')
+    return (newBuiltValueToStringHelper(r'InvoiceStatusEntity')
           ..add('id', id)
           ..add('name', name))
         .toString();
@@ -431,16 +435,18 @@ class InvoiceStatusEntityBuilder
   }
 
   @override
-  _$InvoiceStatusEntity build() {
+  InvoiceStatusEntity build() => _build();
+
+  _$InvoiceStatusEntity _build() {
     final _$result = _$v ??
         new _$InvoiceStatusEntity._(
             id: BuiltValueNullFieldError.checkNotNull(
-                id, 'InvoiceStatusEntity', 'id'),
+                id, r'InvoiceStatusEntity', 'id'),
             name: BuiltValueNullFieldError.checkNotNull(
-                name, 'InvoiceStatusEntity', 'name'));
+                name, r'InvoiceStatusEntity', 'name'));
     replace(_$result);
     return _$result;
   }
 }
 
-// ignore_for_file: always_put_control_body_on_new_line,always_specify_types,annotate_overrides,avoid_annotating_with_dynamic,avoid_as,avoid_catches_without_on_clauses,avoid_returning_this,deprecated_member_use_from_same_package,lines_longer_than_80_chars,omit_local_variable_types,prefer_expression_function_bodies,sort_constructors_first,test_types_in_equals,unnecessary_const,unnecessary_new
+// ignore_for_file: always_put_control_body_on_new_line,always_specify_types,annotate_overrides,avoid_annotating_with_dynamic,avoid_as,avoid_catches_without_on_clauses,avoid_returning_this,deprecated_member_use_from_same_package,lines_longer_than_80_chars,no_leading_underscores_for_local_identifiers,omit_local_variable_types,prefer_expression_function_bodies,sort_constructors_first,test_types_in_equals,unnecessary_const,unnecessary_new,unnecessary_lambdas

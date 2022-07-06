@@ -168,11 +168,11 @@ class _$CompanyGatewayState extends CompanyGatewayState {
 
   factory _$CompanyGatewayState(
           [void Function(CompanyGatewayStateBuilder) updates]) =>
-      (new CompanyGatewayStateBuilder()..update(updates)).build();
+      (new CompanyGatewayStateBuilder()..update(updates))._build();
 
   _$CompanyGatewayState._({this.map, this.list}) : super._() {
-    BuiltValueNullFieldError.checkNotNull(map, 'CompanyGatewayState', 'map');
-    BuiltValueNullFieldError.checkNotNull(list, 'CompanyGatewayState', 'list');
+    BuiltValueNullFieldError.checkNotNull(map, r'CompanyGatewayState', 'map');
+    BuiltValueNullFieldError.checkNotNull(list, r'CompanyGatewayState', 'list');
   }
 
   @override
@@ -200,7 +200,7 @@ class _$CompanyGatewayState extends CompanyGatewayState {
 
   @override
   String toString() {
-    return (newBuiltValueToStringHelper('CompanyGatewayState')
+    return (newBuiltValueToStringHelper(r'CompanyGatewayState')
           ..add('map', map)
           ..add('list', list))
         .toString();
@@ -244,7 +244,9 @@ class CompanyGatewayStateBuilder
   }
 
   @override
-  _$CompanyGatewayState build() {
+  CompanyGatewayState build() => _build();
+
+  _$CompanyGatewayState _build() {
     _$CompanyGatewayState _$result;
     try {
       _$result = _$v ??
@@ -258,7 +260,7 @@ class CompanyGatewayStateBuilder
         list.build();
       } catch (e) {
         throw new BuiltValueNestedFieldError(
-            'CompanyGatewayState', _$failedField, e.toString());
+            r'CompanyGatewayState', _$failedField, e.toString());
       }
       rethrow;
     }
@@ -285,7 +287,7 @@ class _$CompanyGatewayUIState extends CompanyGatewayUIState {
 
   factory _$CompanyGatewayUIState(
           [void Function(CompanyGatewayUIStateBuilder) updates]) =>
-      (new CompanyGatewayUIStateBuilder()..update(updates)).build();
+      (new CompanyGatewayUIStateBuilder()..update(updates))._build();
 
   _$CompanyGatewayUIState._(
       {this.editing,
@@ -297,9 +299,9 @@ class _$CompanyGatewayUIState extends CompanyGatewayUIState {
       this.cancelCompleter})
       : super._() {
     BuiltValueNullFieldError.checkNotNull(
-        listUIState, 'CompanyGatewayUIState', 'listUIState');
+        listUIState, r'CompanyGatewayUIState', 'listUIState');
     BuiltValueNullFieldError.checkNotNull(
-        tabIndex, 'CompanyGatewayUIState', 'tabIndex');
+        tabIndex, r'CompanyGatewayUIState', 'tabIndex');
   }
 
   @override
@@ -341,7 +343,7 @@ class _$CompanyGatewayUIState extends CompanyGatewayUIState {
 
   @override
   String toString() {
-    return (newBuiltValueToStringHelper('CompanyGatewayUIState')
+    return (newBuiltValueToStringHelper(r'CompanyGatewayUIState')
           ..add('editing', editing)
           ..add('listUIState', listUIState)
           ..add('selectedId', selectedId)
@@ -420,7 +422,9 @@ class CompanyGatewayUIStateBuilder
   }
 
   @override
-  _$CompanyGatewayUIState build() {
+  CompanyGatewayUIState build() => _build();
+
+  _$CompanyGatewayUIState _build() {
     _$CompanyGatewayUIState _$result;
     try {
       _$result = _$v ??
@@ -430,7 +434,7 @@ class CompanyGatewayUIStateBuilder
               selectedId: selectedId,
               forceSelected: forceSelected,
               tabIndex: BuiltValueNullFieldError.checkNotNull(
-                  tabIndex, 'CompanyGatewayUIState', 'tabIndex'),
+                  tabIndex, r'CompanyGatewayUIState', 'tabIndex'),
               saveCompleter: saveCompleter,
               cancelCompleter: cancelCompleter);
     } catch (_) {
@@ -442,7 +446,7 @@ class CompanyGatewayUIStateBuilder
         listUIState.build();
       } catch (e) {
         throw new BuiltValueNestedFieldError(
-            'CompanyGatewayUIState', _$failedField, e.toString());
+            r'CompanyGatewayUIState', _$failedField, e.toString());
       }
       rethrow;
     }
@@ -451,4 +455,4 @@ class CompanyGatewayUIStateBuilder
   }
 }
 
-// ignore_for_file: always_put_control_body_on_new_line,always_specify_types,annotate_overrides,avoid_annotating_with_dynamic,avoid_as,avoid_catches_without_on_clauses,avoid_returning_this,deprecated_member_use_from_same_package,lines_longer_than_80_chars,omit_local_variable_types,prefer_expression_function_bodies,sort_constructors_first,test_types_in_equals,unnecessary_const,unnecessary_new
+// ignore_for_file: always_put_control_body_on_new_line,always_specify_types,annotate_overrides,avoid_annotating_with_dynamic,avoid_as,avoid_catches_without_on_clauses,avoid_returning_this,deprecated_member_use_from_same_package,lines_longer_than_80_chars,no_leading_underscores_for_local_identifiers,omit_local_variable_types,prefer_expression_function_bodies,sort_constructors_first,test_types_in_equals,unnecessary_const,unnecessary_new,unnecessary_lambdas

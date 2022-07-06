@@ -27,9 +27,9 @@ class ContactRepository {
   }
 
   Future<BuiltList<ContactEntity>> loadList(
-      Credentials credentials, int page) async {
+      Credentials credentials, int page, int recordsPerPage) async {
     final String url =
-        credentials.url + '/contacts?per_page=$kRecordsPerPage&page=$page';
+        credentials.url + '/contacts?per_page=$recordsPerPage&page=$page';
     final dynamic response = await webClient.get(url, credentials.token);
 
     final ContactListResponse contactResponse =

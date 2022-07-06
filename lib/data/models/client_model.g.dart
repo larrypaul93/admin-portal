@@ -800,10 +800,10 @@ class _$ClientListResponse extends ClientListResponse {
 
   factory _$ClientListResponse(
           [void Function(ClientListResponseBuilder) updates]) =>
-      (new ClientListResponseBuilder()..update(updates)).build();
+      (new ClientListResponseBuilder()..update(updates))._build();
 
   _$ClientListResponse._({this.data}) : super._() {
-    BuiltValueNullFieldError.checkNotNull(data, 'ClientListResponse', 'data');
+    BuiltValueNullFieldError.checkNotNull(data, r'ClientListResponse', 'data');
   }
 
   @override
@@ -829,7 +829,7 @@ class _$ClientListResponse extends ClientListResponse {
 
   @override
   String toString() {
-    return (newBuiltValueToStringHelper('ClientListResponse')
+    return (newBuiltValueToStringHelper(r'ClientListResponse')
           ..add('data', data))
         .toString();
   }
@@ -867,7 +867,9 @@ class ClientListResponseBuilder
   }
 
   @override
-  _$ClientListResponse build() {
+  ClientListResponse build() => _build();
+
+  _$ClientListResponse _build() {
     _$ClientListResponse _$result;
     try {
       _$result = _$v ?? new _$ClientListResponse._(data: data.build());
@@ -878,7 +880,7 @@ class ClientListResponseBuilder
         data.build();
       } catch (e) {
         throw new BuiltValueNestedFieldError(
-            'ClientListResponse', _$failedField, e.toString());
+            r'ClientListResponse', _$failedField, e.toString());
       }
       rethrow;
     }
@@ -893,10 +895,10 @@ class _$ClientItemResponse extends ClientItemResponse {
 
   factory _$ClientItemResponse(
           [void Function(ClientItemResponseBuilder) updates]) =>
-      (new ClientItemResponseBuilder()..update(updates)).build();
+      (new ClientItemResponseBuilder()..update(updates))._build();
 
   _$ClientItemResponse._({this.data}) : super._() {
-    BuiltValueNullFieldError.checkNotNull(data, 'ClientItemResponse', 'data');
+    BuiltValueNullFieldError.checkNotNull(data, r'ClientItemResponse', 'data');
   }
 
   @override
@@ -922,7 +924,7 @@ class _$ClientItemResponse extends ClientItemResponse {
 
   @override
   String toString() {
-    return (newBuiltValueToStringHelper('ClientItemResponse')
+    return (newBuiltValueToStringHelper(r'ClientItemResponse')
           ..add('data', data))
         .toString();
   }
@@ -959,7 +961,9 @@ class ClientItemResponseBuilder
   }
 
   @override
-  _$ClientItemResponse build() {
+  ClientItemResponse build() => _build();
+
+  _$ClientItemResponse _build() {
     _$ClientItemResponse _$result;
     try {
       _$result = _$v ?? new _$ClientItemResponse._(data: data.build());
@@ -970,7 +974,7 @@ class ClientItemResponseBuilder
         data.build();
       } catch (e) {
         throw new BuiltValueNestedFieldError(
-            'ClientItemResponse', _$failedField, e.toString());
+            r'ClientItemResponse', _$failedField, e.toString());
       }
       rethrow;
     }
@@ -1136,7 +1140,7 @@ class _$ClientEntity extends ClientEntity {
   final String id;
 
   factory _$ClientEntity([void Function(ClientEntityBuilder) updates]) =>
-      (new ClientEntityBuilder()..update(updates)).build();
+      (new ClientEntityBuilder()..update(updates))._build();
 
   _$ClientEntity._(
       {this.groupId,
@@ -1217,89 +1221,95 @@ class _$ClientEntity extends ClientEntity {
       this.assignedUserId,
       this.id})
       : super._() {
-    BuiltValueNullFieldError.checkNotNull(groupId, 'ClientEntity', 'groupId');
-    BuiltValueNullFieldError.checkNotNull(name, 'ClientEntity', 'name');
+    BuiltValueNullFieldError.checkNotNull(groupId, r'ClientEntity', 'groupId');
+    BuiltValueNullFieldError.checkNotNull(name, r'ClientEntity', 'name');
     BuiltValueNullFieldError.checkNotNull(
-        displayName, 'ClientEntity', 'displayName');
-    BuiltValueNullFieldError.checkNotNull(balance, 'ClientEntity', 'balance');
+        displayName, r'ClientEntity', 'displayName');
+    BuiltValueNullFieldError.checkNotNull(balance, r'ClientEntity', 'balance');
     BuiltValueNullFieldError.checkNotNull(
-        creditBalance, 'ClientEntity', 'creditBalance');
+        creditBalance, r'ClientEntity', 'creditBalance');
     BuiltValueNullFieldError.checkNotNull(
-        paidToDate, 'ClientEntity', 'paidToDate');
+        paidToDate, r'ClientEntity', 'paidToDate');
     BuiltValueNullFieldError.checkNotNull(
-        clientHash, 'ClientEntity', 'clientHash');
-    BuiltValueNullFieldError.checkNotNull(address1, 'ClientEntity', 'address1');
-    BuiltValueNullFieldError.checkNotNull(address2, 'ClientEntity', 'address2');
-    BuiltValueNullFieldError.checkNotNull(city, 'ClientEntity', 'city');
-    BuiltValueNullFieldError.checkNotNull(state, 'ClientEntity', 'state');
+        clientHash, r'ClientEntity', 'clientHash');
     BuiltValueNullFieldError.checkNotNull(
-        postalCode, 'ClientEntity', 'postalCode');
+        address1, r'ClientEntity', 'address1');
     BuiltValueNullFieldError.checkNotNull(
-        countryId, 'ClientEntity', 'countryId');
-    BuiltValueNullFieldError.checkNotNull(phone, 'ClientEntity', 'phone');
+        address2, r'ClientEntity', 'address2');
+    BuiltValueNullFieldError.checkNotNull(city, r'ClientEntity', 'city');
+    BuiltValueNullFieldError.checkNotNull(state, r'ClientEntity', 'state');
     BuiltValueNullFieldError.checkNotNull(
-        privateNotes, 'ClientEntity', 'privateNotes');
+        postalCode, r'ClientEntity', 'postalCode');
     BuiltValueNullFieldError.checkNotNull(
-        publicNotes, 'ClientEntity', 'publicNotes');
-    BuiltValueNullFieldError.checkNotNull(website, 'ClientEntity', 'website');
+        countryId, r'ClientEntity', 'countryId');
+    BuiltValueNullFieldError.checkNotNull(phone, r'ClientEntity', 'phone');
     BuiltValueNullFieldError.checkNotNull(
-        industryId, 'ClientEntity', 'industryId');
-    BuiltValueNullFieldError.checkNotNull(sizeId, 'ClientEntity', 'sizeId');
+        privateNotes, r'ClientEntity', 'privateNotes');
     BuiltValueNullFieldError.checkNotNull(
-        vatNumber, 'ClientEntity', 'vatNumber');
-    BuiltValueNullFieldError.checkNotNull(idNumber, 'ClientEntity', 'idNumber');
-    BuiltValueNullFieldError.checkNotNull(number, 'ClientEntity', 'number');
+        publicNotes, r'ClientEntity', 'publicNotes');
+    BuiltValueNullFieldError.checkNotNull(website, r'ClientEntity', 'website');
     BuiltValueNullFieldError.checkNotNull(
-        shippingAddress1, 'ClientEntity', 'shippingAddress1');
+        industryId, r'ClientEntity', 'industryId');
+    BuiltValueNullFieldError.checkNotNull(sizeId, r'ClientEntity', 'sizeId');
     BuiltValueNullFieldError.checkNotNull(
-        shippingAddress2, 'ClientEntity', 'shippingAddress2');
+        vatNumber, r'ClientEntity', 'vatNumber');
     BuiltValueNullFieldError.checkNotNull(
-        shippingCity, 'ClientEntity', 'shippingCity');
+        idNumber, r'ClientEntity', 'idNumber');
+    BuiltValueNullFieldError.checkNotNull(number, r'ClientEntity', 'number');
     BuiltValueNullFieldError.checkNotNull(
-        shippingState, 'ClientEntity', 'shippingState');
+        shippingAddress1, r'ClientEntity', 'shippingAddress1');
     BuiltValueNullFieldError.checkNotNull(
-        shippingPostalCode, 'ClientEntity', 'shippingPostalCode');
+        shippingAddress2, r'ClientEntity', 'shippingAddress2');
     BuiltValueNullFieldError.checkNotNull(
-        shippingCountryId, 'ClientEntity', 'shippingCountryId');
-    BuiltValueNullFieldError.checkNotNull(settings, 'ClientEntity', 'settings');
+        shippingCity, r'ClientEntity', 'shippingCity');
     BuiltValueNullFieldError.checkNotNull(
-        lastLogin, 'ClientEntity', 'lastLogin');
+        shippingState, r'ClientEntity', 'shippingState');
     BuiltValueNullFieldError.checkNotNull(
-        customValue1, 'ClientEntity', 'customValue1');
+        shippingPostalCode, r'ClientEntity', 'shippingPostalCode');
     BuiltValueNullFieldError.checkNotNull(
-        customValue2, 'ClientEntity', 'customValue2');
+        shippingCountryId, r'ClientEntity', 'shippingCountryId');
     BuiltValueNullFieldError.checkNotNull(
-        customValue3, 'ClientEntity', 'customValue3');
+        settings, r'ClientEntity', 'settings');
     BuiltValueNullFieldError.checkNotNull(
-        customValue4, 'ClientEntity', 'customValue4');
+        lastLogin, r'ClientEntity', 'lastLogin');
     BuiltValueNullFieldError.checkNotNull(
-        mainAddress1, 'ClientEntity', 'mainAddress1');
+        customValue1, r'ClientEntity', 'customValue1');
     BuiltValueNullFieldError.checkNotNull(
-        mainAddress2, 'ClientEntity', 'mainAddress2');
-    BuiltValueNullFieldError.checkNotNull(mainCity, 'ClientEntity', 'mainCity');
+        customValue2, r'ClientEntity', 'customValue2');
     BuiltValueNullFieldError.checkNotNull(
-        mainState, 'ClientEntity', 'mainState');
+        customValue3, r'ClientEntity', 'customValue3');
     BuiltValueNullFieldError.checkNotNull(
-        mainPostalCode, 'ClientEntity', 'mainPostalCode');
+        customValue4, r'ClientEntity', 'customValue4');
     BuiltValueNullFieldError.checkNotNull(
-        mainCountryId, 'ClientEntity', 'mainCountryId');
-    BuiltValueNullFieldError.checkNotNull(contacts, 'ClientEntity', 'contacts');
+        mainAddress1, r'ClientEntity', 'mainAddress1');
     BuiltValueNullFieldError.checkNotNull(
-        activities, 'ClientEntity', 'activities');
-    BuiltValueNullFieldError.checkNotNull(ledger, 'ClientEntity', 'ledger');
+        mainAddress2, r'ClientEntity', 'mainAddress2');
     BuiltValueNullFieldError.checkNotNull(
-        gatewayTokens, 'ClientEntity', 'gatewayTokens');
+        mainCity, r'ClientEntity', 'mainCity');
     BuiltValueNullFieldError.checkNotNull(
-        documents, 'ClientEntity', 'documents');
+        mainState, r'ClientEntity', 'mainState');
     BuiltValueNullFieldError.checkNotNull(
-        systemLogs, 'ClientEntity', 'systemLogs');
+        mainPostalCode, r'ClientEntity', 'mainPostalCode');
     BuiltValueNullFieldError.checkNotNull(
-        createdAt, 'ClientEntity', 'createdAt');
+        mainCountryId, r'ClientEntity', 'mainCountryId');
     BuiltValueNullFieldError.checkNotNull(
-        updatedAt, 'ClientEntity', 'updatedAt');
+        contacts, r'ClientEntity', 'contacts');
     BuiltValueNullFieldError.checkNotNull(
-        archivedAt, 'ClientEntity', 'archivedAt');
-    BuiltValueNullFieldError.checkNotNull(id, 'ClientEntity', 'id');
+        activities, r'ClientEntity', 'activities');
+    BuiltValueNullFieldError.checkNotNull(ledger, r'ClientEntity', 'ledger');
+    BuiltValueNullFieldError.checkNotNull(
+        gatewayTokens, r'ClientEntity', 'gatewayTokens');
+    BuiltValueNullFieldError.checkNotNull(
+        documents, r'ClientEntity', 'documents');
+    BuiltValueNullFieldError.checkNotNull(
+        systemLogs, r'ClientEntity', 'systemLogs');
+    BuiltValueNullFieldError.checkNotNull(
+        createdAt, r'ClientEntity', 'createdAt');
+    BuiltValueNullFieldError.checkNotNull(
+        updatedAt, r'ClientEntity', 'updatedAt');
+    BuiltValueNullFieldError.checkNotNull(
+        archivedAt, r'ClientEntity', 'archivedAt');
+    BuiltValueNullFieldError.checkNotNull(id, r'ClientEntity', 'id');
   }
 
   @override
@@ -1436,7 +1446,7 @@ class _$ClientEntity extends ClientEntity {
 
   @override
   String toString() {
-    return (newBuiltValueToStringHelper('ClientEntity')
+    return (newBuiltValueToStringHelper(r'ClientEntity')
           ..add('groupId', groupId)
           ..add('loadedAt', loadedAt)
           ..add('name', name)
@@ -1963,55 +1973,57 @@ class ClientEntityBuilder
   }
 
   @override
-  _$ClientEntity build() {
+  ClientEntity build() => _build();
+
+  _$ClientEntity _build() {
     _$ClientEntity _$result;
     try {
       _$result = _$v ??
           new _$ClientEntity._(
               groupId: BuiltValueNullFieldError.checkNotNull(
-                  groupId, 'ClientEntity', 'groupId'),
+                  groupId, r'ClientEntity', 'groupId'),
               loadedAt: loadedAt,
               name: BuiltValueNullFieldError.checkNotNull(
-                  name, 'ClientEntity', 'name'),
+                  name, r'ClientEntity', 'name'),
               displayName: BuiltValueNullFieldError.checkNotNull(
-                  displayName, 'ClientEntity', 'displayName'),
+                  displayName, r'ClientEntity', 'displayName'),
               balance: BuiltValueNullFieldError.checkNotNull(
-                  balance, 'ClientEntity', 'balance'),
+                  balance, r'ClientEntity', 'balance'),
               creditBalance: BuiltValueNullFieldError.checkNotNull(
-                  creditBalance, 'ClientEntity', 'creditBalance'),
+                  creditBalance, r'ClientEntity', 'creditBalance'),
               paidToDate: BuiltValueNullFieldError.checkNotNull(
-                  paidToDate, 'ClientEntity', 'paidToDate'),
+                  paidToDate, r'ClientEntity', 'paidToDate'),
               clientHash: BuiltValueNullFieldError.checkNotNull(
-                  clientHash, 'ClientEntity', 'clientHash'),
+                  clientHash, r'ClientEntity', 'clientHash'),
               address1: BuiltValueNullFieldError.checkNotNull(
-                  address1, 'ClientEntity', 'address1'),
+                  address1, r'ClientEntity', 'address1'),
               address2:
-                  BuiltValueNullFieldError.checkNotNull(address2, 'ClientEntity', 'address2'),
-              city: BuiltValueNullFieldError.checkNotNull(city, 'ClientEntity', 'city'),
-              state: BuiltValueNullFieldError.checkNotNull(state, 'ClientEntity', 'state'),
-              postalCode: BuiltValueNullFieldError.checkNotNull(postalCode, 'ClientEntity', 'postalCode'),
-              countryId: BuiltValueNullFieldError.checkNotNull(countryId, 'ClientEntity', 'countryId'),
-              phone: BuiltValueNullFieldError.checkNotNull(phone, 'ClientEntity', 'phone'),
-              privateNotes: BuiltValueNullFieldError.checkNotNull(privateNotes, 'ClientEntity', 'privateNotes'),
-              publicNotes: BuiltValueNullFieldError.checkNotNull(publicNotes, 'ClientEntity', 'publicNotes'),
-              website: BuiltValueNullFieldError.checkNotNull(website, 'ClientEntity', 'website'),
-              industryId: BuiltValueNullFieldError.checkNotNull(industryId, 'ClientEntity', 'industryId'),
-              sizeId: BuiltValueNullFieldError.checkNotNull(sizeId, 'ClientEntity', 'sizeId'),
-              vatNumber: BuiltValueNullFieldError.checkNotNull(vatNumber, 'ClientEntity', 'vatNumber'),
-              idNumber: BuiltValueNullFieldError.checkNotNull(idNumber, 'ClientEntity', 'idNumber'),
-              number: BuiltValueNullFieldError.checkNotNull(number, 'ClientEntity', 'number'),
-              shippingAddress1: BuiltValueNullFieldError.checkNotNull(shippingAddress1, 'ClientEntity', 'shippingAddress1'),
-              shippingAddress2: BuiltValueNullFieldError.checkNotNull(shippingAddress2, 'ClientEntity', 'shippingAddress2'),
-              shippingCity: BuiltValueNullFieldError.checkNotNull(shippingCity, 'ClientEntity', 'shippingCity'),
-              shippingState: BuiltValueNullFieldError.checkNotNull(shippingState, 'ClientEntity', 'shippingState'),
-              shippingPostalCode: BuiltValueNullFieldError.checkNotNull(shippingPostalCode, 'ClientEntity', 'shippingPostalCode'),
-              shippingCountryId: BuiltValueNullFieldError.checkNotNull(shippingCountryId, 'ClientEntity', 'shippingCountryId'),
+                  BuiltValueNullFieldError.checkNotNull(address2, r'ClientEntity', 'address2'),
+              city: BuiltValueNullFieldError.checkNotNull(city, r'ClientEntity', 'city'),
+              state: BuiltValueNullFieldError.checkNotNull(state, r'ClientEntity', 'state'),
+              postalCode: BuiltValueNullFieldError.checkNotNull(postalCode, r'ClientEntity', 'postalCode'),
+              countryId: BuiltValueNullFieldError.checkNotNull(countryId, r'ClientEntity', 'countryId'),
+              phone: BuiltValueNullFieldError.checkNotNull(phone, r'ClientEntity', 'phone'),
+              privateNotes: BuiltValueNullFieldError.checkNotNull(privateNotes, r'ClientEntity', 'privateNotes'),
+              publicNotes: BuiltValueNullFieldError.checkNotNull(publicNotes, r'ClientEntity', 'publicNotes'),
+              website: BuiltValueNullFieldError.checkNotNull(website, r'ClientEntity', 'website'),
+              industryId: BuiltValueNullFieldError.checkNotNull(industryId, r'ClientEntity', 'industryId'),
+              sizeId: BuiltValueNullFieldError.checkNotNull(sizeId, r'ClientEntity', 'sizeId'),
+              vatNumber: BuiltValueNullFieldError.checkNotNull(vatNumber, r'ClientEntity', 'vatNumber'),
+              idNumber: BuiltValueNullFieldError.checkNotNull(idNumber, r'ClientEntity', 'idNumber'),
+              number: BuiltValueNullFieldError.checkNotNull(number, r'ClientEntity', 'number'),
+              shippingAddress1: BuiltValueNullFieldError.checkNotNull(shippingAddress1, r'ClientEntity', 'shippingAddress1'),
+              shippingAddress2: BuiltValueNullFieldError.checkNotNull(shippingAddress2, r'ClientEntity', 'shippingAddress2'),
+              shippingCity: BuiltValueNullFieldError.checkNotNull(shippingCity, r'ClientEntity', 'shippingCity'),
+              shippingState: BuiltValueNullFieldError.checkNotNull(shippingState, r'ClientEntity', 'shippingState'),
+              shippingPostalCode: BuiltValueNullFieldError.checkNotNull(shippingPostalCode, r'ClientEntity', 'shippingPostalCode'),
+              shippingCountryId: BuiltValueNullFieldError.checkNotNull(shippingCountryId, r'ClientEntity', 'shippingCountryId'),
               settings: settings.build(),
-              lastLogin: BuiltValueNullFieldError.checkNotNull(lastLogin, 'ClientEntity', 'lastLogin'),
-              customValue1: BuiltValueNullFieldError.checkNotNull(customValue1, 'ClientEntity', 'customValue1'),
-              customValue2: BuiltValueNullFieldError.checkNotNull(customValue2, 'ClientEntity', 'customValue2'),
-              customValue3: BuiltValueNullFieldError.checkNotNull(customValue3, 'ClientEntity', 'customValue3'),
-              customValue4: BuiltValueNullFieldError.checkNotNull(customValue4, 'ClientEntity', 'customValue4'),
+              lastLogin: BuiltValueNullFieldError.checkNotNull(lastLogin, r'ClientEntity', 'lastLogin'),
+              customValue1: BuiltValueNullFieldError.checkNotNull(customValue1, r'ClientEntity', 'customValue1'),
+              customValue2: BuiltValueNullFieldError.checkNotNull(customValue2, r'ClientEntity', 'customValue2'),
+              customValue3: BuiltValueNullFieldError.checkNotNull(customValue3, r'ClientEntity', 'customValue3'),
+              customValue4: BuiltValueNullFieldError.checkNotNull(customValue4, r'ClientEntity', 'customValue4'),
               suffix: suffix,
               legalBusinessName: legalBusinessName,
               email: email,
@@ -2034,12 +2046,12 @@ class ClientEntityBuilder
               headOfficeState: headOfficeState,
               headOfficePostalCode: headOfficePostalCode,
               headOfficeCountryId: headOfficeCountryId,
-              mainAddress1: BuiltValueNullFieldError.checkNotNull(mainAddress1, 'ClientEntity', 'mainAddress1'),
-              mainAddress2: BuiltValueNullFieldError.checkNotNull(mainAddress2, 'ClientEntity', 'mainAddress2'),
-              mainCity: BuiltValueNullFieldError.checkNotNull(mainCity, 'ClientEntity', 'mainCity'),
-              mainState: BuiltValueNullFieldError.checkNotNull(mainState, 'ClientEntity', 'mainState'),
-              mainPostalCode: BuiltValueNullFieldError.checkNotNull(mainPostalCode, 'ClientEntity', 'mainPostalCode'),
-              mainCountryId: BuiltValueNullFieldError.checkNotNull(mainCountryId, 'ClientEntity', 'mainCountryId'),
+              mainAddress1: BuiltValueNullFieldError.checkNotNull(mainAddress1, r'ClientEntity', 'mainAddress1'),
+              mainAddress2: BuiltValueNullFieldError.checkNotNull(mainAddress2, r'ClientEntity', 'mainAddress2'),
+              mainCity: BuiltValueNullFieldError.checkNotNull(mainCity, r'ClientEntity', 'mainCity'),
+              mainState: BuiltValueNullFieldError.checkNotNull(mainState, r'ClientEntity', 'mainState'),
+              mainPostalCode: BuiltValueNullFieldError.checkNotNull(mainPostalCode, r'ClientEntity', 'mainPostalCode'),
+              mainCountryId: BuiltValueNullFieldError.checkNotNull(mainCountryId, r'ClientEntity', 'mainCountryId'),
               contacts: contacts.build(),
               activities: activities.build(),
               ledger: ledger.build(),
@@ -2047,13 +2059,13 @@ class ClientEntityBuilder
               documents: documents.build(),
               systemLogs: systemLogs.build(),
               isChanged: isChanged,
-              createdAt: BuiltValueNullFieldError.checkNotNull(createdAt, 'ClientEntity', 'createdAt'),
-              updatedAt: BuiltValueNullFieldError.checkNotNull(updatedAt, 'ClientEntity', 'updatedAt'),
-              archivedAt: BuiltValueNullFieldError.checkNotNull(archivedAt, 'ClientEntity', 'archivedAt'),
+              createdAt: BuiltValueNullFieldError.checkNotNull(createdAt, r'ClientEntity', 'createdAt'),
+              updatedAt: BuiltValueNullFieldError.checkNotNull(updatedAt, r'ClientEntity', 'updatedAt'),
+              archivedAt: BuiltValueNullFieldError.checkNotNull(archivedAt, r'ClientEntity', 'archivedAt'),
               isDeleted: isDeleted,
               createdUserId: createdUserId,
               assignedUserId: assignedUserId,
-              id: BuiltValueNullFieldError.checkNotNull(id, 'ClientEntity', 'id'));
+              id: BuiltValueNullFieldError.checkNotNull(id, r'ClientEntity', 'id'));
     } catch (_) {
       String _$failedField;
       try {
@@ -2074,7 +2086,7 @@ class ClientEntityBuilder
         systemLogs.build();
       } catch (e) {
         throw new BuiltValueNestedFieldError(
-            'ClientEntity', _$failedField, e.toString());
+            r'ClientEntity', _$failedField, e.toString());
       }
       rethrow;
     }
@@ -2083,4 +2095,4 @@ class ClientEntityBuilder
   }
 }
 
-// ignore_for_file: always_put_control_body_on_new_line,always_specify_types,annotate_overrides,avoid_annotating_with_dynamic,avoid_as,avoid_catches_without_on_clauses,avoid_returning_this,deprecated_member_use_from_same_package,lines_longer_than_80_chars,omit_local_variable_types,prefer_expression_function_bodies,sort_constructors_first,test_types_in_equals,unnecessary_const,unnecessary_new
+// ignore_for_file: always_put_control_body_on_new_line,always_specify_types,annotate_overrides,avoid_annotating_with_dynamic,avoid_as,avoid_catches_without_on_clauses,avoid_returning_this,deprecated_member_use_from_same_package,lines_longer_than_80_chars,no_leading_underscores_for_local_identifiers,omit_local_variable_types,prefer_expression_function_bodies,sort_constructors_first,test_types_in_equals,unnecessary_const,unnecessary_new,unnecessary_lambdas

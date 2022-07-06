@@ -358,11 +358,11 @@ class _$GatewayTokenListResponse extends GatewayTokenListResponse {
 
   factory _$GatewayTokenListResponse(
           [void Function(GatewayTokenListResponseBuilder) updates]) =>
-      (new GatewayTokenListResponseBuilder()..update(updates)).build();
+      (new GatewayTokenListResponseBuilder()..update(updates))._build();
 
   _$GatewayTokenListResponse._({this.data}) : super._() {
     BuiltValueNullFieldError.checkNotNull(
-        data, 'GatewayTokenListResponse', 'data');
+        data, r'GatewayTokenListResponse', 'data');
   }
 
   @override
@@ -388,7 +388,7 @@ class _$GatewayTokenListResponse extends GatewayTokenListResponse {
 
   @override
   String toString() {
-    return (newBuiltValueToStringHelper('GatewayTokenListResponse')
+    return (newBuiltValueToStringHelper(r'GatewayTokenListResponse')
           ..add('data', data))
         .toString();
   }
@@ -427,7 +427,9 @@ class GatewayTokenListResponseBuilder
   }
 
   @override
-  _$GatewayTokenListResponse build() {
+  GatewayTokenListResponse build() => _build();
+
+  _$GatewayTokenListResponse _build() {
     _$GatewayTokenListResponse _$result;
     try {
       _$result = _$v ?? new _$GatewayTokenListResponse._(data: data.build());
@@ -438,7 +440,7 @@ class GatewayTokenListResponseBuilder
         data.build();
       } catch (e) {
         throw new BuiltValueNestedFieldError(
-            'GatewayTokenListResponse', _$failedField, e.toString());
+            r'GatewayTokenListResponse', _$failedField, e.toString());
       }
       rethrow;
     }
@@ -453,11 +455,11 @@ class _$GatewayTokenItemResponse extends GatewayTokenItemResponse {
 
   factory _$GatewayTokenItemResponse(
           [void Function(GatewayTokenItemResponseBuilder) updates]) =>
-      (new GatewayTokenItemResponseBuilder()..update(updates)).build();
+      (new GatewayTokenItemResponseBuilder()..update(updates))._build();
 
   _$GatewayTokenItemResponse._({this.data}) : super._() {
     BuiltValueNullFieldError.checkNotNull(
-        data, 'GatewayTokenItemResponse', 'data');
+        data, r'GatewayTokenItemResponse', 'data');
   }
 
   @override
@@ -483,7 +485,7 @@ class _$GatewayTokenItemResponse extends GatewayTokenItemResponse {
 
   @override
   String toString() {
-    return (newBuiltValueToStringHelper('GatewayTokenItemResponse')
+    return (newBuiltValueToStringHelper(r'GatewayTokenItemResponse')
           ..add('data', data))
         .toString();
   }
@@ -522,7 +524,9 @@ class GatewayTokenItemResponseBuilder
   }
 
   @override
-  _$GatewayTokenItemResponse build() {
+  GatewayTokenItemResponse build() => _build();
+
+  _$GatewayTokenItemResponse _build() {
     _$GatewayTokenItemResponse _$result;
     try {
       _$result = _$v ?? new _$GatewayTokenItemResponse._(data: data.build());
@@ -533,7 +537,7 @@ class GatewayTokenItemResponseBuilder
         data.build();
       } catch (e) {
         throw new BuiltValueNestedFieldError(
-            'GatewayTokenItemResponse', _$failedField, e.toString());
+            r'GatewayTokenItemResponse', _$failedField, e.toString());
       }
       rethrow;
     }
@@ -574,7 +578,7 @@ class _$GatewayTokenEntity extends GatewayTokenEntity {
 
   factory _$GatewayTokenEntity(
           [void Function(GatewayTokenEntityBuilder) updates]) =>
-      (new GatewayTokenEntityBuilder()..update(updates)).build();
+      (new GatewayTokenEntityBuilder()..update(updates))._build();
 
   _$GatewayTokenEntity._(
       {this.token,
@@ -592,23 +596,24 @@ class _$GatewayTokenEntity extends GatewayTokenEntity {
       this.assignedUserId,
       this.id})
       : super._() {
-    BuiltValueNullFieldError.checkNotNull(token, 'GatewayTokenEntity', 'token');
     BuiltValueNullFieldError.checkNotNull(
-        customerReference, 'GatewayTokenEntity', 'customerReference');
+        token, r'GatewayTokenEntity', 'token');
     BuiltValueNullFieldError.checkNotNull(
-        companyGatewayId, 'GatewayTokenEntity', 'companyGatewayId');
+        customerReference, r'GatewayTokenEntity', 'customerReference');
     BuiltValueNullFieldError.checkNotNull(
-        gatewayTypeId, 'GatewayTokenEntity', 'gatewayTypeId');
+        companyGatewayId, r'GatewayTokenEntity', 'companyGatewayId');
     BuiltValueNullFieldError.checkNotNull(
-        isDefault, 'GatewayTokenEntity', 'isDefault');
-    BuiltValueNullFieldError.checkNotNull(meta, 'GatewayTokenEntity', 'meta');
+        gatewayTypeId, r'GatewayTokenEntity', 'gatewayTypeId');
     BuiltValueNullFieldError.checkNotNull(
-        createdAt, 'GatewayTokenEntity', 'createdAt');
+        isDefault, r'GatewayTokenEntity', 'isDefault');
+    BuiltValueNullFieldError.checkNotNull(meta, r'GatewayTokenEntity', 'meta');
     BuiltValueNullFieldError.checkNotNull(
-        updatedAt, 'GatewayTokenEntity', 'updatedAt');
+        createdAt, r'GatewayTokenEntity', 'createdAt');
     BuiltValueNullFieldError.checkNotNull(
-        archivedAt, 'GatewayTokenEntity', 'archivedAt');
-    BuiltValueNullFieldError.checkNotNull(id, 'GatewayTokenEntity', 'id');
+        updatedAt, r'GatewayTokenEntity', 'updatedAt');
+    BuiltValueNullFieldError.checkNotNull(
+        archivedAt, r'GatewayTokenEntity', 'archivedAt');
+    BuiltValueNullFieldError.checkNotNull(id, r'GatewayTokenEntity', 'id');
   }
 
   @override
@@ -675,7 +680,7 @@ class _$GatewayTokenEntity extends GatewayTokenEntity {
 
   @override
   String toString() {
-    return (newBuiltValueToStringHelper('GatewayTokenEntity')
+    return (newBuiltValueToStringHelper(r'GatewayTokenEntity')
           ..add('token', token)
           ..add('customerReference', customerReference)
           ..add('companyGatewayId', companyGatewayId)
@@ -796,33 +801,35 @@ class GatewayTokenEntityBuilder
   }
 
   @override
-  _$GatewayTokenEntity build() {
+  GatewayTokenEntity build() => _build();
+
+  _$GatewayTokenEntity _build() {
     _$GatewayTokenEntity _$result;
     try {
       _$result = _$v ??
           new _$GatewayTokenEntity._(
               token: BuiltValueNullFieldError.checkNotNull(
-                  token, 'GatewayTokenEntity', 'token'),
+                  token, r'GatewayTokenEntity', 'token'),
               customerReference: BuiltValueNullFieldError.checkNotNull(
-                  customerReference, 'GatewayTokenEntity', 'customerReference'),
+                  customerReference, r'GatewayTokenEntity', 'customerReference'),
               companyGatewayId: BuiltValueNullFieldError.checkNotNull(
-                  companyGatewayId, 'GatewayTokenEntity', 'companyGatewayId'),
+                  companyGatewayId, r'GatewayTokenEntity', 'companyGatewayId'),
               gatewayTypeId: BuiltValueNullFieldError.checkNotNull(
-                  gatewayTypeId, 'GatewayTokenEntity', 'gatewayTypeId'),
+                  gatewayTypeId, r'GatewayTokenEntity', 'gatewayTypeId'),
               isDefault: BuiltValueNullFieldError.checkNotNull(
-                  isDefault, 'GatewayTokenEntity', 'isDefault'),
+                  isDefault, r'GatewayTokenEntity', 'isDefault'),
               meta: meta.build(),
               isChanged: isChanged,
               createdAt: BuiltValueNullFieldError.checkNotNull(
-                  createdAt, 'GatewayTokenEntity', 'createdAt'),
+                  createdAt, r'GatewayTokenEntity', 'createdAt'),
               updatedAt: BuiltValueNullFieldError.checkNotNull(
-                  updatedAt, 'GatewayTokenEntity', 'updatedAt'),
+                  updatedAt, r'GatewayTokenEntity', 'updatedAt'),
               archivedAt:
-                  BuiltValueNullFieldError.checkNotNull(archivedAt, 'GatewayTokenEntity', 'archivedAt'),
+                  BuiltValueNullFieldError.checkNotNull(archivedAt, r'GatewayTokenEntity', 'archivedAt'),
               isDeleted: isDeleted,
               createdUserId: createdUserId,
               assignedUserId: assignedUserId,
-              id: BuiltValueNullFieldError.checkNotNull(id, 'GatewayTokenEntity', 'id'));
+              id: BuiltValueNullFieldError.checkNotNull(id, r'GatewayTokenEntity', 'id'));
     } catch (_) {
       String _$failedField;
       try {
@@ -830,7 +837,7 @@ class GatewayTokenEntityBuilder
         meta.build();
       } catch (e) {
         throw new BuiltValueNestedFieldError(
-            'GatewayTokenEntity', _$failedField, e.toString());
+            r'GatewayTokenEntity', _$failedField, e.toString());
       }
       rethrow;
     }
@@ -853,7 +860,7 @@ class _$GatewayTokenMetaEntity extends GatewayTokenMetaEntity {
 
   factory _$GatewayTokenMetaEntity(
           [void Function(GatewayTokenMetaEntityBuilder) updates]) =>
-      (new GatewayTokenMetaEntityBuilder()..update(updates)).build();
+      (new GatewayTokenMetaEntityBuilder()..update(updates))._build();
 
   _$GatewayTokenMetaEntity._(
       {this.brand, this.last4, this.type, this.expMonth, this.expYear})
@@ -890,7 +897,7 @@ class _$GatewayTokenMetaEntity extends GatewayTokenMetaEntity {
 
   @override
   String toString() {
-    return (newBuiltValueToStringHelper('GatewayTokenMetaEntity')
+    return (newBuiltValueToStringHelper(r'GatewayTokenMetaEntity')
           ..add('brand', brand)
           ..add('last4', last4)
           ..add('type', type)
@@ -951,7 +958,9 @@ class GatewayTokenMetaEntityBuilder
   }
 
   @override
-  _$GatewayTokenMetaEntity build() {
+  GatewayTokenMetaEntity build() => _build();
+
+  _$GatewayTokenMetaEntity _build() {
     final _$result = _$v ??
         new _$GatewayTokenMetaEntity._(
             brand: brand,
@@ -964,4 +973,4 @@ class GatewayTokenMetaEntityBuilder
   }
 }
 
-// ignore_for_file: always_put_control_body_on_new_line,always_specify_types,annotate_overrides,avoid_annotating_with_dynamic,avoid_as,avoid_catches_without_on_clauses,avoid_returning_this,deprecated_member_use_from_same_package,lines_longer_than_80_chars,omit_local_variable_types,prefer_expression_function_bodies,sort_constructors_first,test_types_in_equals,unnecessary_const,unnecessary_new
+// ignore_for_file: always_put_control_body_on_new_line,always_specify_types,annotate_overrides,avoid_annotating_with_dynamic,avoid_as,avoid_catches_without_on_clauses,avoid_returning_this,deprecated_member_use_from_same_package,lines_longer_than_80_chars,no_leading_underscores_for_local_identifiers,omit_local_variable_types,prefer_expression_function_bodies,sort_constructors_first,test_types_in_equals,unnecessary_const,unnecessary_new,unnecessary_lambdas

@@ -233,11 +233,11 @@ class _$PaymentTermListResponse extends PaymentTermListResponse {
 
   factory _$PaymentTermListResponse(
           [void Function(PaymentTermListResponseBuilder) updates]) =>
-      (new PaymentTermListResponseBuilder()..update(updates)).build();
+      (new PaymentTermListResponseBuilder()..update(updates))._build();
 
   _$PaymentTermListResponse._({this.data}) : super._() {
     BuiltValueNullFieldError.checkNotNull(
-        data, 'PaymentTermListResponse', 'data');
+        data, r'PaymentTermListResponse', 'data');
   }
 
   @override
@@ -263,7 +263,7 @@ class _$PaymentTermListResponse extends PaymentTermListResponse {
 
   @override
   String toString() {
-    return (newBuiltValueToStringHelper('PaymentTermListResponse')
+    return (newBuiltValueToStringHelper(r'PaymentTermListResponse')
           ..add('data', data))
         .toString();
   }
@@ -302,7 +302,9 @@ class PaymentTermListResponseBuilder
   }
 
   @override
-  _$PaymentTermListResponse build() {
+  PaymentTermListResponse build() => _build();
+
+  _$PaymentTermListResponse _build() {
     _$PaymentTermListResponse _$result;
     try {
       _$result = _$v ?? new _$PaymentTermListResponse._(data: data.build());
@@ -313,7 +315,7 @@ class PaymentTermListResponseBuilder
         data.build();
       } catch (e) {
         throw new BuiltValueNestedFieldError(
-            'PaymentTermListResponse', _$failedField, e.toString());
+            r'PaymentTermListResponse', _$failedField, e.toString());
       }
       rethrow;
     }
@@ -328,11 +330,11 @@ class _$PaymentTermItemResponse extends PaymentTermItemResponse {
 
   factory _$PaymentTermItemResponse(
           [void Function(PaymentTermItemResponseBuilder) updates]) =>
-      (new PaymentTermItemResponseBuilder()..update(updates)).build();
+      (new PaymentTermItemResponseBuilder()..update(updates))._build();
 
   _$PaymentTermItemResponse._({this.data}) : super._() {
     BuiltValueNullFieldError.checkNotNull(
-        data, 'PaymentTermItemResponse', 'data');
+        data, r'PaymentTermItemResponse', 'data');
   }
 
   @override
@@ -358,7 +360,7 @@ class _$PaymentTermItemResponse extends PaymentTermItemResponse {
 
   @override
   String toString() {
-    return (newBuiltValueToStringHelper('PaymentTermItemResponse')
+    return (newBuiltValueToStringHelper(r'PaymentTermItemResponse')
           ..add('data', data))
         .toString();
   }
@@ -397,7 +399,9 @@ class PaymentTermItemResponseBuilder
   }
 
   @override
-  _$PaymentTermItemResponse build() {
+  PaymentTermItemResponse build() => _build();
+
+  _$PaymentTermItemResponse _build() {
     _$PaymentTermItemResponse _$result;
     try {
       _$result = _$v ?? new _$PaymentTermItemResponse._(data: data.build());
@@ -408,7 +412,7 @@ class PaymentTermItemResponseBuilder
         data.build();
       } catch (e) {
         throw new BuiltValueNestedFieldError(
-            'PaymentTermItemResponse', _$failedField, e.toString());
+            r'PaymentTermItemResponse', _$failedField, e.toString());
       }
       rethrow;
     }
@@ -441,7 +445,7 @@ class _$PaymentTermEntity extends PaymentTermEntity {
 
   factory _$PaymentTermEntity(
           [void Function(PaymentTermEntityBuilder) updates]) =>
-      (new PaymentTermEntityBuilder()..update(updates)).build();
+      (new PaymentTermEntityBuilder()..update(updates))._build();
 
   _$PaymentTermEntity._(
       {this.name,
@@ -455,16 +459,16 @@ class _$PaymentTermEntity extends PaymentTermEntity {
       this.assignedUserId,
       this.id})
       : super._() {
-    BuiltValueNullFieldError.checkNotNull(name, 'PaymentTermEntity', 'name');
+    BuiltValueNullFieldError.checkNotNull(name, r'PaymentTermEntity', 'name');
     BuiltValueNullFieldError.checkNotNull(
-        numDays, 'PaymentTermEntity', 'numDays');
+        numDays, r'PaymentTermEntity', 'numDays');
     BuiltValueNullFieldError.checkNotNull(
-        createdAt, 'PaymentTermEntity', 'createdAt');
+        createdAt, r'PaymentTermEntity', 'createdAt');
     BuiltValueNullFieldError.checkNotNull(
-        updatedAt, 'PaymentTermEntity', 'updatedAt');
+        updatedAt, r'PaymentTermEntity', 'updatedAt');
     BuiltValueNullFieldError.checkNotNull(
-        archivedAt, 'PaymentTermEntity', 'archivedAt');
-    BuiltValueNullFieldError.checkNotNull(id, 'PaymentTermEntity', 'id');
+        archivedAt, r'PaymentTermEntity', 'archivedAt');
+    BuiltValueNullFieldError.checkNotNull(id, r'PaymentTermEntity', 'id');
   }
 
   @override
@@ -516,7 +520,7 @@ class _$PaymentTermEntity extends PaymentTermEntity {
 
   @override
   String toString() {
-    return (newBuiltValueToStringHelper('PaymentTermEntity')
+    return (newBuiltValueToStringHelper(r'PaymentTermEntity')
           ..add('name', name)
           ..add('numDays', numDays)
           ..add('isChanged', isChanged)
@@ -609,28 +613,30 @@ class PaymentTermEntityBuilder
   }
 
   @override
-  _$PaymentTermEntity build() {
+  PaymentTermEntity build() => _build();
+
+  _$PaymentTermEntity _build() {
     final _$result = _$v ??
         new _$PaymentTermEntity._(
             name: BuiltValueNullFieldError.checkNotNull(
-                name, 'PaymentTermEntity', 'name'),
+                name, r'PaymentTermEntity', 'name'),
             numDays: BuiltValueNullFieldError.checkNotNull(
-                numDays, 'PaymentTermEntity', 'numDays'),
+                numDays, r'PaymentTermEntity', 'numDays'),
             isChanged: isChanged,
             createdAt: BuiltValueNullFieldError.checkNotNull(
-                createdAt, 'PaymentTermEntity', 'createdAt'),
+                createdAt, r'PaymentTermEntity', 'createdAt'),
             updatedAt: BuiltValueNullFieldError.checkNotNull(
-                updatedAt, 'PaymentTermEntity', 'updatedAt'),
+                updatedAt, r'PaymentTermEntity', 'updatedAt'),
             archivedAt: BuiltValueNullFieldError.checkNotNull(
-                archivedAt, 'PaymentTermEntity', 'archivedAt'),
+                archivedAt, r'PaymentTermEntity', 'archivedAt'),
             isDeleted: isDeleted,
             createdUserId: createdUserId,
             assignedUserId: assignedUserId,
             id: BuiltValueNullFieldError.checkNotNull(
-                id, 'PaymentTermEntity', 'id'));
+                id, r'PaymentTermEntity', 'id'));
     replace(_$result);
     return _$result;
   }
 }
 
-// ignore_for_file: always_put_control_body_on_new_line,always_specify_types,annotate_overrides,avoid_annotating_with_dynamic,avoid_as,avoid_catches_without_on_clauses,avoid_returning_this,deprecated_member_use_from_same_package,lines_longer_than_80_chars,omit_local_variable_types,prefer_expression_function_bodies,sort_constructors_first,test_types_in_equals,unnecessary_const,unnecessary_new
+// ignore_for_file: always_put_control_body_on_new_line,always_specify_types,annotate_overrides,avoid_annotating_with_dynamic,avoid_as,avoid_catches_without_on_clauses,avoid_returning_this,deprecated_member_use_from_same_package,lines_longer_than_80_chars,no_leading_underscores_for_local_identifiers,omit_local_variable_types,prefer_expression_function_bodies,sort_constructors_first,test_types_in_equals,unnecessary_const,unnecessary_new,unnecessary_lambdas

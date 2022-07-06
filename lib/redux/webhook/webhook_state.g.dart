@@ -154,11 +154,11 @@ class _$WebhookState extends WebhookState {
   final BuiltList<String> list;
 
   factory _$WebhookState([void Function(WebhookStateBuilder) updates]) =>
-      (new WebhookStateBuilder()..update(updates)).build();
+      (new WebhookStateBuilder()..update(updates))._build();
 
   _$WebhookState._({this.map, this.list}) : super._() {
-    BuiltValueNullFieldError.checkNotNull(map, 'WebhookState', 'map');
-    BuiltValueNullFieldError.checkNotNull(list, 'WebhookState', 'list');
+    BuiltValueNullFieldError.checkNotNull(map, r'WebhookState', 'map');
+    BuiltValueNullFieldError.checkNotNull(list, r'WebhookState', 'list');
   }
 
   @override
@@ -182,7 +182,7 @@ class _$WebhookState extends WebhookState {
 
   @override
   String toString() {
-    return (newBuiltValueToStringHelper('WebhookState')
+    return (newBuiltValueToStringHelper(r'WebhookState')
           ..add('map', map)
           ..add('list', list))
         .toString();
@@ -226,7 +226,9 @@ class WebhookStateBuilder
   }
 
   @override
-  _$WebhookState build() {
+  WebhookState build() => _build();
+
+  _$WebhookState _build() {
     _$WebhookState _$result;
     try {
       _$result =
@@ -240,7 +242,7 @@ class WebhookStateBuilder
         list.build();
       } catch (e) {
         throw new BuiltValueNestedFieldError(
-            'WebhookState', _$failedField, e.toString());
+            r'WebhookState', _$failedField, e.toString());
       }
       rethrow;
     }
@@ -266,7 +268,7 @@ class _$WebhookUIState extends WebhookUIState {
   final Completer<Null> cancelCompleter;
 
   factory _$WebhookUIState([void Function(WebhookUIStateBuilder) updates]) =>
-      (new WebhookUIStateBuilder()..update(updates)).build();
+      (new WebhookUIStateBuilder()..update(updates))._build();
 
   _$WebhookUIState._(
       {this.editing,
@@ -278,9 +280,9 @@ class _$WebhookUIState extends WebhookUIState {
       this.cancelCompleter})
       : super._() {
     BuiltValueNullFieldError.checkNotNull(
-        listUIState, 'WebhookUIState', 'listUIState');
+        listUIState, r'WebhookUIState', 'listUIState');
     BuiltValueNullFieldError.checkNotNull(
-        tabIndex, 'WebhookUIState', 'tabIndex');
+        tabIndex, r'WebhookUIState', 'tabIndex');
   }
 
   @override
@@ -321,7 +323,7 @@ class _$WebhookUIState extends WebhookUIState {
 
   @override
   String toString() {
-    return (newBuiltValueToStringHelper('WebhookUIState')
+    return (newBuiltValueToStringHelper(r'WebhookUIState')
           ..add('editing', editing)
           ..add('listUIState', listUIState)
           ..add('selectedId', selectedId)
@@ -400,7 +402,9 @@ class WebhookUIStateBuilder
   }
 
   @override
-  _$WebhookUIState build() {
+  WebhookUIState build() => _build();
+
+  _$WebhookUIState _build() {
     _$WebhookUIState _$result;
     try {
       _$result = _$v ??
@@ -410,7 +414,7 @@ class WebhookUIStateBuilder
               selectedId: selectedId,
               forceSelected: forceSelected,
               tabIndex: BuiltValueNullFieldError.checkNotNull(
-                  tabIndex, 'WebhookUIState', 'tabIndex'),
+                  tabIndex, r'WebhookUIState', 'tabIndex'),
               saveCompleter: saveCompleter,
               cancelCompleter: cancelCompleter);
     } catch (_) {
@@ -422,7 +426,7 @@ class WebhookUIStateBuilder
         listUIState.build();
       } catch (e) {
         throw new BuiltValueNestedFieldError(
-            'WebhookUIState', _$failedField, e.toString());
+            r'WebhookUIState', _$failedField, e.toString());
       }
       rethrow;
     }
@@ -431,4 +435,4 @@ class WebhookUIStateBuilder
   }
 }
 
-// ignore_for_file: always_put_control_body_on_new_line,always_specify_types,annotate_overrides,avoid_annotating_with_dynamic,avoid_as,avoid_catches_without_on_clauses,avoid_returning_this,deprecated_member_use_from_same_package,lines_longer_than_80_chars,omit_local_variable_types,prefer_expression_function_bodies,sort_constructors_first,test_types_in_equals,unnecessary_const,unnecessary_new
+// ignore_for_file: always_put_control_body_on_new_line,always_specify_types,annotate_overrides,avoid_annotating_with_dynamic,avoid_as,avoid_catches_without_on_clauses,avoid_returning_this,deprecated_member_use_from_same_package,lines_longer_than_80_chars,no_leading_underscores_for_local_identifiers,omit_local_variable_types,prefer_expression_function_bodies,sort_constructors_first,test_types_in_equals,unnecessary_const,unnecessary_new,unnecessary_lambdas

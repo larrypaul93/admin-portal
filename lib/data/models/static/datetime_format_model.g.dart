@@ -167,11 +167,11 @@ class _$DatetimeFormatListResponse extends DatetimeFormatListResponse {
 
   factory _$DatetimeFormatListResponse(
           [void Function(DatetimeFormatListResponseBuilder) updates]) =>
-      (new DatetimeFormatListResponseBuilder()..update(updates)).build();
+      (new DatetimeFormatListResponseBuilder()..update(updates))._build();
 
   _$DatetimeFormatListResponse._({this.data}) : super._() {
     BuiltValueNullFieldError.checkNotNull(
-        data, 'DatetimeFormatListResponse', 'data');
+        data, r'DatetimeFormatListResponse', 'data');
   }
 
   @override
@@ -197,7 +197,7 @@ class _$DatetimeFormatListResponse extends DatetimeFormatListResponse {
 
   @override
   String toString() {
-    return (newBuiltValueToStringHelper('DatetimeFormatListResponse')
+    return (newBuiltValueToStringHelper(r'DatetimeFormatListResponse')
           ..add('data', data))
         .toString();
   }
@@ -236,7 +236,9 @@ class DatetimeFormatListResponseBuilder
   }
 
   @override
-  _$DatetimeFormatListResponse build() {
+  DatetimeFormatListResponse build() => _build();
+
+  _$DatetimeFormatListResponse _build() {
     _$DatetimeFormatListResponse _$result;
     try {
       _$result = _$v ?? new _$DatetimeFormatListResponse._(data: data.build());
@@ -247,7 +249,7 @@ class DatetimeFormatListResponseBuilder
         data.build();
       } catch (e) {
         throw new BuiltValueNestedFieldError(
-            'DatetimeFormatListResponse', _$failedField, e.toString());
+            r'DatetimeFormatListResponse', _$failedField, e.toString());
       }
       rethrow;
     }
@@ -262,11 +264,11 @@ class _$DatetimeFormatItemResponse extends DatetimeFormatItemResponse {
 
   factory _$DatetimeFormatItemResponse(
           [void Function(DatetimeFormatItemResponseBuilder) updates]) =>
-      (new DatetimeFormatItemResponseBuilder()..update(updates)).build();
+      (new DatetimeFormatItemResponseBuilder()..update(updates))._build();
 
   _$DatetimeFormatItemResponse._({this.data}) : super._() {
     BuiltValueNullFieldError.checkNotNull(
-        data, 'DatetimeFormatItemResponse', 'data');
+        data, r'DatetimeFormatItemResponse', 'data');
   }
 
   @override
@@ -292,7 +294,7 @@ class _$DatetimeFormatItemResponse extends DatetimeFormatItemResponse {
 
   @override
   String toString() {
-    return (newBuiltValueToStringHelper('DatetimeFormatItemResponse')
+    return (newBuiltValueToStringHelper(r'DatetimeFormatItemResponse')
           ..add('data', data))
         .toString();
   }
@@ -331,7 +333,9 @@ class DatetimeFormatItemResponseBuilder
   }
 
   @override
-  _$DatetimeFormatItemResponse build() {
+  DatetimeFormatItemResponse build() => _build();
+
+  _$DatetimeFormatItemResponse _build() {
     _$DatetimeFormatItemResponse _$result;
     try {
       _$result = _$v ?? new _$DatetimeFormatItemResponse._(data: data.build());
@@ -342,7 +346,7 @@ class DatetimeFormatItemResponseBuilder
         data.build();
       } catch (e) {
         throw new BuiltValueNestedFieldError(
-            'DatetimeFormatItemResponse', _$failedField, e.toString());
+            r'DatetimeFormatItemResponse', _$failedField, e.toString());
       }
       rethrow;
     }
@@ -359,12 +363,12 @@ class _$DatetimeFormatEntity extends DatetimeFormatEntity {
 
   factory _$DatetimeFormatEntity(
           [void Function(DatetimeFormatEntityBuilder) updates]) =>
-      (new DatetimeFormatEntityBuilder()..update(updates)).build();
+      (new DatetimeFormatEntityBuilder()..update(updates))._build();
 
   _$DatetimeFormatEntity._({this.id, this.format}) : super._() {
-    BuiltValueNullFieldError.checkNotNull(id, 'DatetimeFormatEntity', 'id');
+    BuiltValueNullFieldError.checkNotNull(id, r'DatetimeFormatEntity', 'id');
     BuiltValueNullFieldError.checkNotNull(
-        format, 'DatetimeFormatEntity', 'format');
+        format, r'DatetimeFormatEntity', 'format');
   }
 
   @override
@@ -392,7 +396,7 @@ class _$DatetimeFormatEntity extends DatetimeFormatEntity {
 
   @override
   String toString() {
-    return (newBuiltValueToStringHelper('DatetimeFormatEntity')
+    return (newBuiltValueToStringHelper(r'DatetimeFormatEntity')
           ..add('id', id)
           ..add('format', format))
         .toString();
@@ -435,16 +439,18 @@ class DatetimeFormatEntityBuilder
   }
 
   @override
-  _$DatetimeFormatEntity build() {
+  DatetimeFormatEntity build() => _build();
+
+  _$DatetimeFormatEntity _build() {
     final _$result = _$v ??
         new _$DatetimeFormatEntity._(
             id: BuiltValueNullFieldError.checkNotNull(
-                id, 'DatetimeFormatEntity', 'id'),
+                id, r'DatetimeFormatEntity', 'id'),
             format: BuiltValueNullFieldError.checkNotNull(
-                format, 'DatetimeFormatEntity', 'format'));
+                format, r'DatetimeFormatEntity', 'format'));
     replace(_$result);
     return _$result;
   }
 }
 
-// ignore_for_file: always_put_control_body_on_new_line,always_specify_types,annotate_overrides,avoid_annotating_with_dynamic,avoid_as,avoid_catches_without_on_clauses,avoid_returning_this,deprecated_member_use_from_same_package,lines_longer_than_80_chars,omit_local_variable_types,prefer_expression_function_bodies,sort_constructors_first,test_types_in_equals,unnecessary_const,unnecessary_new
+// ignore_for_file: always_put_control_body_on_new_line,always_specify_types,annotate_overrides,avoid_annotating_with_dynamic,avoid_as,avoid_catches_without_on_clauses,avoid_returning_this,deprecated_member_use_from_same_package,lines_longer_than_80_chars,no_leading_underscores_for_local_identifiers,omit_local_variable_types,prefer_expression_function_bodies,sort_constructors_first,test_types_in_equals,unnecessary_const,unnecessary_new,unnecessary_lambdas

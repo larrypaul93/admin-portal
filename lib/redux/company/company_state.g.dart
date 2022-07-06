@@ -64,6 +64,9 @@ class _$UserCompanyStateSerializer
       'contactState',
       serializers.serialize(object.contactState,
           specifiedType: const FullType(ContactState)),
+      'serviceReportsState',
+      serializers.serialize(object.serviceReportsState,
+          specifiedType: const FullType(ServiceReportsState)),
       'recurringExpenseState',
       serializers.serialize(object.recurringExpenseState,
           specifiedType: const FullType(RecurringExpenseState)),
@@ -191,6 +194,11 @@ class _$UserCompanyStateSerializer
         case 'contactState':
           result.contactState.replace(serializers.deserialize(value,
               specifiedType: const FullType(ContactState)) as ContactState);
+          break;
+        case 'serviceReportsState':
+          result.serviceReportsState.replace(serializers.deserialize(value,
+                  specifiedType: const FullType(ServiceReportsState))
+              as ServiceReportsState);
           break;
         case 'recurringExpenseState':
           result.recurringExpenseState.replace(serializers.deserialize(value,
@@ -445,6 +453,8 @@ class _$UserCompanyState extends UserCompanyState {
   @override
   final ContactState contactState;
   @override
+  final ServiceReportsState serviceReportsState;
+  @override
   final RecurringExpenseState recurringExpenseState;
   @override
   final SubscriptionState subscriptionState;
@@ -475,7 +485,7 @@ class _$UserCompanyState extends UserCompanyState {
 
   factory _$UserCompanyState(
           [void Function(UserCompanyStateBuilder) updates]) =>
-      (new UserCompanyStateBuilder()..update(updates)).build();
+      (new UserCompanyStateBuilder()..update(updates))._build();
 
   _$UserCompanyState._(
       {this.lastUpdated,
@@ -493,6 +503,7 @@ class _$UserCompanyState extends UserCompanyState {
       this.purchaseOrderState,
       this.categoryState,
       this.contactState,
+      this.serviceReportsState,
       this.recurringExpenseState,
       this.subscriptionState,
       this.taskStatusState,
@@ -509,61 +520,63 @@ class _$UserCompanyState extends UserCompanyState {
       this.groupState})
       : super._() {
     BuiltValueNullFieldError.checkNotNull(
-        lastUpdated, 'UserCompanyState', 'lastUpdated');
+        lastUpdated, r'UserCompanyState', 'lastUpdated');
     BuiltValueNullFieldError.checkNotNull(
-        documentState, 'UserCompanyState', 'documentState');
+        documentState, r'UserCompanyState', 'documentState');
     BuiltValueNullFieldError.checkNotNull(
-        productState, 'UserCompanyState', 'productState');
+        productState, r'UserCompanyState', 'productState');
     BuiltValueNullFieldError.checkNotNull(
-        clientState, 'UserCompanyState', 'clientState');
+        clientState, r'UserCompanyState', 'clientState');
     BuiltValueNullFieldError.checkNotNull(
-        invoiceState, 'UserCompanyState', 'invoiceState');
+        invoiceState, r'UserCompanyState', 'invoiceState');
     BuiltValueNullFieldError.checkNotNull(
-        expenseState, 'UserCompanyState', 'expenseState');
+        expenseState, r'UserCompanyState', 'expenseState');
     BuiltValueNullFieldError.checkNotNull(
-        vendorState, 'UserCompanyState', 'vendorState');
+        vendorState, r'UserCompanyState', 'vendorState');
     BuiltValueNullFieldError.checkNotNull(
-        taskState, 'UserCompanyState', 'taskState');
+        taskState, r'UserCompanyState', 'taskState');
     BuiltValueNullFieldError.checkNotNull(
-        projectState, 'UserCompanyState', 'projectState');
+        projectState, r'UserCompanyState', 'projectState');
     BuiltValueNullFieldError.checkNotNull(
-        paymentState, 'UserCompanyState', 'paymentState');
+        paymentState, r'UserCompanyState', 'paymentState');
     BuiltValueNullFieldError.checkNotNull(
-        quoteState, 'UserCompanyState', 'quoteState');
+        quoteState, r'UserCompanyState', 'quoteState');
     BuiltValueNullFieldError.checkNotNull(
-        purchaseOrderState, 'UserCompanyState', 'purchaseOrderState');
+        purchaseOrderState, r'UserCompanyState', 'purchaseOrderState');
     BuiltValueNullFieldError.checkNotNull(
-        categoryState, 'UserCompanyState', 'categoryState');
+        categoryState, r'UserCompanyState', 'categoryState');
     BuiltValueNullFieldError.checkNotNull(
-        contactState, 'UserCompanyState', 'contactState');
+        contactState, r'UserCompanyState', 'contactState');
     BuiltValueNullFieldError.checkNotNull(
-        recurringExpenseState, 'UserCompanyState', 'recurringExpenseState');
+        serviceReportsState, r'UserCompanyState', 'serviceReportsState');
     BuiltValueNullFieldError.checkNotNull(
-        subscriptionState, 'UserCompanyState', 'subscriptionState');
+        recurringExpenseState, r'UserCompanyState', 'recurringExpenseState');
     BuiltValueNullFieldError.checkNotNull(
-        taskStatusState, 'UserCompanyState', 'taskStatusState');
+        subscriptionState, r'UserCompanyState', 'subscriptionState');
     BuiltValueNullFieldError.checkNotNull(
-        expenseCategoryState, 'UserCompanyState', 'expenseCategoryState');
+        taskStatusState, r'UserCompanyState', 'taskStatusState');
     BuiltValueNullFieldError.checkNotNull(
-        recurringInvoiceState, 'UserCompanyState', 'recurringInvoiceState');
+        expenseCategoryState, r'UserCompanyState', 'expenseCategoryState');
     BuiltValueNullFieldError.checkNotNull(
-        webhookState, 'UserCompanyState', 'webhookState');
+        recurringInvoiceState, r'UserCompanyState', 'recurringInvoiceState');
     BuiltValueNullFieldError.checkNotNull(
-        tokenState, 'UserCompanyState', 'tokenState');
+        webhookState, r'UserCompanyState', 'webhookState');
     BuiltValueNullFieldError.checkNotNull(
-        paymentTermState, 'UserCompanyState', 'paymentTermState');
+        tokenState, r'UserCompanyState', 'tokenState');
     BuiltValueNullFieldError.checkNotNull(
-        designState, 'UserCompanyState', 'designState');
+        paymentTermState, r'UserCompanyState', 'paymentTermState');
     BuiltValueNullFieldError.checkNotNull(
-        creditState, 'UserCompanyState', 'creditState');
+        designState, r'UserCompanyState', 'designState');
     BuiltValueNullFieldError.checkNotNull(
-        userState, 'UserCompanyState', 'userState');
+        creditState, r'UserCompanyState', 'creditState');
     BuiltValueNullFieldError.checkNotNull(
-        taxRateState, 'UserCompanyState', 'taxRateState');
+        userState, r'UserCompanyState', 'userState');
     BuiltValueNullFieldError.checkNotNull(
-        companyGatewayState, 'UserCompanyState', 'companyGatewayState');
+        taxRateState, r'UserCompanyState', 'taxRateState');
     BuiltValueNullFieldError.checkNotNull(
-        groupState, 'UserCompanyState', 'groupState');
+        companyGatewayState, r'UserCompanyState', 'companyGatewayState');
+    BuiltValueNullFieldError.checkNotNull(
+        groupState, r'UserCompanyState', 'groupState');
   }
 
   @override
@@ -593,6 +606,7 @@ class _$UserCompanyState extends UserCompanyState {
         purchaseOrderState == other.purchaseOrderState &&
         categoryState == other.categoryState &&
         contactState == other.contactState &&
+        serviceReportsState == other.serviceReportsState &&
         recurringExpenseState == other.recurringExpenseState &&
         subscriptionState == other.subscriptionState &&
         taskStatusState == other.taskStatusState &&
@@ -630,12 +644,12 @@ class _$UserCompanyState extends UserCompanyState {
                                                                 $jc(
                                                                     $jc(
                                                                         $jc(
-                                                                            $jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc(0, lastUpdated.hashCode), userCompany.hashCode), documentState.hashCode), productState.hashCode), clientState.hashCode), invoiceState.hashCode), expenseState.hashCode), vendorState.hashCode), taskState.hashCode), projectState.hashCode),
-                                                                                paymentState.hashCode),
-                                                                            quoteState.hashCode),
-                                                                        purchaseOrderState.hashCode),
-                                                                    categoryState.hashCode),
-                                                                contactState.hashCode),
+                                                                            $jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc(0, lastUpdated.hashCode), userCompany.hashCode), documentState.hashCode), productState.hashCode), clientState.hashCode), invoiceState.hashCode), expenseState.hashCode), vendorState.hashCode), taskState.hashCode), projectState.hashCode), paymentState.hashCode),
+                                                                                quoteState.hashCode),
+                                                                            purchaseOrderState.hashCode),
+                                                                        categoryState.hashCode),
+                                                                    contactState.hashCode),
+                                                                serviceReportsState.hashCode),
                                                             recurringExpenseState.hashCode),
                                                         subscriptionState.hashCode),
                                                     taskStatusState.hashCode),
@@ -654,7 +668,7 @@ class _$UserCompanyState extends UserCompanyState {
 
   @override
   String toString() {
-    return (newBuiltValueToStringHelper('UserCompanyState')
+    return (newBuiltValueToStringHelper(r'UserCompanyState')
           ..add('lastUpdated', lastUpdated)
           ..add('userCompany', userCompany)
           ..add('documentState', documentState)
@@ -670,6 +684,7 @@ class _$UserCompanyState extends UserCompanyState {
           ..add('purchaseOrderState', purchaseOrderState)
           ..add('categoryState', categoryState)
           ..add('contactState', contactState)
+          ..add('serviceReportsState', serviceReportsState)
           ..add('recurringExpenseState', recurringExpenseState)
           ..add('subscriptionState', subscriptionState)
           ..add('taskStatusState', taskStatusState)
@@ -779,6 +794,12 @@ class UserCompanyStateBuilder
   set contactState(ContactStateBuilder contactState) =>
       _$this._contactState = contactState;
 
+  ServiceReportsStateBuilder _serviceReportsState;
+  ServiceReportsStateBuilder get serviceReportsState =>
+      _$this._serviceReportsState ??= new ServiceReportsStateBuilder();
+  set serviceReportsState(ServiceReportsStateBuilder serviceReportsState) =>
+      _$this._serviceReportsState = serviceReportsState;
+
   RecurringExpenseStateBuilder _recurringExpenseState;
   RecurringExpenseStateBuilder get recurringExpenseState =>
       _$this._recurringExpenseState ??= new RecurringExpenseStateBuilder();
@@ -884,6 +905,7 @@ class UserCompanyStateBuilder
       _purchaseOrderState = $v.purchaseOrderState.toBuilder();
       _categoryState = $v.categoryState.toBuilder();
       _contactState = $v.contactState.toBuilder();
+      _serviceReportsState = $v.serviceReportsState.toBuilder();
       _recurringExpenseState = $v.recurringExpenseState.toBuilder();
       _subscriptionState = $v.subscriptionState.toBuilder();
       _taskStatusState = $v.taskStatusState.toBuilder();
@@ -915,13 +937,15 @@ class UserCompanyStateBuilder
   }
 
   @override
-  _$UserCompanyState build() {
+  UserCompanyState build() => _build();
+
+  _$UserCompanyState _build() {
     _$UserCompanyState _$result;
     try {
       _$result = _$v ??
           new _$UserCompanyState._(
               lastUpdated: BuiltValueNullFieldError.checkNotNull(
-                  lastUpdated, 'UserCompanyState', 'lastUpdated'),
+                  lastUpdated, r'UserCompanyState', 'lastUpdated'),
               userCompany: _userCompany?.build(),
               documentState: documentState.build(),
               productState: productState.build(),
@@ -936,6 +960,7 @@ class UserCompanyStateBuilder
               purchaseOrderState: purchaseOrderState.build(),
               categoryState: categoryState.build(),
               contactState: contactState.build(),
+              serviceReportsState: serviceReportsState.build(),
               recurringExpenseState: recurringExpenseState.build(),
               subscriptionState: subscriptionState.build(),
               taskStatusState: taskStatusState.build(),
@@ -981,6 +1006,8 @@ class UserCompanyStateBuilder
         categoryState.build();
         _$failedField = 'contactState';
         contactState.build();
+        _$failedField = 'serviceReportsState';
+        serviceReportsState.build();
         _$failedField = 'recurringExpenseState';
         recurringExpenseState.build();
         _$failedField = 'subscriptionState';
@@ -1011,7 +1038,7 @@ class UserCompanyStateBuilder
         groupState.build();
       } catch (e) {
         throw new BuiltValueNestedFieldError(
-            'UserCompanyState', _$failedField, e.toString());
+            r'UserCompanyState', _$failedField, e.toString());
       }
       rethrow;
     }
@@ -1055,7 +1082,7 @@ class _$SettingsUIState extends SettingsUIState {
   final int filterClearedAt;
 
   factory _$SettingsUIState([void Function(SettingsUIStateBuilder) updates]) =>
-      (new SettingsUIStateBuilder()..update(updates)).build();
+      (new SettingsUIStateBuilder()..update(updates))._build();
 
   _$SettingsUIState._(
       {this.company,
@@ -1076,32 +1103,32 @@ class _$SettingsUIState extends SettingsUIState {
       this.filterClearedAt})
       : super._() {
     BuiltValueNullFieldError.checkNotNull(
-        company, 'SettingsUIState', 'company');
+        company, r'SettingsUIState', 'company');
     BuiltValueNullFieldError.checkNotNull(
-        origCompany, 'SettingsUIState', 'origCompany');
-    BuiltValueNullFieldError.checkNotNull(client, 'SettingsUIState', 'client');
+        origCompany, r'SettingsUIState', 'origCompany');
+    BuiltValueNullFieldError.checkNotNull(client, r'SettingsUIState', 'client');
     BuiltValueNullFieldError.checkNotNull(
-        origClient, 'SettingsUIState', 'origClient');
-    BuiltValueNullFieldError.checkNotNull(group, 'SettingsUIState', 'group');
+        origClient, r'SettingsUIState', 'origClient');
+    BuiltValueNullFieldError.checkNotNull(group, r'SettingsUIState', 'group');
     BuiltValueNullFieldError.checkNotNull(
-        origGroup, 'SettingsUIState', 'origGroup');
-    BuiltValueNullFieldError.checkNotNull(user, 'SettingsUIState', 'user');
+        origGroup, r'SettingsUIState', 'origGroup');
+    BuiltValueNullFieldError.checkNotNull(user, r'SettingsUIState', 'user');
     BuiltValueNullFieldError.checkNotNull(
-        origUser, 'SettingsUIState', 'origUser');
+        origUser, r'SettingsUIState', 'origUser');
     BuiltValueNullFieldError.checkNotNull(
-        entityType, 'SettingsUIState', 'entityType');
+        entityType, r'SettingsUIState', 'entityType');
     BuiltValueNullFieldError.checkNotNull(
-        isChanged, 'SettingsUIState', 'isChanged');
+        isChanged, r'SettingsUIState', 'isChanged');
     BuiltValueNullFieldError.checkNotNull(
-        updatedAt, 'SettingsUIState', 'updatedAt');
+        updatedAt, r'SettingsUIState', 'updatedAt');
     BuiltValueNullFieldError.checkNotNull(
-        section, 'SettingsUIState', 'section');
+        section, r'SettingsUIState', 'section');
     BuiltValueNullFieldError.checkNotNull(
-        tabIndex, 'SettingsUIState', 'tabIndex');
+        tabIndex, r'SettingsUIState', 'tabIndex');
     BuiltValueNullFieldError.checkNotNull(
-        selectedTemplate, 'SettingsUIState', 'selectedTemplate');
+        selectedTemplate, r'SettingsUIState', 'selectedTemplate');
     BuiltValueNullFieldError.checkNotNull(
-        filterClearedAt, 'SettingsUIState', 'filterClearedAt');
+        filterClearedAt, r'SettingsUIState', 'filterClearedAt');
   }
 
   @override
@@ -1176,7 +1203,7 @@ class _$SettingsUIState extends SettingsUIState {
 
   @override
   String toString() {
-    return (newBuiltValueToStringHelper('SettingsUIState')
+    return (newBuiltValueToStringHelper(r'SettingsUIState')
           ..add('company', company)
           ..add('origCompany', origCompany)
           ..add('client', client)
@@ -1315,7 +1342,9 @@ class SettingsUIStateBuilder
   }
 
   @override
-  _$SettingsUIState build() {
+  SettingsUIState build() => _build();
+
+  _$SettingsUIState _build() {
     _$SettingsUIState _$result;
     try {
       _$result = _$v ??
@@ -1329,20 +1358,20 @@ class SettingsUIStateBuilder
               user: user.build(),
               origUser: origUser.build(),
               entityType: BuiltValueNullFieldError.checkNotNull(
-                  entityType, 'SettingsUIState', 'entityType'),
+                  entityType, r'SettingsUIState', 'entityType'),
               isChanged: BuiltValueNullFieldError.checkNotNull(
-                  isChanged, 'SettingsUIState', 'isChanged'),
+                  isChanged, r'SettingsUIState', 'isChanged'),
               updatedAt: BuiltValueNullFieldError.checkNotNull(
-                  updatedAt, 'SettingsUIState', 'updatedAt'),
+                  updatedAt, r'SettingsUIState', 'updatedAt'),
               section: BuiltValueNullFieldError.checkNotNull(
-                  section, 'SettingsUIState', 'section'),
+                  section, r'SettingsUIState', 'section'),
               tabIndex: BuiltValueNullFieldError.checkNotNull(
-                  tabIndex, 'SettingsUIState', 'tabIndex'),
+                  tabIndex, r'SettingsUIState', 'tabIndex'),
               selectedTemplate: BuiltValueNullFieldError.checkNotNull(
-                  selectedTemplate, 'SettingsUIState', 'selectedTemplate'),
+                  selectedTemplate, r'SettingsUIState', 'selectedTemplate'),
               filter: filter,
               filterClearedAt: BuiltValueNullFieldError.checkNotNull(
-                  filterClearedAt, 'SettingsUIState', 'filterClearedAt'));
+                  filterClearedAt, r'SettingsUIState', 'filterClearedAt'));
     } catch (_) {
       String _$failedField;
       try {
@@ -1364,7 +1393,7 @@ class SettingsUIStateBuilder
         origUser.build();
       } catch (e) {
         throw new BuiltValueNestedFieldError(
-            'SettingsUIState', _$failedField, e.toString());
+            r'SettingsUIState', _$failedField, e.toString());
       }
       rethrow;
     }
@@ -1373,4 +1402,4 @@ class SettingsUIStateBuilder
   }
 }
 
-// ignore_for_file: always_put_control_body_on_new_line,always_specify_types,annotate_overrides,avoid_annotating_with_dynamic,avoid_as,avoid_catches_without_on_clauses,avoid_returning_this,deprecated_member_use_from_same_package,lines_longer_than_80_chars,omit_local_variable_types,prefer_expression_function_bodies,sort_constructors_first,test_types_in_equals,unnecessary_const,unnecessary_new
+// ignore_for_file: always_put_control_body_on_new_line,always_specify_types,annotate_overrides,avoid_annotating_with_dynamic,avoid_as,avoid_catches_without_on_clauses,avoid_returning_this,deprecated_member_use_from_same_package,lines_longer_than_80_chars,no_leading_underscores_for_local_identifiers,omit_local_variable_types,prefer_expression_function_bodies,sort_constructors_first,test_types_in_equals,unnecessary_const,unnecessary_new,unnecessary_lambdas

@@ -552,10 +552,10 @@ class _$ContactListResponse extends ContactListResponse {
 
   factory _$ContactListResponse(
           [void Function(ContactListResponseBuilder) updates]) =>
-      (new ContactListResponseBuilder()..update(updates)).build();
+      (new ContactListResponseBuilder()..update(updates))._build();
 
   _$ContactListResponse._({this.data}) : super._() {
-    BuiltValueNullFieldError.checkNotNull(data, 'ContactListResponse', 'data');
+    BuiltValueNullFieldError.checkNotNull(data, r'ContactListResponse', 'data');
   }
 
   @override
@@ -581,7 +581,7 @@ class _$ContactListResponse extends ContactListResponse {
 
   @override
   String toString() {
-    return (newBuiltValueToStringHelper('ContactListResponse')
+    return (newBuiltValueToStringHelper(r'ContactListResponse')
           ..add('data', data))
         .toString();
   }
@@ -619,7 +619,9 @@ class ContactListResponseBuilder
   }
 
   @override
-  _$ContactListResponse build() {
+  ContactListResponse build() => _build();
+
+  _$ContactListResponse _build() {
     _$ContactListResponse _$result;
     try {
       _$result = _$v ?? new _$ContactListResponse._(data: data.build());
@@ -630,7 +632,7 @@ class ContactListResponseBuilder
         data.build();
       } catch (e) {
         throw new BuiltValueNestedFieldError(
-            'ContactListResponse', _$failedField, e.toString());
+            r'ContactListResponse', _$failedField, e.toString());
       }
       rethrow;
     }
@@ -645,10 +647,10 @@ class _$ContactItemResponse extends ContactItemResponse {
 
   factory _$ContactItemResponse(
           [void Function(ContactItemResponseBuilder) updates]) =>
-      (new ContactItemResponseBuilder()..update(updates)).build();
+      (new ContactItemResponseBuilder()..update(updates))._build();
 
   _$ContactItemResponse._({this.data}) : super._() {
-    BuiltValueNullFieldError.checkNotNull(data, 'ContactItemResponse', 'data');
+    BuiltValueNullFieldError.checkNotNull(data, r'ContactItemResponse', 'data');
   }
 
   @override
@@ -674,7 +676,7 @@ class _$ContactItemResponse extends ContactItemResponse {
 
   @override
   String toString() {
-    return (newBuiltValueToStringHelper('ContactItemResponse')
+    return (newBuiltValueToStringHelper(r'ContactItemResponse')
           ..add('data', data))
         .toString();
   }
@@ -711,7 +713,9 @@ class ContactItemResponseBuilder
   }
 
   @override
-  _$ContactItemResponse build() {
+  ContactItemResponse build() => _build();
+
+  _$ContactItemResponse _build() {
     _$ContactItemResponse _$result;
     try {
       _$result = _$v ?? new _$ContactItemResponse._(data: data.build());
@@ -722,7 +726,7 @@ class ContactItemResponseBuilder
         data.build();
       } catch (e) {
         throw new BuiltValueNestedFieldError(
-            'ContactItemResponse', _$failedField, e.toString());
+            r'ContactItemResponse', _$failedField, e.toString());
       }
       rethrow;
     }
@@ -844,7 +848,7 @@ class _$ContactEntity extends ContactEntity {
   final String id;
 
   factory _$ContactEntity([void Function(ContactEntityBuilder) updates]) =>
-      (new ContactEntityBuilder()..update(updates)).build();
+      (new ContactEntityBuilder()..update(updates))._build();
 
   _$ContactEntity._(
       {this.firstName,
@@ -904,94 +908,94 @@ class _$ContactEntity extends ContactEntity {
       this.id})
       : super._() {
     BuiltValueNullFieldError.checkNotNull(
-        firstName, 'ContactEntity', 'firstName');
+        firstName, r'ContactEntity', 'firstName');
     BuiltValueNullFieldError.checkNotNull(
-        lastName, 'ContactEntity', 'lastName');
-    BuiltValueNullFieldError.checkNotNull(email, 'ContactEntity', 'email');
+        lastName, r'ContactEntity', 'lastName');
+    BuiltValueNullFieldError.checkNotNull(email, r'ContactEntity', 'email');
     BuiltValueNullFieldError.checkNotNull(
-        password, 'ContactEntity', 'password');
-    BuiltValueNullFieldError.checkNotNull(phone, 'ContactEntity', 'phone');
+        password, r'ContactEntity', 'password');
+    BuiltValueNullFieldError.checkNotNull(phone, r'ContactEntity', 'phone');
     BuiltValueNullFieldError.checkNotNull(
-        contactKey, 'ContactEntity', 'contactKey');
+        contactKey, r'ContactEntity', 'contactKey');
     BuiltValueNullFieldError.checkNotNull(
-        isPrimary, 'ContactEntity', 'isPrimary');
+        isPrimary, r'ContactEntity', 'isPrimary');
     BuiltValueNullFieldError.checkNotNull(
-        sendEmail, 'ContactEntity', 'sendEmail');
+        sendEmail, r'ContactEntity', 'sendEmail');
     BuiltValueNullFieldError.checkNotNull(
-        customValue1, 'ContactEntity', 'customValue1');
+        customValue1, r'ContactEntity', 'customValue1');
     BuiltValueNullFieldError.checkNotNull(
-        customValue2, 'ContactEntity', 'customValue2');
+        customValue2, r'ContactEntity', 'customValue2');
     BuiltValueNullFieldError.checkNotNull(
-        customValue3, 'ContactEntity', 'customValue3');
+        customValue3, r'ContactEntity', 'customValue3');
     BuiltValueNullFieldError.checkNotNull(
-        customValue4, 'ContactEntity', 'customValue4');
+        customValue4, r'ContactEntity', 'customValue4');
     BuiltValueNullFieldError.checkNotNull(
-        address1, 'ContactEntity', 'address1');
+        address1, r'ContactEntity', 'address1');
     BuiltValueNullFieldError.checkNotNull(
-        address2, 'ContactEntity', 'address2');
-    BuiltValueNullFieldError.checkNotNull(city, 'ContactEntity', 'city');
-    BuiltValueNullFieldError.checkNotNull(state, 'ContactEntity', 'state');
+        address2, r'ContactEntity', 'address2');
+    BuiltValueNullFieldError.checkNotNull(city, r'ContactEntity', 'city');
+    BuiltValueNullFieldError.checkNotNull(state, r'ContactEntity', 'state');
     BuiltValueNullFieldError.checkNotNull(
-        postalCode, 'ContactEntity', 'postalCode');
+        postalCode, r'ContactEntity', 'postalCode');
     BuiltValueNullFieldError.checkNotNull(
-        countryId, 'ContactEntity', 'countryId');
-    BuiltValueNullFieldError.checkNotNull(region, 'ContactEntity', 'region');
-    BuiltValueNullFieldError.checkNotNull(fax, 'ContactEntity', 'fax');
+        countryId, r'ContactEntity', 'countryId');
+    BuiltValueNullFieldError.checkNotNull(region, r'ContactEntity', 'region');
+    BuiltValueNullFieldError.checkNotNull(fax, r'ContactEntity', 'fax');
     BuiltValueNullFieldError.checkNotNull(
-        phoneHome, 'ContactEntity', 'phoneHome');
+        phoneHome, r'ContactEntity', 'phoneHome');
     BuiltValueNullFieldError.checkNotNull(
-        phoneMain, 'ContactEntity', 'phoneMain');
+        phoneMain, r'ContactEntity', 'phoneMain');
     BuiltValueNullFieldError.checkNotNull(
-        phoneTollFree, 'ContactEntity', 'phoneTollFree');
+        phoneTollFree, r'ContactEntity', 'phoneTollFree');
     BuiltValueNullFieldError.checkNotNull(
-        phoneCell, 'ContactEntity', 'phoneCell');
+        phoneCell, r'ContactEntity', 'phoneCell');
     BuiltValueNullFieldError.checkNotNull(
-        homeAddress1, 'ContactEntity', 'homeAddress1');
+        homeAddress1, r'ContactEntity', 'homeAddress1');
     BuiltValueNullFieldError.checkNotNull(
-        homeAddress2, 'ContactEntity', 'homeAddress2');
+        homeAddress2, r'ContactEntity', 'homeAddress2');
     BuiltValueNullFieldError.checkNotNull(
-        homeCity, 'ContactEntity', 'homeCity');
+        homeCity, r'ContactEntity', 'homeCity');
     BuiltValueNullFieldError.checkNotNull(
-        homeState, 'ContactEntity', 'homeState');
+        homeState, r'ContactEntity', 'homeState');
     BuiltValueNullFieldError.checkNotNull(
-        homePostalCode, 'ContactEntity', 'homePostalCode');
+        homePostalCode, r'ContactEntity', 'homePostalCode');
     BuiltValueNullFieldError.checkNotNull(
-        homeCountryId, 'ContactEntity', 'homeCountryId');
+        homeCountryId, r'ContactEntity', 'homeCountryId');
     BuiltValueNullFieldError.checkNotNull(
-        headOfficeAddress1, 'ContactEntity', 'headOfficeAddress1');
+        headOfficeAddress1, r'ContactEntity', 'headOfficeAddress1');
     BuiltValueNullFieldError.checkNotNull(
-        headOfficeAddress2, 'ContactEntity', 'headOfficeAddress2');
+        headOfficeAddress2, r'ContactEntity', 'headOfficeAddress2');
     BuiltValueNullFieldError.checkNotNull(
-        headOfficeCity, 'ContactEntity', 'headOfficeCity');
+        headOfficeCity, r'ContactEntity', 'headOfficeCity');
     BuiltValueNullFieldError.checkNotNull(
-        headOfficeState, 'ContactEntity', 'headOfficeState');
+        headOfficeState, r'ContactEntity', 'headOfficeState');
     BuiltValueNullFieldError.checkNotNull(
-        headOfficePostalCode, 'ContactEntity', 'headOfficePostalCode');
+        headOfficePostalCode, r'ContactEntity', 'headOfficePostalCode');
     BuiltValueNullFieldError.checkNotNull(
-        headOfficeCountryId, 'ContactEntity', 'headOfficeCountryId');
+        headOfficeCountryId, r'ContactEntity', 'headOfficeCountryId');
     BuiltValueNullFieldError.checkNotNull(
-        mainAddress1, 'ContactEntity', 'mainAddress1');
+        mainAddress1, r'ContactEntity', 'mainAddress1');
     BuiltValueNullFieldError.checkNotNull(
-        mainAddress2, 'ContactEntity', 'mainAddress2');
+        mainAddress2, r'ContactEntity', 'mainAddress2');
     BuiltValueNullFieldError.checkNotNull(
-        mainCity, 'ContactEntity', 'mainCity');
+        mainCity, r'ContactEntity', 'mainCity');
     BuiltValueNullFieldError.checkNotNull(
-        mainState, 'ContactEntity', 'mainState');
+        mainState, r'ContactEntity', 'mainState');
     BuiltValueNullFieldError.checkNotNull(
-        mainPostalCode, 'ContactEntity', 'mainPostalCode');
+        mainPostalCode, r'ContactEntity', 'mainPostalCode');
     BuiltValueNullFieldError.checkNotNull(
-        mainCountryId, 'ContactEntity', 'mainCountryId');
+        mainCountryId, r'ContactEntity', 'mainCountryId');
     BuiltValueNullFieldError.checkNotNull(
-        lastLogin, 'ContactEntity', 'lastLogin');
-    BuiltValueNullFieldError.checkNotNull(link, 'ContactEntity', 'link');
-    BuiltValueNullFieldError.checkNotNull(number, 'ContactEntity', 'number');
+        lastLogin, r'ContactEntity', 'lastLogin');
+    BuiltValueNullFieldError.checkNotNull(link, r'ContactEntity', 'link');
+    BuiltValueNullFieldError.checkNotNull(number, r'ContactEntity', 'number');
     BuiltValueNullFieldError.checkNotNull(
-        createdAt, 'ContactEntity', 'createdAt');
+        createdAt, r'ContactEntity', 'createdAt');
     BuiltValueNullFieldError.checkNotNull(
-        updatedAt, 'ContactEntity', 'updatedAt');
+        updatedAt, r'ContactEntity', 'updatedAt');
     BuiltValueNullFieldError.checkNotNull(
-        archivedAt, 'ContactEntity', 'archivedAt');
-    BuiltValueNullFieldError.checkNotNull(id, 'ContactEntity', 'id');
+        archivedAt, r'ContactEntity', 'archivedAt');
+    BuiltValueNullFieldError.checkNotNull(id, r'ContactEntity', 'id');
   }
 
   @override
@@ -1106,7 +1110,7 @@ class _$ContactEntity extends ContactEntity {
 
   @override
   String toString() {
-    return (newBuiltValueToStringHelper('ContactEntity')
+    return (newBuiltValueToStringHelper(r'ContactEntity')
           ..add('firstName', firstName)
           ..add('lastName', lastName)
           ..add('email', email)
@@ -1482,77 +1486,78 @@ class ContactEntityBuilder
   }
 
   @override
-  _$ContactEntity build() {
+  ContactEntity build() => _build();
+
+  _$ContactEntity _build() {
     final _$result = _$v ??
         new _$ContactEntity._(
             firstName: BuiltValueNullFieldError.checkNotNull(
-                firstName, 'ContactEntity', 'firstName'),
+                firstName, r'ContactEntity', 'firstName'),
             lastName: BuiltValueNullFieldError.checkNotNull(
-                lastName, 'ContactEntity', 'lastName'),
+                lastName, r'ContactEntity', 'lastName'),
             email: BuiltValueNullFieldError.checkNotNull(
-                email, 'ContactEntity', 'email'),
+                email, r'ContactEntity', 'email'),
             password: BuiltValueNullFieldError.checkNotNull(
-                password, 'ContactEntity', 'password'),
+                password, r'ContactEntity', 'password'),
             phone: BuiltValueNullFieldError.checkNotNull(
-                phone, 'ContactEntity', 'phone'),
+                phone, r'ContactEntity', 'phone'),
             contactKey: BuiltValueNullFieldError.checkNotNull(
-                contactKey, 'ContactEntity', 'contactKey'),
+                contactKey, r'ContactEntity', 'contactKey'),
             isPrimary: BuiltValueNullFieldError.checkNotNull(
-                isPrimary, 'ContactEntity', 'isPrimary'),
+                isPrimary, r'ContactEntity', 'isPrimary'),
             sendEmail: BuiltValueNullFieldError.checkNotNull(
-                sendEmail, 'ContactEntity', 'sendEmail'),
+                sendEmail, r'ContactEntity', 'sendEmail'),
             customValue1: BuiltValueNullFieldError.checkNotNull(
-                customValue1, 'ContactEntity', 'customValue1'),
-            customValue2:
-                BuiltValueNullFieldError.checkNotNull(customValue2, 'ContactEntity', 'customValue2'),
-            customValue3: BuiltValueNullFieldError.checkNotNull(customValue3, 'ContactEntity', 'customValue3'),
-            customValue4: BuiltValueNullFieldError.checkNotNull(customValue4, 'ContactEntity', 'customValue4'),
-            address1: BuiltValueNullFieldError.checkNotNull(address1, 'ContactEntity', 'address1'),
-            address2: BuiltValueNullFieldError.checkNotNull(address2, 'ContactEntity', 'address2'),
-            city: BuiltValueNullFieldError.checkNotNull(city, 'ContactEntity', 'city'),
-            state: BuiltValueNullFieldError.checkNotNull(state, 'ContactEntity', 'state'),
-            postalCode: BuiltValueNullFieldError.checkNotNull(postalCode, 'ContactEntity', 'postalCode'),
-            countryId: BuiltValueNullFieldError.checkNotNull(countryId, 'ContactEntity', 'countryId'),
-            region: BuiltValueNullFieldError.checkNotNull(region, 'ContactEntity', 'region'),
-            fax: BuiltValueNullFieldError.checkNotNull(fax, 'ContactEntity', 'fax'),
-            phoneHome: BuiltValueNullFieldError.checkNotNull(phoneHome, 'ContactEntity', 'phoneHome'),
-            phoneMain: BuiltValueNullFieldError.checkNotNull(phoneMain, 'ContactEntity', 'phoneMain'),
-            phoneTollFree: BuiltValueNullFieldError.checkNotNull(phoneTollFree, 'ContactEntity', 'phoneTollFree'),
-            phoneCell: BuiltValueNullFieldError.checkNotNull(phoneCell, 'ContactEntity', 'phoneCell'),
-            homeAddress1: BuiltValueNullFieldError.checkNotNull(homeAddress1, 'ContactEntity', 'homeAddress1'),
-            homeAddress2: BuiltValueNullFieldError.checkNotNull(homeAddress2, 'ContactEntity', 'homeAddress2'),
-            homeCity: BuiltValueNullFieldError.checkNotNull(homeCity, 'ContactEntity', 'homeCity'),
-            homeState: BuiltValueNullFieldError.checkNotNull(homeState, 'ContactEntity', 'homeState'),
-            homePostalCode: BuiltValueNullFieldError.checkNotNull(homePostalCode, 'ContactEntity', 'homePostalCode'),
-            homeCountryId: BuiltValueNullFieldError.checkNotNull(homeCountryId, 'ContactEntity', 'homeCountryId'),
-            headOfficeAddress1: BuiltValueNullFieldError.checkNotNull(headOfficeAddress1, 'ContactEntity', 'headOfficeAddress1'),
-            headOfficeAddress2: BuiltValueNullFieldError.checkNotNull(headOfficeAddress2, 'ContactEntity', 'headOfficeAddress2'),
-            headOfficeCity: BuiltValueNullFieldError.checkNotNull(headOfficeCity, 'ContactEntity', 'headOfficeCity'),
-            headOfficeState: BuiltValueNullFieldError.checkNotNull(headOfficeState, 'ContactEntity', 'headOfficeState'),
-            headOfficePostalCode: BuiltValueNullFieldError.checkNotNull(headOfficePostalCode, 'ContactEntity', 'headOfficePostalCode'),
-            headOfficeCountryId: BuiltValueNullFieldError.checkNotNull(headOfficeCountryId, 'ContactEntity', 'headOfficeCountryId'),
-            mainAddress1: BuiltValueNullFieldError.checkNotNull(mainAddress1, 'ContactEntity', 'mainAddress1'),
-            mainAddress2: BuiltValueNullFieldError.checkNotNull(mainAddress2, 'ContactEntity', 'mainAddress2'),
-            mainCity: BuiltValueNullFieldError.checkNotNull(mainCity, 'ContactEntity', 'mainCity'),
-            mainState: BuiltValueNullFieldError.checkNotNull(mainState, 'ContactEntity', 'mainState'),
-            mainPostalCode: BuiltValueNullFieldError.checkNotNull(mainPostalCode, 'ContactEntity', 'mainPostalCode'),
-            mainCountryId: BuiltValueNullFieldError.checkNotNull(mainCountryId, 'ContactEntity', 'mainCountryId'),
-            lastLogin: BuiltValueNullFieldError.checkNotNull(lastLogin, 'ContactEntity', 'lastLogin'),
-            link: BuiltValueNullFieldError.checkNotNull(link, 'ContactEntity', 'link'),
+                customValue1, r'ContactEntity', 'customValue1'),
+            customValue2: BuiltValueNullFieldError.checkNotNull(customValue2, r'ContactEntity', 'customValue2'),
+            customValue3: BuiltValueNullFieldError.checkNotNull(customValue3, r'ContactEntity', 'customValue3'),
+            customValue4: BuiltValueNullFieldError.checkNotNull(customValue4, r'ContactEntity', 'customValue4'),
+            address1: BuiltValueNullFieldError.checkNotNull(address1, r'ContactEntity', 'address1'),
+            address2: BuiltValueNullFieldError.checkNotNull(address2, r'ContactEntity', 'address2'),
+            city: BuiltValueNullFieldError.checkNotNull(city, r'ContactEntity', 'city'),
+            state: BuiltValueNullFieldError.checkNotNull(state, r'ContactEntity', 'state'),
+            postalCode: BuiltValueNullFieldError.checkNotNull(postalCode, r'ContactEntity', 'postalCode'),
+            countryId: BuiltValueNullFieldError.checkNotNull(countryId, r'ContactEntity', 'countryId'),
+            region: BuiltValueNullFieldError.checkNotNull(region, r'ContactEntity', 'region'),
+            fax: BuiltValueNullFieldError.checkNotNull(fax, r'ContactEntity', 'fax'),
+            phoneHome: BuiltValueNullFieldError.checkNotNull(phoneHome, r'ContactEntity', 'phoneHome'),
+            phoneMain: BuiltValueNullFieldError.checkNotNull(phoneMain, r'ContactEntity', 'phoneMain'),
+            phoneTollFree: BuiltValueNullFieldError.checkNotNull(phoneTollFree, r'ContactEntity', 'phoneTollFree'),
+            phoneCell: BuiltValueNullFieldError.checkNotNull(phoneCell, r'ContactEntity', 'phoneCell'),
+            homeAddress1: BuiltValueNullFieldError.checkNotNull(homeAddress1, r'ContactEntity', 'homeAddress1'),
+            homeAddress2: BuiltValueNullFieldError.checkNotNull(homeAddress2, r'ContactEntity', 'homeAddress2'),
+            homeCity: BuiltValueNullFieldError.checkNotNull(homeCity, r'ContactEntity', 'homeCity'),
+            homeState: BuiltValueNullFieldError.checkNotNull(homeState, r'ContactEntity', 'homeState'),
+            homePostalCode: BuiltValueNullFieldError.checkNotNull(homePostalCode, r'ContactEntity', 'homePostalCode'),
+            homeCountryId: BuiltValueNullFieldError.checkNotNull(homeCountryId, r'ContactEntity', 'homeCountryId'),
+            headOfficeAddress1: BuiltValueNullFieldError.checkNotNull(headOfficeAddress1, r'ContactEntity', 'headOfficeAddress1'),
+            headOfficeAddress2: BuiltValueNullFieldError.checkNotNull(headOfficeAddress2, r'ContactEntity', 'headOfficeAddress2'),
+            headOfficeCity: BuiltValueNullFieldError.checkNotNull(headOfficeCity, r'ContactEntity', 'headOfficeCity'),
+            headOfficeState: BuiltValueNullFieldError.checkNotNull(headOfficeState, r'ContactEntity', 'headOfficeState'),
+            headOfficePostalCode: BuiltValueNullFieldError.checkNotNull(headOfficePostalCode, r'ContactEntity', 'headOfficePostalCode'),
+            headOfficeCountryId: BuiltValueNullFieldError.checkNotNull(headOfficeCountryId, r'ContactEntity', 'headOfficeCountryId'),
+            mainAddress1: BuiltValueNullFieldError.checkNotNull(mainAddress1, r'ContactEntity', 'mainAddress1'),
+            mainAddress2: BuiltValueNullFieldError.checkNotNull(mainAddress2, r'ContactEntity', 'mainAddress2'),
+            mainCity: BuiltValueNullFieldError.checkNotNull(mainCity, r'ContactEntity', 'mainCity'),
+            mainState: BuiltValueNullFieldError.checkNotNull(mainState, r'ContactEntity', 'mainState'),
+            mainPostalCode: BuiltValueNullFieldError.checkNotNull(mainPostalCode, r'ContactEntity', 'mainPostalCode'),
+            mainCountryId: BuiltValueNullFieldError.checkNotNull(mainCountryId, r'ContactEntity', 'mainCountryId'),
+            lastLogin: BuiltValueNullFieldError.checkNotNull(lastLogin, r'ContactEntity', 'lastLogin'),
+            link: BuiltValueNullFieldError.checkNotNull(link, r'ContactEntity', 'link'),
             groupId: groupId,
             loadedAt: loadedAt,
-            number: BuiltValueNullFieldError.checkNotNull(number, 'ContactEntity', 'number'),
+            number: BuiltValueNullFieldError.checkNotNull(number, r'ContactEntity', 'number'),
             isChanged: isChanged,
-            createdAt: BuiltValueNullFieldError.checkNotNull(createdAt, 'ContactEntity', 'createdAt'),
-            updatedAt: BuiltValueNullFieldError.checkNotNull(updatedAt, 'ContactEntity', 'updatedAt'),
-            archivedAt: BuiltValueNullFieldError.checkNotNull(archivedAt, 'ContactEntity', 'archivedAt'),
+            createdAt: BuiltValueNullFieldError.checkNotNull(createdAt, r'ContactEntity', 'createdAt'),
+            updatedAt: BuiltValueNullFieldError.checkNotNull(updatedAt, r'ContactEntity', 'updatedAt'),
+            archivedAt: BuiltValueNullFieldError.checkNotNull(archivedAt, r'ContactEntity', 'archivedAt'),
             isDeleted: isDeleted,
             createdUserId: createdUserId,
             assignedUserId: assignedUserId,
-            id: BuiltValueNullFieldError.checkNotNull(id, 'ContactEntity', 'id'));
+            id: BuiltValueNullFieldError.checkNotNull(id, r'ContactEntity', 'id'));
     replace(_$result);
     return _$result;
   }
 }
 
-// ignore_for_file: always_put_control_body_on_new_line,always_specify_types,annotate_overrides,avoid_annotating_with_dynamic,avoid_as,avoid_catches_without_on_clauses,avoid_returning_this,deprecated_member_use_from_same_package,lines_longer_than_80_chars,omit_local_variable_types,prefer_expression_function_bodies,sort_constructors_first,test_types_in_equals,unnecessary_const,unnecessary_new
+// ignore_for_file: always_put_control_body_on_new_line,always_specify_types,annotate_overrides,avoid_annotating_with_dynamic,avoid_as,avoid_catches_without_on_clauses,avoid_returning_this,deprecated_member_use_from_same_package,lines_longer_than_80_chars,no_leading_underscores_for_local_identifiers,omit_local_variable_types,prefer_expression_function_bodies,sort_constructors_first,test_types_in_equals,unnecessary_const,unnecessary_new,unnecessary_lambdas

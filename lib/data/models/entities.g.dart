@@ -837,10 +837,10 @@ class _$ErrorMessage extends ErrorMessage {
   final String message;
 
   factory _$ErrorMessage([void Function(ErrorMessageBuilder) updates]) =>
-      (new ErrorMessageBuilder()..update(updates)).build();
+      (new ErrorMessageBuilder()..update(updates))._build();
 
   _$ErrorMessage._({this.message}) : super._() {
-    BuiltValueNullFieldError.checkNotNull(message, 'ErrorMessage', 'message');
+    BuiltValueNullFieldError.checkNotNull(message, r'ErrorMessage', 'message');
   }
 
   @override
@@ -864,7 +864,7 @@ class _$ErrorMessage extends ErrorMessage {
 
   @override
   String toString() {
-    return (newBuiltValueToStringHelper('ErrorMessage')
+    return (newBuiltValueToStringHelper(r'ErrorMessage')
           ..add('message', message))
         .toString();
   }
@@ -901,11 +901,13 @@ class ErrorMessageBuilder
   }
 
   @override
-  _$ErrorMessage build() {
+  ErrorMessage build() => _build();
+
+  _$ErrorMessage _build() {
     final _$result = _$v ??
         new _$ErrorMessage._(
             message: BuiltValueNullFieldError.checkNotNull(
-                message, 'ErrorMessage', 'message'));
+                message, r'ErrorMessage', 'message'));
     replace(_$result);
     return _$result;
   }
@@ -918,12 +920,12 @@ class _$LoginResponse extends LoginResponse {
   final StaticDataEntity static;
 
   factory _$LoginResponse([void Function(LoginResponseBuilder) updates]) =>
-      (new LoginResponseBuilder()..update(updates)).build();
+      (new LoginResponseBuilder()..update(updates))._build();
 
   _$LoginResponse._({this.userCompanies, this.static}) : super._() {
     BuiltValueNullFieldError.checkNotNull(
-        userCompanies, 'LoginResponse', 'userCompanies');
-    BuiltValueNullFieldError.checkNotNull(static, 'LoginResponse', 'static');
+        userCompanies, r'LoginResponse', 'userCompanies');
+    BuiltValueNullFieldError.checkNotNull(static, r'LoginResponse', 'static');
   }
 
   @override
@@ -950,7 +952,7 @@ class _$LoginResponse extends LoginResponse {
 
   @override
   String toString() {
-    return (newBuiltValueToStringHelper('LoginResponse')
+    return (newBuiltValueToStringHelper(r'LoginResponse')
           ..add('userCompanies', userCompanies)
           ..add('static', static))
         .toString();
@@ -996,7 +998,9 @@ class LoginResponseBuilder
   }
 
   @override
-  _$LoginResponse build() {
+  LoginResponse build() => _build();
+
+  _$LoginResponse _build() {
     _$LoginResponse _$result;
     try {
       _$result = _$v ??
@@ -1011,7 +1015,7 @@ class LoginResponseBuilder
         static.build();
       } catch (e) {
         throw new BuiltValueNestedFieldError(
-            'LoginResponse', _$failedField, e.toString());
+            r'LoginResponse', _$failedField, e.toString());
       }
       rethrow;
     }
@@ -1065,7 +1069,7 @@ class _$ActivityEntity extends ActivityEntity {
   final InvoiceHistoryEntity history;
 
   factory _$ActivityEntity([void Function(ActivityEntityBuilder) updates]) =>
-      (new ActivityEntityBuilder()..update(updates)).build();
+      (new ActivityEntityBuilder()..update(updates))._build();
 
   _$ActivityEntity._(
       {this.notes,
@@ -1090,13 +1094,13 @@ class _$ActivityEntity extends ActivityEntity {
       this.tokenId,
       this.history})
       : super._() {
-    BuiltValueNullFieldError.checkNotNull(notes, 'ActivityEntity', 'notes');
-    BuiltValueNullFieldError.checkNotNull(key, 'ActivityEntity', 'key');
+    BuiltValueNullFieldError.checkNotNull(notes, r'ActivityEntity', 'notes');
+    BuiltValueNullFieldError.checkNotNull(key, r'ActivityEntity', 'key');
     BuiltValueNullFieldError.checkNotNull(
-        activityTypeId, 'ActivityEntity', 'activityTypeId');
-    BuiltValueNullFieldError.checkNotNull(userId, 'ActivityEntity', 'userId');
+        activityTypeId, r'ActivityEntity', 'activityTypeId');
+    BuiltValueNullFieldError.checkNotNull(userId, r'ActivityEntity', 'userId');
     BuiltValueNullFieldError.checkNotNull(
-        updatedAt, 'ActivityEntity', 'updatedAt');
+        updatedAt, r'ActivityEntity', 'updatedAt');
   }
 
   @override
@@ -1179,7 +1183,7 @@ class _$ActivityEntity extends ActivityEntity {
 
   @override
   String toString() {
-    return (newBuiltValueToStringHelper('ActivityEntity')
+    return (newBuiltValueToStringHelper(r'ActivityEntity')
           ..add('notes', notes)
           ..add('key', key)
           ..add('activityTypeId', activityTypeId)
@@ -1340,20 +1344,22 @@ class ActivityEntityBuilder
   }
 
   @override
-  _$ActivityEntity build() {
+  ActivityEntity build() => _build();
+
+  _$ActivityEntity _build() {
     _$ActivityEntity _$result;
     try {
       _$result = _$v ??
           new _$ActivityEntity._(
               notes: BuiltValueNullFieldError.checkNotNull(
-                  notes, 'ActivityEntity', 'notes'),
+                  notes, r'ActivityEntity', 'notes'),
               key: BuiltValueNullFieldError.checkNotNull(
-                  key, 'ActivityEntity', 'key'),
+                  key, r'ActivityEntity', 'key'),
               activityTypeId: BuiltValueNullFieldError.checkNotNull(
-                  activityTypeId, 'ActivityEntity', 'activityTypeId'),
+                  activityTypeId, r'ActivityEntity', 'activityTypeId'),
               clientId: clientId,
               userId: BuiltValueNullFieldError.checkNotNull(
-                  userId, 'ActivityEntity', 'userId'),
+                  userId, r'ActivityEntity', 'userId'),
               invoiceId: invoiceId,
               recurringInvoiceId: recurringInvoiceId,
               recurringExpenseId: recurringExpenseId,
@@ -1361,7 +1367,7 @@ class ActivityEntityBuilder
               paymentId: paymentId,
               creditId: creditId,
               updatedAt: BuiltValueNullFieldError.checkNotNull(
-                  updatedAt, 'ActivityEntity', 'updatedAt'),
+                  updatedAt, r'ActivityEntity', 'updatedAt'),
               expenseId: expenseId,
               isSystem: isSystem,
               ip: ip,
@@ -1378,7 +1384,7 @@ class ActivityEntityBuilder
         _history?.build();
       } catch (e) {
         throw new BuiltValueNestedFieldError(
-            'ActivityEntity', _$failedField, e.toString());
+            r'ActivityEntity', _$failedField, e.toString());
       }
       rethrow;
     }
@@ -1404,7 +1410,7 @@ class _$LedgerEntity extends LedgerEntity {
   final String paymentId;
 
   factory _$LedgerEntity([void Function(LedgerEntityBuilder) updates]) =>
-      (new LedgerEntityBuilder()..update(updates)).build();
+      (new LedgerEntityBuilder()..update(updates))._build();
 
   _$LedgerEntity._(
       {this.notes,
@@ -1415,12 +1421,12 @@ class _$LedgerEntity extends LedgerEntity {
       this.creditId,
       this.paymentId})
       : super._() {
-    BuiltValueNullFieldError.checkNotNull(notes, 'LedgerEntity', 'notes');
-    BuiltValueNullFieldError.checkNotNull(balance, 'LedgerEntity', 'balance');
+    BuiltValueNullFieldError.checkNotNull(notes, r'LedgerEntity', 'notes');
+    BuiltValueNullFieldError.checkNotNull(balance, r'LedgerEntity', 'balance');
     BuiltValueNullFieldError.checkNotNull(
-        adjustment, 'LedgerEntity', 'adjustment');
+        adjustment, r'LedgerEntity', 'adjustment');
     BuiltValueNullFieldError.checkNotNull(
-        createdAt, 'LedgerEntity', 'createdAt');
+        createdAt, r'LedgerEntity', 'createdAt');
   }
 
   @override
@@ -1460,7 +1466,7 @@ class _$LedgerEntity extends LedgerEntity {
 
   @override
   String toString() {
-    return (newBuiltValueToStringHelper('LedgerEntity')
+    return (newBuiltValueToStringHelper(r'LedgerEntity')
           ..add('notes', notes)
           ..add('balance', balance)
           ..add('adjustment', adjustment)
@@ -1533,17 +1539,19 @@ class LedgerEntityBuilder
   }
 
   @override
-  _$LedgerEntity build() {
+  LedgerEntity build() => _build();
+
+  _$LedgerEntity _build() {
     final _$result = _$v ??
         new _$LedgerEntity._(
             notes: BuiltValueNullFieldError.checkNotNull(
-                notes, 'LedgerEntity', 'notes'),
+                notes, r'LedgerEntity', 'notes'),
             balance: BuiltValueNullFieldError.checkNotNull(
-                balance, 'LedgerEntity', 'balance'),
+                balance, r'LedgerEntity', 'balance'),
             adjustment: BuiltValueNullFieldError.checkNotNull(
-                adjustment, 'LedgerEntity', 'adjustment'),
+                adjustment, r'LedgerEntity', 'adjustment'),
             createdAt: BuiltValueNullFieldError.checkNotNull(
-                createdAt, 'LedgerEntity', 'createdAt'),
+                createdAt, r'LedgerEntity', 'createdAt'),
             invoiceId: invoiceId,
             creditId: creditId,
             paymentId: paymentId);
@@ -1552,4 +1560,4 @@ class LedgerEntityBuilder
   }
 }
 
-// ignore_for_file: always_put_control_body_on_new_line,always_specify_types,annotate_overrides,avoid_annotating_with_dynamic,avoid_as,avoid_catches_without_on_clauses,avoid_returning_this,deprecated_member_use_from_same_package,lines_longer_than_80_chars,omit_local_variable_types,prefer_expression_function_bodies,sort_constructors_first,test_types_in_equals,unnecessary_const,unnecessary_new
+// ignore_for_file: always_put_control_body_on_new_line,always_specify_types,annotate_overrides,avoid_annotating_with_dynamic,avoid_as,avoid_catches_without_on_clauses,avoid_returning_this,deprecated_member_use_from_same_package,lines_longer_than_80_chars,no_leading_underscores_for_local_identifiers,omit_local_variable_types,prefer_expression_function_bodies,sort_constructors_first,test_types_in_equals,unnecessary_const,unnecessary_new,unnecessary_lambdas

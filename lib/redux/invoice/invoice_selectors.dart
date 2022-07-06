@@ -1,6 +1,7 @@
 // Package imports:
 import 'package:built_collection/built_collection.dart';
 import 'package:invoiceninja_flutter/data/models/contact_model.dart';
+import 'package:invoiceninja_flutter/data/models/service_report.dart';
 import 'package:memoize/memoize.dart';
 
 // Project imports:
@@ -33,6 +34,9 @@ ContactEntity invoiceContactSelector(
 var memoizedInvoiceQuoteSelector = memo2(
     (InvoiceEntity invoice, BuiltMap<String, InvoiceEntity> quoteMap) =>
         invoiceQuoteSelector(invoice, quoteMap));
+var memoizedServiceReportList = memo2(
+    (BuiltMap<String, ServiceReportEntity> serviceMap, ClientEntity client) =>
+        serviceReportList(serviceMap, client));
 
 var memoizedDropdownInvoiceList = memo7(
     (BuiltMap<String, InvoiceEntity> invoiceMap,
@@ -44,6 +48,21 @@ var memoizedDropdownInvoiceList = memo7(
             String recurringPrefix) =>
         dropdownInvoiceSelector(invoiceMap, clientMap, invoiceList, clientId,
             userMap, excludedIds, recurringPrefix));
+
+List<String> serviceReportList(
+    BuiltMap<String, ServiceReportEntity> serviceMap, ClientEntity client) {
+  final list = serviceMap.keys
+      .where((serviceId) => serviceMap[serviceId].clientId == client.gdId)
+      .toList();
+  // final list = serviceMap.map((p0) => p0.id).toList();
+
+  list.sort((idA, idB) => serviceMap[idA]
+      .displayName
+      .toLowerCase()
+      .compareTo(serviceMap[idB].displayName.toLowerCase()));
+
+  return list;
+}
 
 List<String> dropdownInvoiceSelector(
   BuiltMap<String, InvoiceEntity> invoiceMap,

@@ -200,10 +200,10 @@ class _$CountryListResponse extends CountryListResponse {
 
   factory _$CountryListResponse(
           [void Function(CountryListResponseBuilder) updates]) =>
-      (new CountryListResponseBuilder()..update(updates)).build();
+      (new CountryListResponseBuilder()..update(updates))._build();
 
   _$CountryListResponse._({this.data}) : super._() {
-    BuiltValueNullFieldError.checkNotNull(data, 'CountryListResponse', 'data');
+    BuiltValueNullFieldError.checkNotNull(data, r'CountryListResponse', 'data');
   }
 
   @override
@@ -229,7 +229,7 @@ class _$CountryListResponse extends CountryListResponse {
 
   @override
   String toString() {
-    return (newBuiltValueToStringHelper('CountryListResponse')
+    return (newBuiltValueToStringHelper(r'CountryListResponse')
           ..add('data', data))
         .toString();
   }
@@ -267,7 +267,9 @@ class CountryListResponseBuilder
   }
 
   @override
-  _$CountryListResponse build() {
+  CountryListResponse build() => _build();
+
+  _$CountryListResponse _build() {
     _$CountryListResponse _$result;
     try {
       _$result = _$v ?? new _$CountryListResponse._(data: data.build());
@@ -278,7 +280,7 @@ class CountryListResponseBuilder
         data.build();
       } catch (e) {
         throw new BuiltValueNestedFieldError(
-            'CountryListResponse', _$failedField, e.toString());
+            r'CountryListResponse', _$failedField, e.toString());
       }
       rethrow;
     }
@@ -293,10 +295,10 @@ class _$CountryItemResponse extends CountryItemResponse {
 
   factory _$CountryItemResponse(
           [void Function(CountryItemResponseBuilder) updates]) =>
-      (new CountryItemResponseBuilder()..update(updates)).build();
+      (new CountryItemResponseBuilder()..update(updates))._build();
 
   _$CountryItemResponse._({this.data}) : super._() {
-    BuiltValueNullFieldError.checkNotNull(data, 'CountryItemResponse', 'data');
+    BuiltValueNullFieldError.checkNotNull(data, r'CountryItemResponse', 'data');
   }
 
   @override
@@ -322,7 +324,7 @@ class _$CountryItemResponse extends CountryItemResponse {
 
   @override
   String toString() {
-    return (newBuiltValueToStringHelper('CountryItemResponse')
+    return (newBuiltValueToStringHelper(r'CountryItemResponse')
           ..add('data', data))
         .toString();
   }
@@ -359,7 +361,9 @@ class CountryItemResponseBuilder
   }
 
   @override
-  _$CountryItemResponse build() {
+  CountryItemResponse build() => _build();
+
+  _$CountryItemResponse _build() {
     _$CountryItemResponse _$result;
     try {
       _$result = _$v ?? new _$CountryItemResponse._(data: data.build());
@@ -370,7 +374,7 @@ class CountryItemResponseBuilder
         data.build();
       } catch (e) {
         throw new BuiltValueNestedFieldError(
-            'CountryItemResponse', _$failedField, e.toString());
+            r'CountryItemResponse', _$failedField, e.toString());
       }
       rethrow;
     }
@@ -398,7 +402,7 @@ class _$CountryEntity extends CountryEntity {
   final String id;
 
   factory _$CountryEntity([void Function(CountryEntityBuilder) updates]) =>
-      (new CountryEntityBuilder()..update(updates)).build();
+      (new CountryEntityBuilder()..update(updates))._build();
 
   _$CountryEntity._(
       {this.name,
@@ -410,18 +414,18 @@ class _$CountryEntity extends CountryEntity {
       this.iso3,
       this.id})
       : super._() {
-    BuiltValueNullFieldError.checkNotNull(name, 'CountryEntity', 'name');
+    BuiltValueNullFieldError.checkNotNull(name, r'CountryEntity', 'name');
     BuiltValueNullFieldError.checkNotNull(
-        swapPostalCode, 'CountryEntity', 'swapPostalCode');
+        swapPostalCode, r'CountryEntity', 'swapPostalCode');
     BuiltValueNullFieldError.checkNotNull(
-        swapCurrencySymbol, 'CountryEntity', 'swapCurrencySymbol');
+        swapCurrencySymbol, r'CountryEntity', 'swapCurrencySymbol');
     BuiltValueNullFieldError.checkNotNull(
-        thousandSeparator, 'CountryEntity', 'thousandSeparator');
+        thousandSeparator, r'CountryEntity', 'thousandSeparator');
     BuiltValueNullFieldError.checkNotNull(
-        decimalSeparator, 'CountryEntity', 'decimalSeparator');
-    BuiltValueNullFieldError.checkNotNull(iso2, 'CountryEntity', 'iso2');
-    BuiltValueNullFieldError.checkNotNull(iso3, 'CountryEntity', 'iso3');
-    BuiltValueNullFieldError.checkNotNull(id, 'CountryEntity', 'id');
+        decimalSeparator, r'CountryEntity', 'decimalSeparator');
+    BuiltValueNullFieldError.checkNotNull(iso2, r'CountryEntity', 'iso2');
+    BuiltValueNullFieldError.checkNotNull(iso3, r'CountryEntity', 'iso3');
+    BuiltValueNullFieldError.checkNotNull(id, r'CountryEntity', 'id');
   }
 
   @override
@@ -464,7 +468,7 @@ class _$CountryEntity extends CountryEntity {
 
   @override
   String toString() {
-    return (newBuiltValueToStringHelper('CountryEntity')
+    return (newBuiltValueToStringHelper(r'CountryEntity')
           ..add('name', name)
           ..add('swapPostalCode', swapPostalCode)
           ..add('swapCurrencySymbol', swapCurrencySymbol)
@@ -547,28 +551,30 @@ class CountryEntityBuilder
   }
 
   @override
-  _$CountryEntity build() {
+  CountryEntity build() => _build();
+
+  _$CountryEntity _build() {
     final _$result = _$v ??
         new _$CountryEntity._(
             name: BuiltValueNullFieldError.checkNotNull(
-                name, 'CountryEntity', 'name'),
+                name, r'CountryEntity', 'name'),
             swapPostalCode: BuiltValueNullFieldError.checkNotNull(
-                swapPostalCode, 'CountryEntity', 'swapPostalCode'),
+                swapPostalCode, r'CountryEntity', 'swapPostalCode'),
             swapCurrencySymbol: BuiltValueNullFieldError.checkNotNull(
-                swapCurrencySymbol, 'CountryEntity', 'swapCurrencySymbol'),
+                swapCurrencySymbol, r'CountryEntity', 'swapCurrencySymbol'),
             thousandSeparator: BuiltValueNullFieldError.checkNotNull(
-                thousandSeparator, 'CountryEntity', 'thousandSeparator'),
+                thousandSeparator, r'CountryEntity', 'thousandSeparator'),
             decimalSeparator: BuiltValueNullFieldError.checkNotNull(
-                decimalSeparator, 'CountryEntity', 'decimalSeparator'),
+                decimalSeparator, r'CountryEntity', 'decimalSeparator'),
             iso2: BuiltValueNullFieldError.checkNotNull(
-                iso2, 'CountryEntity', 'iso2'),
+                iso2, r'CountryEntity', 'iso2'),
             iso3: BuiltValueNullFieldError.checkNotNull(
-                iso3, 'CountryEntity', 'iso3'),
+                iso3, r'CountryEntity', 'iso3'),
             id: BuiltValueNullFieldError.checkNotNull(
-                id, 'CountryEntity', 'id'));
+                id, r'CountryEntity', 'id'));
     replace(_$result);
     return _$result;
   }
 }
 
-// ignore_for_file: always_put_control_body_on_new_line,always_specify_types,annotate_overrides,avoid_annotating_with_dynamic,avoid_as,avoid_catches_without_on_clauses,avoid_returning_this,deprecated_member_use_from_same_package,lines_longer_than_80_chars,omit_local_variable_types,prefer_expression_function_bodies,sort_constructors_first,test_types_in_equals,unnecessary_const,unnecessary_new
+// ignore_for_file: always_put_control_body_on_new_line,always_specify_types,annotate_overrides,avoid_annotating_with_dynamic,avoid_as,avoid_catches_without_on_clauses,avoid_returning_this,deprecated_member_use_from_same_package,lines_longer_than_80_chars,no_leading_underscores_for_local_identifiers,omit_local_variable_types,prefer_expression_function_bodies,sort_constructors_first,test_types_in_equals,unnecessary_const,unnecessary_new,unnecessary_lambdas

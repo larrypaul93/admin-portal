@@ -22,6 +22,7 @@ import 'package:invoiceninja_flutter/redux/project/project_state.dart';
 import 'package:invoiceninja_flutter/redux/quote/quote_state.dart';
 import 'package:invoiceninja_flutter/redux/recurring_expense/recurring_expense_state.dart';
 import 'package:invoiceninja_flutter/redux/recurring_invoice/recurring_invoice_state.dart';
+import 'package:invoiceninja_flutter/redux/service_report/service_reports_state.dart';
 import 'package:invoiceninja_flutter/redux/subscription/subscription_state.dart';
 import 'package:invoiceninja_flutter/redux/task/task_state.dart';
 import 'package:invoiceninja_flutter/redux/task_status/task_status_state.dart';
@@ -60,6 +61,7 @@ abstract class UserCompanyState
       categoryState: CategoryState(),
 
       contactState: ContactState(),
+      serviceReportsState: ServiceReportsState(),
 
       recurringExpenseState: RecurringExpenseState(),
       subscriptionState: SubscriptionState(),
@@ -114,6 +116,7 @@ abstract class UserCompanyState
   CategoryState get categoryState;
 
   ContactState get contactState;
+  ServiceReportsState get serviceReportsState;
 
   RecurringExpenseState get recurringExpenseState;
 

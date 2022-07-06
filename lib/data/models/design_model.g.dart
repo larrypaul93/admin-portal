@@ -300,10 +300,10 @@ class _$DesignListResponse extends DesignListResponse {
 
   factory _$DesignListResponse(
           [void Function(DesignListResponseBuilder) updates]) =>
-      (new DesignListResponseBuilder()..update(updates)).build();
+      (new DesignListResponseBuilder()..update(updates))._build();
 
   _$DesignListResponse._({this.data}) : super._() {
-    BuiltValueNullFieldError.checkNotNull(data, 'DesignListResponse', 'data');
+    BuiltValueNullFieldError.checkNotNull(data, r'DesignListResponse', 'data');
   }
 
   @override
@@ -329,7 +329,7 @@ class _$DesignListResponse extends DesignListResponse {
 
   @override
   String toString() {
-    return (newBuiltValueToStringHelper('DesignListResponse')
+    return (newBuiltValueToStringHelper(r'DesignListResponse')
           ..add('data', data))
         .toString();
   }
@@ -367,7 +367,9 @@ class DesignListResponseBuilder
   }
 
   @override
-  _$DesignListResponse build() {
+  DesignListResponse build() => _build();
+
+  _$DesignListResponse _build() {
     _$DesignListResponse _$result;
     try {
       _$result = _$v ?? new _$DesignListResponse._(data: data.build());
@@ -378,7 +380,7 @@ class DesignListResponseBuilder
         data.build();
       } catch (e) {
         throw new BuiltValueNestedFieldError(
-            'DesignListResponse', _$failedField, e.toString());
+            r'DesignListResponse', _$failedField, e.toString());
       }
       rethrow;
     }
@@ -393,10 +395,10 @@ class _$DesignItemResponse extends DesignItemResponse {
 
   factory _$DesignItemResponse(
           [void Function(DesignItemResponseBuilder) updates]) =>
-      (new DesignItemResponseBuilder()..update(updates)).build();
+      (new DesignItemResponseBuilder()..update(updates))._build();
 
   _$DesignItemResponse._({this.data}) : super._() {
-    BuiltValueNullFieldError.checkNotNull(data, 'DesignItemResponse', 'data');
+    BuiltValueNullFieldError.checkNotNull(data, r'DesignItemResponse', 'data');
   }
 
   @override
@@ -422,7 +424,7 @@ class _$DesignItemResponse extends DesignItemResponse {
 
   @override
   String toString() {
-    return (newBuiltValueToStringHelper('DesignItemResponse')
+    return (newBuiltValueToStringHelper(r'DesignItemResponse')
           ..add('data', data))
         .toString();
   }
@@ -459,7 +461,9 @@ class DesignItemResponseBuilder
   }
 
   @override
-  _$DesignItemResponse build() {
+  DesignItemResponse build() => _build();
+
+  _$DesignItemResponse _build() {
     _$DesignItemResponse _$result;
     try {
       _$result = _$v ?? new _$DesignItemResponse._(data: data.build());
@@ -470,7 +474,7 @@ class DesignItemResponseBuilder
         data.build();
       } catch (e) {
         throw new BuiltValueNestedFieldError(
-            'DesignItemResponse', _$failedField, e.toString());
+            r'DesignItemResponse', _$failedField, e.toString());
       }
       rethrow;
     }
@@ -489,16 +493,16 @@ class _$DesignPreviewRequest extends DesignPreviewRequest {
 
   factory _$DesignPreviewRequest(
           [void Function(DesignPreviewRequestBuilder) updates]) =>
-      (new DesignPreviewRequestBuilder()..update(updates)).build();
+      (new DesignPreviewRequestBuilder()..update(updates))._build();
 
   _$DesignPreviewRequest._({this.entityType, this.entityId, this.design})
       : super._() {
     BuiltValueNullFieldError.checkNotNull(
-        entityType, 'DesignPreviewRequest', 'entityType');
+        entityType, r'DesignPreviewRequest', 'entityType');
     BuiltValueNullFieldError.checkNotNull(
-        entityId, 'DesignPreviewRequest', 'entityId');
+        entityId, r'DesignPreviewRequest', 'entityId');
     BuiltValueNullFieldError.checkNotNull(
-        design, 'DesignPreviewRequest', 'design');
+        design, r'DesignPreviewRequest', 'design');
   }
 
   @override
@@ -528,7 +532,7 @@ class _$DesignPreviewRequest extends DesignPreviewRequest {
 
   @override
   String toString() {
-    return (newBuiltValueToStringHelper('DesignPreviewRequest')
+    return (newBuiltValueToStringHelper(r'DesignPreviewRequest')
           ..add('entityType', entityType)
           ..add('entityId', entityId)
           ..add('design', design))
@@ -578,15 +582,17 @@ class DesignPreviewRequestBuilder
   }
 
   @override
-  _$DesignPreviewRequest build() {
+  DesignPreviewRequest build() => _build();
+
+  _$DesignPreviewRequest _build() {
     _$DesignPreviewRequest _$result;
     try {
       _$result = _$v ??
           new _$DesignPreviewRequest._(
               entityType: BuiltValueNullFieldError.checkNotNull(
-                  entityType, 'DesignPreviewRequest', 'entityType'),
+                  entityType, r'DesignPreviewRequest', 'entityType'),
               entityId: BuiltValueNullFieldError.checkNotNull(
-                  entityId, 'DesignPreviewRequest', 'entityId'),
+                  entityId, r'DesignPreviewRequest', 'entityId'),
               design: design.build());
     } catch (_) {
       String _$failedField;
@@ -595,7 +601,7 @@ class DesignPreviewRequestBuilder
         design.build();
       } catch (e) {
         throw new BuiltValueNestedFieldError(
-            'DesignPreviewRequest', _$failedField, e.toString());
+            r'DesignPreviewRequest', _$failedField, e.toString());
       }
       rethrow;
     }
@@ -631,7 +637,7 @@ class _$DesignEntity extends DesignEntity {
   final String id;
 
   factory _$DesignEntity([void Function(DesignEntityBuilder) updates]) =>
-      (new DesignEntityBuilder()..update(updates)).build();
+      (new DesignEntityBuilder()..update(updates))._build();
 
   _$DesignEntity._(
       {this.name,
@@ -647,17 +653,18 @@ class _$DesignEntity extends DesignEntity {
       this.assignedUserId,
       this.id})
       : super._() {
-    BuiltValueNullFieldError.checkNotNull(name, 'DesignEntity', 'name');
-    BuiltValueNullFieldError.checkNotNull(design, 'DesignEntity', 'design');
-    BuiltValueNullFieldError.checkNotNull(isCustom, 'DesignEntity', 'isCustom');
-    BuiltValueNullFieldError.checkNotNull(isFree, 'DesignEntity', 'isFree');
+    BuiltValueNullFieldError.checkNotNull(name, r'DesignEntity', 'name');
+    BuiltValueNullFieldError.checkNotNull(design, r'DesignEntity', 'design');
     BuiltValueNullFieldError.checkNotNull(
-        createdAt, 'DesignEntity', 'createdAt');
+        isCustom, r'DesignEntity', 'isCustom');
+    BuiltValueNullFieldError.checkNotNull(isFree, r'DesignEntity', 'isFree');
     BuiltValueNullFieldError.checkNotNull(
-        updatedAt, 'DesignEntity', 'updatedAt');
+        createdAt, r'DesignEntity', 'createdAt');
     BuiltValueNullFieldError.checkNotNull(
-        archivedAt, 'DesignEntity', 'archivedAt');
-    BuiltValueNullFieldError.checkNotNull(id, 'DesignEntity', 'id');
+        updatedAt, r'DesignEntity', 'updatedAt');
+    BuiltValueNullFieldError.checkNotNull(
+        archivedAt, r'DesignEntity', 'archivedAt');
+    BuiltValueNullFieldError.checkNotNull(id, r'DesignEntity', 'id');
   }
 
   @override
@@ -714,7 +721,7 @@ class _$DesignEntity extends DesignEntity {
 
   @override
   String toString() {
-    return (newBuiltValueToStringHelper('DesignEntity')
+    return (newBuiltValueToStringHelper(r'DesignEntity')
           ..add('name', name)
           ..add('design', design)
           ..add('isCustom', isCustom)
@@ -822,30 +829,32 @@ class DesignEntityBuilder
   }
 
   @override
-  _$DesignEntity build() {
+  DesignEntity build() => _build();
+
+  _$DesignEntity _build() {
     _$DesignEntity _$result;
     try {
       _$result = _$v ??
           new _$DesignEntity._(
               name: BuiltValueNullFieldError.checkNotNull(
-                  name, 'DesignEntity', 'name'),
+                  name, r'DesignEntity', 'name'),
               design: design.build(),
               isCustom: BuiltValueNullFieldError.checkNotNull(
-                  isCustom, 'DesignEntity', 'isCustom'),
+                  isCustom, r'DesignEntity', 'isCustom'),
               isFree: BuiltValueNullFieldError.checkNotNull(
-                  isFree, 'DesignEntity', 'isFree'),
+                  isFree, r'DesignEntity', 'isFree'),
               isChanged: isChanged,
               createdAt: BuiltValueNullFieldError.checkNotNull(
-                  createdAt, 'DesignEntity', 'createdAt'),
+                  createdAt, r'DesignEntity', 'createdAt'),
               updatedAt: BuiltValueNullFieldError.checkNotNull(
-                  updatedAt, 'DesignEntity', 'updatedAt'),
+                  updatedAt, r'DesignEntity', 'updatedAt'),
               archivedAt: BuiltValueNullFieldError.checkNotNull(
-                  archivedAt, 'DesignEntity', 'archivedAt'),
+                  archivedAt, r'DesignEntity', 'archivedAt'),
               isDeleted: isDeleted,
               createdUserId: createdUserId,
               assignedUserId: assignedUserId,
               id: BuiltValueNullFieldError.checkNotNull(
-                  id, 'DesignEntity', 'id'));
+                  id, r'DesignEntity', 'id'));
     } catch (_) {
       String _$failedField;
       try {
@@ -853,7 +862,7 @@ class DesignEntityBuilder
         design.build();
       } catch (e) {
         throw new BuiltValueNestedFieldError(
-            'DesignEntity', _$failedField, e.toString());
+            r'DesignEntity', _$failedField, e.toString());
       }
       rethrow;
     }
@@ -862,4 +871,4 @@ class DesignEntityBuilder
   }
 }
 
-// ignore_for_file: always_put_control_body_on_new_line,always_specify_types,annotate_overrides,avoid_annotating_with_dynamic,avoid_as,avoid_catches_without_on_clauses,avoid_returning_this,deprecated_member_use_from_same_package,lines_longer_than_80_chars,omit_local_variable_types,prefer_expression_function_bodies,sort_constructors_first,test_types_in_equals,unnecessary_const,unnecessary_new
+// ignore_for_file: always_put_control_body_on_new_line,always_specify_types,annotate_overrides,avoid_annotating_with_dynamic,avoid_as,avoid_catches_without_on_clauses,avoid_returning_this,deprecated_member_use_from_same_package,lines_longer_than_80_chars,no_leading_underscores_for_local_identifiers,omit_local_variable_types,prefer_expression_function_bodies,sort_constructors_first,test_types_in_equals,unnecessary_const,unnecessary_new,unnecessary_lambdas

@@ -256,10 +256,10 @@ class _$WebhookListResponse extends WebhookListResponse {
 
   factory _$WebhookListResponse(
           [void Function(WebhookListResponseBuilder) updates]) =>
-      (new WebhookListResponseBuilder()..update(updates)).build();
+      (new WebhookListResponseBuilder()..update(updates))._build();
 
   _$WebhookListResponse._({this.data}) : super._() {
-    BuiltValueNullFieldError.checkNotNull(data, 'WebhookListResponse', 'data');
+    BuiltValueNullFieldError.checkNotNull(data, r'WebhookListResponse', 'data');
   }
 
   @override
@@ -285,7 +285,7 @@ class _$WebhookListResponse extends WebhookListResponse {
 
   @override
   String toString() {
-    return (newBuiltValueToStringHelper('WebhookListResponse')
+    return (newBuiltValueToStringHelper(r'WebhookListResponse')
           ..add('data', data))
         .toString();
   }
@@ -323,7 +323,9 @@ class WebhookListResponseBuilder
   }
 
   @override
-  _$WebhookListResponse build() {
+  WebhookListResponse build() => _build();
+
+  _$WebhookListResponse _build() {
     _$WebhookListResponse _$result;
     try {
       _$result = _$v ?? new _$WebhookListResponse._(data: data.build());
@@ -334,7 +336,7 @@ class WebhookListResponseBuilder
         data.build();
       } catch (e) {
         throw new BuiltValueNestedFieldError(
-            'WebhookListResponse', _$failedField, e.toString());
+            r'WebhookListResponse', _$failedField, e.toString());
       }
       rethrow;
     }
@@ -349,10 +351,10 @@ class _$WebhookItemResponse extends WebhookItemResponse {
 
   factory _$WebhookItemResponse(
           [void Function(WebhookItemResponseBuilder) updates]) =>
-      (new WebhookItemResponseBuilder()..update(updates)).build();
+      (new WebhookItemResponseBuilder()..update(updates))._build();
 
   _$WebhookItemResponse._({this.data}) : super._() {
-    BuiltValueNullFieldError.checkNotNull(data, 'WebhookItemResponse', 'data');
+    BuiltValueNullFieldError.checkNotNull(data, r'WebhookItemResponse', 'data');
   }
 
   @override
@@ -378,7 +380,7 @@ class _$WebhookItemResponse extends WebhookItemResponse {
 
   @override
   String toString() {
-    return (newBuiltValueToStringHelper('WebhookItemResponse')
+    return (newBuiltValueToStringHelper(r'WebhookItemResponse')
           ..add('data', data))
         .toString();
   }
@@ -415,7 +417,9 @@ class WebhookItemResponseBuilder
   }
 
   @override
-  _$WebhookItemResponse build() {
+  WebhookItemResponse build() => _build();
+
+  _$WebhookItemResponse _build() {
     _$WebhookItemResponse _$result;
     try {
       _$result = _$v ?? new _$WebhookItemResponse._(data: data.build());
@@ -426,7 +430,7 @@ class WebhookItemResponseBuilder
         data.build();
       } catch (e) {
         throw new BuiltValueNestedFieldError(
-            'WebhookItemResponse', _$failedField, e.toString());
+            r'WebhookItemResponse', _$failedField, e.toString());
       }
       rethrow;
     }
@@ -464,7 +468,7 @@ class _$WebhookEntity extends WebhookEntity {
   final String id;
 
   factory _$WebhookEntity([void Function(WebhookEntityBuilder) updates]) =>
-      (new WebhookEntityBuilder()..update(updates)).build();
+      (new WebhookEntityBuilder()..update(updates))._build();
 
   _$WebhookEntity._(
       {this.eventId,
@@ -481,20 +485,20 @@ class _$WebhookEntity extends WebhookEntity {
       this.assignedUserId,
       this.id})
       : super._() {
-    BuiltValueNullFieldError.checkNotNull(eventId, 'WebhookEntity', 'eventId');
+    BuiltValueNullFieldError.checkNotNull(eventId, r'WebhookEntity', 'eventId');
     BuiltValueNullFieldError.checkNotNull(
-        targetUrl, 'WebhookEntity', 'targetUrl');
-    BuiltValueNullFieldError.checkNotNull(format, 'WebhookEntity', 'format');
+        targetUrl, r'WebhookEntity', 'targetUrl');
+    BuiltValueNullFieldError.checkNotNull(format, r'WebhookEntity', 'format');
     BuiltValueNullFieldError.checkNotNull(
-        restMethod, 'WebhookEntity', 'restMethod');
-    BuiltValueNullFieldError.checkNotNull(headers, 'WebhookEntity', 'headers');
+        restMethod, r'WebhookEntity', 'restMethod');
+    BuiltValueNullFieldError.checkNotNull(headers, r'WebhookEntity', 'headers');
     BuiltValueNullFieldError.checkNotNull(
-        createdAt, 'WebhookEntity', 'createdAt');
+        createdAt, r'WebhookEntity', 'createdAt');
     BuiltValueNullFieldError.checkNotNull(
-        updatedAt, 'WebhookEntity', 'updatedAt');
+        updatedAt, r'WebhookEntity', 'updatedAt');
     BuiltValueNullFieldError.checkNotNull(
-        archivedAt, 'WebhookEntity', 'archivedAt');
-    BuiltValueNullFieldError.checkNotNull(id, 'WebhookEntity', 'id');
+        archivedAt, r'WebhookEntity', 'archivedAt');
+    BuiltValueNullFieldError.checkNotNull(id, r'WebhookEntity', 'id');
   }
 
   @override
@@ -554,7 +558,7 @@ class _$WebhookEntity extends WebhookEntity {
 
   @override
   String toString() {
-    return (newBuiltValueToStringHelper('WebhookEntity')
+    return (newBuiltValueToStringHelper(r'WebhookEntity')
           ..add('eventId', eventId)
           ..add('targetUrl', targetUrl)
           ..add('format', format)
@@ -668,32 +672,34 @@ class WebhookEntityBuilder
   }
 
   @override
-  _$WebhookEntity build() {
+  WebhookEntity build() => _build();
+
+  _$WebhookEntity _build() {
     _$WebhookEntity _$result;
     try {
       _$result = _$v ??
           new _$WebhookEntity._(
               eventId: BuiltValueNullFieldError.checkNotNull(
-                  eventId, 'WebhookEntity', 'eventId'),
+                  eventId, r'WebhookEntity', 'eventId'),
               targetUrl: BuiltValueNullFieldError.checkNotNull(
-                  targetUrl, 'WebhookEntity', 'targetUrl'),
+                  targetUrl, r'WebhookEntity', 'targetUrl'),
               format: BuiltValueNullFieldError.checkNotNull(
-                  format, 'WebhookEntity', 'format'),
+                  format, r'WebhookEntity', 'format'),
               restMethod: BuiltValueNullFieldError.checkNotNull(
-                  restMethod, 'WebhookEntity', 'restMethod'),
+                  restMethod, r'WebhookEntity', 'restMethod'),
               headers: headers.build(),
               isChanged: isChanged,
               createdAt: BuiltValueNullFieldError.checkNotNull(
-                  createdAt, 'WebhookEntity', 'createdAt'),
+                  createdAt, r'WebhookEntity', 'createdAt'),
               updatedAt: BuiltValueNullFieldError.checkNotNull(
-                  updatedAt, 'WebhookEntity', 'updatedAt'),
+                  updatedAt, r'WebhookEntity', 'updatedAt'),
               archivedAt: BuiltValueNullFieldError.checkNotNull(
-                  archivedAt, 'WebhookEntity', 'archivedAt'),
+                  archivedAt, r'WebhookEntity', 'archivedAt'),
               isDeleted: isDeleted,
               createdUserId: createdUserId,
               assignedUserId: assignedUserId,
               id: BuiltValueNullFieldError.checkNotNull(
-                  id, 'WebhookEntity', 'id'));
+                  id, r'WebhookEntity', 'id'));
     } catch (_) {
       String _$failedField;
       try {
@@ -701,7 +707,7 @@ class WebhookEntityBuilder
         headers.build();
       } catch (e) {
         throw new BuiltValueNestedFieldError(
-            'WebhookEntity', _$failedField, e.toString());
+            r'WebhookEntity', _$failedField, e.toString());
       }
       rethrow;
     }
@@ -710,4 +716,4 @@ class WebhookEntityBuilder
   }
 }
 
-// ignore_for_file: always_put_control_body_on_new_line,always_specify_types,annotate_overrides,avoid_annotating_with_dynamic,avoid_as,avoid_catches_without_on_clauses,avoid_returning_this,deprecated_member_use_from_same_package,lines_longer_than_80_chars,omit_local_variable_types,prefer_expression_function_bodies,sort_constructors_first,test_types_in_equals,unnecessary_const,unnecessary_new
+// ignore_for_file: always_put_control_body_on_new_line,always_specify_types,annotate_overrides,avoid_annotating_with_dynamic,avoid_as,avoid_catches_without_on_clauses,avoid_returning_this,deprecated_member_use_from_same_package,lines_longer_than_80_chars,no_leading_underscores_for_local_identifiers,omit_local_variable_types,prefer_expression_function_bodies,sort_constructors_first,test_types_in_equals,unnecessary_const,unnecessary_new,unnecessary_lambdas

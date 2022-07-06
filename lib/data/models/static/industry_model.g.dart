@@ -161,10 +161,11 @@ class _$IndustryListResponse extends IndustryListResponse {
 
   factory _$IndustryListResponse(
           [void Function(IndustryListResponseBuilder) updates]) =>
-      (new IndustryListResponseBuilder()..update(updates)).build();
+      (new IndustryListResponseBuilder()..update(updates))._build();
 
   _$IndustryListResponse._({this.data}) : super._() {
-    BuiltValueNullFieldError.checkNotNull(data, 'IndustryListResponse', 'data');
+    BuiltValueNullFieldError.checkNotNull(
+        data, r'IndustryListResponse', 'data');
   }
 
   @override
@@ -190,7 +191,7 @@ class _$IndustryListResponse extends IndustryListResponse {
 
   @override
   String toString() {
-    return (newBuiltValueToStringHelper('IndustryListResponse')
+    return (newBuiltValueToStringHelper(r'IndustryListResponse')
           ..add('data', data))
         .toString();
   }
@@ -228,7 +229,9 @@ class IndustryListResponseBuilder
   }
 
   @override
-  _$IndustryListResponse build() {
+  IndustryListResponse build() => _build();
+
+  _$IndustryListResponse _build() {
     _$IndustryListResponse _$result;
     try {
       _$result = _$v ?? new _$IndustryListResponse._(data: data.build());
@@ -239,7 +242,7 @@ class IndustryListResponseBuilder
         data.build();
       } catch (e) {
         throw new BuiltValueNestedFieldError(
-            'IndustryListResponse', _$failedField, e.toString());
+            r'IndustryListResponse', _$failedField, e.toString());
       }
       rethrow;
     }
@@ -254,10 +257,11 @@ class _$IndustryItemResponse extends IndustryItemResponse {
 
   factory _$IndustryItemResponse(
           [void Function(IndustryItemResponseBuilder) updates]) =>
-      (new IndustryItemResponseBuilder()..update(updates)).build();
+      (new IndustryItemResponseBuilder()..update(updates))._build();
 
   _$IndustryItemResponse._({this.data}) : super._() {
-    BuiltValueNullFieldError.checkNotNull(data, 'IndustryItemResponse', 'data');
+    BuiltValueNullFieldError.checkNotNull(
+        data, r'IndustryItemResponse', 'data');
   }
 
   @override
@@ -283,7 +287,7 @@ class _$IndustryItemResponse extends IndustryItemResponse {
 
   @override
   String toString() {
-    return (newBuiltValueToStringHelper('IndustryItemResponse')
+    return (newBuiltValueToStringHelper(r'IndustryItemResponse')
           ..add('data', data))
         .toString();
   }
@@ -321,7 +325,9 @@ class IndustryItemResponseBuilder
   }
 
   @override
-  _$IndustryItemResponse build() {
+  IndustryItemResponse build() => _build();
+
+  _$IndustryItemResponse _build() {
     _$IndustryItemResponse _$result;
     try {
       _$result = _$v ?? new _$IndustryItemResponse._(data: data.build());
@@ -332,7 +338,7 @@ class IndustryItemResponseBuilder
         data.build();
       } catch (e) {
         throw new BuiltValueNestedFieldError(
-            'IndustryItemResponse', _$failedField, e.toString());
+            r'IndustryItemResponse', _$failedField, e.toString());
       }
       rethrow;
     }
@@ -348,11 +354,11 @@ class _$IndustryEntity extends IndustryEntity {
   final String id;
 
   factory _$IndustryEntity([void Function(IndustryEntityBuilder) updates]) =>
-      (new IndustryEntityBuilder()..update(updates)).build();
+      (new IndustryEntityBuilder()..update(updates))._build();
 
   _$IndustryEntity._({this.name, this.id}) : super._() {
-    BuiltValueNullFieldError.checkNotNull(name, 'IndustryEntity', 'name');
-    BuiltValueNullFieldError.checkNotNull(id, 'IndustryEntity', 'id');
+    BuiltValueNullFieldError.checkNotNull(name, r'IndustryEntity', 'name');
+    BuiltValueNullFieldError.checkNotNull(id, r'IndustryEntity', 'id');
   }
 
   @override
@@ -377,7 +383,7 @@ class _$IndustryEntity extends IndustryEntity {
 
   @override
   String toString() {
-    return (newBuiltValueToStringHelper('IndustryEntity')
+    return (newBuiltValueToStringHelper(r'IndustryEntity')
           ..add('name', name)
           ..add('id', id))
         .toString();
@@ -420,16 +426,18 @@ class IndustryEntityBuilder
   }
 
   @override
-  _$IndustryEntity build() {
+  IndustryEntity build() => _build();
+
+  _$IndustryEntity _build() {
     final _$result = _$v ??
         new _$IndustryEntity._(
             name: BuiltValueNullFieldError.checkNotNull(
-                name, 'IndustryEntity', 'name'),
+                name, r'IndustryEntity', 'name'),
             id: BuiltValueNullFieldError.checkNotNull(
-                id, 'IndustryEntity', 'id'));
+                id, r'IndustryEntity', 'id'));
     replace(_$result);
     return _$result;
   }
 }
 
-// ignore_for_file: always_put_control_body_on_new_line,always_specify_types,annotate_overrides,avoid_annotating_with_dynamic,avoid_as,avoid_catches_without_on_clauses,avoid_returning_this,deprecated_member_use_from_same_package,lines_longer_than_80_chars,omit_local_variable_types,prefer_expression_function_bodies,sort_constructors_first,test_types_in_equals,unnecessary_const,unnecessary_new
+// ignore_for_file: always_put_control_body_on_new_line,always_specify_types,annotate_overrides,avoid_annotating_with_dynamic,avoid_as,avoid_catches_without_on_clauses,avoid_returning_this,deprecated_member_use_from_same_package,lines_longer_than_80_chars,no_leading_underscores_for_local_identifiers,omit_local_variable_types,prefer_expression_function_bodies,sort_constructors_first,test_types_in_equals,unnecessary_const,unnecessary_new,unnecessary_lambdas

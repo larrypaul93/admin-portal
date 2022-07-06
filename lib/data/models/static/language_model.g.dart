@@ -168,10 +168,11 @@ class _$LanguageListResponse extends LanguageListResponse {
 
   factory _$LanguageListResponse(
           [void Function(LanguageListResponseBuilder) updates]) =>
-      (new LanguageListResponseBuilder()..update(updates)).build();
+      (new LanguageListResponseBuilder()..update(updates))._build();
 
   _$LanguageListResponse._({this.data}) : super._() {
-    BuiltValueNullFieldError.checkNotNull(data, 'LanguageListResponse', 'data');
+    BuiltValueNullFieldError.checkNotNull(
+        data, r'LanguageListResponse', 'data');
   }
 
   @override
@@ -197,7 +198,7 @@ class _$LanguageListResponse extends LanguageListResponse {
 
   @override
   String toString() {
-    return (newBuiltValueToStringHelper('LanguageListResponse')
+    return (newBuiltValueToStringHelper(r'LanguageListResponse')
           ..add('data', data))
         .toString();
   }
@@ -235,7 +236,9 @@ class LanguageListResponseBuilder
   }
 
   @override
-  _$LanguageListResponse build() {
+  LanguageListResponse build() => _build();
+
+  _$LanguageListResponse _build() {
     _$LanguageListResponse _$result;
     try {
       _$result = _$v ?? new _$LanguageListResponse._(data: data.build());
@@ -246,7 +249,7 @@ class LanguageListResponseBuilder
         data.build();
       } catch (e) {
         throw new BuiltValueNestedFieldError(
-            'LanguageListResponse', _$failedField, e.toString());
+            r'LanguageListResponse', _$failedField, e.toString());
       }
       rethrow;
     }
@@ -261,10 +264,11 @@ class _$LanguageItemResponse extends LanguageItemResponse {
 
   factory _$LanguageItemResponse(
           [void Function(LanguageItemResponseBuilder) updates]) =>
-      (new LanguageItemResponseBuilder()..update(updates)).build();
+      (new LanguageItemResponseBuilder()..update(updates))._build();
 
   _$LanguageItemResponse._({this.data}) : super._() {
-    BuiltValueNullFieldError.checkNotNull(data, 'LanguageItemResponse', 'data');
+    BuiltValueNullFieldError.checkNotNull(
+        data, r'LanguageItemResponse', 'data');
   }
 
   @override
@@ -290,7 +294,7 @@ class _$LanguageItemResponse extends LanguageItemResponse {
 
   @override
   String toString() {
-    return (newBuiltValueToStringHelper('LanguageItemResponse')
+    return (newBuiltValueToStringHelper(r'LanguageItemResponse')
           ..add('data', data))
         .toString();
   }
@@ -328,7 +332,9 @@ class LanguageItemResponseBuilder
   }
 
   @override
-  _$LanguageItemResponse build() {
+  LanguageItemResponse build() => _build();
+
+  _$LanguageItemResponse _build() {
     _$LanguageItemResponse _$result;
     try {
       _$result = _$v ?? new _$LanguageItemResponse._(data: data.build());
@@ -339,7 +345,7 @@ class LanguageItemResponseBuilder
         data.build();
       } catch (e) {
         throw new BuiltValueNestedFieldError(
-            'LanguageItemResponse', _$failedField, e.toString());
+            r'LanguageItemResponse', _$failedField, e.toString());
       }
       rethrow;
     }
@@ -357,12 +363,12 @@ class _$LanguageEntity extends LanguageEntity {
   final String id;
 
   factory _$LanguageEntity([void Function(LanguageEntityBuilder) updates]) =>
-      (new LanguageEntityBuilder()..update(updates)).build();
+      (new LanguageEntityBuilder()..update(updates))._build();
 
   _$LanguageEntity._({this.name, this.locale, this.id}) : super._() {
-    BuiltValueNullFieldError.checkNotNull(name, 'LanguageEntity', 'name');
-    BuiltValueNullFieldError.checkNotNull(locale, 'LanguageEntity', 'locale');
-    BuiltValueNullFieldError.checkNotNull(id, 'LanguageEntity', 'id');
+    BuiltValueNullFieldError.checkNotNull(name, r'LanguageEntity', 'name');
+    BuiltValueNullFieldError.checkNotNull(locale, r'LanguageEntity', 'locale');
+    BuiltValueNullFieldError.checkNotNull(id, r'LanguageEntity', 'id');
   }
 
   @override
@@ -391,7 +397,7 @@ class _$LanguageEntity extends LanguageEntity {
 
   @override
   String toString() {
-    return (newBuiltValueToStringHelper('LanguageEntity')
+    return (newBuiltValueToStringHelper(r'LanguageEntity')
           ..add('name', name)
           ..add('locale', locale)
           ..add('id', id))
@@ -440,18 +446,20 @@ class LanguageEntityBuilder
   }
 
   @override
-  _$LanguageEntity build() {
+  LanguageEntity build() => _build();
+
+  _$LanguageEntity _build() {
     final _$result = _$v ??
         new _$LanguageEntity._(
             name: BuiltValueNullFieldError.checkNotNull(
-                name, 'LanguageEntity', 'name'),
+                name, r'LanguageEntity', 'name'),
             locale: BuiltValueNullFieldError.checkNotNull(
-                locale, 'LanguageEntity', 'locale'),
+                locale, r'LanguageEntity', 'locale'),
             id: BuiltValueNullFieldError.checkNotNull(
-                id, 'LanguageEntity', 'id'));
+                id, r'LanguageEntity', 'id'));
     replace(_$result);
     return _$result;
   }
 }
 
-// ignore_for_file: always_put_control_body_on_new_line,always_specify_types,annotate_overrides,avoid_annotating_with_dynamic,avoid_as,avoid_catches_without_on_clauses,avoid_returning_this,deprecated_member_use_from_same_package,lines_longer_than_80_chars,omit_local_variable_types,prefer_expression_function_bodies,sort_constructors_first,test_types_in_equals,unnecessary_const,unnecessary_new
+// ignore_for_file: always_put_control_body_on_new_line,always_specify_types,annotate_overrides,avoid_annotating_with_dynamic,avoid_as,avoid_catches_without_on_clauses,avoid_returning_this,deprecated_member_use_from_same_package,lines_longer_than_80_chars,no_leading_underscores_for_local_identifiers,omit_local_variable_types,prefer_expression_function_bodies,sort_constructors_first,test_types_in_equals,unnecessary_const,unnecessary_new,unnecessary_lambdas

@@ -1298,7 +1298,7 @@ void editEntity({
 
           case EntityType.contact:
             store.dispatch(EditContact(contact: entity, completer: completer));
-
+            break;
           case EntityType.recurringExpense:
             store.dispatch(EditRecurringExpense(
                 recurringExpense: entity, completer: completer));
@@ -1475,7 +1475,7 @@ void handleEntitiesActions(List<BaseEntity> entities, EntityAction action,
 
     case EntityType.contact:
       handleContactAction(context, entities, action);
-
+      break;
     case EntityType.recurringExpense:
       handleRecurringExpenseAction(context, entities, action);
       break;

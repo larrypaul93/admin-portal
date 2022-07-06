@@ -269,10 +269,11 @@ class _$CategoryListResponse extends CategoryListResponse {
 
   factory _$CategoryListResponse(
           [void Function(CategoryListResponseBuilder) updates]) =>
-      (new CategoryListResponseBuilder()..update(updates)).build();
+      (new CategoryListResponseBuilder()..update(updates))._build();
 
   _$CategoryListResponse._({this.data}) : super._() {
-    BuiltValueNullFieldError.checkNotNull(data, 'CategoryListResponse', 'data');
+    BuiltValueNullFieldError.checkNotNull(
+        data, r'CategoryListResponse', 'data');
   }
 
   @override
@@ -298,7 +299,7 @@ class _$CategoryListResponse extends CategoryListResponse {
 
   @override
   String toString() {
-    return (newBuiltValueToStringHelper('CategoryListResponse')
+    return (newBuiltValueToStringHelper(r'CategoryListResponse')
           ..add('data', data))
         .toString();
   }
@@ -336,7 +337,9 @@ class CategoryListResponseBuilder
   }
 
   @override
-  _$CategoryListResponse build() {
+  CategoryListResponse build() => _build();
+
+  _$CategoryListResponse _build() {
     _$CategoryListResponse _$result;
     try {
       _$result = _$v ?? new _$CategoryListResponse._(data: data.build());
@@ -347,7 +350,7 @@ class CategoryListResponseBuilder
         data.build();
       } catch (e) {
         throw new BuiltValueNestedFieldError(
-            'CategoryListResponse', _$failedField, e.toString());
+            r'CategoryListResponse', _$failedField, e.toString());
       }
       rethrow;
     }
@@ -362,10 +365,11 @@ class _$CategoryItemResponse extends CategoryItemResponse {
 
   factory _$CategoryItemResponse(
           [void Function(CategoryItemResponseBuilder) updates]) =>
-      (new CategoryItemResponseBuilder()..update(updates)).build();
+      (new CategoryItemResponseBuilder()..update(updates))._build();
 
   _$CategoryItemResponse._({this.data}) : super._() {
-    BuiltValueNullFieldError.checkNotNull(data, 'CategoryItemResponse', 'data');
+    BuiltValueNullFieldError.checkNotNull(
+        data, r'CategoryItemResponse', 'data');
   }
 
   @override
@@ -391,7 +395,7 @@ class _$CategoryItemResponse extends CategoryItemResponse {
 
   @override
   String toString() {
-    return (newBuiltValueToStringHelper('CategoryItemResponse')
+    return (newBuiltValueToStringHelper(r'CategoryItemResponse')
           ..add('data', data))
         .toString();
   }
@@ -429,7 +433,9 @@ class CategoryItemResponseBuilder
   }
 
   @override
-  _$CategoryItemResponse build() {
+  CategoryItemResponse build() => _build();
+
+  _$CategoryItemResponse _build() {
     _$CategoryItemResponse _$result;
     try {
       _$result = _$v ?? new _$CategoryItemResponse._(data: data.build());
@@ -440,7 +446,7 @@ class CategoryItemResponseBuilder
         data.build();
       } catch (e) {
         throw new BuiltValueNestedFieldError(
-            'CategoryItemResponse', _$failedField, e.toString());
+            r'CategoryItemResponse', _$failedField, e.toString());
       }
       rethrow;
     }
@@ -480,7 +486,7 @@ class _$CategoryEntity extends CategoryEntity {
   final String id;
 
   factory _$CategoryEntity([void Function(CategoryEntityBuilder) updates]) =>
-      (new CategoryEntityBuilder()..update(updates)).build();
+      (new CategoryEntityBuilder()..update(updates))._build();
 
   _$CategoryEntity._(
       {this.name,
@@ -498,20 +504,20 @@ class _$CategoryEntity extends CategoryEntity {
       this.assignedUserId,
       this.id})
       : super._() {
-    BuiltValueNullFieldError.checkNotNull(name, 'CategoryEntity', 'name');
+    BuiltValueNullFieldError.checkNotNull(name, r'CategoryEntity', 'name');
     BuiltValueNullFieldError.checkNotNull(
-        description, 'CategoryEntity', 'description');
+        description, r'CategoryEntity', 'description');
     BuiltValueNullFieldError.checkNotNull(
-        skuPrefix, 'CategoryEntity', 'skuPrefix');
+        skuPrefix, r'CategoryEntity', 'skuPrefix');
     BuiltValueNullFieldError.checkNotNull(
-        nextNumber, 'CategoryEntity', 'nextNumber');
+        nextNumber, r'CategoryEntity', 'nextNumber');
     BuiltValueNullFieldError.checkNotNull(
-        createdAt, 'CategoryEntity', 'createdAt');
+        createdAt, r'CategoryEntity', 'createdAt');
     BuiltValueNullFieldError.checkNotNull(
-        updatedAt, 'CategoryEntity', 'updatedAt');
+        updatedAt, r'CategoryEntity', 'updatedAt');
     BuiltValueNullFieldError.checkNotNull(
-        archivedAt, 'CategoryEntity', 'archivedAt');
-    BuiltValueNullFieldError.checkNotNull(id, 'CategoryEntity', 'id');
+        archivedAt, r'CategoryEntity', 'archivedAt');
+    BuiltValueNullFieldError.checkNotNull(id, r'CategoryEntity', 'id');
   }
 
   @override
@@ -575,7 +581,7 @@ class _$CategoryEntity extends CategoryEntity {
 
   @override
   String toString() {
-    return (newBuiltValueToStringHelper('CategoryEntity')
+    return (newBuiltValueToStringHelper(r'CategoryEntity')
           ..add('name', name)
           ..add('description', description)
           ..add('categoryId', categoryId)
@@ -693,33 +699,35 @@ class CategoryEntityBuilder
   }
 
   @override
-  _$CategoryEntity build() {
+  CategoryEntity build() => _build();
+
+  _$CategoryEntity _build() {
     _$CategoryEntity _$result;
     try {
       _$result = _$v ??
           new _$CategoryEntity._(
               name: BuiltValueNullFieldError.checkNotNull(
-                  name, 'CategoryEntity', 'name'),
+                  name, r'CategoryEntity', 'name'),
               description: BuiltValueNullFieldError.checkNotNull(
-                  description, 'CategoryEntity', 'description'),
+                  description, r'CategoryEntity', 'description'),
               categoryId: categoryId,
               skuPrefix: BuiltValueNullFieldError.checkNotNull(
-                  skuPrefix, 'CategoryEntity', 'skuPrefix'),
+                  skuPrefix, r'CategoryEntity', 'skuPrefix'),
               nextNumber: BuiltValueNullFieldError.checkNotNull(
-                  nextNumber, 'CategoryEntity', 'nextNumber'),
+                  nextNumber, r'CategoryEntity', 'nextNumber'),
               category: _category?.build(),
               isChanged: isChanged,
               createdAt: BuiltValueNullFieldError.checkNotNull(
-                  createdAt, 'CategoryEntity', 'createdAt'),
+                  createdAt, r'CategoryEntity', 'createdAt'),
               updatedAt: BuiltValueNullFieldError.checkNotNull(
-                  updatedAt, 'CategoryEntity', 'updatedAt'),
+                  updatedAt, r'CategoryEntity', 'updatedAt'),
               archivedAt: BuiltValueNullFieldError.checkNotNull(
-                  archivedAt, 'CategoryEntity', 'archivedAt'),
+                  archivedAt, r'CategoryEntity', 'archivedAt'),
               isDeleted: isDeleted,
               createdUserId: createdUserId,
               assignedUserId: assignedUserId,
               id: BuiltValueNullFieldError.checkNotNull(
-                  id, 'CategoryEntity', 'id'));
+                  id, r'CategoryEntity', 'id'));
     } catch (_) {
       String _$failedField;
       try {
@@ -727,7 +735,7 @@ class CategoryEntityBuilder
         _category?.build();
       } catch (e) {
         throw new BuiltValueNestedFieldError(
-            'CategoryEntity', _$failedField, e.toString());
+            r'CategoryEntity', _$failedField, e.toString());
       }
       rethrow;
     }
@@ -736,4 +744,4 @@ class CategoryEntityBuilder
   }
 }
 
-// ignore_for_file: always_put_control_body_on_new_line,always_specify_types,annotate_overrides,avoid_annotating_with_dynamic,avoid_as,avoid_catches_without_on_clauses,avoid_returning_this,deprecated_member_use_from_same_package,lines_longer_than_80_chars,omit_local_variable_types,prefer_expression_function_bodies,sort_constructors_first,test_types_in_equals,unnecessary_const,unnecessary_new
+// ignore_for_file: always_put_control_body_on_new_line,always_specify_types,annotate_overrides,avoid_annotating_with_dynamic,avoid_as,avoid_catches_without_on_clauses,avoid_returning_this,deprecated_member_use_from_same_package,lines_longer_than_80_chars,no_leading_underscores_for_local_identifiers,omit_local_variable_types,prefer_expression_function_bodies,sort_constructors_first,test_types_in_equals,unnecessary_const,unnecessary_new,unnecessary_lambdas

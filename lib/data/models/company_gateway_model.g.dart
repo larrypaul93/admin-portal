@@ -527,11 +527,11 @@ class _$CompanyGatewayListResponse extends CompanyGatewayListResponse {
 
   factory _$CompanyGatewayListResponse(
           [void Function(CompanyGatewayListResponseBuilder) updates]) =>
-      (new CompanyGatewayListResponseBuilder()..update(updates)).build();
+      (new CompanyGatewayListResponseBuilder()..update(updates))._build();
 
   _$CompanyGatewayListResponse._({this.data}) : super._() {
     BuiltValueNullFieldError.checkNotNull(
-        data, 'CompanyGatewayListResponse', 'data');
+        data, r'CompanyGatewayListResponse', 'data');
   }
 
   @override
@@ -557,7 +557,7 @@ class _$CompanyGatewayListResponse extends CompanyGatewayListResponse {
 
   @override
   String toString() {
-    return (newBuiltValueToStringHelper('CompanyGatewayListResponse')
+    return (newBuiltValueToStringHelper(r'CompanyGatewayListResponse')
           ..add('data', data))
         .toString();
   }
@@ -596,7 +596,9 @@ class CompanyGatewayListResponseBuilder
   }
 
   @override
-  _$CompanyGatewayListResponse build() {
+  CompanyGatewayListResponse build() => _build();
+
+  _$CompanyGatewayListResponse _build() {
     _$CompanyGatewayListResponse _$result;
     try {
       _$result = _$v ?? new _$CompanyGatewayListResponse._(data: data.build());
@@ -607,7 +609,7 @@ class CompanyGatewayListResponseBuilder
         data.build();
       } catch (e) {
         throw new BuiltValueNestedFieldError(
-            'CompanyGatewayListResponse', _$failedField, e.toString());
+            r'CompanyGatewayListResponse', _$failedField, e.toString());
       }
       rethrow;
     }
@@ -622,11 +624,11 @@ class _$CompanyGatewayItemResponse extends CompanyGatewayItemResponse {
 
   factory _$CompanyGatewayItemResponse(
           [void Function(CompanyGatewayItemResponseBuilder) updates]) =>
-      (new CompanyGatewayItemResponseBuilder()..update(updates)).build();
+      (new CompanyGatewayItemResponseBuilder()..update(updates))._build();
 
   _$CompanyGatewayItemResponse._({this.data}) : super._() {
     BuiltValueNullFieldError.checkNotNull(
-        data, 'CompanyGatewayItemResponse', 'data');
+        data, r'CompanyGatewayItemResponse', 'data');
   }
 
   @override
@@ -652,7 +654,7 @@ class _$CompanyGatewayItemResponse extends CompanyGatewayItemResponse {
 
   @override
   String toString() {
-    return (newBuiltValueToStringHelper('CompanyGatewayItemResponse')
+    return (newBuiltValueToStringHelper(r'CompanyGatewayItemResponse')
           ..add('data', data))
         .toString();
   }
@@ -691,7 +693,9 @@ class CompanyGatewayItemResponseBuilder
   }
 
   @override
-  _$CompanyGatewayItemResponse build() {
+  CompanyGatewayItemResponse build() => _build();
+
+  _$CompanyGatewayItemResponse _build() {
     _$CompanyGatewayItemResponse _$result;
     try {
       _$result = _$v ?? new _$CompanyGatewayItemResponse._(data: data.build());
@@ -702,7 +706,7 @@ class CompanyGatewayItemResponseBuilder
         data.build();
       } catch (e) {
         throw new BuiltValueNestedFieldError(
-            'CompanyGatewayItemResponse', _$failedField, e.toString());
+            r'CompanyGatewayItemResponse', _$failedField, e.toString());
       }
       rethrow;
     }
@@ -775,7 +779,7 @@ class _$CompanyGatewayEntity extends CompanyGatewayEntity {
 
   factory _$CompanyGatewayEntity(
           [void Function(CompanyGatewayEntityBuilder) updates]) =>
-      (new CompanyGatewayEntityBuilder()..update(updates)).build();
+      (new CompanyGatewayEntityBuilder()..update(updates))._build();
 
   _$CompanyGatewayEntity._(
       {this.loadedAt,
@@ -810,52 +814,52 @@ class _$CompanyGatewayEntity extends CompanyGatewayEntity {
       this.id})
       : super._() {
     BuiltValueNullFieldError.checkNotNull(
-        gatewayId, 'CompanyGatewayEntity', 'gatewayId');
+        gatewayId, r'CompanyGatewayEntity', 'gatewayId');
     BuiltValueNullFieldError.checkNotNull(
-        acceptedCreditCards, 'CompanyGatewayEntity', 'acceptedCreditCards');
+        acceptedCreditCards, r'CompanyGatewayEntity', 'acceptedCreditCards');
     BuiltValueNullFieldError.checkNotNull(requireShippingAddress,
-        'CompanyGatewayEntity', 'requireShippingAddress');
+        r'CompanyGatewayEntity', 'requireShippingAddress');
+    BuiltValueNullFieldError.checkNotNull(requireBillingAddress,
+        r'CompanyGatewayEntity', 'requireBillingAddress');
     BuiltValueNullFieldError.checkNotNull(
-        requireBillingAddress, 'CompanyGatewayEntity', 'requireBillingAddress');
+        requireClientName, r'CompanyGatewayEntity', 'requireClientName');
     BuiltValueNullFieldError.checkNotNull(
-        requireClientName, 'CompanyGatewayEntity', 'requireClientName');
+        requireClientPhone, r'CompanyGatewayEntity', 'requireClientPhone');
     BuiltValueNullFieldError.checkNotNull(
-        requireClientPhone, 'CompanyGatewayEntity', 'requireClientPhone');
+        requireContactName, r'CompanyGatewayEntity', 'requireContactName');
     BuiltValueNullFieldError.checkNotNull(
-        requireContactName, 'CompanyGatewayEntity', 'requireContactName');
+        requireContactEmail, r'CompanyGatewayEntity', 'requireContactEmail');
     BuiltValueNullFieldError.checkNotNull(
-        requireContactEmail, 'CompanyGatewayEntity', 'requireContactEmail');
+        requireCvv, r'CompanyGatewayEntity', 'requireCvv');
     BuiltValueNullFieldError.checkNotNull(
-        requireCvv, 'CompanyGatewayEntity', 'requireCvv');
+        updateDetails, r'CompanyGatewayEntity', 'updateDetails');
     BuiltValueNullFieldError.checkNotNull(
-        updateDetails, 'CompanyGatewayEntity', 'updateDetails');
+        feesAndLimitsMap, r'CompanyGatewayEntity', 'feesAndLimitsMap');
     BuiltValueNullFieldError.checkNotNull(
-        feesAndLimitsMap, 'CompanyGatewayEntity', 'feesAndLimitsMap');
+        systemLogs, r'CompanyGatewayEntity', 'systemLogs');
     BuiltValueNullFieldError.checkNotNull(
-        systemLogs, 'CompanyGatewayEntity', 'systemLogs');
+        customValue1, r'CompanyGatewayEntity', 'customValue1');
     BuiltValueNullFieldError.checkNotNull(
-        customValue1, 'CompanyGatewayEntity', 'customValue1');
+        customValue2, r'CompanyGatewayEntity', 'customValue2');
     BuiltValueNullFieldError.checkNotNull(
-        customValue2, 'CompanyGatewayEntity', 'customValue2');
+        customValue3, r'CompanyGatewayEntity', 'customValue3');
     BuiltValueNullFieldError.checkNotNull(
-        customValue3, 'CompanyGatewayEntity', 'customValue3');
+        customValue4, r'CompanyGatewayEntity', 'customValue4');
     BuiltValueNullFieldError.checkNotNull(
-        customValue4, 'CompanyGatewayEntity', 'customValue4');
+        config, r'CompanyGatewayEntity', 'config');
     BuiltValueNullFieldError.checkNotNull(
-        config, 'CompanyGatewayEntity', 'config');
+        tokenBilling, r'CompanyGatewayEntity', 'tokenBilling');
     BuiltValueNullFieldError.checkNotNull(
-        tokenBilling, 'CompanyGatewayEntity', 'tokenBilling');
+        isTestMode, r'CompanyGatewayEntity', 'isTestMode');
     BuiltValueNullFieldError.checkNotNull(
-        isTestMode, 'CompanyGatewayEntity', 'isTestMode');
+        label, r'CompanyGatewayEntity', 'label');
     BuiltValueNullFieldError.checkNotNull(
-        label, 'CompanyGatewayEntity', 'label');
+        createdAt, r'CompanyGatewayEntity', 'createdAt');
     BuiltValueNullFieldError.checkNotNull(
-        createdAt, 'CompanyGatewayEntity', 'createdAt');
+        updatedAt, r'CompanyGatewayEntity', 'updatedAt');
     BuiltValueNullFieldError.checkNotNull(
-        updatedAt, 'CompanyGatewayEntity', 'updatedAt');
-    BuiltValueNullFieldError.checkNotNull(
-        archivedAt, 'CompanyGatewayEntity', 'archivedAt');
-    BuiltValueNullFieldError.checkNotNull(id, 'CompanyGatewayEntity', 'id');
+        archivedAt, r'CompanyGatewayEntity', 'archivedAt');
+    BuiltValueNullFieldError.checkNotNull(id, r'CompanyGatewayEntity', 'id');
   }
 
   @override
@@ -947,7 +951,7 @@ class _$CompanyGatewayEntity extends CompanyGatewayEntity {
 
   @override
   String toString() {
-    return (newBuiltValueToStringHelper('CompanyGatewayEntity')
+    return (newBuiltValueToStringHelper(r'CompanyGatewayEntity')
           ..add('loadedAt', loadedAt)
           ..add('gatewayId', gatewayId)
           ..add('acceptedCreditCards', acceptedCreditCards)
@@ -1175,48 +1179,50 @@ class CompanyGatewayEntityBuilder
   }
 
   @override
-  _$CompanyGatewayEntity build() {
+  CompanyGatewayEntity build() => _build();
+
+  _$CompanyGatewayEntity _build() {
     _$CompanyGatewayEntity _$result;
     try {
       _$result = _$v ??
           new _$CompanyGatewayEntity._(
               loadedAt: loadedAt,
               gatewayId: BuiltValueNullFieldError.checkNotNull(
-                  gatewayId, 'CompanyGatewayEntity', 'gatewayId'),
+                  gatewayId, r'CompanyGatewayEntity', 'gatewayId'),
               acceptedCreditCards: BuiltValueNullFieldError.checkNotNull(
-                  acceptedCreditCards, 'CompanyGatewayEntity', 'acceptedCreditCards'),
+                  acceptedCreditCards, r'CompanyGatewayEntity', 'acceptedCreditCards'),
               requireShippingAddress: BuiltValueNullFieldError.checkNotNull(
-                  requireShippingAddress, 'CompanyGatewayEntity', 'requireShippingAddress'),
+                  requireShippingAddress, r'CompanyGatewayEntity', 'requireShippingAddress'),
               requireBillingAddress: BuiltValueNullFieldError.checkNotNull(
-                  requireBillingAddress, 'CompanyGatewayEntity', 'requireBillingAddress'),
+                  requireBillingAddress, r'CompanyGatewayEntity', 'requireBillingAddress'),
               requireClientName: BuiltValueNullFieldError.checkNotNull(
-                  requireClientName, 'CompanyGatewayEntity', 'requireClientName'),
+                  requireClientName, r'CompanyGatewayEntity', 'requireClientName'),
               requirePostalCode: requirePostalCode,
               requireClientPhone: BuiltValueNullFieldError.checkNotNull(
-                  requireClientPhone, 'CompanyGatewayEntity', 'requireClientPhone'),
+                  requireClientPhone, r'CompanyGatewayEntity', 'requireClientPhone'),
               requireContactName: BuiltValueNullFieldError.checkNotNull(
-                  requireContactName, 'CompanyGatewayEntity', 'requireContactName'),
-              requireContactEmail: BuiltValueNullFieldError.checkNotNull(requireContactEmail, 'CompanyGatewayEntity', 'requireContactEmail'),
-              requireCvv: BuiltValueNullFieldError.checkNotNull(requireCvv, 'CompanyGatewayEntity', 'requireCvv'),
-              updateDetails: BuiltValueNullFieldError.checkNotNull(updateDetails, 'CompanyGatewayEntity', 'updateDetails'),
+                  requireContactName, r'CompanyGatewayEntity', 'requireContactName'),
+              requireContactEmail: BuiltValueNullFieldError.checkNotNull(requireContactEmail, r'CompanyGatewayEntity', 'requireContactEmail'),
+              requireCvv: BuiltValueNullFieldError.checkNotNull(requireCvv, r'CompanyGatewayEntity', 'requireCvv'),
+              updateDetails: BuiltValueNullFieldError.checkNotNull(updateDetails, r'CompanyGatewayEntity', 'updateDetails'),
               feesAndLimitsMap: feesAndLimitsMap.build(),
               systemLogs: systemLogs.build(),
-              customValue1: BuiltValueNullFieldError.checkNotNull(customValue1, 'CompanyGatewayEntity', 'customValue1'),
-              customValue2: BuiltValueNullFieldError.checkNotNull(customValue2, 'CompanyGatewayEntity', 'customValue2'),
-              customValue3: BuiltValueNullFieldError.checkNotNull(customValue3, 'CompanyGatewayEntity', 'customValue3'),
-              customValue4: BuiltValueNullFieldError.checkNotNull(customValue4, 'CompanyGatewayEntity', 'customValue4'),
-              config: BuiltValueNullFieldError.checkNotNull(config, 'CompanyGatewayEntity', 'config'),
-              tokenBilling: BuiltValueNullFieldError.checkNotNull(tokenBilling, 'CompanyGatewayEntity', 'tokenBilling'),
-              isTestMode: BuiltValueNullFieldError.checkNotNull(isTestMode, 'CompanyGatewayEntity', 'isTestMode'),
-              label: BuiltValueNullFieldError.checkNotNull(label, 'CompanyGatewayEntity', 'label'),
+              customValue1: BuiltValueNullFieldError.checkNotNull(customValue1, r'CompanyGatewayEntity', 'customValue1'),
+              customValue2: BuiltValueNullFieldError.checkNotNull(customValue2, r'CompanyGatewayEntity', 'customValue2'),
+              customValue3: BuiltValueNullFieldError.checkNotNull(customValue3, r'CompanyGatewayEntity', 'customValue3'),
+              customValue4: BuiltValueNullFieldError.checkNotNull(customValue4, r'CompanyGatewayEntity', 'customValue4'),
+              config: BuiltValueNullFieldError.checkNotNull(config, r'CompanyGatewayEntity', 'config'),
+              tokenBilling: BuiltValueNullFieldError.checkNotNull(tokenBilling, r'CompanyGatewayEntity', 'tokenBilling'),
+              isTestMode: BuiltValueNullFieldError.checkNotNull(isTestMode, r'CompanyGatewayEntity', 'isTestMode'),
+              label: BuiltValueNullFieldError.checkNotNull(label, r'CompanyGatewayEntity', 'label'),
               isChanged: isChanged,
-              createdAt: BuiltValueNullFieldError.checkNotNull(createdAt, 'CompanyGatewayEntity', 'createdAt'),
-              updatedAt: BuiltValueNullFieldError.checkNotNull(updatedAt, 'CompanyGatewayEntity', 'updatedAt'),
-              archivedAt: BuiltValueNullFieldError.checkNotNull(archivedAt, 'CompanyGatewayEntity', 'archivedAt'),
+              createdAt: BuiltValueNullFieldError.checkNotNull(createdAt, r'CompanyGatewayEntity', 'createdAt'),
+              updatedAt: BuiltValueNullFieldError.checkNotNull(updatedAt, r'CompanyGatewayEntity', 'updatedAt'),
+              archivedAt: BuiltValueNullFieldError.checkNotNull(archivedAt, r'CompanyGatewayEntity', 'archivedAt'),
               isDeleted: isDeleted,
               createdUserId: createdUserId,
               assignedUserId: assignedUserId,
-              id: BuiltValueNullFieldError.checkNotNull(id, 'CompanyGatewayEntity', 'id'));
+              id: BuiltValueNullFieldError.checkNotNull(id, r'CompanyGatewayEntity', 'id'));
     } catch (_) {
       String _$failedField;
       try {
@@ -1226,7 +1232,7 @@ class CompanyGatewayEntityBuilder
         systemLogs.build();
       } catch (e) {
         throw new BuiltValueNestedFieldError(
-            'CompanyGatewayEntity', _$failedField, e.toString());
+            r'CompanyGatewayEntity', _$failedField, e.toString());
       }
       rethrow;
     }
@@ -1265,7 +1271,7 @@ class _$FeesAndLimitsSettings extends FeesAndLimitsSettings {
 
   factory _$FeesAndLimitsSettings(
           [void Function(FeesAndLimitsSettingsBuilder) updates]) =>
-      (new FeesAndLimitsSettingsBuilder()..update(updates)).build();
+      (new FeesAndLimitsSettingsBuilder()..update(updates))._build();
 
   _$FeesAndLimitsSettings._(
       {this.minLimit,
@@ -1283,31 +1289,31 @@ class _$FeesAndLimitsSettings extends FeesAndLimitsSettings {
       this.isEnabled})
       : super._() {
     BuiltValueNullFieldError.checkNotNull(
-        minLimit, 'FeesAndLimitsSettings', 'minLimit');
+        minLimit, r'FeesAndLimitsSettings', 'minLimit');
     BuiltValueNullFieldError.checkNotNull(
-        maxLimit, 'FeesAndLimitsSettings', 'maxLimit');
+        maxLimit, r'FeesAndLimitsSettings', 'maxLimit');
     BuiltValueNullFieldError.checkNotNull(
-        feeAmount, 'FeesAndLimitsSettings', 'feeAmount');
+        feeAmount, r'FeesAndLimitsSettings', 'feeAmount');
     BuiltValueNullFieldError.checkNotNull(
-        feePercent, 'FeesAndLimitsSettings', 'feePercent');
+        feePercent, r'FeesAndLimitsSettings', 'feePercent');
     BuiltValueNullFieldError.checkNotNull(
-        feeCap, 'FeesAndLimitsSettings', 'feeCap');
+        feeCap, r'FeesAndLimitsSettings', 'feeCap');
     BuiltValueNullFieldError.checkNotNull(
-        taxRate1, 'FeesAndLimitsSettings', 'taxRate1');
+        taxRate1, r'FeesAndLimitsSettings', 'taxRate1');
     BuiltValueNullFieldError.checkNotNull(
-        taxName1, 'FeesAndLimitsSettings', 'taxName1');
+        taxName1, r'FeesAndLimitsSettings', 'taxName1');
     BuiltValueNullFieldError.checkNotNull(
-        taxRate2, 'FeesAndLimitsSettings', 'taxRate2');
+        taxRate2, r'FeesAndLimitsSettings', 'taxRate2');
     BuiltValueNullFieldError.checkNotNull(
-        taxName2, 'FeesAndLimitsSettings', 'taxName2');
+        taxName2, r'FeesAndLimitsSettings', 'taxName2');
     BuiltValueNullFieldError.checkNotNull(
-        taxRate3, 'FeesAndLimitsSettings', 'taxRate3');
+        taxRate3, r'FeesAndLimitsSettings', 'taxRate3');
     BuiltValueNullFieldError.checkNotNull(
-        taxName3, 'FeesAndLimitsSettings', 'taxName3');
+        taxName3, r'FeesAndLimitsSettings', 'taxName3');
     BuiltValueNullFieldError.checkNotNull(
-        adjustFeePercent, 'FeesAndLimitsSettings', 'adjustFeePercent');
+        adjustFeePercent, r'FeesAndLimitsSettings', 'adjustFeePercent');
     BuiltValueNullFieldError.checkNotNull(
-        isEnabled, 'FeesAndLimitsSettings', 'isEnabled');
+        isEnabled, r'FeesAndLimitsSettings', 'isEnabled');
   }
 
   @override
@@ -1369,7 +1375,7 @@ class _$FeesAndLimitsSettings extends FeesAndLimitsSettings {
 
   @override
   String toString() {
-    return (newBuiltValueToStringHelper('FeesAndLimitsSettings')
+    return (newBuiltValueToStringHelper(r'FeesAndLimitsSettings')
           ..add('minLimit', minLimit)
           ..add('maxLimit', maxLimit)
           ..add('feeAmount', feeAmount)
@@ -1481,34 +1487,36 @@ class FeesAndLimitsSettingsBuilder
   }
 
   @override
-  _$FeesAndLimitsSettings build() {
+  FeesAndLimitsSettings build() => _build();
+
+  _$FeesAndLimitsSettings _build() {
     final _$result = _$v ??
         new _$FeesAndLimitsSettings._(
             minLimit: BuiltValueNullFieldError.checkNotNull(
-                minLimit, 'FeesAndLimitsSettings', 'minLimit'),
+                minLimit, r'FeesAndLimitsSettings', 'minLimit'),
             maxLimit: BuiltValueNullFieldError.checkNotNull(
-                maxLimit, 'FeesAndLimitsSettings', 'maxLimit'),
+                maxLimit, r'FeesAndLimitsSettings', 'maxLimit'),
             feeAmount: BuiltValueNullFieldError.checkNotNull(
-                feeAmount, 'FeesAndLimitsSettings', 'feeAmount'),
+                feeAmount, r'FeesAndLimitsSettings', 'feeAmount'),
             feePercent: BuiltValueNullFieldError.checkNotNull(
-                feePercent, 'FeesAndLimitsSettings', 'feePercent'),
+                feePercent, r'FeesAndLimitsSettings', 'feePercent'),
             feeCap: BuiltValueNullFieldError.checkNotNull(
-                feeCap, 'FeesAndLimitsSettings', 'feeCap'),
+                feeCap, r'FeesAndLimitsSettings', 'feeCap'),
             taxRate1: BuiltValueNullFieldError.checkNotNull(
-                taxRate1, 'FeesAndLimitsSettings', 'taxRate1'),
+                taxRate1, r'FeesAndLimitsSettings', 'taxRate1'),
             taxName1: BuiltValueNullFieldError.checkNotNull(
-                taxName1, 'FeesAndLimitsSettings', 'taxName1'),
+                taxName1, r'FeesAndLimitsSettings', 'taxName1'),
             taxRate2: BuiltValueNullFieldError.checkNotNull(
-                taxRate2, 'FeesAndLimitsSettings', 'taxRate2'),
+                taxRate2, r'FeesAndLimitsSettings', 'taxRate2'),
             taxName2:
-                BuiltValueNullFieldError.checkNotNull(taxName2, 'FeesAndLimitsSettings', 'taxName2'),
-            taxRate3: BuiltValueNullFieldError.checkNotNull(taxRate3, 'FeesAndLimitsSettings', 'taxRate3'),
-            taxName3: BuiltValueNullFieldError.checkNotNull(taxName3, 'FeesAndLimitsSettings', 'taxName3'),
-            adjustFeePercent: BuiltValueNullFieldError.checkNotNull(adjustFeePercent, 'FeesAndLimitsSettings', 'adjustFeePercent'),
-            isEnabled: BuiltValueNullFieldError.checkNotNull(isEnabled, 'FeesAndLimitsSettings', 'isEnabled'));
+                BuiltValueNullFieldError.checkNotNull(taxName2, r'FeesAndLimitsSettings', 'taxName2'),
+            taxRate3: BuiltValueNullFieldError.checkNotNull(taxRate3, r'FeesAndLimitsSettings', 'taxRate3'),
+            taxName3: BuiltValueNullFieldError.checkNotNull(taxName3, r'FeesAndLimitsSettings', 'taxName3'),
+            adjustFeePercent: BuiltValueNullFieldError.checkNotNull(adjustFeePercent, r'FeesAndLimitsSettings', 'adjustFeePercent'),
+            isEnabled: BuiltValueNullFieldError.checkNotNull(isEnabled, r'FeesAndLimitsSettings', 'isEnabled'));
     replace(_$result);
     return _$result;
   }
 }
 
-// ignore_for_file: always_put_control_body_on_new_line,always_specify_types,annotate_overrides,avoid_annotating_with_dynamic,avoid_as,avoid_catches_without_on_clauses,avoid_returning_this,deprecated_member_use_from_same_package,lines_longer_than_80_chars,omit_local_variable_types,prefer_expression_function_bodies,sort_constructors_first,test_types_in_equals,unnecessary_const,unnecessary_new
+// ignore_for_file: always_put_control_body_on_new_line,always_specify_types,annotate_overrides,avoid_annotating_with_dynamic,avoid_as,avoid_catches_without_on_clauses,avoid_returning_this,deprecated_member_use_from_same_package,lines_longer_than_80_chars,no_leading_underscores_for_local_identifiers,omit_local_variable_types,prefer_expression_function_bodies,sort_constructors_first,test_types_in_equals,unnecessary_const,unnecessary_new,unnecessary_lambdas

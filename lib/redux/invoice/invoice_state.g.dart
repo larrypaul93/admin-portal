@@ -154,11 +154,11 @@ class _$InvoiceState extends InvoiceState {
   final BuiltList<String> list;
 
   factory _$InvoiceState([void Function(InvoiceStateBuilder) updates]) =>
-      (new InvoiceStateBuilder()..update(updates)).build();
+      (new InvoiceStateBuilder()..update(updates))._build();
 
   _$InvoiceState._({this.map, this.list}) : super._() {
-    BuiltValueNullFieldError.checkNotNull(map, 'InvoiceState', 'map');
-    BuiltValueNullFieldError.checkNotNull(list, 'InvoiceState', 'list');
+    BuiltValueNullFieldError.checkNotNull(map, r'InvoiceState', 'map');
+    BuiltValueNullFieldError.checkNotNull(list, r'InvoiceState', 'list');
   }
 
   @override
@@ -182,7 +182,7 @@ class _$InvoiceState extends InvoiceState {
 
   @override
   String toString() {
-    return (newBuiltValueToStringHelper('InvoiceState')
+    return (newBuiltValueToStringHelper(r'InvoiceState')
           ..add('map', map)
           ..add('list', list))
         .toString();
@@ -226,7 +226,9 @@ class InvoiceStateBuilder
   }
 
   @override
-  _$InvoiceState build() {
+  InvoiceState build() => _build();
+
+  _$InvoiceState _build() {
     _$InvoiceState _$result;
     try {
       _$result =
@@ -240,7 +242,7 @@ class InvoiceStateBuilder
         list.build();
       } catch (e) {
         throw new BuiltValueNestedFieldError(
-            'InvoiceState', _$failedField, e.toString());
+            r'InvoiceState', _$failedField, e.toString());
       }
       rethrow;
     }
@@ -270,7 +272,7 @@ class _$InvoiceUIState extends InvoiceUIState {
   final Completer<Null> cancelCompleter;
 
   factory _$InvoiceUIState([void Function(InvoiceUIStateBuilder) updates]) =>
-      (new InvoiceUIStateBuilder()..update(updates)).build();
+      (new InvoiceUIStateBuilder()..update(updates))._build();
 
   _$InvoiceUIState._(
       {this.editing,
@@ -284,9 +286,9 @@ class _$InvoiceUIState extends InvoiceUIState {
       this.cancelCompleter})
       : super._() {
     BuiltValueNullFieldError.checkNotNull(
-        listUIState, 'InvoiceUIState', 'listUIState');
+        listUIState, r'InvoiceUIState', 'listUIState');
     BuiltValueNullFieldError.checkNotNull(
-        tabIndex, 'InvoiceUIState', 'tabIndex');
+        tabIndex, r'InvoiceUIState', 'tabIndex');
   }
 
   @override
@@ -335,7 +337,7 @@ class _$InvoiceUIState extends InvoiceUIState {
 
   @override
   String toString() {
-    return (newBuiltValueToStringHelper('InvoiceUIState')
+    return (newBuiltValueToStringHelper(r'InvoiceUIState')
           ..add('editing', editing)
           ..add('editingItemIndex', editingItemIndex)
           ..add('historyActivityId', historyActivityId)
@@ -428,7 +430,9 @@ class InvoiceUIStateBuilder
   }
 
   @override
-  _$InvoiceUIState build() {
+  InvoiceUIState build() => _build();
+
+  _$InvoiceUIState _build() {
     _$InvoiceUIState _$result;
     try {
       _$result = _$v ??
@@ -440,7 +444,7 @@ class InvoiceUIStateBuilder
               selectedId: selectedId,
               forceSelected: forceSelected,
               tabIndex: BuiltValueNullFieldError.checkNotNull(
-                  tabIndex, 'InvoiceUIState', 'tabIndex'),
+                  tabIndex, r'InvoiceUIState', 'tabIndex'),
               saveCompleter: saveCompleter,
               cancelCompleter: cancelCompleter);
     } catch (_) {
@@ -453,7 +457,7 @@ class InvoiceUIStateBuilder
         listUIState.build();
       } catch (e) {
         throw new BuiltValueNestedFieldError(
-            'InvoiceUIState', _$failedField, e.toString());
+            r'InvoiceUIState', _$failedField, e.toString());
       }
       rethrow;
     }
@@ -462,4 +466,4 @@ class InvoiceUIStateBuilder
   }
 }
 
-// ignore_for_file: always_put_control_body_on_new_line,always_specify_types,annotate_overrides,avoid_annotating_with_dynamic,avoid_as,avoid_catches_without_on_clauses,avoid_returning_this,deprecated_member_use_from_same_package,lines_longer_than_80_chars,omit_local_variable_types,prefer_expression_function_bodies,sort_constructors_first,test_types_in_equals,unnecessary_const,unnecessary_new
+// ignore_for_file: always_put_control_body_on_new_line,always_specify_types,annotate_overrides,avoid_annotating_with_dynamic,avoid_as,avoid_catches_without_on_clauses,avoid_returning_this,deprecated_member_use_from_same_package,lines_longer_than_80_chars,no_leading_underscores_for_local_identifiers,omit_local_variable_types,prefer_expression_function_bodies,sort_constructors_first,test_types_in_equals,unnecessary_const,unnecessary_new,unnecessary_lambdas

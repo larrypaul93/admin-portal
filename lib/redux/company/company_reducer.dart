@@ -1,5 +1,6 @@
 // Package imports:
 import 'package:built_collection/built_collection.dart';
+import 'package:invoiceninja_flutter/redux/service_report/service_reports_requcer.dart';
 import 'package:redux/redux.dart';
 
 // Project imports:
@@ -59,6 +60,8 @@ UserCompanyState companyReducer(UserCompanyState state, dynamic action) {
     ..purchaseOrderState
         .replace(purchaseOrdersReducer(state.purchaseOrderState, action))
     ..categoryState.replace(categoriesReducer(state.categoryState, action))
+    ..serviceReportsState
+        .replace(serviceReportsReducer(state.serviceReportsState, action))
     ..contactState.replace(contactsReducer(state.contactState, action))
     ..recurringExpenseState
         .replace(recurringExpensesReducer(state.recurringExpenseState, action))

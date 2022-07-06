@@ -102,6 +102,32 @@ class ClientFields {
   static const String shippingState = 'shipping_state';
   static const String shippingPostalCode = 'shipping_postal_code';
   static const String shippingCountry = 'shipping_country';
+
+  static const String legalBusinessName = 'legal_business_name';
+  static const String phone_home = 'phone_home';
+  static const String phone_main = 'phone_main';
+  static const String phone_toll_free = 'phone_toll_free';
+  static const String homeAddress1 = 'home_address1';
+  static const String homeAddress2 = 'home_address2';
+  static const String homeCity = 'home_city';
+  static const String homeState = 'home_state';
+  static const String homePostalCode = 'home_postal_code';
+  static const String homeCountryId = 'home_country_id';
+
+  static const String headOfficeAddress1 = 'head_office_address1';
+  static const String headOfficeAddress2 = 'head_office_address2';
+  static const String headOfficeCity = 'head_office_city';
+  static const String headOfficeState = 'head_office_state';
+  static const String headOfficePostalCode = 'head_office_postal_code';
+  static const String headOfficeCountryId = 'head_office_country_id';
+
+  static const String mainAddress1 = 'main_address1';
+  static const String mainAddress2 = 'main_address2';
+  static const String mainCity = 'main_city';
+  static const String mainState = 'main_state';
+  static const String mainPostalCode = 'main_postal_code';
+  static const String mainCountryId = 'main_country_id';
+
   static const String group = 'group';
 }
 

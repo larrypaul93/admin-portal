@@ -249,11 +249,11 @@ class _$ServiceReportListResponse extends ServiceReportListResponse {
 
   factory _$ServiceReportListResponse(
           [void Function(ServiceReportListResponseBuilder) updates]) =>
-      (new ServiceReportListResponseBuilder()..update(updates)).build();
+      (new ServiceReportListResponseBuilder()..update(updates))._build();
 
   _$ServiceReportListResponse._({this.data}) : super._() {
     BuiltValueNullFieldError.checkNotNull(
-        data, 'ServiceReportListResponse', 'data');
+        data, r'ServiceReportListResponse', 'data');
   }
 
   @override
@@ -279,7 +279,7 @@ class _$ServiceReportListResponse extends ServiceReportListResponse {
 
   @override
   String toString() {
-    return (newBuiltValueToStringHelper('ServiceReportListResponse')
+    return (newBuiltValueToStringHelper(r'ServiceReportListResponse')
           ..add('data', data))
         .toString();
   }
@@ -318,7 +318,9 @@ class ServiceReportListResponseBuilder
   }
 
   @override
-  _$ServiceReportListResponse build() {
+  ServiceReportListResponse build() => _build();
+
+  _$ServiceReportListResponse _build() {
     _$ServiceReportListResponse _$result;
     try {
       _$result = _$v ?? new _$ServiceReportListResponse._(data: data.build());
@@ -329,7 +331,7 @@ class ServiceReportListResponseBuilder
         data.build();
       } catch (e) {
         throw new BuiltValueNestedFieldError(
-            'ServiceReportListResponse', _$failedField, e.toString());
+            r'ServiceReportListResponse', _$failedField, e.toString());
       }
       rethrow;
     }
@@ -344,11 +346,11 @@ class _$ServiceReportItemResponse extends ServiceReportItemResponse {
 
   factory _$ServiceReportItemResponse(
           [void Function(ServiceReportItemResponseBuilder) updates]) =>
-      (new ServiceReportItemResponseBuilder()..update(updates)).build();
+      (new ServiceReportItemResponseBuilder()..update(updates))._build();
 
   _$ServiceReportItemResponse._({this.data}) : super._() {
     BuiltValueNullFieldError.checkNotNull(
-        data, 'ServiceReportItemResponse', 'data');
+        data, r'ServiceReportItemResponse', 'data');
   }
 
   @override
@@ -374,7 +376,7 @@ class _$ServiceReportItemResponse extends ServiceReportItemResponse {
 
   @override
   String toString() {
-    return (newBuiltValueToStringHelper('ServiceReportItemResponse')
+    return (newBuiltValueToStringHelper(r'ServiceReportItemResponse')
           ..add('data', data))
         .toString();
   }
@@ -413,7 +415,9 @@ class ServiceReportItemResponseBuilder
   }
 
   @override
-  _$ServiceReportItemResponse build() {
+  ServiceReportItemResponse build() => _build();
+
+  _$ServiceReportItemResponse _build() {
     _$ServiceReportItemResponse _$result;
     try {
       _$result = _$v ?? new _$ServiceReportItemResponse._(data: data.build());
@@ -424,7 +428,7 @@ class ServiceReportItemResponseBuilder
         data.build();
       } catch (e) {
         throw new BuiltValueNestedFieldError(
-            'ServiceReportItemResponse', _$failedField, e.toString());
+            r'ServiceReportItemResponse', _$failedField, e.toString());
       }
       rethrow;
     }
@@ -459,7 +463,7 @@ class _$ServiceReportEntity extends ServiceReportEntity {
 
   factory _$ServiceReportEntity(
           [void Function(ServiceReportEntityBuilder) updates]) =>
-      (new ServiceReportEntityBuilder()..update(updates)).build();
+      (new ServiceReportEntityBuilder()..update(updates))._build();
 
   _$ServiceReportEntity._(
       {this.type,
@@ -474,16 +478,16 @@ class _$ServiceReportEntity extends ServiceReportEntity {
       this.assignedUserId,
       this.id})
       : super._() {
-    BuiltValueNullFieldError.checkNotNull(type, 'ServiceReportEntity', 'type');
+    BuiltValueNullFieldError.checkNotNull(type, r'ServiceReportEntity', 'type');
     BuiltValueNullFieldError.checkNotNull(
-        reportNo, 'ServiceReportEntity', 'reportNo');
+        reportNo, r'ServiceReportEntity', 'reportNo');
     BuiltValueNullFieldError.checkNotNull(
-        createdAt, 'ServiceReportEntity', 'createdAt');
+        createdAt, r'ServiceReportEntity', 'createdAt');
     BuiltValueNullFieldError.checkNotNull(
-        updatedAt, 'ServiceReportEntity', 'updatedAt');
+        updatedAt, r'ServiceReportEntity', 'updatedAt');
     BuiltValueNullFieldError.checkNotNull(
-        archivedAt, 'ServiceReportEntity', 'archivedAt');
-    BuiltValueNullFieldError.checkNotNull(id, 'ServiceReportEntity', 'id');
+        archivedAt, r'ServiceReportEntity', 'archivedAt');
+    BuiltValueNullFieldError.checkNotNull(id, r'ServiceReportEntity', 'id');
   }
 
   @override
@@ -539,7 +543,7 @@ class _$ServiceReportEntity extends ServiceReportEntity {
 
   @override
   String toString() {
-    return (newBuiltValueToStringHelper('ServiceReportEntity')
+    return (newBuiltValueToStringHelper(r'ServiceReportEntity')
           ..add('type', type)
           ..add('clientId', clientId)
           ..add('reportNo', reportNo)
@@ -638,29 +642,31 @@ class ServiceReportEntityBuilder
   }
 
   @override
-  _$ServiceReportEntity build() {
+  ServiceReportEntity build() => _build();
+
+  _$ServiceReportEntity _build() {
     final _$result = _$v ??
         new _$ServiceReportEntity._(
             type: BuiltValueNullFieldError.checkNotNull(
-                type, 'ServiceReportEntity', 'type'),
+                type, r'ServiceReportEntity', 'type'),
             clientId: clientId,
             reportNo: BuiltValueNullFieldError.checkNotNull(
-                reportNo, 'ServiceReportEntity', 'reportNo'),
+                reportNo, r'ServiceReportEntity', 'reportNo'),
             isChanged: isChanged,
             createdAt: BuiltValueNullFieldError.checkNotNull(
-                createdAt, 'ServiceReportEntity', 'createdAt'),
+                createdAt, r'ServiceReportEntity', 'createdAt'),
             updatedAt: BuiltValueNullFieldError.checkNotNull(
-                updatedAt, 'ServiceReportEntity', 'updatedAt'),
+                updatedAt, r'ServiceReportEntity', 'updatedAt'),
             archivedAt: BuiltValueNullFieldError.checkNotNull(
-                archivedAt, 'ServiceReportEntity', 'archivedAt'),
+                archivedAt, r'ServiceReportEntity', 'archivedAt'),
             isDeleted: isDeleted,
             createdUserId: createdUserId,
             assignedUserId: assignedUserId,
             id: BuiltValueNullFieldError.checkNotNull(
-                id, 'ServiceReportEntity', 'id'));
+                id, r'ServiceReportEntity', 'id'));
     replace(_$result);
     return _$result;
   }
 }
 
-// ignore_for_file: always_put_control_body_on_new_line,always_specify_types,annotate_overrides,avoid_annotating_with_dynamic,avoid_as,avoid_catches_without_on_clauses,avoid_returning_this,deprecated_member_use_from_same_package,lines_longer_than_80_chars,omit_local_variable_types,prefer_expression_function_bodies,sort_constructors_first,test_types_in_equals,unnecessary_const,unnecessary_new
+// ignore_for_file: always_put_control_body_on_new_line,always_specify_types,annotate_overrides,avoid_annotating_with_dynamic,avoid_as,avoid_catches_without_on_clauses,avoid_returning_this,deprecated_member_use_from_same_package,lines_longer_than_80_chars,no_leading_underscores_for_local_identifiers,omit_local_variable_types,prefer_expression_function_bodies,sort_constructors_first,test_types_in_equals,unnecessary_const,unnecessary_new,unnecessary_lambdas

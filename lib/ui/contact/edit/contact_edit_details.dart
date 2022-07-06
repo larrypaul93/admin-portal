@@ -108,7 +108,7 @@ class ContactEditDetailsState extends State<ContactEditDetails> {
     _controllers
         .forEach((dynamic controller) => controller.removeListener(_onChanged));
 
-    print(widget.viewModel.contact);
+    // print(widget.viewModel.contact);
     final contact = widget.viewModel.contact;
 
     _firstNameController.text = contact.firstName;

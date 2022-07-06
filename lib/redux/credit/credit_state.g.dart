@@ -152,11 +152,11 @@ class _$CreditState extends CreditState {
   final BuiltList<String> list;
 
   factory _$CreditState([void Function(CreditStateBuilder) updates]) =>
-      (new CreditStateBuilder()..update(updates)).build();
+      (new CreditStateBuilder()..update(updates))._build();
 
   _$CreditState._({this.map, this.list}) : super._() {
-    BuiltValueNullFieldError.checkNotNull(map, 'CreditState', 'map');
-    BuiltValueNullFieldError.checkNotNull(list, 'CreditState', 'list');
+    BuiltValueNullFieldError.checkNotNull(map, r'CreditState', 'map');
+    BuiltValueNullFieldError.checkNotNull(list, r'CreditState', 'list');
   }
 
   @override
@@ -180,7 +180,7 @@ class _$CreditState extends CreditState {
 
   @override
   String toString() {
-    return (newBuiltValueToStringHelper('CreditState')
+    return (newBuiltValueToStringHelper(r'CreditState')
           ..add('map', map)
           ..add('list', list))
         .toString();
@@ -223,7 +223,9 @@ class CreditStateBuilder implements Builder<CreditState, CreditStateBuilder> {
   }
 
   @override
-  _$CreditState build() {
+  CreditState build() => _build();
+
+  _$CreditState _build() {
     _$CreditState _$result;
     try {
       _$result =
@@ -237,7 +239,7 @@ class CreditStateBuilder implements Builder<CreditState, CreditStateBuilder> {
         list.build();
       } catch (e) {
         throw new BuiltValueNestedFieldError(
-            'CreditState', _$failedField, e.toString());
+            r'CreditState', _$failedField, e.toString());
       }
       rethrow;
     }
@@ -267,7 +269,7 @@ class _$CreditUIState extends CreditUIState {
   final Completer<Null> cancelCompleter;
 
   factory _$CreditUIState([void Function(CreditUIStateBuilder) updates]) =>
-      (new CreditUIStateBuilder()..update(updates)).build();
+      (new CreditUIStateBuilder()..update(updates))._build();
 
   _$CreditUIState._(
       {this.editing,
@@ -281,9 +283,9 @@ class _$CreditUIState extends CreditUIState {
       this.cancelCompleter})
       : super._() {
     BuiltValueNullFieldError.checkNotNull(
-        listUIState, 'CreditUIState', 'listUIState');
+        listUIState, r'CreditUIState', 'listUIState');
     BuiltValueNullFieldError.checkNotNull(
-        tabIndex, 'CreditUIState', 'tabIndex');
+        tabIndex, r'CreditUIState', 'tabIndex');
   }
 
   @override
@@ -331,7 +333,7 @@ class _$CreditUIState extends CreditUIState {
 
   @override
   String toString() {
-    return (newBuiltValueToStringHelper('CreditUIState')
+    return (newBuiltValueToStringHelper(r'CreditUIState')
           ..add('editing', editing)
           ..add('editingItemIndex', editingItemIndex)
           ..add('historyActivityId', historyActivityId)
@@ -424,7 +426,9 @@ class CreditUIStateBuilder
   }
 
   @override
-  _$CreditUIState build() {
+  CreditUIState build() => _build();
+
+  _$CreditUIState _build() {
     _$CreditUIState _$result;
     try {
       _$result = _$v ??
@@ -436,7 +440,7 @@ class CreditUIStateBuilder
               selectedId: selectedId,
               forceSelected: forceSelected,
               tabIndex: BuiltValueNullFieldError.checkNotNull(
-                  tabIndex, 'CreditUIState', 'tabIndex'),
+                  tabIndex, r'CreditUIState', 'tabIndex'),
               saveCompleter: saveCompleter,
               cancelCompleter: cancelCompleter);
     } catch (_) {
@@ -449,7 +453,7 @@ class CreditUIStateBuilder
         listUIState.build();
       } catch (e) {
         throw new BuiltValueNestedFieldError(
-            'CreditUIState', _$failedField, e.toString());
+            r'CreditUIState', _$failedField, e.toString());
       }
       rethrow;
     }
@@ -458,4 +462,4 @@ class CreditUIStateBuilder
   }
 }
 
-// ignore_for_file: always_put_control_body_on_new_line,always_specify_types,annotate_overrides,avoid_annotating_with_dynamic,avoid_as,avoid_catches_without_on_clauses,avoid_returning_this,deprecated_member_use_from_same_package,lines_longer_than_80_chars,omit_local_variable_types,prefer_expression_function_bodies,sort_constructors_first,test_types_in_equals,unnecessary_const,unnecessary_new
+// ignore_for_file: always_put_control_body_on_new_line,always_specify_types,annotate_overrides,avoid_annotating_with_dynamic,avoid_as,avoid_catches_without_on_clauses,avoid_returning_this,deprecated_member_use_from_same_package,lines_longer_than_80_chars,no_leading_underscores_for_local_identifiers,omit_local_variable_types,prefer_expression_function_bodies,sort_constructors_first,test_types_in_equals,unnecessary_const,unnecessary_new,unnecessary_lambdas

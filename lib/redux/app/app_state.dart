@@ -8,6 +8,8 @@ import 'package:flutter/foundation.dart';
 import 'package:built_collection/built_collection.dart';
 import 'package:built_value/built_value.dart';
 import 'package:built_value/serializer.dart';
+import 'package:invoiceninja_flutter/data/models/service_report.dart';
+import 'package:invoiceninja_flutter/redux/service_report/service_reports_state.dart';
 import 'package:invoiceninja_flutter/ui/contact/contact_screen.dart';
 import 'package:invoiceninja_flutter/ui/purchase_order/purchase_order_screen.dart';
 import 'package:timeago/timeago.dart' as timeago;
@@ -305,7 +307,8 @@ abstract class AppState implements Built<AppState, AppStateBuilder> {
         return purchaseOrderState.map;
       case EntityType.category:
         return categoryState.map;
-
+      case EntityType.serviceReport:
+        return serviceReportsState.map;
       case EntityType.contact:
         return contactState.map;
 
@@ -551,6 +554,8 @@ abstract class AppState implements Built<AppState, AppStateBuilder> {
   PurchaseOrderUIState get purchaseOrderUIState => uiState.purchaseOrderUIState;
 
   CategoryState get categoryState => userCompanyState.categoryState;
+  ServiceReportsState get serviceReportsState =>
+      userCompanyState.serviceReportsState;
   ListUIState get categoryListState => uiState.categoryUIState.listUIState;
   CategoryUIState get categoryUIState => uiState.categoryUIState;
 
