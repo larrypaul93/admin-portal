@@ -260,18 +260,6 @@ class _$InvoiceEntitySerializer implements StructuredSerializer<InvoiceEntity> {
       'auto_bill_enabled',
       serializers.serialize(object.autoBillEnabled,
           specifiedType: const FullType(bool)),
-      'attach_pdf',
-      serializers.serialize(object.attachPdf,
-          specifiedType: const FullType(bool)),
-      'required_signature',
-      serializers.serialize(object.requiredSignature,
-          specifiedType: const FullType(bool)),
-      'interest',
-      serializers.serialize(object.interest,
-          specifiedType: const FullType(bool)),
-      'interest_paid',
-      serializers.serialize(object.interestPaid,
-          specifiedType: const FullType(double)),
       'line_items',
       serializers.serialize(object.lineItems,
           specifiedType: const FullType(
@@ -376,6 +364,34 @@ class _$InvoiceEntitySerializer implements StructuredSerializer<InvoiceEntity> {
         ..add('service_report_id')
         ..add(serializers.serialize(value,
             specifiedType: const FullType(String)));
+    }
+    value = object.attachPdf;
+    if (value != null) {
+      result
+        ..add('attach_pdf')
+        ..add(
+            serializers.serialize(value, specifiedType: const FullType(bool)));
+    }
+    value = object.requiredSignature;
+    if (value != null) {
+      result
+        ..add('required_signature')
+        ..add(
+            serializers.serialize(value, specifiedType: const FullType(bool)));
+    }
+    value = object.interest;
+    if (value != null) {
+      result
+        ..add('interest')
+        ..add(
+            serializers.serialize(value, specifiedType: const FullType(bool)));
+    }
+    value = object.interestPaid;
+    if (value != null) {
+      result
+        ..add('interest_paid')
+        ..add(serializers.serialize(value,
+            specifiedType: const FullType(double)));
     }
     value = object.filename;
     if (value != null) {
@@ -1774,14 +1790,6 @@ class _$InvoiceEntity extends InvoiceEntity {
     BuiltValueNullFieldError.checkNotNull(
         autoBillEnabled, r'InvoiceEntity', 'autoBillEnabled');
     BuiltValueNullFieldError.checkNotNull(
-        attachPdf, r'InvoiceEntity', 'attachPdf');
-    BuiltValueNullFieldError.checkNotNull(
-        requiredSignature, r'InvoiceEntity', 'requiredSignature');
-    BuiltValueNullFieldError.checkNotNull(
-        interest, r'InvoiceEntity', 'interest');
-    BuiltValueNullFieldError.checkNotNull(
-        interestPaid, r'InvoiceEntity', 'interestPaid');
-    BuiltValueNullFieldError.checkNotNull(
         lineItems, r'InvoiceEntity', 'lineItems');
     BuiltValueNullFieldError.checkNotNull(
         invitations, r'InvoiceEntity', 'invitations');
@@ -2518,10 +2526,10 @@ class InvoiceEntityBuilder
               recurringId: recurringId,
               autoBillEnabled: BuiltValueNullFieldError.checkNotNull(autoBillEnabled, r'InvoiceEntity', 'autoBillEnabled'),
               serviceReportId: serviceReportId,
-              attachPdf: BuiltValueNullFieldError.checkNotNull(attachPdf, r'InvoiceEntity', 'attachPdf'),
-              requiredSignature: BuiltValueNullFieldError.checkNotNull(requiredSignature, r'InvoiceEntity', 'requiredSignature'),
-              interest: BuiltValueNullFieldError.checkNotNull(interest, r'InvoiceEntity', 'interest'),
-              interestPaid: BuiltValueNullFieldError.checkNotNull(interestPaid, r'InvoiceEntity', 'interestPaid'),
+              attachPdf: attachPdf,
+              requiredSignature: requiredSignature,
+              interest: interest,
+              interestPaid: interestPaid,
               filename: filename,
               recurringDates: _recurringDates?.build(),
               lineItems: lineItems.build(),

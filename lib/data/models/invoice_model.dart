@@ -524,15 +524,19 @@ abstract class InvoiceEntity extends Object
   @BuiltValueField(wireName: 'service_report_id')
   String get serviceReportId;
 
+  @nullable
   @BuiltValueField(wireName: 'attach_pdf')
   bool get attachPdf;
 
+  @nullable
   @BuiltValueField(wireName: 'required_signature')
   bool get requiredSignature;
 
+  @nullable
   @override
   bool get interest;
 
+  @nullable
   @override
   @BuiltValueField(wireName: 'interest_paid')
   double get interestPaid;
