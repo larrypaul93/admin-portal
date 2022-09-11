@@ -23,6 +23,7 @@ IconData getEntityActionIcon(EntityAction entityAction) {
     case EntityAction.documents:
       return Icons.download;
     case EntityAction.clientPortal:
+    case EntityAction.vendorPortal:
       return Icons.cloud_circle;
     case EntityAction.clone:
     case EntityAction.cloneToOther:
@@ -31,21 +32,16 @@ IconData getEntityActionIcon(EntityAction entityAction) {
     case EntityAction.cloneToQuote:
     case EntityAction.cloneToCredit:
     case EntityAction.cloneToRecurring:
+    case EntityAction.cloneToPurchaseOrder:
       return Icons.control_point_duplicate;
     case EntityAction.markSent:
       return Icons.public;
     case EntityAction.markPaid:
       return Icons.payment;
-    case EntityAction.bulkEmailCredit:
-    case EntityAction.bulkEmailInvoice:
-    case EntityAction.bulkEmailQuote:
-    case EntityAction.bulkEmailPurchaseOrder:
-    case EntityAction.emailQuote:
-    case EntityAction.emailInvoice:
-    case EntityAction.emailCredit:
-    case EntityAction.emailPayment:
-    case EntityAction.emailPurchaseOrder:
+    case EntityAction.sendEmail:
+    case EntityAction.bulkSendEmail:
     case EntityAction.resendInvite:
+    case EntityAction.sendNow:
       return Icons.send;
     case EntityAction.archive:
       return Icons.archive;
@@ -56,8 +52,11 @@ IconData getEntityActionIcon(EntityAction entityAction) {
     case EntityAction.restore:
       return Icons.restore;
     case EntityAction.convertToInvoice:
+    case EntityAction.convertToExpense:
+    case EntityAction.convertToProject:
       return Icons.content_copy;
     case EntityAction.approve:
+    case EntityAction.accept:
       return Icons.check_circle_outline;
     case EntityAction.newInvoice:
     case EntityAction.newExpense:
@@ -69,6 +68,7 @@ IconData getEntityActionIcon(EntityAction entityAction) {
     case EntityAction.newRecurringInvoice:
     case EntityAction.newRecurringQuote:
     case EntityAction.newRecurringExpense:
+    case EntityAction.newPurchaseOrder:
     case EntityAction.invoiceTask:
     case EntityAction.invoiceExpense:
     case EntityAction.invoiceProject:
@@ -103,6 +103,10 @@ IconData getEntityActionIcon(EntityAction entityAction) {
       return Icons.cancel_outlined;
     case EntityAction.save:
       return Icons.cloud_upload;
+    case EntityAction.addToInventory:
+      return Icons.inventory;
+    case EntityAction.merge:
+      return MdiIcons.merge;
     default:
       return null;
   }

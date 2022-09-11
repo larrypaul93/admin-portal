@@ -18,7 +18,6 @@ import 'package:invoiceninja_flutter/ui/app/entities/entity_status_chip.dart';
 import 'package:invoiceninja_flutter/ui/app/icon_message.dart';
 import 'package:invoiceninja_flutter/ui/app/menu_drawer_vm.dart';
 import 'package:invoiceninja_flutter/ui/settings/account_management_vm.dart';
-import 'package:invoiceninja_flutter/utils/formatting.dart';
 import 'package:invoiceninja_flutter/utils/icons.dart';
 import 'package:invoiceninja_flutter/utils/localization.dart';
 import 'package:invoiceninja_flutter/utils/platforms.dart';
@@ -57,6 +56,7 @@ class EditScaffold extends StatelessWidget {
   Widget build(BuildContext context) {
     final store = StoreProvider.of<AppState>(context);
     final state = store.state;
+    final account = state.account;
     final localization = AppLocalization.of(context);
 
     bool showUpgradeBanner = false;
@@ -72,16 +72,12 @@ class EditScaffold extends StatelessWidget {
             ? localization.startFreeTrialMessage
             : localization.upgradeToPaidPlan)
         : localization.ownerUpgradeToPaidPlan;
-    if (state.account.isTrial) {
-      final trialStarted = convertSqlDateToDateTime(state.account.trialStarted);
-      final trialEnds = trialStarted.add(Duration(days: 14));
-      final countDays = trialEnds.difference(DateTime.now()).inDays;
-
-      if (countDays <= 1) {
+    if (account.isTrial) {
+      if (account.trialDaysLeft <= 1) {
         upgradeMessage = localization.freeTrialEndsToday;
       } else {
         upgradeMessage = localization.freeTrialEndsInDays
-            .replaceFirst(':count', countDays.toString());
+            .replaceFirst(':count', account.trialDaysLeft.toString());
       }
     }
 
@@ -113,8 +109,7 @@ class EditScaffold extends StatelessWidget {
         .bodyText2
         .copyWith(color: state.headerTextColor);
 
-    final showOverflow =
-        isDesktop(context) && isFullscreen && onActionPressed != null;
+    final showOverflow = isDesktop(context) && state.isFullScreen;
 
     return WillPopScope(
       onWillPop: () async {
@@ -124,17 +119,18 @@ class EditScaffold extends StatelessWidget {
         child: Scaffold(
           body: state.companies.isEmpty
               ? LoadingIndicator()
-              : showUpgradeBanner
+              : showUpgradeBanner && !isApple()
                   ? Column(
                       children: [
                         InkWell(
                           child: IconMessage(
                             upgradeMessage,
-                            color: Colors.orange,
+                            color: Colors.orange.shade800,
                           ),
-                          onTap: state.userCompany.isOwner && !isApple()
+                          onTap: state.userCompany.isOwner
                               ? () async {
-                                  launch(state.userCompany.ninjaPortalUrl);
+                                  launchUrl(Uri.parse(
+                                      state.userCompany.ninjaPortalUrl));
                                 }
                               : null,
                         ),
@@ -159,7 +155,7 @@ class EditScaffold extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 if (showOverflow) Text(title) else Flexible(child: Text(title)),
-                SizedBox(width: 8),
+                SizedBox(width: 16),
                 if (isDesktop(context) &&
                     isFullscreen &&
                     entity != null &&
@@ -189,6 +185,14 @@ class EditScaffold extends StatelessWidget {
                                 }
 
                                 return OutlinedButton(
+                                  style: action == EntityAction.save
+                                      ? ButtonStyle(
+                                          backgroundColor:
+                                              MaterialStateProperty.all(state
+                                                  .prefState
+                                                  .colorThemeModel
+                                                  .colorSuccess))
+                                      : null,
                                   child: ConstrainedBox(
                                     constraints: BoxConstraints(
                                         minWidth: isDesktop(context) ? 60 : 0),
@@ -198,7 +202,10 @@ class EditScaffold extends StatelessWidget {
                                             text: label,
                                             style: state.isSaving
                                                 ? null
-                                                : textStyle,
+                                                : action == EntityAction.save
+                                                    ? textStyle.copyWith(
+                                                        color: Colors.white)
+                                                    : textStyle,
                                           )
                                         : Text(label,
                                             style: state.isSaving
@@ -284,7 +291,7 @@ class EditScaffold extends StatelessWidget {
             actions: showOverflow
                 ? []
                 : [
-                    if (state.isSaving)
+                    if (state.isSaving && isMobile(context))
                       Padding(
                         padding: const EdgeInsets.only(right: 20),
                         child: Center(
@@ -294,6 +301,58 @@ class EditScaffold extends StatelessWidget {
                           child: CircularProgressIndicator(color: Colors.white),
                         )),
                       )
+                    else if (isDesktop(context))
+                      Row(
+                        children: [
+                          OutlinedButton(
+                            onPressed: state.isSaving
+                                ? null
+                                : () {
+                                    if (onCancelPressed != null) {
+                                      onCancelPressed(context);
+                                    } else {
+                                      store.dispatch(ResetSettings());
+                                    }
+                                  },
+                            child: ConstrainedBox(
+                              constraints: BoxConstraints(minWidth: 60),
+                              child: IconText(
+                                icon: getEntityActionIcon(EntityAction.cancel),
+                                text: localization.cancel,
+                                style: state.isSaving ? null : textStyle,
+                              ),
+                            ),
+                          ),
+                          SizedBox(width: 8),
+                          OutlinedButton(
+                            style: ButtonStyle(
+                                backgroundColor: MaterialStateProperty.all(state
+                                    .prefState.colorThemeModel.colorSuccess)),
+                            onPressed: state.isSaving || onSavePressed == null
+                                ? null
+                                : () {
+                                    // Clear focus now to prevent un-focus after save from
+                                    // marking the form as changed and to hide the keyboard
+                                    FocusScope.of(context).unfocus(
+                                        disposition: UnfocusDisposition
+                                            .previouslyFocusedChild);
+
+                                    onSavePressed(context);
+                                  },
+                            child: ConstrainedBox(
+                              constraints: BoxConstraints(minWidth: 60),
+                              child: IconText(
+                                icon: getEntityActionIcon(EntityAction.save),
+                                text: localization.save,
+                                style: state.isSaving
+                                    ? null
+                                    : textStyle.copyWith(color: Colors.white),
+                              ),
+                            ),
+                          ),
+                          SizedBox(width: 16),
+                        ],
+                      )
                     else
                       SaveCancelButtons(
                         isEnabled: isEnabled && onSavePressed != null,
@@ -301,15 +360,17 @@ class EditScaffold extends StatelessWidget {
                         isCancelEnabled: isCancelEnabled,
                         saveLabel: saveLabel,
                         cancelLabel: localization.cancel,
-                        onSavePressed: (context) {
-                          // Clear focus now to prevent un-focus after save from
-                          // marking the form as changed and to hide the keyboard
-                          FocusScope.of(context).unfocus(
-                              disposition:
-                                  UnfocusDisposition.previouslyFocusedChild);
+                        onSavePressed: onSavePressed == null
+                            ? null
+                            : (context) {
+                                // Clear focus now to prevent un-focus after save from
+                                // marking the form as changed and to hide the keyboard
+                                FocusScope.of(context).unfocus(
+                                    disposition: UnfocusDisposition
+                                        .previouslyFocusedChild);
 
-                          onSavePressed(context);
-                        },
+                                onSavePressed(context);
+                              },
                         onCancelPressed: isMobile(context)
                             ? null
                             : (context) {
@@ -320,7 +381,9 @@ class EditScaffold extends StatelessWidget {
                                 }
                               },
                       ),
-                    if (actions != null && onActionPressed != null)
+                    if (actions != null &&
+                        actions.isNotEmpty &&
+                        onActionPressed != null)
                       PopupMenuButton<EntityAction>(
                         icon: Icon(
                           Icons.more_vert,

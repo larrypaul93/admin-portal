@@ -26,6 +26,10 @@ abstract class SettingsEntity
       defaultCreditDesignId: clientSettings?.defaultCreditDesignId ??
           groupSettings?.defaultCreditDesignId ??
           companySettings?.defaultCreditDesignId,
+      defaultPurchaseOrderDesignId:
+          clientSettings?.defaultPurchaseOrderDesignId ??
+              groupSettings?.defaultPurchaseOrderDesignId ??
+              companySettings?.defaultPurchaseOrderDesignId,
       defaultInvoiceTerms: clientSettings?.defaultInvoiceTerms ??
           groupSettings?.defaultInvoiceTerms ??
           companySettings?.defaultInvoiceTerms,
@@ -80,6 +84,10 @@ abstract class SettingsEntity
       defaultTaxName3: clientSettings?.defaultTaxName3 ??
           groupSettings?.defaultTaxName3 ??
           companySettings?.defaultTaxName3,
+      clientManualPaymentNotification:
+          clientSettings?.clientManualPaymentNotification ??
+              groupSettings?.clientManualPaymentNotification ??
+              companySettings?.clientManualPaymentNotification,
     );
   }
 
@@ -187,7 +195,11 @@ abstract class SettingsEntity
 
   @nullable
   @BuiltValueField(wireName: 'client_portal_enable_uploads')
-  bool get enablePortalUploads;
+  bool get enableClientPortalUploads;
+
+  @nullable
+  @BuiltValueField(wireName: 'vendor_portal_enable_uploads')
+  bool get enableVendorPortalUploads;
 
   @nullable
   @BuiltValueField(wireName: 'email_style')
@@ -557,6 +569,14 @@ abstract class SettingsEntity
   String get emailBodyStatement;
 
   @nullable
+  @BuiltValueField(wireName: 'email_subject_purchase_order')
+  String get emailSubjectPurchaseOrder;
+
+  @nullable
+  @BuiltValueField(wireName: 'email_template_purchase_order')
+  String get emailBodyPurchaseOrder;
+
+  @nullable
   @BuiltValueField(wireName: 'enable_client_portal_password')
   bool get enablePortalPassword;
 
@@ -873,6 +893,14 @@ abstract class SettingsEntity
   @BuiltValueField(wireName: 'purchase_order_number_counter')
   int get purchaseOrderNumberCounter;
 
+  @nullable
+  @BuiltValueField(wireName: 'qr_iban')
+  String get qrIban;
+
+  @nullable
+  @BuiltValueField(wireName: 'besr_id')
+  String get besrId;
+
   bool get hasAddress => address1 != null && address1.isNotEmpty;
 
   bool get hasLogo => companyLogo != null && companyLogo.isNotEmpty;
@@ -978,6 +1006,8 @@ abstract class SettingsEntity
         return emailSubjectCustom2;
       case EmailTemplate.custom3:
         return emailSubjectCustom3;
+      case EmailTemplate.purchase_order:
+        return emailSubjectPurchaseOrder;
       default:
         return 'Error: template not defined for $emailTemplate';
     }
@@ -1009,6 +1039,8 @@ abstract class SettingsEntity
         return emailBodyCustom2;
       case EmailTemplate.custom3:
         return emailBodyCustom3;
+      case EmailTemplate.purchase_order:
+        return emailBodyPurchaseOrder;
       default:
         return 'Error: template not defined for $template';
     }

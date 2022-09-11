@@ -100,6 +100,7 @@ class ProjectListItem extends StatelessWidget {
                                 entityActions: project.getActions(
                                   userCompany: state.userCompany,
                                   client: client,
+                                  includeEdit: true,
                                 ),
                                 isSaving: false,
                                 entity: project,
@@ -148,7 +149,8 @@ class ProjectListItem extends StatelessWidget {
                       SizedBox(width: 10),
                       Text(
                         formatDuration(
-                            Duration(hours: project.budgetedHours.toInt()),
+                            Duration(
+                                minutes: (project.budgetedHours * 60).toInt()),
                             showSeconds: false),
                         style: textStyle,
                         textAlign: TextAlign.end,
@@ -188,7 +190,9 @@ class ProjectListItem extends StatelessWidget {
                       ),
                       Text(
                           formatDuration(
-                              Duration(hours: project.budgetedHours.toInt()),
+                              Duration(
+                                  minutes:
+                                      (project.budgetedHours * 60).toInt()),
                               showSeconds: false),
                           style: Theme.of(context).textTheme.subtitle1),
                     ],

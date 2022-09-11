@@ -1,5 +1,6 @@
 // Package imports:
 import 'package:built_collection/built_collection.dart';
+import 'package:invoiceninja_flutter/redux/product/product_selectors.dart';
 import 'package:invoiceninja_flutter/redux/reports/reports_selectors.dart';
 import 'package:memoize/memoize.dart';
 
@@ -27,7 +28,9 @@ enum ProductReportFields {
   product3,
   product4,
   stock_quantity,
-  notification_threshold
+  notification_threshold,
+  created_at,
+  updated_at,
 }
 
 var memoizedProductReport = memo6((
@@ -64,6 +67,7 @@ ReportResult productReport(
     ProductReportFields.price,
     ProductReportFields.cost,
     ProductReportFields.quantity,
+    ProductReportFields.created_at,
   ];
 
   if (productReportSettings.columns.isNotEmpty) {
@@ -148,7 +152,14 @@ ReportResult productReport(
           value = product.stockQuantity;
           break;
         case ProductReportFields.notification_threshold:
-          value = product.stockNotificationThreshold;
+          value = productNotificationThreshold(
+              product: product, company: userCompany.company);
+          break;
+        case ProductReportFields.updated_at:
+          value = convertTimestampToDateString(product.updatedAt);
+          break;
+        case ProductReportFields.created_at:
+          value = convertTimestampToDateString(product.createdAt);
           break;
       }
 
@@ -168,6 +179,10 @@ ReportResult productReport(
           value: value,
           currencyId: userCompany.company.currencyId,
           formatNumberType: FormatNumberType.double,
+        ));
+      } else if (column == ProductReportFields.notification_threshold) {
+        row.add(product.getReportInt(
+          value: value,
         ));
       } else if (value.runtimeType == double || value.runtimeType == int) {
         row.add(product.getReportDouble(

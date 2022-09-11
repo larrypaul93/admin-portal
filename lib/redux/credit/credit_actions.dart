@@ -471,21 +471,20 @@ Future handleCreditAction(
       store.dispatch(ShowPdfCredit(credit: credit, context: context));
       break;
     case EntityAction.clientPortal:
-      if (await canLaunch(credit.invitationSilentLink)) {
-        await launch(credit.invitationSilentLink,
-            forceSafariVC: false, forceWebView: false);
-      }
+      launchUrl(Uri.parse(credit.invitationSilentLink));
       break;
     case EntityAction.markSent:
       store.dispatch(MarkSentCreditRequest(
           snackBarCompleter<Null>(context, localization.markedCreditAsSent),
           creditIds));
       break;
-    case EntityAction.emailCredit:
-    case EntityAction.bulkEmailCredit:
+    case EntityAction.sendEmail:
+    case EntityAction.bulkSendEmail:
       bool emailValid = true;
-      creditIds.forEach((element) {
-        final client = state.clientState.get(credit.clientId);
+      credits.forEach((credit) {
+        final client = state.clientState.get(
+          (credit as InvoiceEntity).clientId,
+        );
         if (!client.hasEmailAddress) {
           emailValid = false;
         }
@@ -504,7 +503,7 @@ Future handleCreditAction(
             ]);
         return;
       }
-      if (action == EntityAction.emailCredit) {
+      if (action == EntityAction.sendEmail) {
         store.dispatch(ShowEmailCredit(
             completer:
                 snackBarCompleter<Null>(context, localization.emailedCredit),
@@ -513,7 +512,7 @@ Future handleCreditAction(
       } else {
         confirmCallback(
             context: context,
-            message: localization.bulkEmailCredit,
+            message: localization.bulkEmailCredits,
             callback: (_) {
               store.dispatch(BulkEmailCreditsRequest(
                   snackBarCompleter<Null>(
@@ -524,6 +523,17 @@ Future handleCreditAction(
                   creditIds));
             });
       }
+      break;
+    case EntityAction.cloneToPurchaseOrder:
+      final designId = getDesignIdForVendorByEntity(
+          state: state,
+          vendorId: credit.vendorId,
+          entityType: EntityType.purchaseOrder);
+      createEntity(
+          context: context,
+          entity: credit.clone.rebuild((b) => b
+            ..entityType = EntityType.purchaseOrder
+            ..designId = designId));
       break;
     case EntityAction.cloneToOther:
       cloneToDialog(context: context, invoice: credit);
@@ -577,16 +587,17 @@ Future handleCreditAction(
     case EntityAction.applyCredit:
       createEntity(
         context: context,
-        entity: PaymentEntity(state: state).rebuild((b) => b
-          ..typeId = kPaymentTypeCredit
-          ..clientId = credit.clientId
-          ..credits.addAll(credits
-              .map((credit) => PaymentableEntity.fromCredit(credit))
-              .toList())),
+        entity: PaymentEntity(
+                state: state, client: state.clientState.get(credit.clientId))
+            .rebuild((b) => b
+              ..typeId = kPaymentTypeCredit
+              ..credits.addAll(credits
+                  .map((credit) => PaymentableEntity.fromCredit(credit))
+                  .toList())),
       );
       break;
     case EntityAction.download:
-      launch(credit.invitationDownloadLink);
+      launchUrl(Uri.parse(credit.invitationDownloadLink));
       break;
     case EntityAction.bulkDownload:
       store.dispatch(DownloadCreditsRequest(

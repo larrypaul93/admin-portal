@@ -8,6 +8,7 @@ import 'package:flutter_redux/flutter_redux.dart';
 // Project imports:
 import 'package:invoiceninja_flutter/data/models/company_gateway_model.dart';
 import 'package:invoiceninja_flutter/data/models/entities.dart';
+import 'package:invoiceninja_flutter/main_app.dart';
 import 'package:invoiceninja_flutter/redux/app/app_state.dart';
 import 'package:invoiceninja_flutter/redux/payment_term/payment_term_selectors.dart';
 import 'package:invoiceninja_flutter/redux/settings/settings_actions.dart';
@@ -78,6 +79,8 @@ class _CompanyDetailsState extends State<CompanyDetails>
   final _creditFooterController = TextEditingController();
   final _purchaseOrderTermsController = TextEditingController();
   final _purchaseOrderFooterController = TextEditingController();
+  final _qrIbanController = TextEditingController();
+  final _besrIdController = TextEditingController();
 
   List<TextEditingController> _controllers = [];
 
@@ -126,6 +129,8 @@ class _CompanyDetailsState extends State<CompanyDetails>
       _creditTermsController,
       _purchaseOrderFooterController,
       _purchaseOrderTermsController,
+      _qrIbanController,
+      _besrIdController,
     ];
 
     _controllers.forEach(
@@ -157,6 +162,8 @@ class _CompanyDetailsState extends State<CompanyDetails>
     _creditTermsController.text = settings.defaultCreditTerms;
     _purchaseOrderFooterController.text = settings.defaultPurchaseOrderFooter;
     _purchaseOrderTermsController.text = settings.defaultPurchaseOrderTerms;
+    _qrIbanController.text = settings.qrIban;
+    _besrIdController.text = settings.besrId;
 
     _controllers.forEach(
         (dynamic controller) => controller.addListener(_onSettingsChanged));
@@ -200,7 +207,9 @@ class _CompanyDetailsState extends State<CompanyDetails>
       ..defaultCreditFooter = _creditFooterController.text.trim()
       ..defaultCreditTerms = _creditTermsController.text.trim()
       ..defaultPurchaseOrderFooter = _purchaseOrderFooterController.text.trim()
-      ..defaultPurchaseOrderTerms = _purchaseOrderTermsController.text.trim());
+      ..defaultPurchaseOrderTerms = _purchaseOrderTermsController.text.trim()
+      ..qrIban = _qrIbanController.text.trim()
+      ..besrId = _besrIdController.text.trim());
     if (settings != widget.viewModel.settings) {
       _debouncer.run(() {
         widget.viewModel.onSettingsChanged(settings);
@@ -323,6 +332,23 @@ class _CompanyDetailsState extends State<CompanyDetails>
                   ),
                 ],
               ),
+              if (company.supportsQrIban)
+                FormCard(
+                  children: [
+                    DecoratedFormField(
+                      label: localization.qrIban,
+                      controller: _qrIbanController,
+                      onSavePressed: viewModel.onSavePressed,
+                      keyboardType: TextInputType.text,
+                    ),
+                    DecoratedFormField(
+                      label: localization.besrId,
+                      controller: _besrIdController,
+                      onSavePressed: viewModel.onSavePressed,
+                      keyboardType: TextInputType.text,
+                    ),
+                  ],
+                ),
               if (!state.settingsUIState.isFiltered)
                 FormCard(
                   isLast: true,
@@ -450,7 +476,8 @@ class _CompanyDetailsState extends State<CompanyDetails>
                                 fileType: FileType.image,
                               );
                               if (multipartFile != null) {
-                                viewModel.onUploadLogo(context, multipartFile);
+                                viewModel.onUploadLogo(
+                                    navigatorKey.currentContext, multipartFile);
                               }
                             },
                           ),
@@ -599,16 +626,15 @@ class _CompanyDetailsState extends State<CompanyDetails>
               FormCard(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: <Widget>[
-                    if (!state.settingsUIState.isFiltered)
-                      BoolDropdownButton(
-                        value: settings.clientManualPaymentNotification,
-                        onChanged: (value) => viewModel.onSettingsChanged(
-                            settings.rebuild((b) =>
-                                b..clientManualPaymentNotification = value)),
-                        label: localization.manualPaymentEmail,
-                        helpLabel: localization.emailReceipt,
-                        iconData: Icons.email,
-                      ),
+                    BoolDropdownButton(
+                      value: settings.clientManualPaymentNotification,
+                      onChanged: (value) => viewModel.onSettingsChanged(
+                          settings.rebuild((b) =>
+                              b..clientManualPaymentNotification = value)),
+                      label: localization.manualPaymentEmail,
+                      helpLabel: localization.emailReceipt,
+                      iconData: Icons.email,
+                    ),
                     BoolDropdownButton(
                       value: settings.clientOnlinePaymentNotification,
                       onChanged: (value) => viewModel.onSettingsChanged(

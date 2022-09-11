@@ -132,7 +132,7 @@ class ClientFields {
 }
 
 abstract class ClientEntity extends Object
-    with BaseEntity, SelectableEntity
+    with BaseEntity, SelectableEntity, HasActivities
     implements Built<ClientEntity, ClientEntityBuilder> {
   factory ClientEntity({
     String id,
@@ -453,6 +453,7 @@ abstract class ClientEntity extends Object
 
   BuiltList<ContactEntity> get contacts;
 
+  @override
   BuiltList<ActivityEntity> get activities;
 
   BuiltList<LedgerEntity> get ledger;
@@ -485,18 +486,6 @@ abstract class ClientEntity extends Object
     } else {
       return company.settings.clientManualPaymentNotification;
     }
-  }
-
-  Iterable<ActivityEntity> getActivities({String invoiceId, String typeId}) {
-    return activities.where((activity) {
-      if (invoiceId != null && activity.invoiceId != invoiceId) {
-        return false;
-      }
-      if (typeId != null && activity.activityTypeId != typeId) {
-        return false;
-      }
-      return true;
-    });
   }
 
   EmailTemplate getNextEmailTemplate(String invoiceId) {
@@ -709,19 +698,17 @@ abstract class ClientEntity extends Object
   }
 
   bool matchesNameOrEmail(String filter) {
-    filter = filter.toLowerCase();
-
-    if (name.toLowerCase().contains(filter)) {
+    if (matchesString(haystack: name, needle: filter)) {
       return true;
     }
 
     for (var i = 0; i < contacts.length; i++) {
       final contact = contacts[i];
-      if (contact.fullName.toLowerCase().contains(filter)) {
+      if (matchesString(haystack: contact.fullName, needle: filter)) {
         return true;
       }
 
-      if (contact.email.toLowerCase().contains(filter)) {
+      if (matchesString(haystack: contact.email, needle: filter)) {
         return true;
       }
     }
@@ -822,14 +809,6 @@ abstract class ClientEntity extends Object
         actions.add(EntityAction.newPayment);
       }
 
-      if (userCompany.canCreate(EntityType.quote)) {
-        actions.add(EntityAction.newQuote);
-      }
-
-      if (userCompany.canCreate(EntityType.credit)) {
-        actions.add(EntityAction.newCredit);
-      }
-
       if (userCompany.canCreate(EntityType.task)) {
         actions.add(EntityAction.newTask);
       }
@@ -841,6 +820,10 @@ abstract class ClientEntity extends Object
 
     if (actions.isNotEmpty && actions.last != null) {
       actions.add(null);
+    }
+
+    if (userCompany.isAdmin && !multiselect) {
+      actions.add(EntityAction.merge);
     }
 
     actions..addAll(super.getActions(userCompany: userCompany));
@@ -941,11 +924,11 @@ class ContactFields {
   static const String custom4 = 'custom4';
 }
 
-abstract class ContactEntity extends Object
+abstract class ClientContactEntity extends Object
     with BaseEntity, SelectableEntity
-    implements Built<ContactEntity, ContactEntityBuilder> {
-  factory ContactEntity() {
-    return _$ContactEntity._(
+    implements Built<ClientContactEntity, ClientContactEntityBuilder> {
+  factory ClientContactEntity() {
+    return _$ClientContactEntity._(
       id: BaseEntity.nextId,
       isChanged: false,
       firstName: '',
@@ -971,7 +954,7 @@ abstract class ContactEntity extends Object
     );
   }
 
-  ContactEntity._();
+  ClientContactEntity._();
 
   @override
   @memoized
@@ -1098,6 +1081,7 @@ abstract class ContactEntity extends Object
   @override
   FormatNumberType get listDisplayAmountType => FormatNumberType.money;
 
-  static Serializer<ContactEntity> get serializer => _$contactEntitySerializer;
+  static Serializer<ClientContactEntity> get serializer =>
+      _$clientContactEntitySerializer;
 }
 */

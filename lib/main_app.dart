@@ -156,7 +156,9 @@ class InvoiceNinjaAppState extends State<InvoiceNinjaApp> {
   void initState() {
     super.initState();
 
-    WebUtils.warnChanges(widget.store);
+    if (kIsWeb) {
+      WebUtils.warnChanges(widget.store);
+    }
 
     Timer.periodic(Duration(milliseconds: kMillisecondsToTimerRefreshData),
         (_) {

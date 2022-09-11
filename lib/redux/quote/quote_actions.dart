@@ -416,21 +416,40 @@ class FilterQuotesByCustom4 implements PersistUI {
   final String value;
 }
 
-class ConvertQuotes implements StartSaving {
-  ConvertQuotes(this.completer, this.quoteIds);
+class ConvertQuotesToInvoices implements StartSaving {
+  ConvertQuotesToInvoices(this.completer, this.quoteIds);
 
   final List<String> quoteIds;
   final Completer completer;
 }
 
-class ConvertQuoteSuccess implements StopSaving {
-  ConvertQuoteSuccess({this.quotes});
+class ConvertQuotesToInvoicesSuccess implements StopSaving {
+  ConvertQuotesToInvoicesSuccess({this.quotes});
 
   final List<InvoiceEntity> quotes;
 }
 
-class ConvertQuoteFailure implements StopSaving {
-  ConvertQuoteFailure(this.error);
+class ConvertQuotesToInvoicesFailure implements StopSaving {
+  ConvertQuotesToInvoicesFailure(this.error);
+
+  final dynamic error;
+}
+
+class ConvertQuotesToProjects implements StartSaving {
+  ConvertQuotesToProjects(this.completer, this.quoteIds);
+
+  final List<String> quoteIds;
+  final Completer completer;
+}
+
+class ConvertQuotesToProjectsSuccess implements StopSaving {
+  ConvertQuotesToProjectsSuccess({this.quotes});
+
+  final List<InvoiceEntity> quotes;
+}
+
+class ConvertQuotesToProjectsFailure implements StopSaving {
+  ConvertQuotesToProjectsFailure(this.error);
 
   final dynamic error;
 }
@@ -494,13 +513,15 @@ Future handleQuoteAction(
       store.dispatch(ShowPdfQuote(quote: quote, context: context));
       break;
     case EntityAction.clientPortal:
-      if (await canLaunch(quote.invitationSilentLink)) {
-        await launch(quote.invitationSilentLink,
-            forceSafariVC: false, forceWebView: false);
-      }
+      launchUrl(Uri.parse(quote.invitationSilentLink));
       break;
     case EntityAction.convertToInvoice:
-      store.dispatch(ConvertQuotes(
+      store.dispatch(ConvertQuotesToInvoices(
+          snackBarCompleter<Null>(context, localization.convertedQuote),
+          quoteIds));
+      break;
+    case EntityAction.convertToProject:
+      store.dispatch(ConvertQuotesToProjects(
           snackBarCompleter<Null>(context, localization.convertedQuote),
           quoteIds));
       break;
@@ -520,11 +541,13 @@ Future handleQuoteAction(
           snackBarCompleter<Null>(context, localization.markedQuoteAsSent),
           quoteIds));
       break;
-    case EntityAction.emailQuote:
-    case EntityAction.bulkEmailQuote:
+    case EntityAction.sendEmail:
+    case EntityAction.bulkSendEmail:
       bool emailValid = true;
-      quoteIds.forEach((element) {
-        final client = state.clientState.get(quote.clientId);
+      quotes.forEach((quote) {
+        final client = state.clientState.get(
+          (quote as InvoiceEntity).clientId,
+        );
         if (!client.hasEmailAddress) {
           emailValid = false;
         }
@@ -543,7 +566,7 @@ Future handleQuoteAction(
             ]);
         return;
       }
-      if (action == EntityAction.emailQuote) {
+      if (action == EntityAction.sendEmail) {
         store.dispatch(ShowEmailQuote(
             completer:
                 snackBarCompleter<Null>(context, localization.emailedQuote),
@@ -552,7 +575,7 @@ Future handleQuoteAction(
       } else {
         confirmCallback(
             context: context,
-            message: localization.bulkEmailQuote,
+            message: localization.bulkEmailQuotes,
             callback: (_) {
               store.dispatch(BulkEmailQuotesRequest(
                   snackBarCompleter<Null>(
@@ -563,6 +586,17 @@ Future handleQuoteAction(
                   quoteIds));
             });
       }
+      break;
+    case EntityAction.cloneToPurchaseOrder:
+      final designId = getDesignIdForVendorByEntity(
+          state: state,
+          vendorId: quote.vendorId,
+          entityType: EntityType.purchaseOrder);
+      createEntity(
+          context: context,
+          entity: quote.clone.rebuild((b) => b
+            ..entityType = EntityType.purchaseOrder
+            ..designId = designId));
       break;
     case EntityAction.cloneToOther:
       cloneToDialog(context: context, invoice: quote);
@@ -605,7 +639,7 @@ Future handleQuoteAction(
             ..designId = designId));
       break;
     case EntityAction.download:
-      launch(quote.invitationDownloadLink);
+      launchUrl(Uri.parse(quote.invitationDownloadLink));
       break;
     case EntityAction.bulkDownload:
       store.dispatch(DownloadQuotesRequest(

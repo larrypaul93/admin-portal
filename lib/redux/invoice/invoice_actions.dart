@@ -518,10 +518,7 @@ void handleInvoiceAction(BuildContext context, List<BaseEntity> invoices,
       store.dispatch(ShowPdfInvoice(invoice: invoice, context: context));
       break;
     case EntityAction.clientPortal:
-      if (await canLaunch(invoice.invitationSilentLink)) {
-        await launch(invoice.invitationSilentLink,
-            forceSafariVC: false, forceWebView: false);
-      }
+      launchUrl(Uri.parse(invoice.invitationSilentLink));
       break;
     case EntityAction.markSent:
       store.dispatch(MarkInvoicesSentRequest(
@@ -567,11 +564,13 @@ void handleInvoiceAction(BuildContext context, List<BaseEntity> invoices,
                   : localization.markedInvoicesAsPaid),
           invoiceIds));
       break;
-    case EntityAction.emailInvoice:
-    case EntityAction.bulkEmailInvoice:
+    case EntityAction.sendEmail:
+    case EntityAction.bulkSendEmail:
       bool emailValid = true;
-      invoiceIds.forEach((element) {
-        final client = state.clientState.get(invoice.clientId);
+      invoices.forEach((invoice) {
+        final client = state.clientState.get(
+          (invoice as InvoiceEntity).clientId,
+        );
         if (!client.hasEmailAddress) {
           emailValid = false;
         }
@@ -590,7 +589,7 @@ void handleInvoiceAction(BuildContext context, List<BaseEntity> invoices,
             ]);
         return;
       }
-      if (action == EntityAction.emailInvoice) {
+      if (action == EntityAction.sendEmail) {
         store.dispatch(ShowEmailInvoice(
             completer:
                 snackBarCompleter<Null>(context, localization.emailedInvoice),
@@ -599,7 +598,7 @@ void handleInvoiceAction(BuildContext context, List<BaseEntity> invoices,
       } else {
         confirmCallback(
             context: context,
-            message: localization.bulkEmailInvoice,
+            message: localization.bulkEmailInvoices,
             callback: (_) {
               store.dispatch(BulkEmailInvoicesRequest(
                   snackBarCompleter<Null>(
@@ -640,6 +639,19 @@ void handleInvoiceAction(BuildContext context, List<BaseEntity> invoices,
             ..entityType = EntityType.credit
             ..designId = designId));
       break;
+    case EntityAction.cloneToPurchaseOrder:
+      final designId = getDesignIdForVendorByEntity(
+          state: state,
+          vendorId: invoice.vendorId,
+          entityType: EntityType.purchaseOrder);
+      createEntity(
+          context: context,
+          entity: invoice.clone
+              .rebuild((b) => b
+                ..entityType = EntityType.purchaseOrder
+                ..designId = designId)
+              .recreateInvitations(state));
+      break;
     case EntityAction.cloneToRecurring:
       createEntity(
           context: context,
@@ -649,16 +661,17 @@ void handleInvoiceAction(BuildContext context, List<BaseEntity> invoices,
     case EntityAction.newPayment:
       createEntity(
         context: context,
-        entity: PaymentEntity(state: state).rebuild((b) => b
-          ..clientId = invoice.clientId
-          ..invoices.addAll(invoices
-              .where((invoice) => !(invoice as InvoiceEntity).isPaid)
-              .map((invoice) => PaymentableEntity.fromInvoice(invoice))
-              .toList())),
+        entity: PaymentEntity(
+                state: state, client: state.clientState.get(invoice.clientId))
+            .rebuild((b) => b
+              ..invoices.addAll(invoices
+                  .where((invoice) => !(invoice as InvoiceEntity).isPaid)
+                  .map((invoice) => PaymentableEntity.fromInvoice(invoice))
+                  .toList())),
       );
       break;
     case EntityAction.download:
-      launch(invoice.invitationDownloadLink);
+      launchUrl(Uri.parse(invoice.invitationDownloadLink));
       break;
     case EntityAction.bulkDownload:
       store.dispatch(DownloadInvoicesRequest(

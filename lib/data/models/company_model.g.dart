@@ -22,6 +22,8 @@ Serializer<CompanyItemResponse> _$companyItemResponseSerializer =
     new _$CompanyItemResponseSerializer();
 Serializer<RegistrationFieldEntity> _$registrationFieldEntitySerializer =
     new _$RegistrationFieldEntitySerializer();
+Serializer<DashboardField> _$dashboardFieldSerializer =
+    new _$DashboardFieldSerializer();
 
 class _$CompanyEntitySerializer implements StructuredSerializer<CompanyEntity> {
   @override
@@ -116,6 +118,9 @@ class _$CompanyEntitySerializer implements StructuredSerializer<CompanyEntity> {
           specifiedType: const FullType(int)),
       'enabled_item_tax_rates',
       serializers.serialize(object.numberOfItemTaxRates,
+          specifiedType: const FullType(int)),
+      'enabled_expense_tax_rates',
+      serializers.serialize(object.numberOfExpenseTaxRates,
           specifiedType: const FullType(int)),
       'expense_inclusive_taxes',
       serializers.serialize(object.expenseInclusiveTaxes,
@@ -320,6 +325,9 @@ class _$CompanyEntitySerializer implements StructuredSerializer<CompanyEntity> {
       'invoice_task_datelog',
       serializers.serialize(object.invoiceTaskDatelog,
           specifiedType: const FullType(bool)),
+      'invoice_task_project',
+      serializers.serialize(object.invoiceTaskProject,
+          specifiedType: const FullType(bool)),
       'auto_start_tasks',
       serializers.serialize(object.autoStartTasks,
           specifiedType: const FullType(bool)),
@@ -514,6 +522,10 @@ class _$CompanyEntitySerializer implements StructuredSerializer<CompanyEntity> {
           break;
         case 'enabled_item_tax_rates':
           result.numberOfItemTaxRates = serializers.deserialize(value,
+              specifiedType: const FullType(int)) as int;
+          break;
+        case 'enabled_expense_tax_rates':
+          result.numberOfExpenseTaxRates = serializers.deserialize(value,
               specifiedType: const FullType(int)) as int;
           break;
         case 'expense_inclusive_taxes':
@@ -803,6 +815,10 @@ class _$CompanyEntitySerializer implements StructuredSerializer<CompanyEntity> {
           break;
         case 'invoice_task_datelog':
           result.invoiceTaskDatelog = serializers.deserialize(value,
+              specifiedType: const FullType(bool)) as bool;
+          break;
+        case 'invoice_task_project':
+          result.invoiceTaskProject = serializers.deserialize(value,
               specifiedType: const FullType(bool)) as bool;
           break;
         case 'auto_start_tasks':
@@ -1216,6 +1232,16 @@ class _$UserSettingsEntitySerializer
       'include_deleted_clients',
       serializers.serialize(object.includeDeletedClients,
           specifiedType: const FullType(bool)),
+      'dashboard_fields',
+      serializers.serialize(object.dashboardFields,
+          specifiedType: const FullType(
+              BuiltList, const [const FullType(DashboardField)])),
+      'dashboard_fields_per_row_mobile',
+      serializers.serialize(object.dashboardFieldsPerRowMobile,
+          specifiedType: const FullType(int)),
+      'dashboard_fields_per_row_desktop',
+      serializers.serialize(object.dashboardFieldsPerRowDesktop,
+          specifiedType: const FullType(int)),
     ];
     Object value;
     value = object.accentColor;
@@ -1265,6 +1291,20 @@ class _$UserSettingsEntitySerializer
         case 'include_deleted_clients':
           result.includeDeletedClients = serializers.deserialize(value,
               specifiedType: const FullType(bool)) as bool;
+          break;
+        case 'dashboard_fields':
+          result.dashboardFields.replace(serializers.deserialize(value,
+                  specifiedType: const FullType(
+                      BuiltList, const [const FullType(DashboardField)]))
+              as BuiltList<Object>);
+          break;
+        case 'dashboard_fields_per_row_mobile':
+          result.dashboardFieldsPerRowMobile = serializers.deserialize(value,
+              specifiedType: const FullType(int)) as int;
+          break;
+        case 'dashboard_fields_per_row_desktop':
+          result.dashboardFieldsPerRowDesktop = serializers.deserialize(value,
+              specifiedType: const FullType(int)) as int;
           break;
       }
     }
@@ -1448,6 +1488,61 @@ class _$RegistrationFieldEntitySerializer
   }
 }
 
+class _$DashboardFieldSerializer
+    implements StructuredSerializer<DashboardField> {
+  @override
+  final Iterable<Type> types = const [DashboardField, _$DashboardField];
+  @override
+  final String wireName = 'DashboardField';
+
+  @override
+  Iterable<Object> serialize(Serializers serializers, DashboardField object,
+      {FullType specifiedType = FullType.unspecified}) {
+    final result = <Object>[
+      'field',
+      serializers.serialize(object.field,
+          specifiedType: const FullType(String)),
+      'period',
+      serializers.serialize(object.period,
+          specifiedType: const FullType(String)),
+      'type',
+      serializers.serialize(object.type, specifiedType: const FullType(String)),
+    ];
+
+    return result;
+  }
+
+  @override
+  DashboardField deserialize(
+      Serializers serializers, Iterable<Object> serialized,
+      {FullType specifiedType = FullType.unspecified}) {
+    final result = new DashboardFieldBuilder();
+
+    final iterator = serialized.iterator;
+    while (iterator.moveNext()) {
+      final key = iterator.current as String;
+      iterator.moveNext();
+      final Object value = iterator.current;
+      switch (key) {
+        case 'field':
+          result.field = serializers.deserialize(value,
+              specifiedType: const FullType(String)) as String;
+          break;
+        case 'period':
+          result.period = serializers.deserialize(value,
+              specifiedType: const FullType(String)) as String;
+          break;
+        case 'type':
+          result.type = serializers.deserialize(value,
+              specifiedType: const FullType(String)) as String;
+          break;
+      }
+    }
+
+    return result.build();
+  }
+}
+
 class _$CompanyEntity extends CompanyEntity {
   @override
   final bool enableCustomSurchargeTaxes1;
@@ -1505,6 +1600,8 @@ class _$CompanyEntity extends CompanyEntity {
   final int numberOfInvoiceTaxRates;
   @override
   final int numberOfItemTaxRates;
+  @override
+  final int numberOfExpenseTaxRates;
   @override
   final bool expenseInclusiveTaxes;
   @override
@@ -1616,6 +1713,8 @@ class _$CompanyEntity extends CompanyEntity {
   @override
   final bool invoiceTaskDatelog;
   @override
+  final bool invoiceTaskProject;
+  @override
   final bool autoStartTasks;
   @override
   final bool showTasksTable;
@@ -1680,6 +1779,7 @@ class _$CompanyEntity extends CompanyEntity {
       this.firstMonthOfYear,
       this.numberOfInvoiceTaxRates,
       this.numberOfItemTaxRates,
+      this.numberOfExpenseTaxRates,
       this.expenseInclusiveTaxes,
       this.sessionTimeout,
       this.passwordTimeout,
@@ -1735,6 +1835,7 @@ class _$CompanyEntity extends CompanyEntity {
       this.invoiceTaskDocuments,
       this.invoiceTaskTimelog,
       this.invoiceTaskDatelog,
+      this.invoiceTaskProject,
       this.autoStartTasks,
       this.showTasksTable,
       this.showTaskEndDate,
@@ -1806,6 +1907,8 @@ class _$CompanyEntity extends CompanyEntity {
         numberOfInvoiceTaxRates, r'CompanyEntity', 'numberOfInvoiceTaxRates');
     BuiltValueNullFieldError.checkNotNull(
         numberOfItemTaxRates, r'CompanyEntity', 'numberOfItemTaxRates');
+    BuiltValueNullFieldError.checkNotNull(
+        numberOfExpenseTaxRates, r'CompanyEntity', 'numberOfExpenseTaxRates');
     BuiltValueNullFieldError.checkNotNull(
         expenseInclusiveTaxes, r'CompanyEntity', 'expenseInclusiveTaxes');
     BuiltValueNullFieldError.checkNotNull(
@@ -1908,6 +2011,8 @@ class _$CompanyEntity extends CompanyEntity {
     BuiltValueNullFieldError.checkNotNull(
         invoiceTaskDatelog, r'CompanyEntity', 'invoiceTaskDatelog');
     BuiltValueNullFieldError.checkNotNull(
+        invoiceTaskProject, r'CompanyEntity', 'invoiceTaskProject');
+    BuiltValueNullFieldError.checkNotNull(
         autoStartTasks, r'CompanyEntity', 'autoStartTasks');
     BuiltValueNullFieldError.checkNotNull(
         showTasksTable, r'CompanyEntity', 'showTasksTable');
@@ -1969,6 +2074,7 @@ class _$CompanyEntity extends CompanyEntity {
         firstMonthOfYear == other.firstMonthOfYear &&
         numberOfInvoiceTaxRates == other.numberOfInvoiceTaxRates &&
         numberOfItemTaxRates == other.numberOfItemTaxRates &&
+        numberOfExpenseTaxRates == other.numberOfExpenseTaxRates &&
         expenseInclusiveTaxes == other.expenseInclusiveTaxes &&
         sessionTimeout == other.sessionTimeout &&
         passwordTimeout == other.passwordTimeout &&
@@ -2024,6 +2130,7 @@ class _$CompanyEntity extends CompanyEntity {
         invoiceTaskDocuments == other.invoiceTaskDocuments &&
         invoiceTaskTimelog == other.invoiceTaskTimelog &&
         invoiceTaskDatelog == other.invoiceTaskDatelog &&
+        invoiceTaskProject == other.invoiceTaskProject &&
         autoStartTasks == other.autoStartTasks &&
         showTasksTable == other.showTasksTable &&
         showTaskEndDate == other.showTaskEndDate &&
@@ -2063,10 +2170,10 @@ class _$CompanyEntity extends CompanyEntity {
                                                                 $jc(
                                                                     $jc(
                                                                         $jc(
-                                                                            $jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc(0, enableCustomSurchargeTaxes1.hashCode), enableCustomSurchargeTaxes2.hashCode), enableCustomSurchargeTaxes3.hashCode), enableCustomSurchargeTaxes4.hashCode), sizeId.hashCode), industryId.hashCode), subdomain.hashCode), portalMode.hashCode), portalDomain.hashCode), updateProducts.hashCode), convertProductExchangeRate.hashCode), convertRateToClient.hashCode), fillProducts.hashCode), enableProductCost.hashCode), enableProductQuantity.hashCode), enableProductDiscount.hashCode), defaultTaskIsDateBased.hashCode), defaultQuantity.hashCode), showProductDetails.hashCode), clientCanRegister.hashCode), isLarge.hashCode), isDisabled.hashCode), enableShopApi.hashCode), companyKey.hashCode), firstDayOfWeek.hashCode), firstMonthOfYear.hashCode), numberOfInvoiceTaxRates.hashCode), numberOfItemTaxRates.hashCode), expenseInclusiveTaxes.hashCode), sessionTimeout.hashCode), passwordTimeout.hashCode), oauthPasswordRequired.hashCode), markdownEnabled.hashCode), markdownEmailEnabled.hashCode), useCommaAsDecimalPlace.hashCode), reportIncludeDrafts.hashCode), useQuoteTermsOnConversion.hashCode), enableApplyingPayments.hashCode), trackInventory.hashCode), stockNotificationThreshold.hashCode), stockNotification.hashCode), groups.hashCode), activities.hashCode), taxRates.hashCode), taskStatuses.hashCode), taskStatusMap.hashCode), companyGateways.hashCode), expenseCategories.hashCode), users.hashCode), clients.hashCode), contacts.hashCode), products.hashCode), categories.hashCode), serviceReports.hashCode), serviceReportsMap.hashCode), invoices.hashCode), recurringInvoices.hashCode), recurringExpenses.hashCode), payments.hashCode), quotes.hashCode), credits.hashCode), purchaseOrders.hashCode), tasks.hashCode), projects.hashCode), expenses.hashCode), vendors.hashCode), designs.hashCode), documents.hashCode), tokens.hashCode), webhooks.hashCode), subscriptions.hashCode), paymentTerms.hashCode), systemLogs.hashCode), clientRegistrationFields.hashCode), customFields.hashCode), slackWebhookUrl.hashCode), googleAnalyticsKey.hashCode), markExpensesInvoiceable.hashCode), markExpensesPaid.hashCode), invoiceExpenseDocuments.hashCode),
-                                                                                invoiceTaskDocuments.hashCode),
-                                                                            invoiceTaskTimelog.hashCode),
-                                                                        invoiceTaskDatelog.hashCode),
+                                                                            $jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc(0, enableCustomSurchargeTaxes1.hashCode), enableCustomSurchargeTaxes2.hashCode), enableCustomSurchargeTaxes3.hashCode), enableCustomSurchargeTaxes4.hashCode), sizeId.hashCode), industryId.hashCode), subdomain.hashCode), portalMode.hashCode), portalDomain.hashCode), updateProducts.hashCode), convertProductExchangeRate.hashCode), convertRateToClient.hashCode), fillProducts.hashCode), enableProductCost.hashCode), enableProductQuantity.hashCode), enableProductDiscount.hashCode), defaultTaskIsDateBased.hashCode), defaultQuantity.hashCode), showProductDetails.hashCode), clientCanRegister.hashCode), isLarge.hashCode), isDisabled.hashCode), enableShopApi.hashCode), companyKey.hashCode), firstDayOfWeek.hashCode), firstMonthOfYear.hashCode), numberOfInvoiceTaxRates.hashCode), numberOfItemTaxRates.hashCode), numberOfExpenseTaxRates.hashCode), expenseInclusiveTaxes.hashCode), sessionTimeout.hashCode), passwordTimeout.hashCode), oauthPasswordRequired.hashCode), markdownEnabled.hashCode), markdownEmailEnabled.hashCode), useCommaAsDecimalPlace.hashCode), reportIncludeDrafts.hashCode), useQuoteTermsOnConversion.hashCode), enableApplyingPayments.hashCode), trackInventory.hashCode), stockNotificationThreshold.hashCode), stockNotification.hashCode), groups.hashCode), activities.hashCode), taxRates.hashCode), taskStatuses.hashCode), taskStatusMap.hashCode), companyGateways.hashCode), expenseCategories.hashCode), users.hashCode), clients.hashCode), contacts.hashCode), products.hashCode), categories.hashCode), serviceReports.hashCode), serviceReportsMap.hashCode), invoices.hashCode), recurringInvoices.hashCode), recurringExpenses.hashCode), payments.hashCode), quotes.hashCode), credits.hashCode), purchaseOrders.hashCode), tasks.hashCode), projects.hashCode), expenses.hashCode), vendors.hashCode), designs.hashCode), documents.hashCode), tokens.hashCode), webhooks.hashCode), subscriptions.hashCode), paymentTerms.hashCode), systemLogs.hashCode), clientRegistrationFields.hashCode), customFields.hashCode), slackWebhookUrl.hashCode), googleAnalyticsKey.hashCode), markExpensesInvoiceable.hashCode), markExpensesPaid.hashCode), invoiceExpenseDocuments.hashCode), invoiceTaskDocuments.hashCode),
+                                                                                invoiceTaskTimelog.hashCode),
+                                                                            invoiceTaskDatelog.hashCode),
+                                                                        invoiceTaskProject.hashCode),
                                                                     autoStartTasks.hashCode),
                                                                 showTasksTable.hashCode),
                                                             showTaskEndDate.hashCode),
@@ -2116,6 +2223,7 @@ class _$CompanyEntity extends CompanyEntity {
           ..add('firstMonthOfYear', firstMonthOfYear)
           ..add('numberOfInvoiceTaxRates', numberOfInvoiceTaxRates)
           ..add('numberOfItemTaxRates', numberOfItemTaxRates)
+          ..add('numberOfExpenseTaxRates', numberOfExpenseTaxRates)
           ..add('expenseInclusiveTaxes', expenseInclusiveTaxes)
           ..add('sessionTimeout', sessionTimeout)
           ..add('passwordTimeout', passwordTimeout)
@@ -2171,6 +2279,7 @@ class _$CompanyEntity extends CompanyEntity {
           ..add('invoiceTaskDocuments', invoiceTaskDocuments)
           ..add('invoiceTaskTimelog', invoiceTaskTimelog)
           ..add('invoiceTaskDatelog', invoiceTaskDatelog)
+          ..add('invoiceTaskProject', invoiceTaskProject)
           ..add('autoStartTasks', autoStartTasks)
           ..add('showTasksTable', showTasksTable)
           ..add('showTaskEndDate', showTaskEndDate)
@@ -2325,6 +2434,11 @@ class CompanyEntityBuilder
   int get numberOfItemTaxRates => _$this._numberOfItemTaxRates;
   set numberOfItemTaxRates(int numberOfItemTaxRates) =>
       _$this._numberOfItemTaxRates = numberOfItemTaxRates;
+
+  int _numberOfExpenseTaxRates;
+  int get numberOfExpenseTaxRates => _$this._numberOfExpenseTaxRates;
+  set numberOfExpenseTaxRates(int numberOfExpenseTaxRates) =>
+      _$this._numberOfExpenseTaxRates = numberOfExpenseTaxRates;
 
   bool _expenseInclusiveTaxes;
   bool get expenseInclusiveTaxes => _$this._expenseInclusiveTaxes;
@@ -2630,6 +2744,11 @@ class CompanyEntityBuilder
   set invoiceTaskDatelog(bool invoiceTaskDatelog) =>
       _$this._invoiceTaskDatelog = invoiceTaskDatelog;
 
+  bool _invoiceTaskProject;
+  bool get invoiceTaskProject => _$this._invoiceTaskProject;
+  set invoiceTaskProject(bool invoiceTaskProject) =>
+      _$this._invoiceTaskProject = invoiceTaskProject;
+
   bool _autoStartTasks;
   bool get autoStartTasks => _$this._autoStartTasks;
   set autoStartTasks(bool autoStartTasks) =>
@@ -2738,6 +2857,7 @@ class CompanyEntityBuilder
       _firstMonthOfYear = $v.firstMonthOfYear;
       _numberOfInvoiceTaxRates = $v.numberOfInvoiceTaxRates;
       _numberOfItemTaxRates = $v.numberOfItemTaxRates;
+      _numberOfExpenseTaxRates = $v.numberOfExpenseTaxRates;
       _expenseInclusiveTaxes = $v.expenseInclusiveTaxes;
       _sessionTimeout = $v.sessionTimeout;
       _passwordTimeout = $v.passwordTimeout;
@@ -2793,6 +2913,7 @@ class CompanyEntityBuilder
       _invoiceTaskDocuments = $v.invoiceTaskDocuments;
       _invoiceTaskTimelog = $v.invoiceTaskTimelog;
       _invoiceTaskDatelog = $v.invoiceTaskDatelog;
+      _invoiceTaskProject = $v.invoiceTaskProject;
       _autoStartTasks = $v.autoStartTasks;
       _showTasksTable = $v.showTasksTable;
       _showTaskEndDate = $v.showTaskEndDate;
@@ -2875,6 +2996,7 @@ class CompanyEntityBuilder
               firstMonthOfYear: BuiltValueNullFieldError.checkNotNull(firstMonthOfYear, r'CompanyEntity', 'firstMonthOfYear'),
               numberOfInvoiceTaxRates: BuiltValueNullFieldError.checkNotNull(numberOfInvoiceTaxRates, r'CompanyEntity', 'numberOfInvoiceTaxRates'),
               numberOfItemTaxRates: BuiltValueNullFieldError.checkNotNull(numberOfItemTaxRates, r'CompanyEntity', 'numberOfItemTaxRates'),
+              numberOfExpenseTaxRates: BuiltValueNullFieldError.checkNotNull(numberOfExpenseTaxRates, r'CompanyEntity', 'numberOfExpenseTaxRates'),
               expenseInclusiveTaxes: BuiltValueNullFieldError.checkNotNull(expenseInclusiveTaxes, r'CompanyEntity', 'expenseInclusiveTaxes'),
               sessionTimeout: BuiltValueNullFieldError.checkNotNull(sessionTimeout, r'CompanyEntity', 'sessionTimeout'),
               passwordTimeout: BuiltValueNullFieldError.checkNotNull(passwordTimeout, r'CompanyEntity', 'passwordTimeout'),
@@ -2930,6 +3052,7 @@ class CompanyEntityBuilder
               invoiceTaskDocuments: BuiltValueNullFieldError.checkNotNull(invoiceTaskDocuments, r'CompanyEntity', 'invoiceTaskDocuments'),
               invoiceTaskTimelog: BuiltValueNullFieldError.checkNotNull(invoiceTaskTimelog, r'CompanyEntity', 'invoiceTaskTimelog'),
               invoiceTaskDatelog: BuiltValueNullFieldError.checkNotNull(invoiceTaskDatelog, r'CompanyEntity', 'invoiceTaskDatelog'),
+              invoiceTaskProject: BuiltValueNullFieldError.checkNotNull(invoiceTaskProject, r'CompanyEntity', 'invoiceTaskProject'),
               autoStartTasks: BuiltValueNullFieldError.checkNotNull(autoStartTasks, r'CompanyEntity', 'autoStartTasks'),
               showTasksTable: BuiltValueNullFieldError.checkNotNull(showTasksTable, r'CompanyEntity', 'showTasksTable'),
               showTaskEndDate: BuiltValueNullFieldError.checkNotNull(showTaskEndDate, r'CompanyEntity', 'showTaskEndDate'),
@@ -3660,6 +3783,12 @@ class _$UserSettingsEntity extends UserSettingsEntity {
   final int numberYearsActive;
   @override
   final bool includeDeletedClients;
+  @override
+  final BuiltList<DashboardField> dashboardFields;
+  @override
+  final int dashboardFieldsPerRowMobile;
+  @override
+  final int dashboardFieldsPerRowDesktop;
 
   factory _$UserSettingsEntity(
           [void Function(UserSettingsEntityBuilder) updates]) =>
@@ -3670,7 +3799,10 @@ class _$UserSettingsEntity extends UserSettingsEntity {
       this.tableColumns,
       this.reportSettings,
       this.numberYearsActive,
-      this.includeDeletedClients})
+      this.includeDeletedClients,
+      this.dashboardFields,
+      this.dashboardFieldsPerRowMobile,
+      this.dashboardFieldsPerRowDesktop})
       : super._() {
     BuiltValueNullFieldError.checkNotNull(
         tableColumns, r'UserSettingsEntity', 'tableColumns');
@@ -3680,6 +3812,12 @@ class _$UserSettingsEntity extends UserSettingsEntity {
         numberYearsActive, r'UserSettingsEntity', 'numberYearsActive');
     BuiltValueNullFieldError.checkNotNull(
         includeDeletedClients, r'UserSettingsEntity', 'includeDeletedClients');
+    BuiltValueNullFieldError.checkNotNull(
+        dashboardFields, r'UserSettingsEntity', 'dashboardFields');
+    BuiltValueNullFieldError.checkNotNull(dashboardFieldsPerRowMobile,
+        r'UserSettingsEntity', 'dashboardFieldsPerRowMobile');
+    BuiltValueNullFieldError.checkNotNull(dashboardFieldsPerRowDesktop,
+        r'UserSettingsEntity', 'dashboardFieldsPerRowDesktop');
   }
 
   @override
@@ -3699,7 +3837,10 @@ class _$UserSettingsEntity extends UserSettingsEntity {
         tableColumns == other.tableColumns &&
         reportSettings == other.reportSettings &&
         numberYearsActive == other.numberYearsActive &&
-        includeDeletedClients == other.includeDeletedClients;
+        includeDeletedClients == other.includeDeletedClients &&
+        dashboardFields == other.dashboardFields &&
+        dashboardFieldsPerRowMobile == other.dashboardFieldsPerRowMobile &&
+        dashboardFieldsPerRowDesktop == other.dashboardFieldsPerRowDesktop;
   }
 
   int __hashCode;
@@ -3707,10 +3848,18 @@ class _$UserSettingsEntity extends UserSettingsEntity {
   int get hashCode {
     return __hashCode ??= $jf($jc(
         $jc(
-            $jc($jc($jc(0, accentColor.hashCode), tableColumns.hashCode),
-                reportSettings.hashCode),
-            numberYearsActive.hashCode),
-        includeDeletedClients.hashCode));
+            $jc(
+                $jc(
+                    $jc(
+                        $jc(
+                            $jc($jc(0, accentColor.hashCode),
+                                tableColumns.hashCode),
+                            reportSettings.hashCode),
+                        numberYearsActive.hashCode),
+                    includeDeletedClients.hashCode),
+                dashboardFields.hashCode),
+            dashboardFieldsPerRowMobile.hashCode),
+        dashboardFieldsPerRowDesktop.hashCode));
   }
 
   @override
@@ -3720,7 +3869,10 @@ class _$UserSettingsEntity extends UserSettingsEntity {
           ..add('tableColumns', tableColumns)
           ..add('reportSettings', reportSettings)
           ..add('numberYearsActive', numberYearsActive)
-          ..add('includeDeletedClients', includeDeletedClients))
+          ..add('includeDeletedClients', includeDeletedClients)
+          ..add('dashboardFields', dashboardFields)
+          ..add('dashboardFieldsPerRowMobile', dashboardFieldsPerRowMobile)
+          ..add('dashboardFieldsPerRowDesktop', dashboardFieldsPerRowDesktop))
         .toString();
   }
 }
@@ -3755,6 +3907,22 @@ class UserSettingsEntityBuilder
   set includeDeletedClients(bool includeDeletedClients) =>
       _$this._includeDeletedClients = includeDeletedClients;
 
+  ListBuilder<DashboardField> _dashboardFields;
+  ListBuilder<DashboardField> get dashboardFields =>
+      _$this._dashboardFields ??= new ListBuilder<DashboardField>();
+  set dashboardFields(ListBuilder<DashboardField> dashboardFields) =>
+      _$this._dashboardFields = dashboardFields;
+
+  int _dashboardFieldsPerRowMobile;
+  int get dashboardFieldsPerRowMobile => _$this._dashboardFieldsPerRowMobile;
+  set dashboardFieldsPerRowMobile(int dashboardFieldsPerRowMobile) =>
+      _$this._dashboardFieldsPerRowMobile = dashboardFieldsPerRowMobile;
+
+  int _dashboardFieldsPerRowDesktop;
+  int get dashboardFieldsPerRowDesktop => _$this._dashboardFieldsPerRowDesktop;
+  set dashboardFieldsPerRowDesktop(int dashboardFieldsPerRowDesktop) =>
+      _$this._dashboardFieldsPerRowDesktop = dashboardFieldsPerRowDesktop;
+
   UserSettingsEntityBuilder() {
     UserSettingsEntity._initializeBuilder(this);
   }
@@ -3767,6 +3935,9 @@ class UserSettingsEntityBuilder
       _reportSettings = $v.reportSettings.toBuilder();
       _numberYearsActive = $v.numberYearsActive;
       _includeDeletedClients = $v.includeDeletedClients;
+      _dashboardFields = $v.dashboardFields.toBuilder();
+      _dashboardFieldsPerRowMobile = $v.dashboardFieldsPerRowMobile;
+      _dashboardFieldsPerRowDesktop = $v.dashboardFieldsPerRowDesktop;
       _$v = null;
     }
     return this;
@@ -3801,7 +3972,18 @@ class UserSettingsEntityBuilder
               includeDeletedClients: BuiltValueNullFieldError.checkNotNull(
                   includeDeletedClients,
                   r'UserSettingsEntity',
-                  'includeDeletedClients'));
+                  'includeDeletedClients'),
+              dashboardFields: dashboardFields.build(),
+              dashboardFieldsPerRowMobile:
+                  BuiltValueNullFieldError.checkNotNull(
+                      dashboardFieldsPerRowMobile,
+                      r'UserSettingsEntity',
+                      'dashboardFieldsPerRowMobile'),
+              dashboardFieldsPerRowDesktop:
+                  BuiltValueNullFieldError.checkNotNull(
+                      dashboardFieldsPerRowDesktop,
+                      r'UserSettingsEntity',
+                      'dashboardFieldsPerRowDesktop'));
     } catch (_) {
       String _$failedField;
       try {
@@ -3809,6 +3991,9 @@ class UserSettingsEntityBuilder
         tableColumns.build();
         _$failedField = 'reportSettings';
         reportSettings.build();
+
+        _$failedField = 'dashboardFields';
+        dashboardFields.build();
       } catch (e) {
         throw new BuiltValueNestedFieldError(
             r'UserSettingsEntity', _$failedField, e.toString());
@@ -4178,6 +4363,116 @@ class RegistrationFieldEntityBuilder
                 key, r'RegistrationFieldEntity', 'key'),
             required: BuiltValueNullFieldError.checkNotNull(
                 required, r'RegistrationFieldEntity', 'required'));
+    replace(_$result);
+    return _$result;
+  }
+}
+
+class _$DashboardField extends DashboardField {
+  @override
+  final String field;
+  @override
+  final String period;
+  @override
+  final String type;
+
+  factory _$DashboardField([void Function(DashboardFieldBuilder) updates]) =>
+      (new DashboardFieldBuilder()..update(updates))._build();
+
+  _$DashboardField._({this.field, this.period, this.type}) : super._() {
+    BuiltValueNullFieldError.checkNotNull(field, r'DashboardField', 'field');
+    BuiltValueNullFieldError.checkNotNull(period, r'DashboardField', 'period');
+    BuiltValueNullFieldError.checkNotNull(type, r'DashboardField', 'type');
+  }
+
+  @override
+  DashboardField rebuild(void Function(DashboardFieldBuilder) updates) =>
+      (toBuilder()..update(updates)).build();
+
+  @override
+  DashboardFieldBuilder toBuilder() =>
+      new DashboardFieldBuilder()..replace(this);
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(other, this)) return true;
+    return other is DashboardField &&
+        field == other.field &&
+        period == other.period &&
+        type == other.type;
+  }
+
+  int __hashCode;
+  @override
+  int get hashCode {
+    return __hashCode ??=
+        $jf($jc($jc($jc(0, field.hashCode), period.hashCode), type.hashCode));
+  }
+
+  @override
+  String toString() {
+    return (newBuiltValueToStringHelper(r'DashboardField')
+          ..add('field', field)
+          ..add('period', period)
+          ..add('type', type))
+        .toString();
+  }
+}
+
+class DashboardFieldBuilder
+    implements Builder<DashboardField, DashboardFieldBuilder> {
+  _$DashboardField _$v;
+
+  String _field;
+  String get field => _$this._field;
+  set field(String field) => _$this._field = field;
+
+  String _period;
+  String get period => _$this._period;
+  set period(String period) => _$this._period = period;
+
+  String _type;
+  String get type => _$this._type;
+  set type(String type) => _$this._type = type;
+
+  DashboardFieldBuilder() {
+    DashboardField._initializeBuilder(this);
+  }
+
+  DashboardFieldBuilder get _$this {
+    final $v = _$v;
+    if ($v != null) {
+      _field = $v.field;
+      _period = $v.period;
+      _type = $v.type;
+      _$v = null;
+    }
+    return this;
+  }
+
+  @override
+  void replace(DashboardField other) {
+    ArgumentError.checkNotNull(other, 'other');
+    _$v = other as _$DashboardField;
+  }
+
+  @override
+  void update(void Function(DashboardFieldBuilder) updates) {
+    if (updates != null) updates(this);
+  }
+
+  @override
+  DashboardField build() => _build();
+
+  _$DashboardField _build() {
+    final _$result = _$v ??
+        new _$DashboardField._(
+            field: BuiltValueNullFieldError.checkNotNull(
+                field, r'DashboardField', 'field'),
+            period: BuiltValueNullFieldError.checkNotNull(
+                period, r'DashboardField', 'period'),
+            type: BuiltValueNullFieldError.checkNotNull(
+                type, r'DashboardField', 'type'));
     replace(_$result);
     return _$result;
   }

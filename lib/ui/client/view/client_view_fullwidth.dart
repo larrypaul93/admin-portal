@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:invoiceninja_flutter/constants.dart';
 import 'package:invoiceninja_flutter/redux/app/app_state.dart';
+import 'package:invoiceninja_flutter/redux/client/client_selectors.dart';
 import 'package:invoiceninja_flutter/ui/app/copy_to_clipboard.dart';
 import 'package:invoiceninja_flutter/ui/app/entity_header.dart';
 import 'package:invoiceninja_flutter/ui/app/form_card.dart';
@@ -15,6 +16,7 @@ import 'package:invoiceninja_flutter/ui/client/view/client_view_system_logs.dart
 import 'package:invoiceninja_flutter/ui/client/view/client_view_vm.dart';
 import 'package:invoiceninja_flutter/utils/formatting.dart';
 import 'package:invoiceninja_flutter/utils/localization.dart';
+import 'package:invoiceninja_flutter/utils/strings.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -69,6 +71,11 @@ class _ClientViewFullwidthState extends State<ClientViewFullwidth>
         !state.uiState.isEditing &&
         state.prefState.isModuleTable;
 
+    final availableCredits =
+        memoizedGetClientAvailableCredits(client.id, state.creditState.map);
+    final unappliedPayments =
+        memoizedGetClientUnappliedPayments(client.id, state.paymentState.map);
+
     return LayoutBuilder(builder: (context, layout) {
       final minHeight = layout.maxHeight - (kMobileDialogPadding * 2) - 43;
       return Row(
@@ -93,6 +100,16 @@ class _ClientViewFullwidthState extends State<ClientViewFullwidth>
                     style: Theme.of(context).textTheme.headline6,
                   ),
                   SizedBox(height: 8),
+                  if (availableCredits != 0)
+                    Text(localization.credit +
+                        ': ' +
+                        formatNumber(availableCredits, context,
+                            clientId: client.id)),
+                  if (unappliedPayments != 0)
+                    Text(localization.payments +
+                        ': ' +
+                        formatNumber(unappliedPayments, context,
+                            clientId: client.id)),
                   if (client.idNumber.isNotEmpty)
                     Padding(
                       padding: const EdgeInsets.only(bottom: 1),
@@ -121,7 +138,8 @@ class _ClientViewFullwidthState extends State<ClientViewFullwidth>
                       child: CopyToClipboard(
                         value: client.website,
                         child: IconText(
-                            icon: MdiIcons.earth, text: client.website),
+                            icon: MdiIcons.earth,
+                            text: trimUrl(client.website)),
                       ),
                     ),
                   SizedBox(height: 4),
@@ -189,8 +207,12 @@ class _ClientViewFullwidthState extends State<ClientViewFullwidth>
                       SizedBox(width: 8),
                       IconButton(
                         onPressed: () {
-                          launch('http://maps.google.com/?daddr=' +
-                              Uri.encodeQueryComponent(billingAddress));
+                          launchUrl(Uri(
+                              scheme: 'https',
+                              host: 'maps.google.com',
+                              queryParameters: <String, dynamic>{
+                                'daddr': billingAddress
+                              }));
                         },
                         icon: Icon(Icons.map),
                         tooltip: state.prefState.enableTooltips
@@ -217,15 +239,20 @@ class _ClientViewFullwidthState extends State<ClientViewFullwidth>
                       SizedBox(width: 8),
                       IconButton(
                           onPressed: () {
-                            launch('http://maps.google.com/?daddr=' +
-                                Uri.encodeQueryComponent(shippingAddress));
+                            launchUrl(Uri(
+                                scheme: 'https',
+                                host: 'maps.google.com',
+                                queryParameters: <String, dynamic>{
+                                  'daddr': shippingAddress
+                                }));
                           },
                           icon: Icon(Icons.map)),
                     ],
                   ),
                   SizedBox(height: 8),
                 ],
-                if (client.publicNotes.isNotEmpty) Text(client.publicNotes),
+                if (client.publicNotes.isNotEmpty)
+                  CopyToClipboard(value: client.publicNotes),
               ],
             ),
           )),
@@ -349,6 +376,7 @@ class _ClientViewFullwidthState extends State<ClientViewFullwidth>
                                     IconText(
                                       text: client.privateNotes,
                                       icon: Icons.lock,
+                                      copyToClipboard: true,
                                     )
                                 ],
                               ),

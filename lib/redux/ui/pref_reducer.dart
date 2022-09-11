@@ -63,12 +63,15 @@ PrefState prefReducer(
           hideDesktopWarningReducer(state.hideDesktopWarning, action)
       ..hideGatewayWarning =
           hideGatewayWarningReducer(state.hideGatewayWarning, action)
+      ..hideReviewApp = hideReviewAppReducer(state.hideReviewApp, action)
       ..textScaleFactor = textScaleFactorReducer(state.textScaleFactor, action)
       ..isMenuVisible = menuVisibleReducer(state.isMenuVisible, action)
       ..isHistoryVisible = historyVisibleReducer(state.isHistoryVisible, action)
       ..enableDarkMode = darkModeReducer(state.enableDarkMode, action)
       ..enableJSPDF = enableJspdfReducer(state.enableJSPDF, action)
       ..enableTooltips = enableTooltipsReducer(state.enableTooltips, action)
+      ..enableFlexibleSearch =
+          enableFlexibleSearchReducer(state.enableFlexibleSearch, action)
       ..persistData = persistDataReducer(state.persistData, action)
       ..persistUI = persistUIReducer(state.persistUI, action)
       ..showKanban = showKanbanReducer(state.showKanban, action)
@@ -243,6 +246,12 @@ Reducer<bool> hideGatewayWarningReducer = combineReducers([
   }),
 ]);
 
+Reducer<bool> hideReviewAppReducer = combineReducers([
+  TypedReducer<bool, DismissReviewAppPermanently>((filter, action) {
+    return true;
+  }),
+]);
+
 Reducer<int> filterClearedAtReducer = combineReducers([
   TypedReducer<int, FilterCompany>((filterClearedAt, action) {
     return action.filter == null
@@ -311,6 +320,12 @@ Reducer<bool> enableJspdfReducer = combineReducers([
 Reducer<bool> enableTooltipsReducer = combineReducers([
   TypedReducer<bool, UpdateUserPreferences>((enableTooltips, action) {
     return action.enableTooltips ?? enableTooltips;
+  }),
+]);
+
+Reducer<bool> enableFlexibleSearchReducer = combineReducers([
+  TypedReducer<bool, UpdateUserPreferences>((enableFlexibleSearch, action) {
+    return action.flexibleSearch ?? enableFlexibleSearch;
   }),
 ]);
 
@@ -423,6 +438,10 @@ CompanyPrefState companyPrefReducer(CompanyPrefState state, dynamic action) {
 }
 
 Reducer<BuiltList<HistoryRecord>> historyReducer = combineReducers([
+  TypedReducer<BuiltList<HistoryRecord>, PurgeDataSuccess>(
+      (historyList, action) {
+    return BuiltList<HistoryRecord>();
+  }),
   TypedReducer<BuiltList<HistoryRecord>, PopLastHistory>(
     (historyList, action) {
       if (historyList.isEmpty) {
@@ -663,9 +682,13 @@ Reducer<BuiltList<HistoryRecord>> historyReducer = combineReducers([
   TypedReducer<BuiltList<HistoryRecord>, EditCredit>((historyList, action) =>
       _addToHistory(historyList,
           HistoryRecord(id: action.credit.id, entityType: EntityType.credit))),
-  TypedReducer<BuiltList<HistoryRecord>, FilterByEntity>(
-      (historyList, action) => _addToHistory(historyList,
-          HistoryRecord(id: action.entityId, entityType: action.entityType))),
+  TypedReducer<BuiltList<HistoryRecord>, FilterByEntity>((historyList, action) {
+    if (action.clearSelection) {
+      return historyList;
+    }
+    return _addToHistory(historyList,
+        HistoryRecord(id: action.entityId, entityType: action.entityType));
+  }),
 ]);
 
 BuiltList<HistoryRecord> _addToHistory(

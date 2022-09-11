@@ -132,7 +132,7 @@ ReportResult creditReport(
       continue;
     }
 
-    final contact = client.getContact(credit.invitations.first.contactId);
+    final contact = client.getContact(credit.invitations.first.clientContactId);
 
     if (credit.isDeleted || client.isDeleted) {
       continue;
@@ -159,10 +159,10 @@ ReportResult creditReport(
           value = credit.balance;
           break;
         case CreditReportFields.converted_amount:
-          value = credit.amount * 1 / credit.exchangeRate;
+          value = round(credit.amount * 1 / credit.exchangeRate, 2);
           break;
         case CreditReportFields.converted_balance:
-          value = credit.balance * 1 / credit.exchangeRate;
+          value = round(credit.balance * 1 / credit.exchangeRate, 2);
           break;
         case CreditReportFields.client:
           value = client?.listDisplayName ?? '';

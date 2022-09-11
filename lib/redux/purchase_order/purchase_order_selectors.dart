@@ -6,15 +6,33 @@ import 'package:built_collection/built_collection.dart';
 import 'package:invoiceninja_flutter/data/models/models.dart';
 import 'package:invoiceninja_flutter/redux/ui/list_ui_state.dart';
 
-var memoizedDropdownPurchaseOrderList = memo6(
+VendorEntity purchaseOrderClientSelector(
+    InvoiceEntity purchaseOrder, BuiltMap<String, VendorEntity> vendorMap) {
+  return vendorMap[purchaseOrder.vendorId];
+}
+
+VendorContactEntity purchaseOrderContactSelector(
+    InvoiceEntity purchaseOrder, VendorEntity vendor) {
+  var contactIds = purchaseOrder.invitations
+      .map((invitation) => invitation.clientContactId)
+      .toList();
+  if (contactIds.contains(vendor.primaryContact.id)) {
+    contactIds = [vendor.primaryContact.id];
+  }
+  return vendor.contacts
+      .firstWhere((contact) => contactIds.contains(contact.id), orElse: null);
+}
+
+var memoizedDropdownPurchaseOrderList = memo7(
     (BuiltMap<String, InvoiceEntity> purchaseOrderMap,
             BuiltList<String> purchaseOrderList,
             StaticState staticState,
             BuiltMap<String, UserEntity> userMap,
             BuiltMap<String, ClientEntity> clientMap,
+            BuiltMap<String, VendorEntity> vendorMap,
             String clientId) =>
         dropdownPurchaseOrdersSelector(purchaseOrderMap, purchaseOrderList,
-            staticState, userMap, clientMap, clientId));
+            staticState, userMap, clientMap, vendorMap, clientId));
 
 List<String> dropdownPurchaseOrdersSelector(
     BuiltMap<String, InvoiceEntity> purchaseOrderMap,
@@ -22,6 +40,7 @@ List<String> dropdownPurchaseOrdersSelector(
     StaticState staticState,
     BuiltMap<String, UserEntity> userMap,
     BuiltMap<String, ClientEntity> clientMap,
+    BuiltMap<String, VendorEntity> vendorMap,
     String clientId) {
   final list = purchaseOrderList.where((purchaseOrderId) {
     final purchaseOrder = purchaseOrderMap[purchaseOrderId];
@@ -42,28 +61,31 @@ List<String> dropdownPurchaseOrdersSelector(
       sortField: PurchaseOrderFields.number,
       userMap: userMap,
       clientMap: clientMap,
+      vendorMap: vendorMap,
     );
   });
 
   return list;
 }
 
-var memoizedFilteredPurchaseOrderList = memo6((
+var memoizedFilteredPurchaseOrderList = memo7((
   SelectionState selectionState,
   BuiltMap<String, InvoiceEntity> invoiceMap,
   BuiltList<String> invoiceList,
   BuiltMap<String, ClientEntity> clientMap,
+  BuiltMap<String, VendorEntity> vendorMap,
   ListUIState invoiceListState,
   BuiltMap<String, UserEntity> userMap,
 ) =>
     filteredPurchaseOrdersSelector(selectionState, invoiceMap, invoiceList,
-        clientMap, invoiceListState, userMap));
+        clientMap, vendorMap, invoiceListState, userMap));
 
 List<String> filteredPurchaseOrdersSelector(
   SelectionState selectionState,
   BuiltMap<String, InvoiceEntity> invoiceMap,
   BuiltList<String> invoiceList,
   BuiltMap<String, ClientEntity> clientMap,
+  BuiltMap<String, VendorEntity> vendorMap,
   ListUIState invoiceListState,
   BuiltMap<String, UserEntity> userMap,
 ) {
@@ -72,19 +94,19 @@ List<String> filteredPurchaseOrdersSelector(
 
   final list = invoiceList.where((invoiceId) {
     final invoice = invoiceMap[invoiceId];
-    final client =
-        clientMap[invoice.clientId] ?? ClientEntity(id: invoice.clientId);
+    final vendor =
+        vendorMap[invoice.vendorId] ?? VendorEntity(id: invoice.vendorId);
 
     if (invoice.id == selectionState.selectedId) {
       return true;
     }
 
-    if (!client.isActive &&
-        !client.matchesEntityFilter(filterEntityType, filterEntityId)) {
+    if (!vendor.isActive &&
+        !vendor.matchesEntityFilter(filterEntityType, filterEntityId)) {
       return false;
     }
 
-    if (filterEntityType == EntityType.client && client.id != filterEntityId) {
+    if (filterEntityType == EntityType.vendor && vendor.id != filterEntityId) {
       return false;
     } else if (filterEntityType == EntityType.user &&
         invoice.assignedUserId != filterEntityId) {
@@ -98,14 +120,20 @@ List<String> filteredPurchaseOrdersSelector(
     } else if (filterEntityType == EntityType.design &&
         invoice.designId != filterEntityId) {
       return false;
-    } else if (filterEntityType == EntityType.group &&
-        client.groupId != filterEntityId) {
-      return false;
+//    } else if (filterEntityType == EntityType.group &&
+//        vendor.groupId != filterEntityId) {
+//      return false;
     } else if (filterEntityType == EntityType.project &&
         invoice.projectId != filterEntityId) {
       return false;
     } else if (filterEntityType == EntityType.quote &&
         invoice.invoiceId != filterEntityId) {
+      return false;
+    } else if (filterEntityType == EntityType.client &&
+        invoice.clientId != filterEntityId) {
+      return false;
+    } else if (filterEntityType == EntityType.expense &&
+        invoice.expenseId != filterEntityId) {
       return false;
     }
 
@@ -116,7 +144,7 @@ List<String> filteredPurchaseOrdersSelector(
       return false;
     }
     if (!invoice.matchesFilter(invoiceListState.filter) &&
-        !client.matchesNameOrEmail(invoiceListState.filter)) {
+        !vendor.matchesNameOrEmail(invoiceListState.filter)) {
       return false;
     }
     if (invoiceListState.custom1Filters.isNotEmpty &&
@@ -141,11 +169,33 @@ List<String> filteredPurchaseOrdersSelector(
       sortField: invoiceListState.sortField,
       sortAscending: invoiceListState.sortAscending,
       clientMap: clientMap,
+      vendorMap: vendorMap,
       userMap: userMap,
     );
   });
 
   return list;
+}
+
+var memoizedPurchaseOrderStatsForVendor = memo2(
+    (String vendorId, BuiltMap<String, InvoiceEntity> purchaseOrderMap) =>
+        purchaseOrderStatsForVendor(vendorId, purchaseOrderMap));
+
+EntityStats purchaseOrderStatsForVendor(
+    String vendorId, BuiltMap<String, InvoiceEntity> purchaseOrderMap) {
+  int countActive = 0;
+  int countArchived = 0;
+  purchaseOrderMap.forEach((purchaseOrderId, purchaseOrder) {
+    if (purchaseOrder.vendorId == vendorId) {
+      if (purchaseOrder.isActive) {
+        countActive++;
+      } else if (purchaseOrder.isArchived) {
+        countArchived++;
+      }
+    }
+  });
+
+  return EntityStats(countActive: countActive, countArchived: countArchived);
 }
 
 bool hasPurchaseOrderChanges(InvoiceEntity purchaseOrder,

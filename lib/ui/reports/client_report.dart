@@ -108,6 +108,7 @@ ReportResult clientReport(
     ClientReportFields.balance,
     ClientReportFields.paid_to_date,
     ClientReportFields.country,
+    ClientReportFields.created_at,
   ];
 
   if (clientReportSettings.columns.isNotEmpty) {
@@ -314,16 +315,16 @@ ReportResult clientReport(
           value = client.paidToDate;
           break;
         case ClientReportFields.converted_total:
-          value = (client.balance + client.paidToDate) * exchangeRate;
+          value = round((client.balance + client.paidToDate) * exchangeRate, 2);
           break;
         case ClientReportFields.converted_balance:
-          value = client.balance * exchangeRate;
+          value = round(client.balance * exchangeRate, 2);
           break;
         case ClientReportFields.converted_credit_balance:
-          value = client.creditBalance * exchangeRate;
+          value = round(client.creditBalance * exchangeRate, 2);
           break;
         case ClientReportFields.converted_paid_to_date:
-          value = client.paidToDate * exchangeRate;
+          value = round(client.paidToDate * exchangeRate, 2);
           break;
         case ClientReportFields.is_active:
           value = client.isActive;

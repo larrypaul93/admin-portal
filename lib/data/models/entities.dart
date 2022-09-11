@@ -250,6 +250,7 @@ class EmailTemplate extends EnumClass {
   static const EmailTemplate custom1 = _$custom1_email;
   static const EmailTemplate custom2 = _$custom2_email;
   static const EmailTemplate custom3 = _$custom3_email;
+  static const EmailTemplate purchase_order = _$purchase_order;
 
   static BuiltSet<EmailTemplate> get values => _$templateValues;
 
@@ -370,6 +371,8 @@ abstract class BaseEntity implements SelectableEntity {
 
   bool get isEditable => !isDeleted;
 
+  bool get isRestorable => true;
+
   bool userCanAccess(String userId) =>
       createdUserId == userId || assignedUserId == userId;
 
@@ -476,8 +479,28 @@ abstract class BaseEntity implements SelectableEntity {
   }
 }
 
+abstract class HasActivities {
+  BuiltList<ActivityEntity> get activities;
+
+  Iterable<ActivityEntity> getActivities({String invoiceId, String typeId}) {
+    return activities.where((activity) {
+      if (invoiceId != null && activity.invoiceId != invoiceId) {
+        return false;
+      }
+      if (typeId != null && activity.activityTypeId != typeId) {
+        return false;
+      }
+      return true;
+    });
+  }
+}
+
 abstract class BelongsToClient {
   String get clientId;
+}
+
+abstract class BelongsToVendor {
+  String get vendorId;
 }
 
 abstract class ErrorMessage
@@ -538,6 +561,12 @@ class CustomFieldType {
   static const String contact2 = 'contact2';
   static const String contact3 = 'contact3';
   static const String contact4 = 'contact4';
+
+  static const String vendorContact = 'vendor_contact';
+  static const String vendorContact1 = 'vendor_contact1';
+  static const String vendorContact2 = 'vendor_contact2';
+  static const String vendorContact3 = 'vendor_contact3';
+  static const String vendorContact4 = 'vendor_contact4';
 
   static const String task = 'task';
   static const String task1 = 'task1';
@@ -625,6 +654,10 @@ abstract class ActivityEntity
   @nullable
   @BuiltValueField(wireName: 'recurring_expense_id')
   String get recurringExpenseId;
+
+  @nullable
+  @BuiltValueField(wireName: 'purchase_order_id')
+  String get purchaseOrderId;
 
   @nullable
   @BuiltValueField(wireName: 'quote_id')
@@ -790,6 +823,17 @@ abstract class ActivityEntity
       kActivityRestoreRecurringExpense,
     ].contains(activityTypeId)) {
       return EntityType.recurringExpense;
+    } else if ([
+      kActivityCreatePurchaseOrder,
+      kActivityUpdatePurchaseOrder,
+      kActivityArchivePurchaseOrder,
+      kActivityDeletePurchaseOrder,
+      kActivityRestorePurchaseOrder,
+      kActivityEmailPurchaseOrder,
+      kActivityViewPurchaseOrder,
+      kActivityAcceptPurchaseOrder,
+    ].contains(activityTypeId)) {
+      return EntityType.purchaseOrder;
     } else {
       print(
           '## ERROR: failed to resolve entity type - activity_type_id: $activityTypeId');
@@ -811,6 +855,7 @@ abstract class ActivityEntity
     VendorEntity vendor,
     InvoiceEntity recurringInvoice,
     ExpenseEntity recurringExpense,
+    InvoiceEntity purchaseOrder,
   }) {
     ContactEntity contact;
     if (client != null && contactId != null && contactId.isNotEmpty) {
@@ -834,6 +879,8 @@ abstract class ActivityEntity
     activity = activity.replaceFirst(':task', task?.number ?? '');
     activity = activity.replaceFirst(':expense', expense?.number ?? '');
     activity = activity.replaceFirst(':vendor', vendor?.name ?? '');
+    activity =
+        activity.replaceFirst(':purchase_order', purchaseOrder?.number ?? '');
     activity = activity.replaceFirst(
         ':recurring_expense', vendor?.name ?? ''); // TODO implement
     activity = activity.replaceAll('  ', ' ');

@@ -125,6 +125,9 @@ class _$DashboardUISettingsSerializer
       'includeTaxes',
       serializers.serialize(object.includeTaxes,
           specifiedType: const FullType(bool)),
+      'groupBy',
+      serializers.serialize(object.groupBy,
+          specifiedType: const FullType(String)),
     ];
 
     return result;
@@ -182,6 +185,10 @@ class _$DashboardUISettingsSerializer
         case 'includeTaxes':
           result.includeTaxes = serializers.deserialize(value,
               specifiedType: const FullType(bool)) as bool;
+          break;
+        case 'groupBy':
+          result.groupBy = serializers.deserialize(value,
+              specifiedType: const FullType(String)) as String;
           break;
       }
     }
@@ -366,6 +373,8 @@ class _$DashboardUISettings extends DashboardUISettings {
   final String currencyId;
   @override
   final bool includeTaxes;
+  @override
+  final String groupBy;
 
   factory _$DashboardUISettings(
           [void Function(DashboardUISettingsBuilder) updates]) =>
@@ -381,7 +390,8 @@ class _$DashboardUISettings extends DashboardUISettings {
       this.compareCustomEndDate,
       this.offset,
       this.currencyId,
-      this.includeTaxes})
+      this.includeTaxes,
+      this.groupBy})
       : super._() {
     BuiltValueNullFieldError.checkNotNull(
         dateRange, r'DashboardUISettings', 'dateRange');
@@ -403,6 +413,8 @@ class _$DashboardUISettings extends DashboardUISettings {
         currencyId, r'DashboardUISettings', 'currencyId');
     BuiltValueNullFieldError.checkNotNull(
         includeTaxes, r'DashboardUISettings', 'includeTaxes');
+    BuiltValueNullFieldError.checkNotNull(
+        groupBy, r'DashboardUISettings', 'groupBy');
   }
 
   @override
@@ -427,7 +439,8 @@ class _$DashboardUISettings extends DashboardUISettings {
         compareCustomEndDate == other.compareCustomEndDate &&
         offset == other.offset &&
         currencyId == other.currencyId &&
-        includeTaxes == other.includeTaxes;
+        includeTaxes == other.includeTaxes &&
+        groupBy == other.groupBy;
   }
 
   int __hashCode;
@@ -441,16 +454,18 @@ class _$DashboardUISettings extends DashboardUISettings {
                         $jc(
                             $jc(
                                 $jc(
-                                    $jc($jc(0, dateRange.hashCode),
-                                        customStartDate.hashCode),
-                                    customEndDate.hashCode),
-                                enableComparison.hashCode),
-                            compareDateRange.hashCode),
-                        compareCustomStartDate.hashCode),
-                    compareCustomEndDate.hashCode),
-                offset.hashCode),
-            currencyId.hashCode),
-        includeTaxes.hashCode));
+                                    $jc(
+                                        $jc($jc(0, dateRange.hashCode),
+                                            customStartDate.hashCode),
+                                        customEndDate.hashCode),
+                                    enableComparison.hashCode),
+                                compareDateRange.hashCode),
+                            compareCustomStartDate.hashCode),
+                        compareCustomEndDate.hashCode),
+                    offset.hashCode),
+                currencyId.hashCode),
+            includeTaxes.hashCode),
+        groupBy.hashCode));
   }
 
   @override
@@ -465,7 +480,8 @@ class _$DashboardUISettings extends DashboardUISettings {
           ..add('compareCustomEndDate', compareCustomEndDate)
           ..add('offset', offset)
           ..add('currencyId', currencyId)
-          ..add('includeTaxes', includeTaxes))
+          ..add('includeTaxes', includeTaxes)
+          ..add('groupBy', groupBy))
         .toString();
   }
 }
@@ -520,7 +536,13 @@ class DashboardUISettingsBuilder
   bool get includeTaxes => _$this._includeTaxes;
   set includeTaxes(bool includeTaxes) => _$this._includeTaxes = includeTaxes;
 
-  DashboardUISettingsBuilder();
+  String _groupBy;
+  String get groupBy => _$this._groupBy;
+  set groupBy(String groupBy) => _$this._groupBy = groupBy;
+
+  DashboardUISettingsBuilder() {
+    DashboardUISettings._initializeBuilder(this);
+  }
 
   DashboardUISettingsBuilder get _$this {
     final $v = _$v;
@@ -535,6 +557,7 @@ class DashboardUISettingsBuilder
       _offset = $v.offset;
       _currencyId = $v.currencyId;
       _includeTaxes = $v.includeTaxes;
+      _groupBy = $v.groupBy;
       _$v = null;
     }
     return this;
@@ -575,7 +598,8 @@ class DashboardUISettingsBuilder
                 compareCustomEndDate, r'DashboardUISettings', 'compareCustomEndDate'),
             offset: BuiltValueNullFieldError.checkNotNull(offset, r'DashboardUISettings', 'offset'),
             currencyId: BuiltValueNullFieldError.checkNotNull(currencyId, r'DashboardUISettings', 'currencyId'),
-            includeTaxes: BuiltValueNullFieldError.checkNotNull(includeTaxes, r'DashboardUISettings', 'includeTaxes'));
+            includeTaxes: BuiltValueNullFieldError.checkNotNull(includeTaxes, r'DashboardUISettings', 'includeTaxes'),
+            groupBy: BuiltValueNullFieldError.checkNotNull(groupBy, r'DashboardUISettings', 'groupBy'));
     replace(_$result);
     return _$result;
   }

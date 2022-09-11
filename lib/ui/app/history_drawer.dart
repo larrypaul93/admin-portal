@@ -131,7 +131,7 @@ class _HistoryListTileState extends State<HistoryListTile> {
     } else {
       entity = state.getEntityMap(history.entityType)[history.id] as BaseEntity;
 
-      if (entity == null || !entity.isActive) {
+      if (entity == null) {
         return SizedBox();
       }
 
@@ -217,6 +217,7 @@ class _HistoryListTileState extends State<HistoryListTile> {
               store.dispatch(ViewSettings(
                 section: history.id,
                 company: state.company,
+                tabIndex: 0,
               ));
               break;
             default:

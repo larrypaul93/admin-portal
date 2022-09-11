@@ -105,6 +105,7 @@ class _PaymentViewState extends State<PaymentView> {
                       EntityListTile(
                         isFilter: widget.isFilter,
                         entity: client,
+                        subtitle: client.primaryContact.email,
                       ),
                       for (final paymentable in payment.invoicePaymentables)
                         EntityListTile(
@@ -135,7 +136,7 @@ class _PaymentViewState extends State<PaymentView> {
                           title: Text(
                               '${localization.gateway}  ›  ${companyGateway.label}'),
                           onTap: companyGatewayLink != null
-                              ? () => launch(companyGatewayLink)
+                              ? () => launchUrl(Uri.parse(companyGatewayLink))
                               : null,
                           leading: IgnorePointer(
                             child: IconButton(
@@ -174,7 +175,7 @@ class _PaymentViewState extends State<PaymentView> {
                   entity: payment,
                   action1: state.company.enableApplyingPayments
                       ? EntityAction.applyPayment
-                      : EntityAction.emailPayment,
+                      : EntityAction.sendEmail,
                   action1Enabled: state.company.enableApplyingPayments
                       ? payment.applied < payment.amount
                       : true,

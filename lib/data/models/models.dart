@@ -60,22 +60,18 @@ class EntityAction extends EnumClass {
   static const EntityAction cloneToQuote = _$cloneToQuote;
   static const EntityAction cloneToExpense = _$cloneToExpense;
   static const EntityAction cloneToRecurring = _$cloneToRecurring;
+  static const EntityAction cloneToPurchaseOrder = _$cloneToPurchaseOrder;
   static const EntityAction convertToInvoice = _$convertToInvoice;
+  static const EntityAction convertToProject = _$convertToProject;
   static const EntityAction approve = _$approve;
   static const EntityAction applyCredit = _$applyCredit;
   static const EntityAction applyPayment = _$applyPayment;
   static const EntityAction download = _$download;
   static const EntityAction documents = _$documents;
   static const EntityAction bulkDownload = _$bulkDownload;
-  static const EntityAction emailInvoice = _$emailInvoice;
-  static const EntityAction emailQuote = _$emailQuote;
-  static const EntityAction emailCredit = _$emailCredit;
-  static const EntityAction emailPurchaseOrder = _$emailPurchaseOrder;
-  static const EntityAction bulkEmailInvoice = _$bulkEmailInvoice;
-  static const EntityAction bulkEmailQuote = _$bulkEmailQuote;
-  static const EntityAction bulkEmailCredit = _$bulkEmailCredit;
-  static const EntityAction bulkEmailPurchaseOrder = _$bulkEmailPurchaseOrder;
-  static const EntityAction emailPayment = _$emailPayment;
+  static const EntityAction sendEmail = _$sendEmail;
+  static const EntityAction sendNow = _$sendNow;
+  static const EntityAction bulkSendEmail = _$bulkSendEmail;
   static const EntityAction markSent = _$markSent;
   static const EntityAction markPaid = _$markPaid;
   static const EntityAction newClient = _$newClient;
@@ -91,6 +87,7 @@ class EntityAction extends EnumClass {
   static const EntityAction newVendor = _$newVendor;
   static const EntityAction newPurchaseOrder = _$newPurchaseOrder;
   static const EntityAction clientPortal = _$clientPortal;
+  static const EntityAction vendorPortal = _$vendorPortal;
   static const EntityAction newPayment = _$newPayment;
   static const EntityAction settings = _$settings;
   static const EntityAction refundPayment = _$refundPayment;
@@ -111,17 +108,20 @@ class EntityAction extends EnumClass {
   static const EntityAction resendInvite = _$resendInvite;
   static const EntityAction disconnect = _$disconnect;
   static const EntityAction viewInvoice = _$viewInvoice;
+  static const EntityAction viewExpense = _$viewExpense;
   static const EntityAction changeStatus = _$changeStatus;
   static const EntityAction addToInvoice = _$addToInvoice;
   static const EntityAction cancel = _$cancel;
   static const EntityAction save = _$save;
+  static const EntityAction accept = _$accept;
+  static const EntityAction addToInventory = _$addToInventory;
+  static const EntityAction convertToExpense = _$convertToExpense;
+  static const EntityAction merge = _$merge;
 
   @override
   String toString() {
     return toSnakeCase(super.toString());
   }
-
-  bool get isEmail => toString().startsWith('email');
 
   bool get isServerSide => [
         EntityAction.start,
@@ -136,6 +136,7 @@ class EntityAction extends EnumClass {
         EntityAction.delete,
         EntityAction.restore,
         EntityAction.purge,
+        EntityAction.sendNow,
       ].contains(this);
 
   bool get requiresSecondRequest => [
@@ -149,12 +150,12 @@ class EntityAction extends EnumClass {
   String toApiParam() {
     final value = toString();
 
-    if (value.startsWith('email')) {
+    if (this == EntityAction.sendEmail || this == EntityAction.bulkSendEmail) {
       return 'email';
-    }
-
-    if (this == EntityAction.cancelInvoice) {
+    } else if (this == EntityAction.cancelInvoice) {
       return 'cancel';
+    } else if (this == EntityAction.convertToExpense) {
+      return 'expense';
     }
 
     // else if (value == 'approve') {
@@ -162,19 +163,6 @@ class EntityAction extends EnumClass {
     // }
 
     return value;
-  }
-
-  static EntityAction emailEntityType(EntityType entityType) {
-    switch (entityType) {
-      case EntityType.invoice:
-        return EntityAction.emailInvoice;
-      case EntityType.quote:
-        return EntityAction.emailQuote;
-      case EntityType.credit:
-        return EntityAction.emailCredit;
-      default:
-        return null;
-    }
   }
 
   static EntityAction newEntityType(EntityType entityType) {
@@ -201,9 +189,11 @@ class EntityAction extends EnumClass {
         return EntityAction.newTask;
       case EntityType.vendor:
         return EntityAction.newVendor;
+      case EntityType.purchaseOrder:
+        return EntityAction.newPurchaseOrder;
       default:
         print(
-            'ERROR: entityType $entityType not defined in EntityAction.newEntityType');
+            '## ERROR: entityType $entityType not defined in EntityAction.newEntityType');
         return null;
     }
   }

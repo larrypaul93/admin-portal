@@ -226,8 +226,7 @@ class _InvoicePdfViewState extends State<InvoicePdfView> {
                       child: Text(localization.email,
                           style: TextStyle(color: state.headerTextColor)),
                       onPressed: () {
-                        handleEntityAction(invoice,
-                            EntityAction.emailEntityType(invoice.entityType));
+                        handleEntityAction(invoice, EntityAction.sendEmail);
                       },
                     ),
                   if (!invoice.isRecurring)
@@ -238,7 +237,8 @@ class _InvoicePdfViewState extends State<InvoicePdfView> {
                           ? null
                           : () async {
                               if (_response == null) {
-                                launch(invoice.invitationDownloadLink);
+                                launchUrl(
+                                    Uri.parse(invoice.invitationDownloadLink));
                               } else {
                                 final fileName = localization
                                         .lookup('${invoice.entityType}') +

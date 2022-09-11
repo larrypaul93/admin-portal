@@ -2,7 +2,7 @@
 import 'dart:async';
 
 // Flutter imports:
-import 'package:flutter/widgets.dart';
+import 'package:flutter/material.dart';
 
 // Package imports:
 import 'package:built_collection/built_collection.dart';
@@ -10,6 +10,7 @@ import 'package:flutter_redux/flutter_redux.dart';
 import 'package:http/http.dart';
 import 'package:invoiceninja_flutter/data/models/contact_model.dart';
 import 'package:invoiceninja_flutter/redux/document/document_actions.dart';
+import 'package:invoiceninja_flutter/ui/app/forms/client_picker.dart';
 import 'package:invoiceninja_flutter/utils/dialogs.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -207,6 +208,34 @@ class ArchiveClientsFailure implements StopSaving {
   final List<ClientEntity> clients;
 }
 
+class MergeClientsRequest implements StartSaving {
+  MergeClientsRequest({
+    this.completer,
+    this.clientId,
+    this.mergeIntoClientId,
+    this.password,
+    this.idToken,
+  });
+
+  final Completer completer;
+  final String clientId;
+  final String mergeIntoClientId;
+  final String password;
+  final String idToken;
+}
+
+class MergeClientsSuccess implements StopSaving, PersistData {
+  MergeClientsSuccess(this.clientId);
+
+  final String clientId;
+}
+
+class MergeClientsFailure implements StopSaving {
+  MergeClientsFailure(this.clients);
+
+  final List<ClientEntity> clients;
+}
+
 class DeleteClientsRequest implements StartSaving {
   DeleteClientsRequest(this.completer, this.clientIds);
 
@@ -240,7 +269,11 @@ class PurgeClientRequest implements StartSaving {
   final String idToken;
 }
 
-class PurgeClientSuccess implements StopSaving, PersistData {}
+class PurgeClientSuccess implements StopSaving, PersistData {
+  PurgeClientSuccess(this.clientId);
+
+  final String clientId;
+}
 
 class PurgeClientFailure implements StopSaving {
   PurgeClientFailure(this.error);
@@ -332,7 +365,7 @@ void handleClientAction(
       final contact = client.contacts
           .firstWhere((contact) => contact.link.isNotEmpty, orElse: null);
       if (contact != null) {
-        launch(contact.silentLink);
+        launchUrl(Uri.parse(contact.silentLink));
       }
       break;
     case EntityAction.settings:
@@ -396,8 +429,8 @@ void handleClientAction(
     case EntityAction.newPayment:
       createEntity(
         context: context,
-        entity:
-            PaymentEntity(state: state).rebuild((b) => b.clientId = client.id),
+        entity: PaymentEntity(state: state, client: client)
+            .rebuild((b) => b.clientId = client.id),
       );
       break;
     case EntityAction.newProject:
@@ -490,6 +523,14 @@ void handleClientAction(
         ),
       );
       break;
+    case EntityAction.merge:
+      showDialog<void>(
+        context: context,
+        builder: (context) => _MergClientPicker(
+          client: client,
+        ),
+      );
+      break;
     default:
       print('## Error: action $action not handled in client_actions');
   }
@@ -539,4 +580,69 @@ class UpdateClientTab implements PersistUI {
   UpdateClientTab({this.tabIndex});
 
   final int tabIndex;
+}
+
+class _MergClientPicker extends StatefulWidget {
+  const _MergClientPicker({
+    Key key,
+    @required this.client,
+  }) : super(key: key);
+
+  final ClientEntity client;
+
+  @override
+  State<_MergClientPicker> createState() => __MergClientPickerState();
+}
+
+class __MergClientPickerState extends State<_MergClientPicker> {
+  String _mergeIntoClientId;
+
+  @override
+  Widget build(BuildContext context) {
+    final localization = AppLocalization.of(context);
+    final store = StoreProvider.of<AppState>(context);
+    final state = store.state;
+
+    return AlertDialog(
+      title: Text(localization.mergeInto),
+      content: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          ClientPicker(
+            clientId: _mergeIntoClientId,
+            clientState: state.clientState,
+            excludeIds: [widget.client.id],
+            onSelected: (client) =>
+                setState(() => _mergeIntoClientId = client?.id),
+          ),
+        ],
+      ),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.of(context).pop(),
+          child: Text(localization.close),
+        ),
+        TextButton(
+          onPressed: () {
+            passwordCallback(
+                context: context,
+                callback: (password, idToken) {
+                  store.dispatch(MergeClientsRequest(
+                    clientId: widget.client.id,
+                    idToken: idToken,
+                    password: password,
+                    mergeIntoClientId: _mergeIntoClientId,
+                    completer: snackBarCompleter<Null>(
+                      context,
+                      localization.mergedClients,
+                    ),
+                  ));
+                  Navigator.of(context).pop();
+                });
+          },
+          child: Text(localization.merge),
+        ),
+      ],
+    );
+  }
 }

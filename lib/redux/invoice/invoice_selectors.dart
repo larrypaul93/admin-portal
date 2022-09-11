@@ -9,6 +9,10 @@ import 'package:invoiceninja_flutter/data/models/models.dart';
 import 'package:invoiceninja_flutter/redux/app/app_state.dart';
 import 'package:invoiceninja_flutter/redux/ui/list_ui_state.dart';
 
+var memoizedInvoiceQuoteSelector = memo2(
+    (InvoiceEntity invoice, BuiltMap<String, InvoiceEntity> quoteMap) =>
+        invoiceQuoteSelector(invoice, quoteMap));
+
 InvoiceEntity invoiceQuoteSelector(
     InvoiceEntity invoice, BuiltMap<String, InvoiceEntity> quoteMap) {
   InvoiceEntity invoiceQuote;
@@ -22,8 +26,9 @@ InvoiceEntity invoiceQuoteSelector(
 
 ContactEntity invoiceContactSelector(
     InvoiceEntity invoice, ClientEntity client) {
-  var contactIds =
-      invoice.invitations.map((invitation) => invitation.contactId).toList();
+  var contactIds = invoice.invitations
+      .map((invitation) => invitation.clientContactId)
+      .toList();
   if (contactIds.contains(client.primaryContact.id)) {
     contactIds = [client.primaryContact.id];
   }
@@ -31,23 +36,29 @@ ContactEntity invoiceContactSelector(
       .firstWhere((contact) => contactIds.contains(contact.id), orElse: null);
 }
 
-var memoizedInvoiceQuoteSelector = memo2(
-    (InvoiceEntity invoice, BuiltMap<String, InvoiceEntity> quoteMap) =>
-        invoiceQuoteSelector(invoice, quoteMap));
 var memoizedServiceReportList = memo2(
     (BuiltMap<String, ServiceReportEntity> serviceMap, ClientEntity client) =>
         serviceReportList(serviceMap, client));
 
-var memoizedDropdownInvoiceList = memo7(
+var memoizedDropdownInvoiceList = memo8(
     (BuiltMap<String, InvoiceEntity> invoiceMap,
             BuiltMap<String, ClientEntity> clientMap,
+            BuiltMap<String, VendorEntity> vendorMap,
             BuiltList<String> invoiceList,
             String clientId,
             BuiltMap<String, UserEntity> userMap,
             List<String> excludedIds,
             String recurringPrefix) =>
-        dropdownInvoiceSelector(invoiceMap, clientMap, invoiceList, clientId,
-            userMap, excludedIds, recurringPrefix));
+        dropdownInvoiceSelector(
+          invoiceMap,
+          clientMap,
+          vendorMap,
+          invoiceList,
+          clientId,
+          userMap,
+          excludedIds,
+          recurringPrefix,
+        ));
 
 List<String> serviceReportList(
     BuiltMap<String, ServiceReportEntity> serviceMap, ClientEntity client) {
@@ -67,6 +78,7 @@ List<String> serviceReportList(
 List<String> dropdownInvoiceSelector(
   BuiltMap<String, InvoiceEntity> invoiceMap,
   BuiltMap<String, ClientEntity> clientMap,
+  BuiltMap<String, VendorEntity> vendorMap,
   BuiltList<String> invoiceList,
   String clientId,
   BuiltMap<String, UserEntity> userMap,
@@ -98,6 +110,7 @@ List<String> dropdownInvoiceSelector(
     return invoiceA.compareTo(
       invoice: invoiceB,
       clientMap: clientMap,
+      vendorMap: vendorMap,
       sortAscending: false,
       sortField: InvoiceFields.number,
       recurringPrefix: recurringPrefix,
@@ -108,22 +121,33 @@ List<String> dropdownInvoiceSelector(
   return list;
 }
 
-var memoizedFilteredInvoiceList = memo8((SelectionState selectionState,
+var memoizedFilteredInvoiceList = memo9((SelectionState selectionState,
         BuiltMap<String, InvoiceEntity> invoiceMap,
         BuiltList<String> invoiceList,
         BuiltMap<String, ClientEntity> clientMap,
+        BuiltMap<String, VendorEntity> vendorMap,
         BuiltMap<String, PaymentEntity> paymentMap,
         ListUIState invoiceListState,
         BuiltMap<String, UserEntity> userMap,
         String recurringPrefix) =>
-    filteredInvoicesSelector(selectionState, invoiceMap, invoiceList, clientMap,
-        paymentMap, invoiceListState, userMap, recurringPrefix));
+    filteredInvoicesSelector(
+      selectionState,
+      invoiceMap,
+      invoiceList,
+      clientMap,
+      vendorMap,
+      paymentMap,
+      invoiceListState,
+      userMap,
+      recurringPrefix,
+    ));
 
 List<String> filteredInvoicesSelector(
   SelectionState selectionState,
   BuiltMap<String, InvoiceEntity> invoiceMap,
   BuiltList<String> invoiceList,
   BuiltMap<String, ClientEntity> clientMap,
+  BuiltMap<String, VendorEntity> vendorMap,
   BuiltMap<String, PaymentEntity> paymentMap,
   ListUIState invoiceListState,
   BuiltMap<String, UserEntity> userMap,
@@ -226,6 +250,7 @@ List<String> filteredInvoicesSelector(
       sortField: invoiceListState.sortField,
       sortAscending: invoiceListState.sortAscending,
       clientMap: clientMap,
+      vendorMap: vendorMap,
       userMap: userMap,
       recurringPrefix: recurringPrefix,
     );

@@ -117,6 +117,7 @@ Reducer<String> selectedIdReducer = combineReducers([
 ]);
 
 final editingReducer = combineReducers<InvoiceEntity>([
+  TypedReducer<InvoiceEntity, LoadRecurringInvoiceSuccess>(_updateEditing),
   TypedReducer<InvoiceEntity, SaveRecurringInvoiceSuccess>(_updateEditing),
   TypedReducer<InvoiceEntity, AddRecurringInvoiceSuccess>(_updateEditing),
   TypedReducer<InvoiceEntity, EditRecurringInvoice>(_updateEditing),
@@ -146,7 +147,7 @@ final editingReducer = combineReducers<InvoiceEntity>([
       ..isChanged = true
       ..clientId = client?.id ?? ''
       ..invitations.replace((client?.emailContacts ?? <ContactEntity>[])
-          .map((contact) => InvitationEntity(contactId: contact.id))
+          .map((contact) => InvitationEntity(clientContactId: contact.id))
           .toList()));
   }),
   TypedReducer<InvoiceEntity, RestoreRecurringInvoicesSuccess>(
@@ -173,8 +174,8 @@ final editingReducer = combineReducers<InvoiceEntity>([
   TypedReducer<InvoiceEntity, AddRecurringInvoiceContact>(
       (recurringInvoice, action) {
     return recurringInvoice.rebuild((b) => b
-      ..invitations.add(
-          action.invitation ?? InvitationEntity(contactId: action.contact.id)));
+      ..invitations.add(action.invitation ??
+          InvitationEntity(clientContactId: action.contact.id)));
   }),
   TypedReducer<InvoiceEntity, RemoveRecurringInvoiceContact>(
       (recurringInvoice, action) {
@@ -377,6 +378,8 @@ final recurringInvoicesReducer = combineReducers<RecurringInvoiceState>([
       _deleteRecurringInvoiceSuccess),
   TypedReducer<RecurringInvoiceState, RestoreRecurringInvoicesSuccess>(
       _restoreRecurringInvoiceSuccess),
+  TypedReducer<RecurringInvoiceState, SendNowRecurringInvoicesSuccess>(
+      _sendNowRecurringInvoiceSuccess),
 ]);
 
 RecurringInvoiceState _archiveRecurringInvoiceSuccess(
@@ -409,6 +412,16 @@ RecurringInvoiceState _emailRecurringInvoiceSuccess(
 RecurringInvoiceState _restoreRecurringInvoiceSuccess(
     RecurringInvoiceState recurringInvoiceState,
     RestoreRecurringInvoicesSuccess action) {
+  return recurringInvoiceState.rebuild((b) {
+    for (final recurringInvoice in action.recurringInvoices) {
+      b.map[recurringInvoice.id] = recurringInvoice;
+    }
+  });
+}
+
+RecurringInvoiceState _sendNowRecurringInvoiceSuccess(
+    RecurringInvoiceState recurringInvoiceState,
+    SendNowRecurringInvoicesSuccess action) {
   return recurringInvoiceState.rebuild((b) {
     for (final recurringInvoice in action.recurringInvoices) {
       b.map[recurringInvoice.id] = recurringInvoice;

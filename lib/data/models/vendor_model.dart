@@ -58,6 +58,7 @@ class VendorFields {
   static const String state = 'state';
   static const String postalCode = 'postal_code';
   static const String countryId = 'country_id';
+  static const String country = 'country';
   static const String phone = 'phone';
   static const String privateNotes = 'private_notes';
   static const String publicNotes = 'public_notes';
@@ -74,10 +75,12 @@ class VendorFields {
   static const String isDeleted = 'is_deleted';
   static const String documents = 'documents';
   static const String contacts = 'contacts';
+  static const String cityStatePostal = 'city_state_postal';
+  static const String postalCityState = 'postal_city_state';
 }
 
 abstract class VendorEntity extends Object
-    with BaseEntity, SelectableEntity
+    with BaseEntity, SelectableEntity, HasActivities
     implements Built<VendorEntity, VendorEntityBuilder> {
   factory VendorEntity({String id, AppState state, UserEntity user}) {
     return _$VendorEntity._(
@@ -102,6 +105,7 @@ abstract class VendorEntity extends Object
       customValue2: '',
       customValue3: '',
       customValue4: '',
+      activities: BuiltList<ActivityEntity>(),
       contacts: BuiltList<VendorContactEntity>(
         <VendorContactEntity>[
           VendorContactEntity().rebuild((b) => b..isPrimary = true)
@@ -187,6 +191,9 @@ abstract class VendorEntity extends Object
 
   BuiltList<VendorContactEntity> get contacts;
 
+  @override
+  BuiltList<ActivityEntity> get activities;
+
   BuiltList<DocumentEntity> get documents;
 
   @override
@@ -201,6 +208,12 @@ abstract class VendorEntity extends Object
     if (!isDeleted && !multiselect) {
       if (includeEdit && userCompany.canEditEntity(this)) {
         actions.add(EntityAction.edit);
+      }
+
+      actions.add(EntityAction.vendorPortal);
+
+      if (userCompany.canCreate(EntityType.purchaseOrder)) {
+        actions.add(EntityAction.newPurchaseOrder);
       }
 
       if (userCompany.canCreate(EntityType.expense)) {
@@ -340,19 +353,17 @@ abstract class VendorEntity extends Object
   }
 
   bool matchesNameOrEmail(String filter) {
-    filter = filter.toLowerCase();
-
-    if (name.toLowerCase().contains(filter)) {
+    if (matchesString(haystack: name, needle: filter)) {
       return true;
     }
 
     for (var i = 0; i < contacts.length; i++) {
       final contact = contacts[i];
-      if (contact.fullName.toLowerCase().contains(filter)) {
+      if (matchesString(haystack: contact.fullName, needle: filter)) {
         return true;
       }
 
-      if (contact.email.toLowerCase().contains(filter)) {
+      if (matchesString(haystack: contact.email, needle: filter)) {
         return true;
       }
     }
@@ -438,6 +449,12 @@ abstract class VendorEntity extends Object
     }
   }
 
+  List<VendorContactEntity> get emailContacts {
+    //final list = contacts.where((contact) => contact.sendEmail).toList();
+    final list = contacts.where((contact) => true).toList();
+    return list.isEmpty ? [primaryContact] : list;
+  }
+
   VendorContactEntity get primaryContact =>
       contacts.firstWhere((contact) => contact.isPrimary,
           orElse: () => VendorContactEntity());
@@ -446,7 +463,8 @@ abstract class VendorEntity extends Object
 
   bool get hasUser => assignedUserId != null && assignedUserId.isNotEmpty;
 
-  static Serializer<VendorEntity> get serializer => _$vendorEntitySerializer;
+  bool get hasEmailAddress =>
+      contacts.where((contact) => contact.email?.isNotEmpty).isNotEmpty;
 
   bool get hasNameSet {
     final contact = contacts.first;
@@ -454,6 +472,14 @@ abstract class VendorEntity extends Object
         contact.fullName.isNotEmpty ||
         contact.email.isNotEmpty;
   }
+
+  VendorContactEntity getContact(String contactId) => contacts
+      .firstWhere((contact) => contact.id == contactId, orElse: () => null);
+
+  static void _initializeBuilder(VendorEntityBuilder builder) =>
+      builder..activities.replace(BuiltList<ActivityEntity>());
+
+  static Serializer<VendorEntity> get serializer => _$vendorEntitySerializer;
 }
 
 abstract class VendorContactEntity extends Object
@@ -474,6 +500,11 @@ abstract class VendorContactEntity extends Object
       createdUserId: '',
       createdAt: 0,
       assignedUserId: '',
+      customValue1: '',
+      customValue2: '',
+      customValue3: '',
+      customValue4: '',
+      link: '',
     );
   }
 
@@ -501,6 +532,22 @@ abstract class VendorContactEntity extends Object
 
   String get phone;
 
+  @BuiltValueField(wireName: 'custom_value1')
+  String get customValue1;
+
+  @BuiltValueField(wireName: 'custom_value2')
+  String get customValue2;
+
+  @BuiltValueField(wireName: 'custom_value3')
+  String get customValue3;
+
+  @BuiltValueField(wireName: 'custom_value4')
+  String get customValue4;
+
+  String get link;
+
+  String get silentLink => '$link?silent=true';
+
   String get fullName {
     return (firstName + ' ' + lastName).trim();
   }
@@ -511,6 +558,20 @@ abstract class VendorContactEntity extends Object
     } else {
       return email;
     }
+  }
+
+  String get fullNameWithEmail {
+    String name = fullName;
+
+    if (email.isNotEmpty) {
+      if (name.isEmpty) {
+        name += email;
+      } else {
+        name += ' • $email';
+      }
+    }
+
+    return name;
   }
 
   @override
@@ -550,6 +611,13 @@ abstract class VendorContactEntity extends Object
 
   @override
   FormatNumberType get listDisplayAmountType => FormatNumberType.money;
+
+  static void _initializeBuilder(VendorContactEntityBuilder builder) => builder
+    ..link = ''
+    ..customValue1 = ''
+    ..customValue2 = ''
+    ..customValue3 = ''
+    ..customValue4 = '';
 
   static Serializer<VendorContactEntity> get serializer =>
       _$vendorContactEntitySerializer;

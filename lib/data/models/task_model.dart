@@ -442,7 +442,8 @@ abstract class TaskEntity extends Object
       return null;
     }
 
-    return last[1];
+    // TODO remove this, it shouldn't be needed
+    return last[1].round();
   }
 
   List<TaskTime> getTaskTimes({bool sort = true}) {
@@ -769,6 +770,8 @@ abstract class TaskEntity extends Object
       } else if (status.id == kTaskStatusInvoiced && isInvoiced) {
         return true;
       } else if (status.id == kTaskStatusLogged && isStopped && !isInvoiced) {
+        return true;
+      } else if (status.id == statusId) {
         return true;
       }
     }

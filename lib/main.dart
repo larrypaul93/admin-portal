@@ -11,8 +11,8 @@ import 'package:redux/redux.dart';
 import 'package:redux_logging/redux_logging.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-//import 'package:invoiceninja_flutter/utils/platforms.dart';
-//import 'package:bitsdojo_window/bitsdojo_window.dart';
+import 'package:invoiceninja_flutter/utils/platforms.dart';
+// import 'package:bitsdojo_window/bitsdojo_window.dart';
 
 // Project imports:
 import 'package:invoiceninja_flutter/.env.dart';
@@ -58,12 +58,30 @@ import 'package:invoiceninja_flutter/utils/web_stub.dart'
 
 // STARTER: import - do not remove comment
 import 'package:invoiceninja_flutter/redux/purchase_order/purchase_order_middleware.dart';
+import 'package:window_manager/window_manager.dart';
 import 'package:invoiceninja_flutter/redux/category/category_middleware.dart';
 
 import 'package:invoiceninja_flutter/redux/contact/contact_middleware.dart';
 
 void main({bool isTesting = false}) async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  if (isDesktopOS()) {
+    await windowManager.ensureInitialized();
+
+    final prefs = await SharedPreferences.getInstance();
+    windowManager.waitUntilReadyToShow(
+        WindowOptions(
+          center: true,
+          size: Size(
+            prefs.getDouble(kSharedPrefWidth) ?? 800,
+            prefs.getDouble(kSharedPrefHeight) ?? 600,
+          ),
+        ), () async {
+      await windowManager.show();
+      await windowManager.focus();
+    });
+  }
 
   final store = Store<AppState>(appReducer,
       initialState: await _initialState(isTesting),
@@ -157,7 +175,7 @@ Future<AppState> _initialState(bool isTesting) async {
   final prefs = await SharedPreferences.getInstance();
   final prefString = prefs?.getString(kSharedPrefs);
 
-  final url = WebUtils.browserUrl ?? prefs.getString(kSharedPrefUrl) ?? '';
+  final url = WebUtils.apiUrl ?? prefs.getString(kSharedPrefUrl) ?? '';
   if (!kReleaseMode) {
     //url = kAppStagingUrl;
     //url = kAppProductionUrl;

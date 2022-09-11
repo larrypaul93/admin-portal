@@ -22,7 +22,13 @@ import 'package:invoiceninja_flutter/utils/web_stub.dart'
 bool supportsInlineBrowser() => !isDesktopOS();
 
 // TODO remove this function
-bool supportsGoogleOAuth() => !isDesktopOS();
+bool supportsGoogleOAuth() => kIsWeb || isMobileOS();
+
+// TODO remove this function
+bool supportsAppleOAuth() => kIsWeb || isApple();
+
+// TODO remove this function
+bool supportsMicrosoftOAuth() => kIsWeb;
 
 bool isDesktopOS() => isMacOS() || isWindows() || isLinux();
 

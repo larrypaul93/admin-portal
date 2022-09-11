@@ -14,8 +14,9 @@ ClientEntity quoteClientSelector(
 }
 
 ContactEntity quoteContactSelector(InvoiceEntity quote, ClientEntity client) {
-  var contactIds =
-      quote.invitations.map((invitation) => invitation.contactId).toList();
+  var contactIds = quote.invitations
+      .map((invitation) => invitation.clientContactId)
+      .toList();
   if (contactIds.contains(client.primaryContact.id)) {
     contactIds = [client.primaryContact.id];
   }
@@ -23,20 +24,22 @@ ContactEntity quoteContactSelector(InvoiceEntity quote, ClientEntity client) {
       .firstWhere((contact) => contactIds.contains(contact.id), orElse: null);
 }
 
-var memoizedFilteredQuoteList = memo6((SelectionState selectionState,
+var memoizedFilteredQuoteList = memo7((SelectionState selectionState,
         BuiltMap<String, InvoiceEntity> quoteMap,
         BuiltList<String> quoteList,
         BuiltMap<String, ClientEntity> clientMap,
+        BuiltMap<String, VendorEntity> vendorMap,
         ListUIState quoteListState,
         BuiltMap<String, UserEntity> userMap) =>
     filteredQuotesSelector(selectionState, quoteMap, quoteList, clientMap,
-        quoteListState, userMap));
+        vendorMap, quoteListState, userMap));
 
 List<String> filteredQuotesSelector(
     SelectionState selectionState,
     BuiltMap<String, InvoiceEntity> quoteMap,
     BuiltList<String> quoteList,
     BuiltMap<String, ClientEntity> clientMap,
+    BuiltMap<String, VendorEntity> vendorMap,
     ListUIState quoteListState,
     BuiltMap<String, UserEntity> userMap) {
   final filterEntityId = selectionState.filterEntityId;
@@ -105,6 +108,7 @@ List<String> filteredQuotesSelector(
         sortField: quoteListState.sortField,
         sortAscending: quoteListState.sortAscending,
         clientMap: clientMap,
+        vendorMap: vendorMap,
         userMap: userMap);
   });
 

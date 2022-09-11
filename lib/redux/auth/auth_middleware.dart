@@ -169,12 +169,15 @@ Middleware<AppState> _createOAuthLoginRequest(AuthRepository repository) {
 
     repository
         .oauthLogin(
-            idToken: action.idToken,
-            accessToken: action.accessToken,
-            url: action.url,
-            secret: action.secret,
-            provider: action.provider,
-            platform: action.platform)
+      idToken: action.idToken,
+      accessToken: action.accessToken,
+      url: action.url,
+      secret: action.secret,
+      provider: action.provider,
+      platform: action.platform,
+      authCode: action.authCode,
+      email: action.email,
+    )
         .then((data) {
       _saveAuthLocal(action.url);
 
@@ -204,10 +207,12 @@ Middleware<AppState> _createOAuthSignUpRequest(AuthRepository repository) {
 
     repository
         .oauthSignUp(
-            accessToken: action.accessToken,
-            idToken: action.idToken,
-            provider: action.provider,
-            referralCode: state.authState.referralCode)
+      url: action.url,
+      accessToken: action.accessToken,
+      idToken: action.idToken,
+      provider: action.provider,
+      referralCode: state.authState.referralCode,
+    )
         .then((data) {
       _saveAuthLocal(kAppProductionUrl);
 
@@ -436,13 +441,14 @@ Middleware<AppState> _purgeData(AuthRepository repository) {
       NextDispatcher next) async {
     final action = dynamicAction as PurgeDataRequest;
     final state = store.state;
+    final company = state.company;
 
     repository
         .purgeData(
             credentials: state.credentials,
             password: action.password,
             idToken: action.idToken,
-            companyId: state.company.id)
+            companyId: company.id)
         .then((dynamic value) {
       store.dispatch(PurgeDataSuccess());
       store.dispatch(RefreshData(

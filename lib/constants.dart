@@ -4,7 +4,7 @@ class Constants {
 }
 
 // TODO remove version once #46609 is fixed
-const String kClientVersion = '5.0.85';
+const String kClientVersion = '5.0.92';
 const String kMinServerVersion = '5.0.4';
 
 const String kAppName = 'Invoice Ninja';
@@ -25,16 +25,20 @@ const String kSourceCodeFrontend =
     'https://github.com/invoiceninja/admin-portal';
 const String kSourceCodeFrontendSDK = 'https://pub.dev/packages/invoiceninja';
 
+const String kPlayStoreAppId = 'com.invoiceninja.app';
+const String kAppStoreAppId = 'id1503970375';
+
+const String kMicrosoftAppStoreId = '9n3f2bbcfdr6';
 const String kAppleStoreUrl =
-    'https://apps.apple.com/us/app/invoice-ninja-v5/id1503970375';
+    'https://apps.apple.com/us/app/invoice-ninja-v5/$kAppStoreAppId';
 const String kGoogleStoreUrl =
-    'https://play.google.com/store/apps/details?id=com.invoiceninja.app';
+    'https://play.google.com/store/apps/details?id=$kPlayStoreAppId';
 const String kGoogleFDroidUrl =
     'https://f-droid.org/packages/com.invoiceninja.app';
 const String kMacOSUrl = 'https://apps.apple.com/app/id1503970375';
 const String kLinuxUrl = 'https://snapcraft.io/invoiceninja';
 const String kWindowsUrl =
-    'https://www.microsoft.com/en-us/p/invoice-ninja/9n3f2bbcfdr6';
+    'https://www.microsoft.com/en-us/p/invoice-ninja/$kMicrosoftAppStoreId';
 
 const String kSlackUrl = 'http://slack.invoiceninja.com';
 const String kGitHubUrl = 'https://github.com/invoiceninja';
@@ -87,19 +91,31 @@ enum AppEnvironment {
 const String kSharedPrefs = 'shared_prefs';
 const String kSharedPrefUrl = 'url';
 const String kSharedPrefToken = 'checksum';
+const String kSharedPrefWidth = 'width';
+const String kSharedPrefHeight = 'height';
 
-const String kProductPlanPro = 'v1_pro_yearly';
-const String kProductPlanEnterprise2 = 'v1_enterprise_2_yearly';
-const String kProductPlanEnterprise5 = 'v1_enterprise_5_yearly';
-const String kProductPlanEnterprise10 = 'v1_enterprise_10_yearly';
-const String kProductPlanEnterprise20 = 'v1_enterprise_20_yearly';
+const String kProductProPlanMonth = 'pro_plan';
+const String kProductEnterprisePlanMonth_2 = 'enterprise_plan';
+const String kProductEnterprisePlanMonth_5 = 'enterprise_plan_5';
+const String kProductEnterprisePlanMonth_10 = 'enterprise_plan_10';
+const String kProductEnterprisePlanMonth_20 = 'enterprise_plan_20';
+const String kProductProPlanYear = 'pro_plan_annual';
+const String kProductEnterprisePlanYear_2 = 'enterprise_plan_annual';
+const String kProductEnterprisePlanYear_5 = 'enterprise_plan_annual_5';
+const String kProductEnterprisePlanYear_10 = 'enterprise_plan_annual_10';
+const String kProductEnterprisePlanYear_20 = 'enterprise_plan_annual_20';
 
 const kProductPlans = [
-  kProductPlanPro,
-  kProductPlanEnterprise2,
-  kProductPlanEnterprise5,
-  kProductPlanEnterprise10,
-  kProductPlanEnterprise20,
+  kProductProPlanMonth,
+  kProductEnterprisePlanMonth_2,
+  kProductEnterprisePlanMonth_5,
+  kProductEnterprisePlanMonth_10,
+  kProductEnterprisePlanMonth_20,
+  kProductProPlanYear,
+  kProductEnterprisePlanYear_2,
+  kProductEnterprisePlanYear_5,
+  kProductEnterprisePlanYear_10,
+  kProductEnterprisePlanYear_20,
 ];
 
 const double kMobileLayoutWidth = 700;
@@ -152,7 +168,7 @@ const int kMaxNumberOfHistory = 50;
 const int kMaxPostSeconds = 60;
 const int kMaxRawPostSeconds = 300;
 const int kMaxEntitiesPerBulkAction = 100;
-const int kHostedRecordsPerPage = 20000;
+const int kHostedRecordsPerPage = 10000;
 const int kSelfhostedRecordsPerPage = 5000;
 const int kMillisecondsToTimerRefreshData = 1000 * 60 * 5; // 5 minutes
 const int kMillisecondsToRefreshData = 1000 * 60 * 15; // 15 minutes
@@ -171,6 +187,7 @@ const String kCurrencyEuro = '3';
 
 const String kCountryUnitedStates = '840';
 const String kCountryCanada = '124';
+const String kCountrySwitzerland = '756';
 
 const String kInvoiceStatusViewed = '-3';
 const String kInvoiceStatusUnpaid = '-2';
@@ -252,12 +269,14 @@ const kCreditStatuses = {
 const String kPurchaseOrderStatusDraft = '1';
 const String kPurchaseOrderStatusSent = '2';
 const String kPurchaseOrderStatusAccepted = '3';
-const String kPurchaseOrderStatusCancelled = '4';
+const String kPurchaseOrderStatusReceived = '4';
+const String kPurchaseOrderStatusCancelled = '5';
 
 const kPurchaseOrderStatuses = {
   kPurchaseOrderStatusDraft: 'draft',
   kPurchaseOrderStatusSent: 'sent',
   kPurchaseOrderStatusAccepted: 'accepted',
+  kPurchaseOrderStatusReceived: 'received',
   kPurchaseOrderStatusCancelled: 'cancelled',
 };
 
@@ -508,6 +527,8 @@ const String kReportInvoiceItem = 'invoice_item';
 const String kReportQuoteItem = 'quote_item';
 const String kReportRecurringExpense = 'recurring_expense';
 const String kReportRecurringInvoice = 'recurring_invoice';
+const String kReportPurchaseOrder = 'purchase_order';
+const String kReportVendor = 'vendor';
 
 const String kPdfFieldsClientDetails = 'client_details';
 const String kPdfFieldsCompanyDetails = 'company_details';
@@ -516,6 +537,8 @@ const String kPdfFieldsInvoiceDetails = 'invoice_details';
 const String kPdfFieldsQuoteDetails = 'quote_details';
 const String kPdfFieldsCreditDetails = 'credit_details';
 const String kPdfFieldsProductColumns = 'product_columns';
+const String kPdfFieldsVendorDetails = 'vendor_details';
+const String kPdfFieldsPurchaseOrderDetails = 'purchase_order_details';
 const String kPdfFieldsTaskColumns = 'task_columns';
 const String kPdfFieldsTotalFields = 'total_columns';
 
@@ -753,6 +776,7 @@ const kPageSizes = [
 const String kDrawerKey = 'drawer_key';
 const String kSelectCompanyDropdownKey = 'select_company_dropdown_key';
 
+// https://github.com/invoiceninja/invoiceninja/blob/v5-develop/app/Models/Activity.php
 const String kActivityCreateClient = '1';
 const String kActivityArchiveClient = '2';
 const String kActivityDeleteClient = '3';
@@ -836,3 +860,11 @@ const String kActivityUpdateRecurringExpense = '121';
 const String kActivityArchiveRecurringExpense = '122';
 const String kActivityDeleteRecurringExpense = '123';
 const String kActivityRestoreRecurringExpense = '124';
+const String kActivityCreatePurchaseOrder = '130';
+const String kActivityUpdatePurchaseOrder = '131';
+const String kActivityArchivePurchaseOrder = '132';
+const String kActivityDeletePurchaseOrder = '133';
+const String kActivityRestorePurchaseOrder = '134';
+const String kActivityEmailPurchaseOrder = '135';
+const String kActivityViewPurchaseOrder = '136';
+const String kActivityAcceptPurchaseOrder = '137';

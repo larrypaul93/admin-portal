@@ -133,6 +133,20 @@ class _UserDetailsState extends State<UserDetails>
     }
   }
 
+  void _onSavePressed(BuildContext context) {
+    final bool isValid = _formKey.currentState.validate();
+
+    setState(() {
+      autoValidate = !isValid ?? false;
+    });
+
+    if (!isValid) {
+      return;
+    }
+
+    widget.viewModel.onSavePressed(context);
+  }
+
   @override
   Widget build(BuildContext context) {
     final localization = AppLocalization.of(context);
@@ -142,10 +156,13 @@ class _UserDetailsState extends State<UserDetails>
 
     final googleButton = Expanded(
       child: OutlinedButton(
-        child: Text((state.user.isConnectedToGoogle
-                ? localization.disconnectGoogle
-                : localization.connectGoogle)
-            .toUpperCase()),
+        child: Text(
+          (state.user.isConnectedToGoogle
+                  ? localization.disconnectGoogle
+                  : localization.connectGoogle)
+              .toUpperCase(),
+          textAlign: TextAlign.center,
+        ),
         onPressed: state.user.isConnectedToEmail
             ? null
             : () {
@@ -167,10 +184,13 @@ class _UserDetailsState extends State<UserDetails>
 
     final gmailButton = Expanded(
       child: OutlinedButton(
-        child: Text((user.isConnectedToEmail
-                ? localization.disconnectGmail
-                : localization.connectGmail)
-            .toUpperCase()),
+        child: Text(
+          (user.isConnectedToEmail
+                  ? localization.disconnectGmail
+                  : localization.connectGmail)
+              .toUpperCase(),
+          textAlign: TextAlign.center,
+        ),
         onPressed: !state.user.isConnectedToGoogle
             ? null
             : () async {
@@ -184,7 +204,7 @@ class _UserDetailsState extends State<UserDetails>
                 if (state.user.isConnectedToEmail) {
                   viewModel.onDisconnectGmailPressed(context);
                 } else {
-                  launch('$kAppProductionUrl/auth/google');
+                  launchUrl(Uri.parse('$kAppProductionUrl/auth/google'));
                 }
               },
       ),
@@ -192,10 +212,13 @@ class _UserDetailsState extends State<UserDetails>
 
     final microsoftButton = Expanded(
       child: OutlinedButton(
-        child: Text((state.user.isConnectedToMicrosoft
-                ? localization.disconnectMicrosoft
-                : localization.connectMicrosoft)
-            .toUpperCase()),
+        child: Text(
+          (state.user.isConnectedToMicrosoft
+                  ? localization.disconnectMicrosoft
+                  : localization.connectMicrosoft)
+              .toUpperCase(),
+          textAlign: TextAlign.center,
+        ),
         onPressed: state.user.isConnectedToEmail
             ? null
             : () {
@@ -217,10 +240,13 @@ class _UserDetailsState extends State<UserDetails>
 
     final office365Button = Expanded(
       child: OutlinedButton(
-        child: Text((user.isConnectedToEmail
-                ? localization.disconnectEmail
-                : localization.connectEmail)
-            .toUpperCase()),
+        child: Text(
+          (user.isConnectedToEmail
+                  ? localization.disconnectEmail
+                  : localization.connectEmail)
+              .toUpperCase(),
+          textAlign: TextAlign.center,
+        ),
         onPressed: !state.user.isConnectedToMicrosoft
             ? null
             : () async {
@@ -234,27 +260,41 @@ class _UserDetailsState extends State<UserDetails>
                 if (state.user.isConnectedToEmail) {
                   viewModel.onDisconnectMicrosoftEmailPressed(context);
                 } else {
-                  launch('$kAppProductionUrl/auth/microsoft');
+                  launchUrl(
+                      Uri.parse('${state.account.defaultUrl}/auth/microsoft'));
                 }
               },
       ),
     );
 
+    final appleButton = Expanded(
+      child: OutlinedButton(
+        child: Text(
+          (state.user.isConnectedToApple
+                  ? localization.disconnectApple
+                  : localization.connectApple)
+              .toUpperCase(),
+          textAlign: TextAlign.center,
+        ),
+        onPressed: () {
+          if (state.settingsUIState.isChanged) {
+            showMessageDialog(
+                context: context, message: localization.errorUnsavedChanges);
+            return;
+          }
+
+          if (state.user.isConnectedToApple) {
+            viewModel.onDisconnectApplePressed(context);
+          } else {
+            // do nothing
+          }
+        },
+      ),
+    );
+
     return EditScaffold(
       title: localization.userDetails,
-      onSavePressed: (context) {
-        final bool isValid = _formKey.currentState.validate();
-
-        setState(() {
-          autoValidate = !isValid ?? false;
-        });
-
-        if (!isValid) {
-          return;
-        }
-
-        viewModel.onSavePressed(context);
-      },
+      onSavePressed: _onSavePressed,
       appBarBottom: TabBar(
         controller: _controller,
         tabs: [
@@ -281,7 +321,7 @@ class _UserDetailsState extends State<UserDetails>
                       ? localization.pleaseEnterAFirstName
                       : null,
                   autovalidate: autoValidate,
-                  onSavePressed: viewModel.onSavePressed,
+                  onSavePressed: _onSavePressed,
                   keyboardType: TextInputType.name,
                 ),
                 DecoratedFormField(
@@ -291,7 +331,7 @@ class _UserDetailsState extends State<UserDetails>
                       ? localization.pleaseEnterALastName
                       : null,
                   autovalidate: autoValidate,
-                  onSavePressed: viewModel.onSavePressed,
+                  onSavePressed: _onSavePressed,
                   keyboardType: TextInputType.name,
                 ),
                 DecoratedFormField(
@@ -301,19 +341,19 @@ class _UserDetailsState extends State<UserDetails>
                       ? localization.pleaseEnterYourEmail
                       : null,
                   autovalidate: autoValidate,
-                  onSavePressed: viewModel.onSavePressed,
+                  onSavePressed: _onSavePressed,
                   keyboardType: TextInputType.emailAddress,
                 ),
                 DecoratedFormField(
                   label: localization.phone,
                   controller: _phoneController,
-                  onSavePressed: viewModel.onSavePressed,
+                  onSavePressed: _onSavePressed,
                   keyboardType: TextInputType.phone,
                 ),
                 PasswordFormField(
                   controller: _passwordController,
                   autoValidate: autoValidate,
-                  onSavePressed: viewModel.onSavePressed,
+                  onSavePressed: _onSavePressed,
                 ),
               ]),
               Padding(
@@ -321,7 +361,7 @@ class _UserDetailsState extends State<UserDetails>
                     left: 18, top: 20, right: 18, bottom: 10),
                 child: Row(
                   children: [
-                    if (state.isHosted && !isApple() && !isDesktopOS()) ...[
+                    if (state.isHosted && !isDesktopOS()) ...[
                       if (user.isConnectedToGoogle) ...[
                         googleButton,
                         SizedBox(width: kTableColumnGap),
@@ -332,6 +372,9 @@ class _UserDetailsState extends State<UserDetails>
                         SizedBox(width: kTableColumnGap),
                         office365Button,
                         SizedBox(width: kTableColumnGap),
+                      ] else if (user.isConnectedToApple) ...[
+                        appleButton,
+                        SizedBox(width: kTableColumnGap),
                       ] else ...[
                         googleButton,
                         SizedBox(width: kTableColumnGap),
@@ -341,10 +384,13 @@ class _UserDetailsState extends State<UserDetails>
                     ],
                     Expanded(
                       child: OutlinedButton(
-                        child: Text((state.user.isTwoFactorEnabled
-                                ? localization.disableTwoFactor
-                                : localization.enableTwoFactor)
-                            .toUpperCase()),
+                        child: Text(
+                          (state.user.isTwoFactorEnabled
+                                  ? localization.disableTwoFactor
+                                  : localization.enableTwoFactor)
+                              .toUpperCase(),
+                          textAlign: TextAlign.center,
+                        ),
                         onPressed: () {
                           if (state.settingsUIState.isChanged) {
                             showMessageDialog(
@@ -579,8 +625,8 @@ class _EnableTwoFactorState extends State<_EnableTwoFactor> {
                           width: 100,
                           child: TextButton(
                             onPressed: () {
-                              launch(
-                                  'https://github.com/antonioribeiro/google2fa#google-authenticator-apps');
+                              launchUrl(Uri.parse(
+                                  'https://github.com/antonioribeiro/google2fa#google-authenticator-apps'));
                             },
                             child: Text(localzation.learnMore),
                           ),

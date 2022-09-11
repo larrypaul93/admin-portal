@@ -41,6 +41,7 @@ class EntityDropdown extends StatefulWidget {
     this.overrideSuggestedAmount,
     this.overrideSuggestedLabel,
     this.onCreateNew,
+    this.excludeIds = const [],
   });
 
   final EntityType entityType;
@@ -58,6 +59,7 @@ class EntityDropdown extends StatefulWidget {
   final Function(BaseEntity) overrideSuggestedAmount;
   final Function(BaseEntity) overrideSuggestedLabel;
   final Function(Completer<SelectableEntity> completer, String) onCreateNew;
+  final List<String> excludeIds;
 
   @override
   _EntityDropdownState createState() => _EntityDropdownState();
@@ -125,6 +127,8 @@ class _EntityDropdownState extends State<EntityDropdown> {
       final entity = _entityMap[widget.entityId];
       if (widget.overrideSuggestedLabel != null) {
         _textController.text = widget.overrideSuggestedLabel(entity);
+      } else if (entity == null) {
+        // do nothing
       } else {
         _textController.text = _getEntityLabel(entity);
       }
@@ -252,6 +256,7 @@ class _EntityDropdownState extends State<EntityDropdown> {
               .map((entityId) => _entityMap[entityId])
               .where((entity) =>
                   entity?.matchesFilter(textEditingValue.text) ?? false)
+              .where((element) => !widget.excludeIds.contains(element.id))
               .toList();
 
           if (options.length == 1 && options[0].id == widget.entityId) {
@@ -438,6 +443,7 @@ class EntityDropdownDialog extends StatefulWidget {
     @required this.overrideSuggestedLabel,
     @required this.overrideSuggestedAmount,
     this.onAddPressed,
+    this.excludeIds = const [],
   });
 
   final BuiltMap<String, SelectableEntity> entityMap;
@@ -446,6 +452,7 @@ class EntityDropdownDialog extends StatefulWidget {
   final Function(BuildContext context, Completer completer) onAddPressed;
   final Function(BaseEntity) overrideSuggestedAmount;
   final Function(BaseEntity) overrideSuggestedLabel;
+  final List<String> excludeIds;
 
   @override
   _EntityDropdownDialogState createState() => _EntityDropdownDialogState();
@@ -522,6 +529,7 @@ class _EntityDropdownDialogState extends State<EntityDropdownDialog> {
       final matches = widget.entityList
           .where((entityId) =>
               widget.entityMap[entityId]?.matchesFilter(_filter) ?? false)
+          .where((entityId) => !widget.excludeIds.contains(entityId))
           .toList();
 
       return ScrollableListViewBuilder(

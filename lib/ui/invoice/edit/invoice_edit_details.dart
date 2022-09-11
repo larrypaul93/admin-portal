@@ -21,6 +21,7 @@ import 'package:invoiceninja_flutter/ui/app/forms/design_picker.dart';
 import 'package:invoiceninja_flutter/ui/app/forms/discount_field.dart';
 import 'package:invoiceninja_flutter/ui/app/forms/project_picker.dart';
 import 'package:invoiceninja_flutter/ui/app/forms/user_picker.dart';
+import 'package:invoiceninja_flutter/ui/app/forms/vendor_picker.dart';
 import 'package:invoiceninja_flutter/ui/app/invoice/tax_rate_dropdown.dart';
 import 'package:invoiceninja_flutter/ui/app/scrollable_listview.dart';
 import 'package:invoiceninja_flutter/ui/invoice/edit/invoice_edit_details_vm.dart';
@@ -162,21 +163,34 @@ class InvoiceEditDetailsState extends State<InvoiceEditDetails> {
           isLast: true,
           children: <Widget>[
             invoice.isNew
-                ? ClientPicker(
-                    clientId: invoice.clientId,
-                    clientState: state.clientState,
-                    onSelected: (client) =>
-                        viewModel.onClientChanged(context, invoice, client),
-                    onAddPressed: (completer) =>
-                        viewModel.onAddClientPressed(context, completer),
-                  )
+                ? invoice.isPurchaseOrder
+                    ? VendorPicker(
+                        autofocus: true,
+                        vendorId: invoice.vendorId,
+                        vendorState: state.vendorState,
+                        onSelected: (vendor) {
+                          viewModel.onVendorChanged(context, invoice, vendor);
+                        },
+                        onAddPressed: (completer) =>
+                            viewModel.onAddVendorPressed(context, completer),
+                      )
+                    : ClientPicker(
+                        clientId: invoice.clientId,
+                        clientState: state.clientState,
+                        onSelected: (client) =>
+                            viewModel.onClientChanged(context, invoice, client),
+                        onAddPressed: (completer) =>
+                            viewModel.onAddClientPressed(context, completer),
+                      )
                 : DecoratedFormField(
                     controller: _invoiceNumberController,
-                    label: widget.entityType == EntityType.credit
-                        ? localization.creditNumber
-                        : widget.entityType == EntityType.quote
-                            ? localization.quoteNumber
-                            : localization.invoiceNumber,
+                    label: widget.entityType == EntityType.purchaseOrder
+                        ? localization.poNumber
+                        : widget.entityType == EntityType.credit
+                            ? localization.creditNumber
+                            : widget.entityType == EntityType.quote
+                                ? localization.quoteNumber
+                                : localization.invoiceNumber,
                     keyboardType: TextInputType.text,
                     validator: (String val) => val.trim().isEmpty &&
                             invoice.isOld &&
@@ -241,6 +255,10 @@ class InvoiceEditDetailsState extends State<InvoiceEditDetails> {
                     child: Text(localization.usePaymentTerms),
                     value: 'terms',
                   ),
+                  DropdownMenuItem(
+                    child: Text(localization.dueOnReceipt),
+                    value: 'on_receipt',
+                  ),
                   ...List<int>.generate(31, (i) => i + 1)
                       .map((value) => DropdownMenuItem(
                             child: Text(value == 1
@@ -259,18 +277,21 @@ class InvoiceEditDetailsState extends State<InvoiceEditDetails> {
                 validator: (String val) => val.trim().isEmpty
                     ? AppLocalization.of(context).pleaseSelectADate
                     : null,
-                labelText: widget.entityType == EntityType.credit
-                    ? localization.creditDate
-                    : widget.entityType == EntityType.quote
-                        ? localization.quoteDate
-                        : localization.invoiceDate,
+                labelText: widget.entityType == EntityType.purchaseOrder
+                    ? localization.purchaseOrderDate
+                    : widget.entityType == EntityType.credit
+                        ? localization.creditDate
+                        : widget.entityType == EntityType.quote
+                            ? localization.quoteDate
+                            : localization.invoiceDate,
                 selectedDate: invoice.date,
                 onSelected: (date, _) {
                   viewModel.onChanged(invoice.rebuild((b) => b..date = date));
                 },
               ),
               DatePicker(
-                labelText: widget.entityType == EntityType.invoice
+                labelText: widget.entityType == EntityType.invoice ||
+                        widget.entityType == EntityType.purchaseOrder
                     ? localization.dueDate
                     : localization.validUntil,
                 selectedDate: invoice.dueDate,
@@ -325,11 +346,12 @@ class InvoiceEditDetailsState extends State<InvoiceEditDetails> {
                     .toList()
               ],
             ),
-            DecoratedFormField(
-              label: localization.poNumber,
-              controller: _poNumberController,
-              keyboardType: TextInputType.text,
-            ),
+            if (!invoice.isPurchaseOrder)
+              DecoratedFormField(
+                label: localization.poNumber,
+                controller: _poNumberController,
+                keyboardType: TextInputType.text,
+              ),
             DiscountField(
               controller: _discountController,
               value: invoice.discount,
@@ -463,7 +485,16 @@ class InvoiceEditDetailsState extends State<InvoiceEditDetails> {
                   }
                 },
               ),
-            if (company.isModuleEnabled(EntityType.vendor))
+            if (invoice.isPurchaseOrder)
+              ClientPicker(
+                clientId: invoice.clientId,
+                clientState: state.clientState,
+                onSelected: (client) {
+                  viewModel.onChanged(
+                      invoice.rebuild((b) => b..clientId = client?.id ?? ''));
+                },
+              )
+            else if (company.isModuleEnabled(EntityType.vendor))
               EntityDropdown(
                 entityType: EntityType.vendor,
                 entityId: invoice.vendorId,

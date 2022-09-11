@@ -10,7 +10,10 @@ import 'package:flutter/services.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:flutter_styled_toast/flutter_styled_toast.dart';
 import 'package:invoiceninja_flutter/redux/auth/auth_actions.dart';
+import 'package:invoiceninja_flutter/redux/reports/reports_actions.dart';
 import 'package:invoiceninja_flutter/redux/settings/settings_actions.dart';
+import 'package:invoiceninja_flutter/ui/app/sms_verification.dart';
+import 'package:invoiceninja_flutter/utils/app_review.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:pointer_interceptor/pointer_interceptor.dart';
 import 'package:redux/redux.dart';
@@ -41,13 +44,12 @@ import 'package:invoiceninja_flutter/ui/app/scrollable_listview.dart';
 import 'package:invoiceninja_flutter/ui/system/update_dialog.dart';
 import 'package:invoiceninja_flutter/utils/colors.dart';
 import 'package:invoiceninja_flutter/utils/dialogs.dart';
-import 'package:invoiceninja_flutter/utils/formatting.dart';
 import 'package:invoiceninja_flutter/utils/icons.dart';
 import 'package:invoiceninja_flutter/utils/localization.dart';
 import 'package:invoiceninja_flutter/utils/platforms.dart';
 import 'package:invoiceninja_flutter/utils/strings.dart';
 
-class MenuDrawer extends StatelessWidget {
+class MenuDrawer extends StatefulWidget {
   const MenuDrawer({
     Key key,
     @required this.viewModel,
@@ -57,12 +59,19 @@ class MenuDrawer extends StatelessWidget {
   static const LOGO_WIDTH = 38.0;
 
   @override
+  State<MenuDrawer> createState() => _MenuDrawerState();
+}
+
+class _MenuDrawerState extends State<MenuDrawer> {
+  bool _isHovered = false;
+
+  @override
   Widget build(BuildContext context) {
     final Store<AppState> store = StoreProvider.of<AppState>(context);
     final state = store.state;
     final enableDarkMode = state.prefState.enableDarkMode;
     final localization = AppLocalization.of(context);
-    final company = viewModel.selectedCompany;
+    final company = widget.viewModel.selectedCompany;
     final inactiveColor = state.prefState
             .customColors[PrefState.THEME_SIDEBAR_INACTIVE_BACKGROUND_COLOR] ??
         '';
@@ -89,35 +98,76 @@ class MenuDrawer extends StatelessWidget {
           .firstWhere(
               (userCompanyState) => userCompanyState.company.id == company.id)
           .userCompany;
-      return Row(
-        mainAxisSize: MainAxisSize.max,
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: <Widget>[
-          _companyLogo(company),
-          SizedBox(width: 12, height: kTopBottomBarHeight),
-          Expanded(
-            child: Text(
-              company.displayName.isEmpty
-                  ? localization.newCompany
-                  : company.displayName,
-              style: Theme.of(context).textTheme.subtitle1,
-              overflow: TextOverflow.ellipsis,
+      return MouseRegion(
+        onEnter: (_) => setState(() => _isHovered = true),
+        onExit: (_) => setState(() => _isHovered = false),
+        child: Row(
+          mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: <Widget>[
+            !showAccentColor && _isHovered && isDesktopOS()
+                ? IconButton(
+                    onPressed: store.state.historyList.isEmpty
+                        ? () => store.dispatch(ViewDashboard())
+                        : () {
+                            store.dispatch(PopLastHistory());
+                            if (store.state.historyList.isEmpty) {
+                              store.dispatch(ViewDashboard());
+                              return;
+                            }
+                            final history = store.state.historyList.first;
+                            switch (history.entityType) {
+                              case EntityType.dashboard:
+                                store.dispatch(ViewDashboard());
+                                break;
+                              case EntityType.reports:
+                                store.dispatch(ViewReports());
+                                break;
+                              case EntityType.settings:
+                                store.dispatch(ViewSettings(
+                                  section: history.id,
+                                  company: state.company,
+                                  tabIndex: 0,
+                                ));
+                                break;
+                              default:
+                                viewEntityById(
+                                  entityId: history.id,
+                                  entityType: history.entityType,
+                                  showError: false,
+                                );
+                            }
+                          },
+                    icon: Icon(Icons.chevron_left))
+                : Padding(
+                    padding: const EdgeInsets.only(right: 2),
+                    child: _companyLogo(company),
+                  ),
+            SizedBox(width: 10, height: kTopBottomBarHeight),
+            Expanded(
+              child: Text(
+                company.displayName.isEmpty
+                    ? localization.newCompany
+                    : company.displayName,
+                style: Theme.of(context).textTheme.subtitle1,
+                overflow: TextOverflow.ellipsis,
+              ),
             ),
-          ),
-          if (showAccentColor &&
-              userCompany.settings.accentColor != null &&
-              state.companies.length > 1)
-            Container(
-              padding: const EdgeInsets.only(right: 2),
-              decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: convertHexStringToColor(
-                      userCompany.settings.accentColor)),
-              width: 10,
-              height: 10,
-              //color: Colors.red,
-            ),
-        ],
+            if (showAccentColor &&
+                userCompany.settings.accentColor != null &&
+                state.companies.length > 1)
+              Container(
+                padding: const EdgeInsets.only(right: 2),
+                decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: convertHexStringToColor(
+                        userCompany.settings.accentColor)),
+                width: 10,
+                height: 10,
+                //color: Colors.red,
+              ),
+          ],
+        ),
       );
     }
 
@@ -126,11 +176,11 @@ class MenuDrawer extends StatelessWidget {
       child: SizedBox(
         height: kTopBottomBarHeight,
         width: MenuDrawer.LOGO_WIDTH,
-        child: _companyLogo(viewModel.selectedCompany),
+        child: _companyLogo(widget.viewModel.selectedCompany),
       ),
       color: Theme.of(context).cardColor,
       itemBuilder: (BuildContext context) => [
-        ...viewModel.state.companies
+        ...widget.viewModel.state.companies
             .map((company) => PopupMenuItem<String>(
                   child: _companyListItem(company),
                   value: company.id,
@@ -168,7 +218,7 @@ class MenuDrawer extends StatelessWidget {
       ],
       onSelected: (String companyId) {
         if (companyId == 'logout') {
-          viewModel.onLogoutTap(context);
+          widget.viewModel.onLogoutTap(context);
         } else if (state.isLoading) {
           showMessageDialog(
               context: context, message: localization.waitForLoading);
@@ -182,12 +232,12 @@ class MenuDrawer extends StatelessWidget {
               context: context, message: localization.waitForData);
           return;
         } else if (companyId == 'company') {
-          viewModel.onAddCompany(context);
+          widget.viewModel.onAddCompany(context);
         } else {
           final company =
               state.companies.firstWhere((company) => company.id == companyId);
           final index = state.companies.indexOf(company);
-          viewModel.onCompanyChanged(context, index, company);
+          widget.viewModel.onCompanyChanged(context, index, company);
         }
       },
     );
@@ -198,7 +248,7 @@ class MenuDrawer extends StatelessWidget {
             height: kTopBottomBarHeight,
             child: AppDropdownButton<String>(
               key: ValueKey(kSelectCompanyDropdownKey),
-              value: viewModel.selectedCompanyIndex,
+              value: widget.viewModel.selectedCompanyIndex,
               selectedItemBuilder: (context) => state.companies
                   .map((company) =>
                       _companyListItem(company, showAccentColor: false))
@@ -241,7 +291,7 @@ class MenuDrawer extends StatelessWidget {
               ],
               onChanged: (dynamic value) {
                 if (value == 'logout' && !state.isLoading && !state.isSaving) {
-                  viewModel.onLogoutTap(context);
+                  widget.viewModel.onLogoutTap(context);
                 } else if (state.isLoading) {
                   showMessageDialog(
                       context: context, message: localization.waitForLoading);
@@ -255,11 +305,11 @@ class MenuDrawer extends StatelessWidget {
                       context: context, message: localization.waitForData);
                   return;
                 } else if (value == 'company') {
-                  viewModel.onAddCompany(context);
+                  widget.viewModel.onAddCompany(context);
                 } else {
                   final index = int.parse(value);
-                  viewModel.onCompanyChanged(
-                      context, index, state.companies[index]);
+                  widget.viewModel
+                      .onCompanyChanged(context, index, state.companies[index]);
                 }
               },
             ),
@@ -306,7 +356,8 @@ class MenuDrawer extends StatelessWidget {
                                   child: ListTile(
                                     contentPadding:
                                         const EdgeInsets.only(left: 20),
-                                    onTap: () => launch(kDebugModeUrl),
+                                    onTap: () =>
+                                        launchUrl(Uri.parse(kDebugModeUrl)),
                                     leading:
                                         Icon(Icons.warning, color: Colors.red),
                                   ),
@@ -327,10 +378,49 @@ class MenuDrawer extends StatelessWidget {
                                       localization.debugModeIsEnabledHelp,
                                       style: TextStyle(color: Colors.white),
                                     ),
-                                    onTap: () => launch(kDebugModeUrl),
+                                    onTap: () =>
+                                        launchUrl(Uri.parse(kDebugModeUrl)),
                                   ),
                                 ),
-                            if (state.company.isDisabled &&
+                            if (!state.account.accountSmsVerified &&
+                                state.isHosted)
+                              if (state.isMenuCollapsed)
+                                Tooltip(
+                                  message: localization.verifyPhoneNumberHelp,
+                                  child: ListTile(
+                                    contentPadding:
+                                        const EdgeInsets.only(left: 12),
+                                    leading: IconButton(
+                                      onPressed: () {
+                                        showDialog<void>(
+                                          context: context,
+                                          builder: (BuildContext context) =>
+                                              SmsVerification(),
+                                        );
+                                      },
+                                      icon: Icon(Icons.warning,
+                                          color: Colors.orange),
+                                    ),
+                                  ),
+                                )
+                              else
+                                Material(
+                                  child: ListTile(
+                                    tileColor: Colors.orange.shade800,
+                                    subtitle: Text(
+                                      localization.verifyPhoneNumberHelp,
+                                      style: TextStyle(color: Colors.white),
+                                    ),
+                                    onTap: () {
+                                      showDialog<void>(
+                                        context: context,
+                                        builder: (BuildContext context) =>
+                                            SmsVerification(),
+                                      );
+                                    },
+                                  ),
+                                )
+                            else if (state.company.isDisabled &&
                                 state.userCompany.isAdmin)
                               if (state.isMenuCollapsed)
                                 Tooltip(
@@ -338,19 +428,15 @@ class MenuDrawer extends StatelessWidget {
                                   child: ListTile(
                                     contentPadding:
                                         const EdgeInsets.only(left: 12),
-                                    onTap: () {
-                                      // TODO once v4 is sunset change to ViewSettings
-                                      launch(
-                                          'https://invoiceninja.github.io/docs/hosted-activate/');
-                                      /*
-                                      store.dispatch(ViewSettings(
+                                    leading: IconButton(
+                                      onPressed: () =>
+                                          store.dispatch(ViewSettings(
                                         section: kSettingsAccountManagement,
                                         company: company,
-                                      ));
-                                      */
-                                    },
-                                    leading: Icon(Icons.warning,
-                                        color: Colors.orange),
+                                      )),
+                                      icon: Icon(Icons.warning,
+                                          color: Colors.orange),
+                                    ),
                                   ),
                                 )
                               else
@@ -370,23 +456,18 @@ class MenuDrawer extends StatelessWidget {
                                       style: TextStyle(color: Colors.white),
                                     ),
                                     onTap: () {
-                                      // TODO once v4 is sunset change to ViewSettings
-                                      launch(
-                                          'https://invoiceninja.github.io/docs/hosted-activate/');
-
-                                      /*
                                       store.dispatch(ViewSettings(
                                         section: kSettingsAccountManagement,
                                         company: company,
                                       ));
-                                      */
                                     },
                                   ),
                                 ),
                             if (state.userCompany.isOwner &&
                                 state.isHosted &&
                                 !isPaidAccount(context) &&
-                                !isApple())
+                                !isApple() &&
+                                kReleaseMode)
                               Material(
                                 child: Tooltip(
                                   message: state.isMenuCollapsed
@@ -394,17 +475,22 @@ class MenuDrawer extends StatelessWidget {
                                       : '',
                                   child: ListTile(
                                     dense: true,
+                                    contentPadding:
+                                        const EdgeInsets.only(left: 12),
                                     tileColor: Colors.green,
-                                    leading: Padding(
-                                      padding: const EdgeInsets.only(left: 9),
-                                      child: Icon(
+                                    leading: IconButton(
+                                      onPressed: () => store.dispatch(
+                                          ViewSettings(
+                                              clearFilter: true,
+                                              company: company,
+                                              user: state.user,
+                                              section:
+                                                  kSettingsAccountManagement)),
+                                      icon: Icon(
                                         Icons.arrow_circle_up,
-                                        size: 22,
                                         color: Colors.white,
                                       ),
                                     ),
-                                    contentPadding:
-                                        const EdgeInsets.only(left: 12),
                                     title: state.isMenuCollapsed
                                         ? SizedBox()
                                         : Text(
@@ -418,6 +504,13 @@ class MenuDrawer extends StatelessWidget {
                                                 ),
                                           ),
                                     onTap: () {
+                                      /*
+                                      showDialog<void>(
+                                          context: context,
+                                          builder: (BuildContext context) =>
+                                              UpgradeDialog());
+                                      */
+
                                       store.dispatch(ViewSettings(
                                           clearFilter: true,
                                           company: company,
@@ -540,13 +633,14 @@ class MenuDrawer extends StatelessWidget {
                               icon: getEntityIcon(EntityType.recurringExpense),
                               title: localization.recurringExpenses,
                             ),
-                            DrawerTile(
-                              company: company,
-                              icon: getEntityIcon(EntityType.reports),
-                              title: localization.reports,
-                              onTap: () => viewEntitiesByType(
-                                  entityType: EntityType.reports),
-                            ),
+                            if (!isApple() || state.isProPlan)
+                              DrawerTile(
+                                company: company,
+                                icon: getEntityIcon(EntityType.reports),
+                                title: localization.reports,
+                                onTap: () => viewEntitiesByType(
+                                    entityType: EntityType.reports),
+                              ),
                             DrawerTile(
                               company: company,
                               icon: getEntityIcon(EntityType.settings),
@@ -638,8 +732,11 @@ class _DrawerTileState extends State<DrawerTile> {
       route = widget.entityType.name;
     }
 
+    // Workaround to show clients/vendors as selected when
+    // viewing their sub-entities
     final isSelected = uiState.filterEntityType != null &&
             prefState.isViewerFullScreen(uiState.filterEntityType) &&
+            !uiState.isEditing &&
             (prefState.isPreviewVisible || uiState.isList)
         ? widget.entityType == uiState.filterEntityType
         : uiState.currentRoute.startsWith('/${toSnakeCase(route)}');
@@ -790,7 +887,7 @@ class _DrawerTileState extends State<DrawerTile> {
                       ),
                     )
                   : FocusTraversalGroup(
-                      descendantsAreTraversable: false,
+                      descendantsAreFocusable: false,
                       child: IconButton(
                         icon: Icon(widget.icon),
                         color: textColor,
@@ -865,8 +962,7 @@ class SidebarFooter extends StatelessWidget {
                         TextButton(
                           child: Text(localization.learnMore.toUpperCase()),
                           onPressed: () {
-                            launch(kCronsHelpUrl,
-                                forceSafariVC: false, forceWebView: false);
+                            launchUrl(Uri.parse(kCronsHelpUrl));
                           },
                         ),
                         TextButton(
@@ -890,7 +986,10 @@ class SidebarFooter extends StatelessWidget {
                     clearErrorOnDismiss: true,
                   ),
                 )
-              else if (state.isSelfHosted && state.isUpdateAvailable)
+              else if (state.isSelfHosted &&
+                  !state.account.disableAutoUpdate &&
+                  !state.account.isDocker &&
+                  state.isUpdateAvailable)
                 IconButton(
                   tooltip: prefState.enableTooltips
                       ? localization.updateAvailable
@@ -926,13 +1025,13 @@ class SidebarFooter extends StatelessWidget {
                         onPressed: () {
                           final platform = getNativePlatform();
                           final url = getNativeAppUrl(platform);
-                          launch(url);
+                          launchUrl(Uri.parse(url));
                           Navigator.of(context).pop();
                         },
                         child: Text(localization.download.toUpperCase()),
                       ),
                       TextButton(
-                        onPressed: () => launch(kDocsPerformance),
+                        onPressed: () => launchUrl(Uri.parse(kDocsPerformance)),
                         child: Text(localization.learnMore.toUpperCase()),
                       ),
                       TextButton(
@@ -956,7 +1055,7 @@ class SidebarFooter extends StatelessWidget {
             ),
             IconButton(
               icon: Icon(Icons.forum),
-              onPressed: () => launch(kForumUrl),
+              onPressed: () => launchUrl(Uri.parse(kForumUrl)),
               tooltip:
                   prefState.enableTooltips ? localization.supportForum : '',
             ),
@@ -982,7 +1081,7 @@ class SidebarFooter extends StatelessWidget {
                   url += '/' + toSnakeCase(route).replaceAll('_', '-');
                 }
 
-                launch(url);
+                launchUrl(Uri.parse(url));
               },
               tooltip: prefState.enableTooltips ? localization.userGuide : '',
             ),
@@ -1177,10 +1276,6 @@ void _showAbout(BuildContext context) async {
     height: 40.0,
   );
 
-  final daysActive = DateTime.now()
-      .difference(convertTimestampToDate(state.company.createdAt))
-      .inDays;
-
   showDialog<Null>(
       context: context,
       builder: (BuildContext context) {
@@ -1278,8 +1373,9 @@ void _showAbout(BuildContext context) async {
                                                 AppButton(
                                                   label: 'Laravel/PHP',
                                                   iconData: MdiIcons.server,
-                                                  onPressed: () => launch(
-                                                      kSourceCodeBackend),
+                                                  onPressed: () => launchUrl(
+                                                      Uri.parse(
+                                                          kSourceCodeBackend)),
                                                 ),
                                                 Padding(
                                                   padding:
@@ -1291,14 +1387,16 @@ void _showAbout(BuildContext context) async {
                                                   label: 'Flutter/Dart',
                                                   iconData:
                                                       MdiIcons.desktopClassic,
-                                                  onPressed: () => launch(
-                                                      kSourceCodeFrontend),
+                                                  onPressed: () => launchUrl(
+                                                      Uri.parse(
+                                                          kSourceCodeFrontend)),
                                                 ),
                                                 AppButton(
                                                   label: 'Storefront SDK',
                                                   iconData: MdiIcons.tools,
-                                                  onPressed: () => launch(
-                                                      kSourceCodeFrontendSDK),
+                                                  onPressed: () => launchUrl(
+                                                      Uri.parse(
+                                                          kSourceCodeFrontendSDK)),
                                                 ),
                                               ],
                                             ),
@@ -1323,17 +1421,20 @@ void _showAbout(BuildContext context) async {
                                     AppButton(
                                       label: 'Windows',
                                       iconData: MdiIcons.microsoftWindows,
-                                      onPressed: () => launch(kWindowsUrl),
+                                      onPressed: () =>
+                                          launchUrl(Uri.parse(kWindowsUrl)),
                                     ),
                                     AppButton(
                                       label: 'macOS',
                                       iconData: MdiIcons.apple,
-                                      onPressed: () => launch(kMacOSUrl),
+                                      onPressed: () =>
+                                          launchUrl(Uri.parse(kMacOSUrl)),
                                     ),
                                     AppButton(
                                       label: 'Linux',
                                       iconData: MdiIcons.linux,
-                                      onPressed: () => launch(kLinuxUrl),
+                                      onPressed: () =>
+                                          launchUrl(Uri.parse(kLinuxUrl)),
                                     ),
                                     Padding(
                                       padding: const EdgeInsets.only(top: 30),
@@ -1342,17 +1443,20 @@ void _showAbout(BuildContext context) async {
                                     AppButton(
                                       label: 'iOS',
                                       iconData: MdiIcons.apple,
-                                      onPressed: () => launch(kAppleStoreUrl),
+                                      onPressed: () =>
+                                          launchUrl(Uri.parse(kAppleStoreUrl)),
                                     ),
                                     AppButton(
                                       label: 'Android',
                                       iconData: MdiIcons.android,
-                                      onPressed: () => launch(kGoogleStoreUrl),
+                                      onPressed: () =>
+                                          launchUrl(Uri.parse(kGoogleStoreUrl)),
                                     ),
                                     AppButton(
                                       label: 'F-Droid',
                                       iconData: MdiIcons.android,
-                                      onPressed: () => launch(kGoogleFDroidUrl),
+                                      onPressed: () => launchUrl(
+                                          Uri.parse(kGoogleFDroidUrl)),
                                     ),
                                   ],
                                 ),
@@ -1360,6 +1464,12 @@ void _showAbout(BuildContext context) async {
                             });
                       },
                     ),
+                  ),
+                  AppButton(
+                    label: (localization.releaseNotes).toUpperCase(),
+                    iconData: MdiIcons.note,
+                    color: Colors.cyan,
+                    onPressed: () => launchUrl(Uri.parse(kReleaseNotesUrl)),
                   ),
                   if (state.isSelfHosted || !kReleaseMode) ...[
                     AppButton(
@@ -1374,7 +1484,8 @@ void _showAbout(BuildContext context) async {
                             });
                       },
                     ),
-                    if (!state.account.disableAutoUpdate)
+                    if (!state.account.disableAutoUpdate &&
+                        !state.account.isDocker)
                       AppButton(
                         label: (state.isUpdateAvailable
                                 ? localization.updateApp
@@ -1385,12 +1496,18 @@ void _showAbout(BuildContext context) async {
                         onPressed: () => _showUpdate(context),
                       ),
                   ],
-                  if (daysActive > 30)
+                  if (state.company.daysActive > 30)
                     AppButton(
                       label: localization.reviewApp.toUpperCase(),
                       iconData: Icons.star,
                       color: Colors.purple,
-                      onPressed: () => launch(getRateAppURL(context)),
+                      onPressed: () {
+                        if (kIsWeb || isLinux()) {
+                          launchUrl(Uri.parse(getRateAppURL(context)));
+                        } else {
+                          AppReview.openStoreListing();
+                        }
+                      },
                     ),
                   SizedBox(height: 22),
                   Wrap(
@@ -1398,27 +1515,27 @@ void _showAbout(BuildContext context) async {
                     children: [
                       IconButton(
                         tooltip: 'Twitter',
-                        onPressed: () => launch(kTwitterUrl),
+                        onPressed: () => launchUrl(Uri.parse(kTwitterUrl)),
                         icon: Icon(MdiIcons.twitter),
                       ),
                       IconButton(
                         tooltip: 'Facebook',
-                        onPressed: () => launch(kFacebookUrl),
+                        onPressed: () => launchUrl(Uri.parse(kFacebookUrl)),
                         icon: Icon(MdiIcons.facebook),
                       ),
                       IconButton(
                         tooltip: 'GitHub',
-                        onPressed: () => launch(kGitHubUrl),
+                        onPressed: () => launchUrl(Uri.parse(kGitHubUrl)),
                         icon: Icon(MdiIcons.github),
                       ),
                       IconButton(
                         tooltip: 'YouTube',
-                        onPressed: () => launch(kYouTubeUrl),
+                        onPressed: () => launchUrl(Uri.parse(kYouTubeUrl)),
                         icon: Icon(MdiIcons.youtube),
                       ),
                       IconButton(
                         tooltip: 'Slack',
-                        onPressed: () => launch(kSlackUrl),
+                        onPressed: () => launchUrl(Uri.parse(kSlackUrl)),
                         icon: Icon(MdiIcons.slack),
                       ),
                     ],
@@ -1466,7 +1583,7 @@ class _ContactUsDialogState extends State<ContactUsDialog> {
           builder: (BuildContext context) {
             return MessageDialog(localization.yourMessageHasBeenReceived);
           });
-      Navigator.pop(context);
+      Navigator.pop(navigatorKey.currentContext);
     }).catchError((dynamic error) {
       print('## ERROR: $error');
       setState(() => _isSaving = false);

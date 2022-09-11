@@ -146,6 +146,56 @@ SettingsEntity getClientSettings(AppState state, ClientEntity client) {
   );
 }
 
+SettingsEntity getVendorSettings(AppState state, VendorEntity vendor) {
+  if (state == null) {
+    return SettingsEntity();
+  }
+
+  vendor ??= VendorEntity();
+  final company = state.company;
+  //final group = state.groupState.get(vendor.groupId);
+
+  return SettingsEntity(
+    clientSettings: SettingsEntity(), // client.settings,
+    groupSettings: SettingsEntity(), // group.settings,
+    companySettings: company.settings,
+  );
+}
+
+var memoizedGetClientUnappliedPayments = memo2(
+    (String clientId, BuiltMap<String, PaymentEntity> paymentMap) =>
+        getClientUnappliedPayments(clientId: clientId, paymentMap: paymentMap));
+
+double getClientUnappliedPayments(
+    {String clientId, BuiltMap<String, PaymentEntity> paymentMap}) {
+  double amount = 0;
+
+  paymentMap.forEach((paymentId, payment) {
+    if (payment.clientId == clientId) {
+      amount += payment.amount - payment.applied;
+    }
+  });
+
+  return amount;
+}
+
+var memoizedGetClientAvailableCredits = memo2(
+    (String clientId, BuiltMap<String, InvoiceEntity> creditMap) =>
+        getClientAvailableCredits(clientId: clientId, creditMap: creditMap));
+
+double getClientAvailableCredits(
+    {String clientId, BuiltMap<String, InvoiceEntity> creditMap}) {
+  double amount = 0;
+
+  creditMap.forEach((creditId, credit) {
+    if (credit.clientId == clientId) {
+      amount += credit.balance;
+    }
+  });
+
+  return amount;
+}
+
 bool hasClientChanges(
         ClientEntity client, BuiltMap<String, ClientEntity> clientMap) =>
     client.isNew ? client.isChanged : client != clientMap[client.id];

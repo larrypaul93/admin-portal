@@ -20,26 +20,21 @@ const EntityAction _$cloneToQuote = const EntityAction._('cloneToQuote');
 const EntityAction _$cloneToExpense = const EntityAction._('cloneToExpense');
 const EntityAction _$cloneToRecurring =
     const EntityAction._('cloneToRecurring');
+const EntityAction _$cloneToPurchaseOrder =
+    const EntityAction._('cloneToPurchaseOrder');
 const EntityAction _$convertToInvoice =
     const EntityAction._('convertToInvoice');
+const EntityAction _$convertToProject =
+    const EntityAction._('convertToProject');
 const EntityAction _$approve = const EntityAction._('approve');
 const EntityAction _$applyCredit = const EntityAction._('applyCredit');
 const EntityAction _$applyPayment = const EntityAction._('applyPayment');
 const EntityAction _$download = const EntityAction._('download');
 const EntityAction _$documents = const EntityAction._('documents');
 const EntityAction _$bulkDownload = const EntityAction._('bulkDownload');
-const EntityAction _$emailInvoice = const EntityAction._('emailInvoice');
-const EntityAction _$emailQuote = const EntityAction._('emailQuote');
-const EntityAction _$emailCredit = const EntityAction._('emailCredit');
-const EntityAction _$emailPurchaseOrder =
-    const EntityAction._('emailPurchaseOrder');
-const EntityAction _$bulkEmailInvoice =
-    const EntityAction._('bulkEmailInvoice');
-const EntityAction _$bulkEmailQuote = const EntityAction._('bulkEmailQuote');
-const EntityAction _$bulkEmailCredit = const EntityAction._('bulkEmailCredit');
-const EntityAction _$bulkEmailPurchaseOrder =
-    const EntityAction._('bulkEmailPurchaseOrder');
-const EntityAction _$emailPayment = const EntityAction._('emailPayment');
+const EntityAction _$sendEmail = const EntityAction._('sendEmail');
+const EntityAction _$sendNow = const EntityAction._('sendNow');
+const EntityAction _$bulkSendEmail = const EntityAction._('bulkSendEmail');
 const EntityAction _$markSent = const EntityAction._('markSent');
 const EntityAction _$markPaid = const EntityAction._('markPaid');
 const EntityAction _$newClient = const EntityAction._('newClient');
@@ -59,6 +54,7 @@ const EntityAction _$newVendor = const EntityAction._('newVendor');
 const EntityAction _$newPurchaseOrder =
     const EntityAction._('newPurchaseOrder');
 const EntityAction _$clientPortal = const EntityAction._('clientPortal');
+const EntityAction _$vendorPortal = const EntityAction._('vendorPortal');
 const EntityAction _$newPayment = const EntityAction._('newPayment');
 const EntityAction _$settings = const EntityAction._('settings');
 const EntityAction _$refundPayment = const EntityAction._('refundPayment');
@@ -80,10 +76,16 @@ const EntityAction _$invoiceProject = const EntityAction._('invoiceProject');
 const EntityAction _$resendInvite = const EntityAction._('resendInvite');
 const EntityAction _$disconnect = const EntityAction._('disconnect');
 const EntityAction _$viewInvoice = const EntityAction._('viewInvoice');
+const EntityAction _$viewExpense = const EntityAction._('viewExpense');
 const EntityAction _$changeStatus = const EntityAction._('changeStatus');
 const EntityAction _$addToInvoice = const EntityAction._('addToInvoice');
 const EntityAction _$cancel = const EntityAction._('cancel');
 const EntityAction _$save = const EntityAction._('save');
+const EntityAction _$accept = const EntityAction._('accept');
+const EntityAction _$addToInventory = const EntityAction._('addToInventory');
+const EntityAction _$convertToExpense =
+    const EntityAction._('convertToExpense');
+const EntityAction _$merge = const EntityAction._('merge');
 
 EntityAction _$valueOf(String name) {
   switch (name) {
@@ -113,8 +115,12 @@ EntityAction _$valueOf(String name) {
       return _$cloneToExpense;
     case 'cloneToRecurring':
       return _$cloneToRecurring;
+    case 'cloneToPurchaseOrder':
+      return _$cloneToPurchaseOrder;
     case 'convertToInvoice':
       return _$convertToInvoice;
+    case 'convertToProject':
+      return _$convertToProject;
     case 'approve':
       return _$approve;
     case 'applyCredit':
@@ -127,24 +133,12 @@ EntityAction _$valueOf(String name) {
       return _$documents;
     case 'bulkDownload':
       return _$bulkDownload;
-    case 'emailInvoice':
-      return _$emailInvoice;
-    case 'emailQuote':
-      return _$emailQuote;
-    case 'emailCredit':
-      return _$emailCredit;
-    case 'emailPurchaseOrder':
-      return _$emailPurchaseOrder;
-    case 'bulkEmailInvoice':
-      return _$bulkEmailInvoice;
-    case 'bulkEmailQuote':
-      return _$bulkEmailQuote;
-    case 'bulkEmailCredit':
-      return _$bulkEmailCredit;
-    case 'bulkEmailPurchaseOrder':
-      return _$bulkEmailPurchaseOrder;
-    case 'emailPayment':
-      return _$emailPayment;
+    case 'sendEmail':
+      return _$sendEmail;
+    case 'sendNow':
+      return _$sendNow;
+    case 'bulkSendEmail':
+      return _$bulkSendEmail;
     case 'markSent':
       return _$markSent;
     case 'markPaid':
@@ -175,6 +169,8 @@ EntityAction _$valueOf(String name) {
       return _$newPurchaseOrder;
     case 'clientPortal':
       return _$clientPortal;
+    case 'vendorPortal':
+      return _$vendorPortal;
     case 'newPayment':
       return _$newPayment;
     case 'settings':
@@ -215,6 +211,8 @@ EntityAction _$valueOf(String name) {
       return _$disconnect;
     case 'viewInvoice':
       return _$viewInvoice;
+    case 'viewExpense':
+      return _$viewExpense;
     case 'changeStatus':
       return _$changeStatus;
     case 'addToInvoice':
@@ -223,6 +221,14 @@ EntityAction _$valueOf(String name) {
       return _$cancel;
     case 'save':
       return _$save;
+    case 'accept':
+      return _$accept;
+    case 'addToInventory':
+      return _$addToInventory;
+    case 'convertToExpense':
+      return _$convertToExpense;
+    case 'merge':
+      return _$merge;
     default:
       throw new ArgumentError(name);
   }
@@ -243,22 +249,18 @@ final BuiltSet<EntityAction> _$values =
   _$cloneToQuote,
   _$cloneToExpense,
   _$cloneToRecurring,
+  _$cloneToPurchaseOrder,
   _$convertToInvoice,
+  _$convertToProject,
   _$approve,
   _$applyCredit,
   _$applyPayment,
   _$download,
   _$documents,
   _$bulkDownload,
-  _$emailInvoice,
-  _$emailQuote,
-  _$emailCredit,
-  _$emailPurchaseOrder,
-  _$bulkEmailInvoice,
-  _$bulkEmailQuote,
-  _$bulkEmailCredit,
-  _$bulkEmailPurchaseOrder,
-  _$emailPayment,
+  _$sendEmail,
+  _$sendNow,
+  _$bulkSendEmail,
   _$markSent,
   _$markPaid,
   _$newClient,
@@ -274,6 +276,7 @@ final BuiltSet<EntityAction> _$values =
   _$newVendor,
   _$newPurchaseOrder,
   _$clientPortal,
+  _$vendorPortal,
   _$newPayment,
   _$settings,
   _$refundPayment,
@@ -294,10 +297,15 @@ final BuiltSet<EntityAction> _$values =
   _$resendInvite,
   _$disconnect,
   _$viewInvoice,
+  _$viewExpense,
   _$changeStatus,
   _$addToInvoice,
   _$cancel,
   _$save,
+  _$accept,
+  _$addToInventory,
+  _$convertToExpense,
+  _$merge,
 ]);
 
 Serializer<EntityAction> _$entityActionSerializer =

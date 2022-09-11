@@ -1,6 +1,7 @@
 // Package imports:
 import 'package:built_collection/built_collection.dart';
 import 'package:invoiceninja_flutter/redux/service_report/service_reports_requcer.dart';
+import 'package:invoiceninja_flutter/redux/dashboard/dashboard_actions.dart';
 import 'package:redux/redux.dart';
 
 // Project imports:
@@ -145,6 +146,25 @@ Reducer<UserCompanyEntity> userCompanyEntityReducer = combineReducers([
   TypedReducer<UserCompanyEntity, UpdateCompanyLanguage>(
     (userCompany, action) => userCompany
         .rebuild((b) => b..company.settings.languageId = action.languageId),
+  ),
+  TypedReducer<UserCompanyEntity, UpdateDashboardFields>(
+    (userCompany, action) => userCompany.rebuild(
+        (b) => b..settings.dashboardFields.replace(action.dashboardFields)),
+  ),
+  TypedReducer<UserCompanyEntity, UpdateDashboardFieldSettingss>(
+    (userCompany, action) {
+      if (action.numberFieldsPerRowDesktop != null) {
+        return userCompany.rebuild((b) => b
+          ..settings.dashboardFieldsPerRowDesktop =
+              action.numberFieldsPerRowDesktop);
+      } else if (action.numberFieldsPerRowDesktop != null) {
+        return userCompany.rebuild((b) => b
+          ..settings.dashboardFieldsPerRowMobile =
+              action.numberFieldsPerRowMobile);
+      }
+
+      return userCompany;
+    },
   ),
 ]);
 

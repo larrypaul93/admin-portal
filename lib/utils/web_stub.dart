@@ -8,6 +8,8 @@ import 'package:redux/redux.dart';
 import 'package:invoiceninja_flutter/redux/app/app_state.dart';
 
 class WebUtils {
+  static String get apiUrl => null;
+
   static String get browserUrl => null;
 
   static String get browserRoute => null;
@@ -23,6 +25,8 @@ class WebUtils {
   static void registerWebView(String html) {}
 
   static void warnChanges(Store<AppState> store) {}
+
+  static void microsoftLogout() {}
 
   static void microsoftLogin(
     Function(String, String) successCallback,

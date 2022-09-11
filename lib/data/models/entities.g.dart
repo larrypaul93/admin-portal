@@ -241,6 +241,7 @@ const EmailTemplate _$reminder_endless_email =
 const EmailTemplate _$custom1_email = const EmailTemplate._('custom1');
 const EmailTemplate _$custom2_email = const EmailTemplate._('custom2');
 const EmailTemplate _$custom3_email = const EmailTemplate._('custom3');
+const EmailTemplate _$purchase_order = const EmailTemplate._('purchase_order');
 
 EmailTemplate _$templateValueOf(String name) {
   switch (name) {
@@ -270,6 +271,8 @@ EmailTemplate _$templateValueOf(String name) {
       return _$custom2_email;
     case 'custom3':
       return _$custom3_email;
+    case 'purchase_order':
+      return _$purchase_order;
     default:
       throw new ArgumentError(name);
   }
@@ -290,6 +293,7 @@ final BuiltSet<EmailTemplate> _$templateValues =
   _$custom1_email,
   _$custom2_email,
   _$custom3_email,
+  _$purchase_order,
 ]);
 
 const UserPermission _$create = const UserPermission._('create');
@@ -547,6 +551,13 @@ class _$ActivityEntitySerializer
         ..add(serializers.serialize(value,
             specifiedType: const FullType(String)));
     }
+    value = object.purchaseOrderId;
+    if (value != null) {
+      result
+        ..add('purchase_order_id')
+        ..add(serializers.serialize(value,
+            specifiedType: const FullType(String)));
+    }
     value = object.quoteId;
     if (value != null) {
       result
@@ -676,6 +687,10 @@ class _$ActivityEntitySerializer
           break;
         case 'recurring_expense_id':
           result.recurringExpenseId = serializers.deserialize(value,
+              specifiedType: const FullType(String)) as String;
+          break;
+        case 'purchase_order_id':
+          result.purchaseOrderId = serializers.deserialize(value,
               specifiedType: const FullType(String)) as String;
           break;
         case 'quote_id':
@@ -1042,6 +1057,8 @@ class _$ActivityEntity extends ActivityEntity {
   @override
   final String recurringExpenseId;
   @override
+  final String purchaseOrderId;
+  @override
   final String quoteId;
   @override
   final String paymentId;
@@ -1080,6 +1097,7 @@ class _$ActivityEntity extends ActivityEntity {
       this.invoiceId,
       this.recurringInvoiceId,
       this.recurringExpenseId,
+      this.purchaseOrderId,
       this.quoteId,
       this.paymentId,
       this.creditId,
@@ -1123,6 +1141,7 @@ class _$ActivityEntity extends ActivityEntity {
         invoiceId == other.invoiceId &&
         recurringInvoiceId == other.recurringInvoiceId &&
         recurringExpenseId == other.recurringExpenseId &&
+        purchaseOrderId == other.purchaseOrderId &&
         quoteId == other.quoteId &&
         paymentId == other.paymentId &&
         creditId == other.creditId &&
@@ -1159,13 +1178,13 @@ class _$ActivityEntity extends ActivityEntity {
                                                                 $jc(
                                                                     $jc(
                                                                         $jc(
-                                                                            $jc($jc($jc(0, notes.hashCode), key.hashCode),
-                                                                                activityTypeId.hashCode),
-                                                                            clientId.hashCode),
-                                                                        userId.hashCode),
-                                                                    invoiceId.hashCode),
-                                                                recurringInvoiceId.hashCode),
-                                                            recurringExpenseId.hashCode),
+                                                                            $jc($jc($jc($jc(0, notes.hashCode), key.hashCode), activityTypeId.hashCode),
+                                                                                clientId.hashCode),
+                                                                            userId.hashCode),
+                                                                        invoiceId.hashCode),
+                                                                    recurringInvoiceId.hashCode),
+                                                                recurringExpenseId.hashCode),
+                                                            purchaseOrderId.hashCode),
                                                         quoteId.hashCode),
                                                     paymentId.hashCode),
                                                 creditId.hashCode),
@@ -1192,6 +1211,7 @@ class _$ActivityEntity extends ActivityEntity {
           ..add('invoiceId', invoiceId)
           ..add('recurringInvoiceId', recurringInvoiceId)
           ..add('recurringExpenseId', recurringExpenseId)
+          ..add('purchaseOrderId', purchaseOrderId)
           ..add('quoteId', quoteId)
           ..add('paymentId', paymentId)
           ..add('creditId', creditId)
@@ -1247,6 +1267,11 @@ class ActivityEntityBuilder
   String get recurringExpenseId => _$this._recurringExpenseId;
   set recurringExpenseId(String recurringExpenseId) =>
       _$this._recurringExpenseId = recurringExpenseId;
+
+  String _purchaseOrderId;
+  String get purchaseOrderId => _$this._purchaseOrderId;
+  set purchaseOrderId(String purchaseOrderId) =>
+      _$this._purchaseOrderId = purchaseOrderId;
 
   String _quoteId;
   String get quoteId => _$this._quoteId;
@@ -1314,6 +1339,7 @@ class ActivityEntityBuilder
       _invoiceId = $v.invoiceId;
       _recurringInvoiceId = $v.recurringInvoiceId;
       _recurringExpenseId = $v.recurringExpenseId;
+      _purchaseOrderId = $v.purchaseOrderId;
       _quoteId = $v.quoteId;
       _paymentId = $v.paymentId;
       _creditId = $v.creditId;
@@ -1363,6 +1389,7 @@ class ActivityEntityBuilder
               invoiceId: invoiceId,
               recurringInvoiceId: recurringInvoiceId,
               recurringExpenseId: recurringExpenseId,
+              purchaseOrderId: purchaseOrderId,
               quoteId: quoteId,
               paymentId: paymentId,
               creditId: creditId,

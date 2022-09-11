@@ -14,7 +14,7 @@ import 'package:invoiceninja_flutter/redux/app/app_state.dart';
 import 'package:invoiceninja_flutter/utils/formatting.dart';
 
 class WebUtils {
-  static String get browserUrl {
+  static String get apiUrl {
     var url = window.location.href;
 
     if (url.contains('?')) {
@@ -27,6 +27,8 @@ class WebUtils {
 
     return formatApiUrl(url);
   }
+
+  static String get browserUrl => cleanApiUrl(apiUrl);
 
   static String get browserRoute => window.location.hash.replaceFirst('#', '');
 
@@ -69,19 +71,28 @@ class WebUtils {
     });
   }
 
+  static void microsoftLogout() {
+    final config = Configuration()
+      ..auth = (BrowserAuthOptions()
+        ..redirectUri = cleanApiUrl(apiUrl)
+        ..clientId = Config.MICROSOFT_CLIENT_ID);
+
+    final publicClientApp = PublicClientApplication(config);
+    final logoutRequest = EndSessionPopupRequest();
+
+    publicClientApp.logoutPopup(logoutRequest);
+  }
+
   static void microsoftLogin(
     Function(String, String) succesCallback,
     Function(dynamic) failureCallback,
   ) async {
     final config = Configuration()
       ..auth = (BrowserAuthOptions()
-        //..redirectUri = 'https://invoicing.co/auth/microsoft'
-        //..redirectUri = browserUrl
-        //..redirectUri = 'https://staging.invoicing.co/'
-        ..redirectUri = 'http://localhost:8080/'
+        ..redirectUri = cleanApiUrl(apiUrl)
         ..clientId = Config.MICROSOFT_CLIENT_ID);
-    final publicClientApp = PublicClientApplication(config);
 
+    final publicClientApp = PublicClientApplication(config);
     final loginRequest = PopupRequest()..scopes = ['user.read'];
 
     publicClientApp.loginPopup(loginRequest).then((result) {

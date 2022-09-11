@@ -193,7 +193,7 @@ abstract class CalculateInvoiceTotal {
       InvoiceItemEntity item, double invoiceTotal, int precision) {
     final double qty = round(item.quantity, 5);
     final double cost = round(item.cost, 5);
-    final double itemDiscount = round(item.discount, precision);
+    final double itemDiscount = round(item.discount, 5);
     double lineTotal = qty * cost;
 
     if (discount != 0) {
@@ -219,14 +219,14 @@ abstract class CalculateInvoiceTotal {
     return round(lineTotal, precision);
   }
 
-  double calculateTotal({@required int precision}) {
+  double calculateTotalWithoutInterest({@required int precision}) {
     double total = calculateSubtotal(precision: precision);
     double itemTax = 0.0;
 
     lineItems.forEach((item) {
       final double qty = round(item.quantity, 5);
       final double cost = round(item.cost, 5);
-      final double itemDiscount = round(item.discount, precision);
+      final double itemDiscount = round(item.discount, 5);
       final double taxRate1 = round(item.taxRate1, 3);
       final double taxRate2 = round(item.taxRate2, 3);
       final double taxRate3 = round(item.taxRate3, 3);
@@ -236,14 +236,14 @@ abstract class CalculateInvoiceTotal {
         if (isAmountDiscount) {
           lineTotal -= itemDiscount;
         } else {
-          lineTotal -= round(lineTotal * itemDiscount / 100, 4);
+          lineTotal -= round(lineTotal * itemDiscount / 100, precision);
         }
       }
 
       if (discount != 0) {
         if (isAmountDiscount) {
           if (total != 0) {
-            lineTotal -= round(lineTotal / total * discount, 4);
+            lineTotal -= round(lineTotal / total * discount, precision);
           }
         }
       }
@@ -309,19 +309,22 @@ abstract class CalculateInvoiceTotal {
     return total;
   }
 
-  double calculateTotalWithInterest({@required int precision}) {
-    final total = calculateTotal(precision: precision);
+  double calculateTotal({@required int precision}) {
+    final total = calculateTotalWithoutInterest(precision: precision);
     final calcInterest = calculateInterest(precision: precision);
     return total + calcInterest;
   }
 
   double calculateInterest({@required int precision}) {
-    final total = calculateTotal(precision: precision);
+    final total = calculateTotalWithoutInterest(precision: precision);
     double calcInterest = 0;
     int ageInDays = 0;
 
     if (!interest) {
       return 0;
+    }
+    if (interestPaid > 0) {
+      return interestPaid;
     }
 
     final now = DateTime.now();
@@ -335,7 +338,7 @@ abstract class CalculateInvoiceTotal {
     }
     if (ageInDays > 30) {
       calcInterest =
-          round(0.1 * (total - paidToDate) / 100 * ageInDays, precision);
+          round(0.3 * (total - paidToDate) / 100 * ageInDays, precision);
     }
     print(calcInterest);
     return calcInterest;
@@ -347,7 +350,7 @@ abstract class CalculateInvoiceTotal {
     lineItems.forEach((item) {
       final double qty = round(item.quantity, 5);
       final double cost = round(item.cost, 5);
-      final double discount = round(item.discount, precision);
+      final double discount = round(item.discount, 5);
 
       double lineTotal = qty * cost;
 
@@ -355,7 +358,7 @@ abstract class CalculateInvoiceTotal {
         if (isAmountDiscount) {
           lineTotal -= discount;
         } else {
-          lineTotal -= round(lineTotal * discount / 100, 4);
+          lineTotal -= round(lineTotal * discount / 100, precision);
         }
       }
 

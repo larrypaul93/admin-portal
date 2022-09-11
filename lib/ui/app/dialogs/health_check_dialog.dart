@@ -53,11 +53,13 @@ class _HealthCheckDialogState extends State<HealthCheckDialog> {
     final url = '${credentials.url}/health_check';
 
     webClient.get(url, credentials.token).then((dynamic response) {
+      //print('## response: $response');
       setState(() {
         _response = serializers.deserializeWith(
             HealthCheckResponse.serializer, response);
       });
     }).catchError((dynamic error) {
+      Navigator.of(context).pop();
       showErrorDialog(context: context, message: error);
     });
   }
@@ -96,6 +98,7 @@ class _HealthCheckDialogState extends State<HealthCheckDialog> {
         _parseVersion(_response?.phpVersion?.currentPHPVersion ?? '');
     final cliPhpVersion =
         _parseVersion(_response?.phpVersion?.currentPHPCLIVersion ?? '');
+    final phpMemoryLimit = _response?.phpVersion?.memoryLimit ?? '';
 
     return AlertDialog(
       content: _response == null
@@ -124,11 +127,12 @@ class _HealthCheckDialogState extends State<HealthCheckDialog> {
                   isValid: _response.dbCheck,
                 ),
                 _HealthListTile(
-                  title: 'PHP Version',
+                  title: 'PHP Info',
                   isValid: _response.phpVersion.isOkay,
-                  subtitle: webPhpVersion == cliPhpVersion
-                      ? 'v$webPhpVersion'
-                      : 'Web: v$webPhpVersion\nCLI: v$cliPhpVersion',
+                  subtitle: 'Web: v$webPhpVersion\nCLI: v$cliPhpVersion' +
+                      (phpMemoryLimit.isNotEmpty
+                          ? '\nMemory Limit: $phpMemoryLimit'
+                          : ''),
                 ),
                 /*
                 if (!_response.execEnabled)
@@ -180,10 +184,10 @@ class _HealthCheckDialogState extends State<HealthCheckDialog> {
                     url:
                         'https://invoiceninja.github.io/docs/self-host-installation/#final-setup-steps',
                   ),
-                if (_response.phantomEnabled)
+                if (!_response.pdfEngine.toLowerCase().startsWith('snappdf'))
                   _HealthListTile(
                     title: 'SnapPDF not enabled',
-                    subtitle: 'Use SnapPDF for faster PDF generation',
+                    subtitle: 'Use SnapPDF to generate PDF files locally',
                     isWarning: true,
                     url:
                         'https://invoiceninja.github.io/docs/self-host-troubleshooting/#pdf-conversion-issues',
@@ -247,7 +251,7 @@ class _HealthListTile extends StatelessWidget {
         color:
             isWarning ? Colors.orange : (isValid ? Colors.green : Colors.red),
       ),
-      onTap: url != null ? () => launch(url) : null,
+      onTap: url != null ? () => launchUrl(Uri.parse(url)) : null,
     );
   }
 }

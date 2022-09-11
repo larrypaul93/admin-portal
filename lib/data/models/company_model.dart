@@ -5,7 +5,6 @@ import 'dart:convert';
 import 'package:built_collection/built_collection.dart';
 import 'package:built_value/built_value.dart';
 import 'package:built_value/serializer.dart';
-import 'package:flutter/foundation.dart';
 
 // Project imports:
 import 'package:invoiceninja_flutter/.env.dart';
@@ -20,6 +19,7 @@ import 'package:invoiceninja_flutter/data/models/payment_term_model.dart';
 import 'package:invoiceninja_flutter/data/models/service_report.dart';
 import 'package:invoiceninja_flutter/data/models/system_log_model.dart';
 import 'package:invoiceninja_flutter/main_app.dart';
+import 'package:invoiceninja_flutter/redux/dashboard/dashboard_state.dart';
 import 'package:invoiceninja_flutter/utils/formatting.dart';
 import 'package:invoiceninja_flutter/utils/localization.dart';
 import 'package:invoiceninja_flutter/utils/strings.dart';
@@ -83,6 +83,7 @@ abstract class CompanyEntity extends Object
       autoStartTasks: false,
       invoiceTaskTimelog: true,
       invoiceTaskDatelog: true,
+      invoiceTaskProject: false,
       isLarge: false,
       enableShopApi: false,
       convertProductExchangeRate: false,
@@ -93,6 +94,7 @@ abstract class CompanyEntity extends Object
       enableCustomSurchargeTaxes4: false,
       numberOfInvoiceTaxRates: 0,
       numberOfItemTaxRates: 0,
+      numberOfExpenseTaxRates: 0,
       invoiceExpenseDocuments: false,
       markExpensesInvoiceable: false,
       markExpensesPaid: false,
@@ -246,6 +248,9 @@ abstract class CompanyEntity extends Object
   @BuiltValueField(wireName: 'enabled_item_tax_rates')
   int get numberOfItemTaxRates;
 
+  @BuiltValueField(wireName: 'enabled_expense_tax_rates')
+  int get numberOfExpenseTaxRates;
+
   @BuiltValueField(wireName: 'expense_inclusive_taxes')
   bool get expenseInclusiveTaxes;
 
@@ -388,6 +393,9 @@ abstract class CompanyEntity extends Object
   @BuiltValueField(wireName: 'invoice_task_datelog')
   bool get invoiceTaskDatelog;
 
+  @BuiltValueField(wireName: 'invoice_task_project')
+  bool get invoiceTaskProject;
+
   @BuiltValueField(wireName: 'auto_start_tasks')
   bool get autoStartTasks;
 
@@ -484,6 +492,12 @@ abstract class CompanyEntity extends Object
 
   bool get enableThirdItemTaxRate => (numberOfItemTaxRates ?? 0) >= 3;
 
+  bool get enableFirstExpenseTaxRate => (numberOfExpenseTaxRates ?? 0) >= 1;
+
+  bool get enableSecondExpenseTaxRate => (numberOfExpenseTaxRates ?? 0) >= 2;
+
+  bool get enableThirdExpenseTaxRate => (numberOfExpenseTaxRates ?? 0) >= 3;
+
   bool get hasInvoiceTaxes => numberOfInvoiceTaxRates > 0;
 
   bool get hasItemTaxes => numberOfItemTaxRates > 0;
@@ -527,6 +541,14 @@ abstract class CompanyEntity extends Object
       field = field.replaceFirst('quote', 'invoice');
     } else if (field.contains('credit')) {
       field = field.replaceFirst('credit', 'invoice');
+    } else if (field.contains('recurring_invoice')) {
+      field = field.replaceFirst('recurring_invoice', 'invoice');
+    } else if (field.contains('purchase_order')) {
+      field = field.replaceFirst('purchase_order', 'invoice');
+    }
+
+    if (field.contains('recurring_expense')) {
+      field = field.replaceFirst('recurring_expense', 'expense');
     }
 
     if (customFields.containsKey(field)) {
@@ -594,10 +616,6 @@ abstract class CompanyEntity extends Object
       );
 
   bool isModuleEnabled(EntityType entityType) {
-    if (kReleaseMode && entityType == EntityType.purchaseOrder) {
-      return false;
-    }
-
     if ((entityType == EntityType.invoice ||
             entityType == EntityType.payment) &&
         enabledModules & kModuleInvoices == 0) {
@@ -626,12 +644,20 @@ abstract class CompanyEntity extends Object
     } else if (entityType == EntityType.recurringExpense &&
         enabledModules & kModuleRecurringExpenses == 0) {
       return false;
+    } else if (entityType == EntityType.purchaseOrder &&
+        enabledModules & kModulePurchaseOrders == 0) {
+      return false;
     }
 
     return true;
   }
 
+  int get daysActive =>
+      DateTime.now().difference(convertTimestampToDate(createdAt)).inDays;
+
   String get currencyId => settings.currencyId ?? kDefaultCurrencyId;
+
+  bool get supportsQrIban => settings.countryId == kCountrySwitzerland;
 
   // ignore: unused_element
   static void _initializeBuilder(CompanyEntityBuilder builder) => builder
@@ -654,6 +680,8 @@ abstract class CompanyEntity extends Object
     ..reportIncludeDrafts = false
     ..convertRateToClient = true
     ..stopOnUnpaidRecurring = false
+    ..numberOfExpenseTaxRates = 0
+    ..invoiceTaskProject = false
     ..systemLogs.replace(BuiltList<SystemLogEntity>())
     ..subscriptions.replace(BuiltList<SubscriptionEntity>())
     ..recurringExpenses.replace(BuiltList<ExpenseEntity>())
@@ -992,6 +1020,22 @@ abstract class UserSettingsEntity
       tableColumns: BuiltMap<String, BuiltList<String>>(),
       reportSettings: BuiltMap<String, ReportSettingsEntity>(),
       includeDeletedClients: false,
+      dashboardFields: BuiltList<DashboardField>(<DashboardField>[
+        DashboardField(
+          field: DashboardUISettings.FIELD_ACTIVE_INVOICES,
+          period: DashboardUISettings.PERIOD_CURRENT,
+        ),
+        DashboardField(
+          field: DashboardUISettings.FIELD_OUTSTANDING_INVOICES,
+          period: DashboardUISettings.PERIOD_CURRENT,
+        ),
+        DashboardField(
+          field: DashboardUISettings.FIELD_COMPLETED_PAYMENTS,
+          period: DashboardUISettings.PERIOD_CURRENT,
+        ),
+      ]),
+      dashboardFieldsPerRowMobile: 1,
+      dashboardFieldsPerRowDesktop: 3,
     );
   }
 
@@ -1017,6 +1061,15 @@ abstract class UserSettingsEntity
   @BuiltValueField(wireName: 'include_deleted_clients')
   bool get includeDeletedClients;
 
+  @BuiltValueField(wireName: 'dashboard_fields')
+  BuiltList<DashboardField> get dashboardFields;
+
+  @BuiltValueField(wireName: 'dashboard_fields_per_row_mobile')
+  int get dashboardFieldsPerRowMobile;
+
+  @BuiltValueField(wireName: 'dashboard_fields_per_row_desktop')
+  int get dashboardFieldsPerRowDesktop;
+
   List<String> getTableColumns(EntityType entityType) {
     if (tableColumns != null && tableColumns.containsKey('$entityType')) {
       return tableColumns['$entityType'].toList();
@@ -1031,6 +1084,22 @@ abstract class UserSettingsEntity
     ..numberYearsActive = 3
     ..tableColumns.replace(BuiltMap<String, BuiltList<String>>())
     ..reportSettings.replace(BuiltMap<String, ReportSettingsEntity>())
+    ..dashboardFields.replace(BuiltList<DashboardField>(<DashboardField>[
+      DashboardField(
+        field: DashboardUISettings.FIELD_ACTIVE_INVOICES,
+        period: DashboardUISettings.PERIOD_CURRENT,
+      ),
+      DashboardField(
+        field: DashboardUISettings.FIELD_OUTSTANDING_INVOICES,
+        period: DashboardUISettings.PERIOD_CURRENT,
+      ),
+      DashboardField(
+        field: DashboardUISettings.FIELD_COMPLETED_PAYMENTS,
+        period: DashboardUISettings.PERIOD_CURRENT,
+      ),
+    ]))
+    ..dashboardFieldsPerRowMobile = 1
+    ..dashboardFieldsPerRowDesktop = 3
     ..includeDeletedClients = false;
 
   static Serializer<UserSettingsEntity> get serializer =>
@@ -1124,4 +1193,42 @@ abstract class RegistrationFieldEntity
 
   static Serializer<RegistrationFieldEntity> get serializer =>
       _$registrationFieldEntitySerializer;
+}
+
+abstract class DashboardField
+    implements Built<DashboardField, DashboardFieldBuilder> {
+  factory DashboardField({
+    String field,
+    String period,
+    String type,
+  }) {
+    return _$DashboardField._(
+      field: field ?? '',
+      period: period ?? '',
+      type: type ?? TYPE_SUM,
+    );
+  }
+
+  DashboardField._();
+
+  static const TYPE_SUM = 'sum';
+  static const TYPE_COUNT = 'count';
+  static const TYPE_AVERAGE = 'average';
+
+  @override
+  @memoized
+  int get hashCode;
+
+  String get field;
+
+  String get period;
+
+  String get type;
+
+  // ignore: unused_element
+  static void _initializeBuilder(DashboardFieldBuilder builder) =>
+      builder..type = TYPE_SUM;
+
+  static Serializer<DashboardField> get serializer =>
+      _$dashboardFieldSerializer;
 }

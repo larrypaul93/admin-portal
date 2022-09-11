@@ -9,8 +9,9 @@ import 'package:invoiceninja_flutter/redux/app/app_state.dart';
 import 'package:invoiceninja_flutter/redux/ui/list_ui_state.dart';
 
 ContactEntity creditContactSelector(InvoiceEntity credit, ClientEntity client) {
-  var contactIds =
-      credit.invitations.map((invitation) => invitation.contactId).toList();
+  var contactIds = credit.invitations
+      .map((invitation) => invitation.clientContactId)
+      .toList();
   if (contactIds.contains(client.primaryContact.id)) {
     contactIds = [client.primaryContact.id];
   }
@@ -18,19 +19,28 @@ ContactEntity creditContactSelector(InvoiceEntity credit, ClientEntity client) {
       .firstWhere((contact) => contactIds.contains(contact.id), orElse: null);
 }
 
-var memoizedDropdownCreditList = memo6(
+var memoizedDropdownCreditList = memo7(
     (BuiltMap<String, InvoiceEntity> creditMap,
             BuiltMap<String, ClientEntity> clientMap,
+            BuiltMap<String, VendorEntity> vendorMap,
             BuiltList<String> creditList,
             String clientId,
             BuiltMap<String, UserEntity> userMap,
             List<String> excludedIds) =>
         dropdownCreditSelector(
-            creditMap, clientMap, creditList, clientId, userMap, excludedIds));
+          creditMap,
+          clientMap,
+          vendorMap,
+          creditList,
+          clientId,
+          userMap,
+          excludedIds,
+        ));
 
 List<String> dropdownCreditSelector(
     BuiltMap<String, InvoiceEntity> creditMap,
     BuiltMap<String, ClientEntity> clientMap,
+    BuiltMap<String, VendorEntity> vendorMap,
     BuiltList<String> creditList,
     String clientId,
     BuiltMap<String, UserEntity> userMap,
@@ -61,6 +71,7 @@ List<String> dropdownCreditSelector(
     return creditA.compareTo(
         invoice: creditB,
         clientMap: clientMap,
+        vendorMap: vendorMap,
         sortAscending: true,
         sortField: CreditFields.number,
         userMap: userMap);
@@ -74,20 +85,22 @@ ClientEntity creditClientSelector(
   return clientMap[credit.clientId];
 }
 
-var memoizedFilteredCreditList = memo6((SelectionState selectionState,
+var memoizedFilteredCreditList = memo7((SelectionState selectionState,
         BuiltMap<String, InvoiceEntity> creditMap,
         BuiltList<String> creditList,
         BuiltMap<String, ClientEntity> clientMap,
+        BuiltMap<String, VendorEntity> vendorMap,
         ListUIState creditListState,
         BuiltMap<String, UserEntity> userMap) =>
     filteredCreditsSelector(selectionState, creditMap, creditList, clientMap,
-        creditListState, userMap));
+        vendorMap, creditListState, userMap));
 
 List<String> filteredCreditsSelector(
     SelectionState selectionState,
     BuiltMap<String, InvoiceEntity> creditMap,
     BuiltList<String> creditList,
     BuiltMap<String, ClientEntity> clientMap,
+    BuiltMap<String, VendorEntity> vendorMap,
     ListUIState creditListState,
     BuiltMap<String, UserEntity> userMap) {
   final filterEntityId = selectionState.filterEntityId;
@@ -154,6 +167,7 @@ List<String> filteredCreditsSelector(
         sortField: creditListState.sortField,
         sortAscending: creditListState.sortAscending,
         clientMap: clientMap,
+        vendorMap: vendorMap,
         userMap: userMap);
   });
 

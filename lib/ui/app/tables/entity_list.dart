@@ -219,10 +219,6 @@ class _EntityListState extends State<EntityList> {
           ],
         );
       } else {
-        if (widget.tableColumns.isEmpty) {
-          return SizedBox();
-        }
-
         final rowsPerPage = state.prefState.rowsPerPage;
 
         return Column(
@@ -297,6 +293,7 @@ class _EntityListState extends State<EntityList> {
                       10,
                       25,
                       50,
+                      100,
                     ],
                     onRowsPerPageChanged: (value) {
                       store.dispatch(UpdateUserPreferences(rowsPerPage: value));

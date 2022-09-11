@@ -244,6 +244,10 @@ class _TemplatesAndRemindersState extends State<TemplatesAndReminders>
       settings = settings.rebuild((b) => b
         ..emailBodyStatement = body
         ..emailSubjectStatement = subject);
+    } else if (_selectedTemplate == EmailTemplate.purchase_order) {
+      settings = settings.rebuild((b) => b
+        ..emailBodyPurchaseOrder = body
+        ..emailSubjectPurchaseOrder = subject);
     }
 
     if (settings != widget.viewModel.settings) {
@@ -369,6 +373,9 @@ class _TemplatesAndRemindersState extends State<TemplatesAndReminders>
                       return false;
                     } else if (value == EmailTemplate.credit &&
                         !company.isModuleEnabled(EntityType.credit)) {
+                      return false;
+                    } else if (value == EmailTemplate.purchase_order &&
+                        !company.isModuleEnabled(EntityType.purchaseOrder)) {
                       return false;
                     }
                     // TODO remove this once statements are enabled
@@ -514,6 +521,10 @@ class _TemplatesAndRemindersState extends State<TemplatesAndReminders>
                 ),
               VariablesHelp(
                 showInvoiceAsQuote: template == EmailTemplate.quote,
+                showInvoiceAsInvoices: [
+                  EmailTemplate.payment,
+                  EmailTemplate.payment_partial,
+                ].contains(template),
               ),
               SizedBox(height: 16),
             ],
@@ -548,8 +559,11 @@ class _TemplatesAndRemindersState extends State<TemplatesAndReminders>
                   LoadingIndicator()
                 else
                   IgnorePointer(
-                    child: ExampleEditor(
-                      value: html2md.convert(_bodyPreview),
+                    child: ColoredBox(
+                      color: Colors.white,
+                      child: ExampleEditor(
+                        value: html2md.convert(_bodyPreview),
+                      ),
                     ),
                   ),
               ],

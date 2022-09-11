@@ -141,6 +141,9 @@ class _$InvoiceEntitySerializer implements StructuredSerializer<InvoiceEntity> {
       'project_id',
       serializers.serialize(object.projectId,
           specifiedType: const FullType(String)),
+      'expense_id',
+      serializers.serialize(object.expenseId,
+          specifiedType: const FullType(String)),
       'vendor_id',
       serializers.serialize(object.vendorId,
           specifiedType: const FullType(String)),
@@ -482,6 +485,10 @@ class _$InvoiceEntitySerializer implements StructuredSerializer<InvoiceEntity> {
           break;
         case 'project_id':
           result.projectId = serializers.deserialize(value,
+              specifiedType: const FullType(String)) as String;
+          break;
+        case 'expense_id':
+          result.expenseId = serializers.deserialize(value,
               specifiedType: const FullType(String)) as String;
           break;
         case 'vendor_id':
@@ -1012,7 +1019,10 @@ class _$InvitationEntitySerializer
       'link',
       serializers.serialize(object.link, specifiedType: const FullType(String)),
       'client_contact_id',
-      serializers.serialize(object.contactId,
+      serializers.serialize(object.clientContactId,
+          specifiedType: const FullType(String)),
+      'vendor_contact_id',
+      serializers.serialize(object.vendorContactId,
           specifiedType: const FullType(String)),
       'sent_date',
       serializers.serialize(object.sentDate,
@@ -1102,7 +1112,11 @@ class _$InvitationEntitySerializer
               specifiedType: const FullType(String)) as String;
           break;
         case 'client_contact_id':
-          result.contactId = serializers.deserialize(value,
+          result.clientContactId = serializers.deserialize(value,
+              specifiedType: const FullType(String)) as String;
+          break;
+        case 'vendor_contact_id':
+          result.vendorContactId = serializers.deserialize(value,
               specifiedType: const FullType(String)) as String;
           break;
         case 'sent_date':
@@ -1484,6 +1498,8 @@ class _$InvoiceEntity extends InvoiceEntity {
   @override
   final String projectId;
   @override
+  final String expenseId;
+  @override
   final String vendorId;
   @override
   final String subscriptionId;
@@ -1635,6 +1651,7 @@ class _$InvoiceEntity extends InvoiceEntity {
       this.paidToDate,
       this.clientId,
       this.projectId,
+      this.expenseId,
       this.vendorId,
       this.subscriptionId,
       this.statusId,
@@ -1715,6 +1732,8 @@ class _$InvoiceEntity extends InvoiceEntity {
         clientId, r'InvoiceEntity', 'clientId');
     BuiltValueNullFieldError.checkNotNull(
         projectId, r'InvoiceEntity', 'projectId');
+    BuiltValueNullFieldError.checkNotNull(
+        expenseId, r'InvoiceEntity', 'expenseId');
     BuiltValueNullFieldError.checkNotNull(
         vendorId, r'InvoiceEntity', 'vendorId');
     BuiltValueNullFieldError.checkNotNull(
@@ -1822,6 +1841,7 @@ class _$InvoiceEntity extends InvoiceEntity {
         paidToDate == other.paidToDate &&
         clientId == other.clientId &&
         projectId == other.projectId &&
+        expenseId == other.expenseId &&
         vendorId == other.vendorId &&
         subscriptionId == other.subscriptionId &&
         statusId == other.statusId &&
@@ -1914,7 +1934,7 @@ class _$InvoiceEntity extends InvoiceEntity {
                                                                 $jc(
                                                                     $jc(
                                                                         $jc(
-                                                                            $jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc(0, amount.hashCode), balance.hashCode), paidToDate.hashCode), clientId.hashCode), projectId.hashCode), vendorId.hashCode), subscriptionId.hashCode), statusId.hashCode), number.hashCode), discount.hashCode), poNumber.hashCode), date.hashCode), dueDate.hashCode), publicNotes.hashCode), privateNotes.hashCode), terms.hashCode), footer.hashCode), designId.hashCode), usesInclusiveTaxes.hashCode), taxName1.hashCode), taxRate1.hashCode), taxName2.hashCode), taxRate2.hashCode), taxName3.hashCode), taxRate3.hashCode), isAmountDiscount.hashCode), partial.hashCode), taxAmount.hashCode), partialDueDate.hashCode), autoBill.hashCode), customValue1.hashCode), customValue2.hashCode), customValue3.hashCode), customValue4.hashCode), customSurcharge1.hashCode), customSurcharge2.hashCode), customSurcharge3.hashCode), customSurcharge4.hashCode), customTaxes1.hashCode), customTaxes2.hashCode), customTaxes3.hashCode), customTaxes4.hashCode), exchangeRate.hashCode), reminder1Sent.hashCode), reminder2Sent.hashCode), reminder3Sent.hashCode), reminderLastSent.hashCode), frequencyId.hashCode), lastSentDate.hashCode), nextSendDate.hashCode), remainingCycles.hashCode), dueDateDays.hashCode), invoiceId.hashCode), recurringId.hashCode), autoBillEnabled.hashCode),
+                                                                            $jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc(0, amount.hashCode), balance.hashCode), paidToDate.hashCode), clientId.hashCode), projectId.hashCode), expenseId.hashCode), vendorId.hashCode), subscriptionId.hashCode), statusId.hashCode), number.hashCode), discount.hashCode), poNumber.hashCode), date.hashCode), dueDate.hashCode), publicNotes.hashCode), privateNotes.hashCode), terms.hashCode), footer.hashCode), designId.hashCode), usesInclusiveTaxes.hashCode), taxName1.hashCode), taxRate1.hashCode), taxName2.hashCode), taxRate2.hashCode), taxName3.hashCode), taxRate3.hashCode), isAmountDiscount.hashCode), partial.hashCode), taxAmount.hashCode), partialDueDate.hashCode), autoBill.hashCode), customValue1.hashCode), customValue2.hashCode), customValue3.hashCode), customValue4.hashCode), customSurcharge1.hashCode), customSurcharge2.hashCode), customSurcharge3.hashCode), customSurcharge4.hashCode), customTaxes1.hashCode), customTaxes2.hashCode), customTaxes3.hashCode), customTaxes4.hashCode), exchangeRate.hashCode), reminder1Sent.hashCode), reminder2Sent.hashCode), reminder3Sent.hashCode), reminderLastSent.hashCode), frequencyId.hashCode), lastSentDate.hashCode), nextSendDate.hashCode), remainingCycles.hashCode), dueDateDays.hashCode), invoiceId.hashCode), recurringId.hashCode), autoBillEnabled.hashCode),
                                                                                 serviceReportId.hashCode),
                                                                             attachPdf.hashCode),
                                                                         requiredSignature.hashCode),
@@ -1944,6 +1964,7 @@ class _$InvoiceEntity extends InvoiceEntity {
           ..add('paidToDate', paidToDate)
           ..add('clientId', clientId)
           ..add('projectId', projectId)
+          ..add('expenseId', expenseId)
           ..add('vendorId', vendorId)
           ..add('subscriptionId', subscriptionId)
           ..add('statusId', statusId)
@@ -2042,6 +2063,10 @@ class InvoiceEntityBuilder
   String _projectId;
   String get projectId => _$this._projectId;
   set projectId(String projectId) => _$this._projectId = projectId;
+
+  String _expenseId;
+  String get expenseId => _$this._expenseId;
+  set expenseId(String expenseId) => _$this._expenseId = expenseId;
 
   String _vendorId;
   String get vendorId => _$this._vendorId;
@@ -2367,6 +2392,7 @@ class InvoiceEntityBuilder
       _paidToDate = $v.paidToDate;
       _clientId = $v.clientId;
       _projectId = $v.projectId;
+      _expenseId = $v.expenseId;
       _vendorId = $v.vendorId;
       _subscriptionId = $v.subscriptionId;
       _statusId = $v.statusId;
@@ -2472,12 +2498,13 @@ class InvoiceEntityBuilder
                   clientId, r'InvoiceEntity', 'clientId'),
               projectId: BuiltValueNullFieldError.checkNotNull(
                   projectId, r'InvoiceEntity', 'projectId'),
+              expenseId: BuiltValueNullFieldError.checkNotNull(
+                  expenseId, r'InvoiceEntity', 'expenseId'),
               vendorId: BuiltValueNullFieldError.checkNotNull(
                   vendorId, r'InvoiceEntity', 'vendorId'),
               subscriptionId: BuiltValueNullFieldError.checkNotNull(
                   subscriptionId, r'InvoiceEntity', 'subscriptionId'),
-              statusId: BuiltValueNullFieldError.checkNotNull(
-                  statusId, r'InvoiceEntity', 'statusId'),
+              statusId: BuiltValueNullFieldError.checkNotNull(statusId, r'InvoiceEntity', 'statusId'),
               number: BuiltValueNullFieldError.checkNotNull(number, r'InvoiceEntity', 'number'),
               discount: BuiltValueNullFieldError.checkNotNull(discount, r'InvoiceEntity', 'discount'),
               poNumber: BuiltValueNullFieldError.checkNotNull(poNumber, r'InvoiceEntity', 'poNumber'),
@@ -2969,7 +2996,9 @@ class _$InvitationEntity extends InvitationEntity {
   @override
   final String link;
   @override
-  final String contactId;
+  final String clientContactId;
+  @override
+  final String vendorContactId;
   @override
   final String sentDate;
   @override
@@ -3004,7 +3033,8 @@ class _$InvitationEntity extends InvitationEntity {
   _$InvitationEntity._(
       {this.key,
       this.link,
-      this.contactId,
+      this.clientContactId,
+      this.vendorContactId,
       this.sentDate,
       this.viewedDate,
       this.openedDate,
@@ -3022,7 +3052,9 @@ class _$InvitationEntity extends InvitationEntity {
     BuiltValueNullFieldError.checkNotNull(key, r'InvitationEntity', 'key');
     BuiltValueNullFieldError.checkNotNull(link, r'InvitationEntity', 'link');
     BuiltValueNullFieldError.checkNotNull(
-        contactId, r'InvitationEntity', 'contactId');
+        clientContactId, r'InvitationEntity', 'clientContactId');
+    BuiltValueNullFieldError.checkNotNull(
+        vendorContactId, r'InvitationEntity', 'vendorContactId');
     BuiltValueNullFieldError.checkNotNull(
         sentDate, r'InvitationEntity', 'sentDate');
     BuiltValueNullFieldError.checkNotNull(
@@ -3052,7 +3084,8 @@ class _$InvitationEntity extends InvitationEntity {
     return other is InvitationEntity &&
         key == other.key &&
         link == other.link &&
-        contactId == other.contactId &&
+        clientContactId == other.clientContactId &&
+        vendorContactId == other.vendorContactId &&
         isChanged == other.isChanged &&
         createdAt == other.createdAt &&
         updatedAt == other.updatedAt &&
@@ -3077,9 +3110,11 @@ class _$InvitationEntity extends InvitationEntity {
                                 $jc(
                                     $jc(
                                         $jc(
-                                            $jc($jc(0, key.hashCode),
-                                                link.hashCode),
-                                            contactId.hashCode),
+                                            $jc(
+                                                $jc($jc(0, key.hashCode),
+                                                    link.hashCode),
+                                                clientContactId.hashCode),
+                                            vendorContactId.hashCode),
                                         isChanged.hashCode),
                                     createdAt.hashCode),
                                 updatedAt.hashCode),
@@ -3096,7 +3131,8 @@ class _$InvitationEntity extends InvitationEntity {
     return (newBuiltValueToStringHelper(r'InvitationEntity')
           ..add('key', key)
           ..add('link', link)
-          ..add('contactId', contactId)
+          ..add('clientContactId', clientContactId)
+          ..add('vendorContactId', vendorContactId)
           ..add('sentDate', sentDate)
           ..add('viewedDate', viewedDate)
           ..add('openedDate', openedDate)
@@ -3126,9 +3162,15 @@ class InvitationEntityBuilder
   String get link => _$this._link;
   set link(String link) => _$this._link = link;
 
-  String _contactId;
-  String get contactId => _$this._contactId;
-  set contactId(String contactId) => _$this._contactId = contactId;
+  String _clientContactId;
+  String get clientContactId => _$this._clientContactId;
+  set clientContactId(String clientContactId) =>
+      _$this._clientContactId = clientContactId;
+
+  String _vendorContactId;
+  String get vendorContactId => _$this._vendorContactId;
+  set vendorContactId(String vendorContactId) =>
+      _$this._vendorContactId = vendorContactId;
 
   String _sentDate;
   String get sentDate => _$this._sentDate;
@@ -3184,14 +3226,17 @@ class InvitationEntityBuilder
   String get id => _$this._id;
   set id(String id) => _$this._id = id;
 
-  InvitationEntityBuilder();
+  InvitationEntityBuilder() {
+    InvitationEntity._initializeBuilder(this);
+  }
 
   InvitationEntityBuilder get _$this {
     final $v = _$v;
     if ($v != null) {
       _key = $v.key;
       _link = $v.link;
-      _contactId = $v.contactId;
+      _clientContactId = $v.clientContactId;
+      _vendorContactId = $v.vendorContactId;
       _sentDate = $v.sentDate;
       _viewedDate = $v.viewedDate;
       _openedDate = $v.openedDate;
@@ -3231,8 +3276,10 @@ class InvitationEntityBuilder
                 key, r'InvitationEntity', 'key'),
             link: BuiltValueNullFieldError.checkNotNull(
                 link, r'InvitationEntity', 'link'),
-            contactId: BuiltValueNullFieldError.checkNotNull(
-                contactId, r'InvitationEntity', 'contactId'),
+            clientContactId: BuiltValueNullFieldError.checkNotNull(
+                clientContactId, r'InvitationEntity', 'clientContactId'),
+            vendorContactId: BuiltValueNullFieldError.checkNotNull(
+                vendorContactId, r'InvitationEntity', 'vendorContactId'),
             sentDate: BuiltValueNullFieldError.checkNotNull(
                 sentDate, r'InvitationEntity', 'sentDate'),
             viewedDate: BuiltValueNullFieldError.checkNotNull(
@@ -3243,10 +3290,9 @@ class InvitationEntityBuilder
             isChanged: isChanged,
             createdAt: BuiltValueNullFieldError.checkNotNull(
                 createdAt, r'InvitationEntity', 'createdAt'),
-            updatedAt: BuiltValueNullFieldError.checkNotNull(
-                updatedAt, r'InvitationEntity', 'updatedAt'),
-            archivedAt: BuiltValueNullFieldError.checkNotNull(
-                archivedAt, r'InvitationEntity', 'archivedAt'),
+            updatedAt:
+                BuiltValueNullFieldError.checkNotNull(updatedAt, r'InvitationEntity', 'updatedAt'),
+            archivedAt: BuiltValueNullFieldError.checkNotNull(archivedAt, r'InvitationEntity', 'archivedAt'),
             isDeleted: isDeleted,
             createdUserId: createdUserId,
             assignedUserId: assignedUserId,

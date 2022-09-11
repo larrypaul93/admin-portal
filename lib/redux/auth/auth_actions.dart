@@ -23,14 +23,15 @@ class LoadStateSuccess {
 class OAuthLoginRequest implements StartLoading {
   OAuthLoginRequest({
     @required this.completer,
-    this.email,
-    @required this.idToken,
-    @required this.accessToken,
     @required this.url,
     @required this.secret,
     @required this.platform,
     @required this.provider,
     @required this.oneTimePassword,
+    this.idToken,
+    this.accessToken,
+    this.authCode,
+    this.email,
   });
 
   final Completer completer;
@@ -42,6 +43,7 @@ class OAuthLoginRequest implements StartLoading {
   final String platform;
   final String provider;
   final String oneTimePassword;
+  final String authCode;
 }
 
 class UserLoadUrl {
@@ -129,14 +131,16 @@ class UserSignUpRequest implements StartLoading {
 
 class OAuthSignUpRequest implements StartLoading {
   OAuthSignUpRequest({
+    @required this.url,
     @required this.completer,
-    @required this.idToken,
-    @required this.accessToken,
     @required this.provider,
+    @required this.idToken,
+    this.accessToken,
   });
 
   final Completer completer;
   final String idToken;
+  final String url;
   final String accessToken;
   final String provider;
 }

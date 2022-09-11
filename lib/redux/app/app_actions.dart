@@ -97,6 +97,8 @@ class DismissNativeWarningPermanently implements PersistUI, PersistPrefs {}
 
 class DismissGatewayWarningPermanently implements PersistUI, PersistPrefs {}
 
+class DismissReviewAppPermanently implements PersistUI, PersistPrefs {}
+
 class ViewMainScreen {
   ViewMainScreen({this.addDelay = false});
 
@@ -165,6 +167,7 @@ class UpdateUserPreferences implements PersistPrefs {
     this.editAfterSaving,
     this.enableTouchEvents,
     this.enableTooltips,
+    this.flexibleSearch,
   });
 
   final AppLayout appLayout;
@@ -191,6 +194,7 @@ class UpdateUserPreferences implements PersistPrefs {
   final bool editAfterSaving;
   final bool enableTouchEvents;
   final bool enableTooltips;
+  final bool flexibleSearch;
 }
 
 class LoadAccountSuccess implements StopLoading {
@@ -496,12 +500,14 @@ void viewEntityById({
         }
 
         if (entityId != null &&
-            showError &&
             !store.state.getEntityMap(entityType).containsKey(entityId)) {
-          final localization = AppLocalization.of(navigatorKey.currentContext);
-          showErrorDialog(
-              context: navigatorKey.currentContext,
-              message: localization.failedToFindRecord);
+          if (showError) {
+            final localization =
+                AppLocalization.of(navigatorKey.currentContext);
+            showErrorDialog(
+                context: navigatorKey.currentContext,
+                message: localization.failedToFindRecord);
+          }
           return;
         }
 
@@ -857,6 +863,7 @@ void createEntityByType({
               purchaseOrder: InvoiceEntity(
                 state: state,
                 entityType: EntityType.purchaseOrder,
+                vendor: vendor,
               ),
             ));
             break;
@@ -1611,8 +1618,6 @@ void checkForChanges({
   final context = navigatorKey.currentContext;
 
   if (force) {
-    store.dispatch(DiscardChanges());
-    store.dispatch(ResetSettings());
     callback();
   } else if (store.state.hasChanges() && !isMobile(context)) {
     showDialog<MessageDialog>(

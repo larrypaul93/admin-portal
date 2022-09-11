@@ -8,9 +8,11 @@ import 'package:flutter/material.dart';
 // Package imports:
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:invoiceninja_flutter/data/models/vendor_model.dart';
+import 'package:invoiceninja_flutter/redux/app/app_actions.dart';
 import 'package:invoiceninja_flutter/redux/vendor/vendor_actions.dart';
 import 'package:invoiceninja_flutter/redux/vendor/vendor_selectors.dart';
 import 'package:invoiceninja_flutter/ui/app/buttons/elevated_button.dart';
+import 'package:invoiceninja_flutter/ui/app/document_grid.dart';
 import 'package:invoiceninja_flutter/ui/app/entity_dropdown.dart';
 import 'package:http/http.dart' as http;
 
@@ -38,6 +40,8 @@ import 'package:invoiceninja_flutter/ui/app/forms/discount_field.dart';
 import 'package:invoiceninja_flutter/ui/app/forms/dynamic_selector.dart';
 import 'package:invoiceninja_flutter/ui/app/forms/project_picker.dart';
 import 'package:invoiceninja_flutter/ui/app/forms/user_picker.dart';
+import 'package:invoiceninja_flutter/ui/app/forms/vendor_picker.dart';
+import 'package:invoiceninja_flutter/ui/app/help_text.dart';
 import 'package:invoiceninja_flutter/ui/app/invoice/tax_rate_dropdown.dart';
 import 'package:invoiceninja_flutter/ui/app/presenters/entity_presenter.dart';
 import 'package:invoiceninja_flutter/ui/credit/edit/credit_edit_items_vm.dart';
@@ -45,6 +49,7 @@ import 'package:invoiceninja_flutter/ui/invoice/edit/invoice_edit_contacts_vm.da
 import 'package:invoiceninja_flutter/ui/invoice/edit/invoice_edit_details_vm.dart';
 import 'package:invoiceninja_flutter/ui/invoice/edit/invoice_edit_items_vm.dart';
 import 'package:invoiceninja_flutter/ui/invoice/edit/invoice_edit_vm.dart';
+import 'package:invoiceninja_flutter/ui/purchase_order/edit/purchase_order_edit_items_vm.dart';
 import 'package:invoiceninja_flutter/ui/quote/edit/quote_edit_items_vm.dart';
 import 'package:invoiceninja_flutter/ui/recurring_invoice/edit/recurring_invoice_edit_items_vm.dart';
 import 'package:invoiceninja_flutter/utils/completers.dart';
@@ -108,7 +113,7 @@ class InvoiceEditDesktopState extends State<InvoiceEditDesktop>
     _showTasksTable = invoice.hasTasks && !invoice.hasProducts;
 
     _focusNode = FocusScopeNode();
-    _optionTabController = TabController(vsync: this, length: 5);
+    _optionTabController = TabController(vsync: this, length: 6);
     _tableTabController = TabController(
         vsync: this, length: 2, initialIndex: _showTasksTable ? 1 : 0);
     _scrollController = ScrollController();
@@ -217,6 +222,7 @@ class InvoiceEditDesktopState extends State<InvoiceEditDesktop>
     final invoice = viewModel.invoice;
     final company = viewModel.company;
     final client = state.clientState.get(invoice.clientId);
+    final vendor = state.vendorState.get(invoice.vendorId);
     final entityType = invoice.entityType;
     final originalInvoice =
         state.getEntity(invoice.entityType, invoice.id) as InvoiceEntity;
@@ -258,29 +264,49 @@ class InvoiceEditDesktopState extends State<InvoiceEditDesktop>
                       left: kMobileDialogPadding),
                   children: <Widget>[
                     if (invoice.isNew)
-                      ClientPicker(
-                        autofocus: true,
-                        clientId: invoice.clientId,
-                        clientState: state.clientState,
-                        onSelected: (client) {
-                          viewModel.onClientChanged(context, invoice, client);
-                        },
-                        onAddPressed: (completer) =>
-                            viewModel.onAddClientPressed(context, completer),
-                      )
+                      if (invoice.isPurchaseOrder)
+                        VendorPicker(
+                          autofocus: true,
+                          vendorId: invoice.vendorId,
+                          vendorState: state.vendorState,
+                          onSelected: (vendor) {
+                            viewModel.onVendorChanged(context, invoice, vendor);
+                          },
+                          onAddPressed: (completer) =>
+                              viewModel.onAddVendorPressed(context, completer),
+                        )
+                      else
+                        ClientPicker(
+                          autofocus: true,
+                          clientId: invoice.clientId,
+                          clientState: state.clientState,
+                          onSelected: (client) {
+                            viewModel.onClientChanged(context, invoice, client);
+                          },
+                          onAddPressed: (completer) =>
+                              viewModel.onAddClientPressed(context, completer),
+                        )
                     else
-                      ConstrainedBox(
-                        constraints: BoxConstraints(
-                            minWidth: double.infinity, minHeight: 40),
-                        child: Padding(
-                          padding: const EdgeInsets.all(6),
-                          child: Text(
-                            EntityPresenter()
-                                .initialize(client, context)
-                                .title(),
-                            style: Theme.of(context).textTheme.headline6,
-                            maxLines: 2,
-                            overflow: TextOverflow.ellipsis,
+                      InkWell(
+                        onLongPress: () => editEntity(
+                            entity: invoice.isPurchaseOrder ? vendor : client),
+                        onTap: () => viewEntity(
+                            entity: invoice.isPurchaseOrder ? vendor : client),
+                        child: ConstrainedBox(
+                          constraints: BoxConstraints(
+                              minWidth: double.infinity, minHeight: 40),
+                          child: Padding(
+                            padding: const EdgeInsets.all(6),
+                            child: Text(
+                              EntityPresenter()
+                                  .initialize(
+                                      invoice.isPurchaseOrder ? vendor : client,
+                                      context)
+                                  .title(),
+                              style: Theme.of(context).textTheme.headline6,
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
+                            ),
                           ),
                         ),
                       ),
@@ -359,6 +385,10 @@ class InvoiceEditDesktopState extends State<InvoiceEditDesktop>
                             child: Text(localization.usePaymentTerms),
                             value: 'terms',
                           ),
+                          DropdownMenuItem(
+                            child: Text(localization.dueOnReceipt),
+                            value: 'on_receipt',
+                          ),
                           ...List<int>.generate(31, (i) => i + 1)
                               .map((value) => DropdownMenuItem(
                                     child: Text(value == 1
@@ -378,11 +408,13 @@ class InvoiceEditDesktopState extends State<InvoiceEditDesktop>
                         validator: (String val) => val.trim().isEmpty
                             ? AppLocalization.of(context).pleaseSelectADate
                             : null,
-                        labelText: entityType == EntityType.credit
-                            ? localization.creditDate
-                            : entityType == EntityType.quote
-                                ? localization.quoteDate
-                                : localization.invoiceDate,
+                        labelText: entityType == EntityType.purchaseOrder
+                            ? localization.purchaseOrderDate
+                            : entityType == EntityType.credit
+                                ? localization.creditDate
+                                : entityType == EntityType.quote
+                                    ? localization.quoteDate
+                                    : localization.invoiceDate,
                         selectedDate: invoice.date,
                         onSelected: (date, _) {
                           viewModel.onChanged(
@@ -391,7 +423,8 @@ class InvoiceEditDesktopState extends State<InvoiceEditDesktop>
                       ),
                       DatePicker(
                         key: ValueKey('__terms_${client.id}__'),
-                        labelText: entityType == EntityType.invoice
+                        labelText: entityType == EntityType.invoice ||
+                                entityType == EntityType.purchaseOrder
                             ? localization.dueDate
                             : localization.validUntil,
                         selectedDate: invoice.dueDate,
@@ -453,11 +486,13 @@ class InvoiceEditDesktopState extends State<InvoiceEditDesktop>
                   children: <Widget>[
                     DecoratedFormField(
                       controller: _invoiceNumberController,
-                      label: entityType == EntityType.credit
-                          ? localization.creditNumber
-                          : entityType == EntityType.quote
-                              ? localization.quoteNumber
-                              : localization.invoiceNumber,
+                      label: entityType == EntityType.purchaseOrder
+                          ? localization.poNumber
+                          : entityType == EntityType.credit
+                              ? localization.creditNumber
+                              : entityType == EntityType.quote
+                                  ? localization.quoteNumber
+                                  : localization.invoiceNumber,
                       validator: (String val) => val.trim().isEmpty &&
                               invoice.isOld &&
                               originalInvoice.number.isNotEmpty
@@ -467,12 +502,13 @@ class InvoiceEditDesktopState extends State<InvoiceEditDesktop>
                       keyboardType: TextInputType.text,
                       onSavePressed: widget.entityViewModel.onSavePressed,
                     ),
-                    DecoratedFormField(
-                      label: localization.poNumber,
-                      controller: _poNumberController,
-                      onSavePressed: widget.entityViewModel.onSavePressed,
-                      keyboardType: TextInputType.text,
-                    ),
+                    if (!invoice.isPurchaseOrder)
+                      DecoratedFormField(
+                        label: localization.poNumber,
+                        controller: _poNumberController,
+                        onSavePressed: widget.entityViewModel.onSavePressed,
+                        keyboardType: TextInputType.text,
+                      ),
                     DiscountField(
                       controller: _discountController,
                       value: invoice.discount,
@@ -620,6 +656,10 @@ class InvoiceEditDesktopState extends State<InvoiceEditDesktop>
               viewModel: widget.entityViewModel,
               isTasks: _showTasksTable,
             )
+          else if (entityType == EntityType.purchaseOrder)
+            PurchaseOrderEditItemsScreen(
+              viewModel: widget.entityViewModel,
+            )
           else
             SizedBox(),
           Row(
@@ -635,6 +675,7 @@ class InvoiceEditDesktopState extends State<InvoiceEditDesktop>
                       left: kMobileDialogPadding),
                   children: <Widget>[
                     AppTabBar(
+                      isScrollable: true,
                       controller: _optionTabController,
                       tabs: [
                         Tab(text: localization.terms),
@@ -642,6 +683,11 @@ class InvoiceEditDesktopState extends State<InvoiceEditDesktop>
                         Tab(text: localization.publicNotes),
                         Tab(text: localization.privateNotes),
                         Tab(text: localization.settings),
+                        Tab(
+                            text: localization.documents +
+                                (invoice.documents.isNotEmpty
+                                    ? ' (${invoice.documents.length})'
+                                    : '')),
                       ],
                     ),
                     SizedBox(
@@ -650,43 +696,31 @@ class InvoiceEditDesktopState extends State<InvoiceEditDesktop>
                         controller: _optionTabController,
                         children: <Widget>[
                           DecoratedFormField(
-                            maxLines: 7,
+                            maxLines: 8,
                             controller: _termsController,
                             keyboardType: TextInputType.multiline,
-                            label: entityType == EntityType.credit
-                                ? localization.creditTerms
-                                : entityType == EntityType.quote
-                                    ? localization.quoteTerms
-                                    : localization.invoiceTerms,
                             hint: invoice.isOld && !invoice.isRecurringInvoice
                                 ? ''
                                 : settings.getDefaultTerms(invoice.entityType),
                           ),
                           DecoratedFormField(
-                            maxLines: 7,
+                            maxLines: 8,
                             controller: _footerController,
                             keyboardType: TextInputType.multiline,
-                            label: entityType == EntityType.credit
-                                ? localization.creditFooter
-                                : entityType == EntityType.quote
-                                    ? localization.quoteFooter
-                                    : localization.invoiceFooter,
                             hint: invoice.isOld && !invoice.isRecurringInvoice
                                 ? ''
                                 : settings.getDefaultFooter(invoice.entityType),
                           ),
                           DecoratedFormField(
-                            maxLines: 7,
+                            maxLines: 8,
                             controller: _publicNotesController,
                             keyboardType: TextInputType.multiline,
-                            label: localization.publicNotes,
                             hint: client.publicNotes,
                           ),
                           DecoratedFormField(
-                            maxLines: 7,
+                            maxLines: 8,
                             controller: _privateNotesController,
                             keyboardType: TextInputType.multiline,
-                            label: localization.privateNotes,
                           ),
                           LayoutBuilder(builder: (context, constraints) {
                             return GridView.count(
@@ -730,7 +764,17 @@ class InvoiceEditDesktopState extends State<InvoiceEditDesktop>
                                       }
                                     },
                                   ),
-                                if (company.isModuleEnabled(EntityType.vendor))
+                                if (invoice.isPurchaseOrder)
+                                  ClientPicker(
+                                    clientId: invoice.clientId,
+                                    clientState: state.clientState,
+                                    onSelected: (client) {
+                                      viewModel.onChanged(invoice.rebuild((b) =>
+                                          b..clientId = client?.id ?? ''));
+                                    },
+                                  )
+                                else if (company
+                                    .isModuleEnabled(EntityType.vendor))
                                   EntityDropdown(
                                     entityType: EntityType.vendor,
                                     entityId: invoice.vendorId,
@@ -817,6 +861,18 @@ class InvoiceEditDesktopState extends State<InvoiceEditDesktop>
                               ],
                             );
                           }),
+                          if (invoice.isNew || state.hasChanges())
+                            HelpText(localization.saveToUploadDocuments)
+                          else
+                            DocumentGrid(
+                                documents: invoice.documents.toList(),
+                                onUploadDocument: (path) => widget
+                                    .entityViewModel
+                                    .onUploadDocument(context, path),
+                                onDeleteDocument: (document, password,
+                                        idToken) =>
+                                    widget.entityViewModel.onDeleteDocument(
+                                        context, document, password, idToken))
                         ],
                       ),
                     ),
@@ -833,19 +889,6 @@ class InvoiceEditDesktopState extends State<InvoiceEditDesktop>
                             right: kMobileDialogPadding,
                             left: kMobileDialogPadding / 2),
                         children: <Widget>[
-                          if (invoice.interestPaid > 0)
-                            TextFormField(
-                              enabled: false,
-                              decoration: InputDecoration(
-                                labelText: 'Interest Paid',
-                              ),
-                              textAlign: TextAlign.end,
-                              key: ValueKey(
-                                  '__invoice_interest_paid_${invoice.interestPaid}_${invoice.clientId}__'),
-                              initialValue: formatNumber(
-                                  invoice.interestPaid, context,
-                                  clientId: invoice.clientId),
-                            ),
                           TextFormField(
                             enabled: false,
                             decoration: InputDecoration(
@@ -967,10 +1010,7 @@ class InvoiceEditDesktopState extends State<InvoiceEditDesktop>
                                 invoice.calculateTotal(
                                         precision: precisionForInvoice(
                                             state, invoice)) -
-                                    invoice.paidToDate +
-                                    invoice.calculateInterest(
-                                        precision: precisionForInvoice(
-                                            state, invoice)),
+                                    invoice.paidToDate,
                                 context,
                                 clientId: invoice.clientId),
                           ),
@@ -1051,7 +1091,13 @@ class __PdfPreviewState extends State<_PdfPreview> {
   }
 
   void _loadPdf() async {
-    if (!widget.invoice.hasClient) {
+    final invoice = widget.invoice;
+
+    if (invoice.isPurchaseOrder) {
+      if (!invoice.hasVendor) {
+        return;
+      }
+    } else if (!invoice.hasClient) {
       return;
     }
 
@@ -1068,17 +1114,23 @@ class __PdfPreviewState extends State<_PdfPreview> {
     final state = store.state;
     final credentials = state.credentials;
     final webClient = WebClient();
-    String url =
-        '${credentials.url}/live_preview?entity=${widget.invoice.entityType.snakeCase}';
-    if (widget.invoice.isOld) {
-      url += '&entity_id=${widget.invoice.id}';
+    String url = '${credentials.url}/live_preview';
+
+    if (invoice.isPurchaseOrder) {
+      url += '/purchase_order';
     }
-    if (state.isHosted) {
+
+    url += '?entity=${invoice.entityType.snakeCase}';
+
+    if (invoice.isOld) {
+      url += '&entity_id=${invoice.id}';
+    }
+
+    if (state.isHosted && !state.isStaging) {
       url = url.replaceFirst('//', '//preview.');
     }
 
-    final data =
-        serializers.serializeWith(InvoiceEntity.serializer, widget.invoice);
+    final data = serializers.serializeWith(InvoiceEntity.serializer, invoice);
     webClient
         .post(url, credentials.token,
             data: json.encode(data), rawResponse: true)
@@ -1104,6 +1156,7 @@ class __PdfPreviewState extends State<_PdfPreview> {
         }
       });
     }).catchError((dynamic error) {
+      print('## Error: $error');
       setState(() {
         _isLoading = false;
       });

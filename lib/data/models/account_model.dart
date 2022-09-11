@@ -23,15 +23,16 @@ abstract class AccountEntity
       debugEnabled: false,
       isDocker: false,
       isHosted: false,
+      accountSmsVerified: true,
       isSchedulerRunning: false,
       disableAutoUpdate: false,
       isMigrated: false,
       defaultCompanyId: '',
-      trialPlan: '',
       trialStarted: '',
       hostedClientCount: 0,
       hostedCompanyCount: 1,
       setReactAsDefaultAP: false,
+      trialDaysLeft: 0,
     );
   }
 
@@ -42,9 +43,6 @@ abstract class AccountEntity
   int get hashCode;
 
   String get id;
-
-  @BuiltValueField(wireName: 'trial_plan')
-  String get trialPlan;
 
   @BuiltValueField(wireName: 'trial_started')
   String get trialStarted;
@@ -96,15 +94,25 @@ abstract class AccountEntity
   @BuiltValueField(wireName: 'set_react_as_default_ap')
   bool get setReactAsDefaultAP;
 
+  @BuiltValueField(wireName: 'account_sms_verified')
+  bool get accountSmsVerified;
+
+  @BuiltValueField(wireName: 'trial_days_left')
+  int get trialDaysLeft;
+
   bool get isUpdateAvailable {
     if (disableAutoUpdate) {
+      return false;
+    }
+
+    if (currentVersion.isEmpty || latestVersion.isEmpty) {
       return false;
     }
 
     return Version.parse(currentVersion) < Version.parse(latestVersion);
   }
 
-  bool get isTrial => trialPlan.isNotEmpty;
+  bool get isTrial => trialDaysLeft > 0;
 
   bool get isEligibleForTrial => trialStarted.isEmpty && plan == kPlanFree;
 
@@ -112,15 +120,16 @@ abstract class AccountEntity
   static void _initializeBuilder(AccountEntityBuilder builder) => builder
     ..debugEnabled = false
     ..isDocker = false
-    ..isSchedulerRunning = false
+    ..isSchedulerRunning = true
     ..disableAutoUpdate = false
     ..isMigrated = false
     ..isHosted = false
-    ..trialPlan = ''
     ..trialStarted = ''
     ..defaultCompanyId = ''
+    ..trialDaysLeft = 0
     ..hostedClientCount = 0
     ..hostedCompanyCount = 1
+    ..accountSmsVerified = false
     ..setReactAsDefaultAP = false;
 
   static Serializer<AccountEntity> get serializer => _$accountEntitySerializer;

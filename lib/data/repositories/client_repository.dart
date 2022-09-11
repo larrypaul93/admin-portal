@@ -59,7 +59,7 @@ class ClientRepository {
     }
 
     final url = credentials.url +
-        '/clients/bulk?include=gateway_tokens,activities,ledger,system_logs,documents';
+        '/clients/bulk?per_page=$kMaxEntitiesPerBulkAction&include=gateway_tokens,activities,ledger,system_logs,documents';
     final dynamic response = await webClient.post(url, credentials.token,
         data: json.encode({'ids': ids, 'action': action.toApiParam()}));
 
@@ -81,6 +81,24 @@ class ClientRepository {
         password: password, idToken: idToken);
 
     return true;
+  }
+
+  Future<ClientEntity> merge({
+    @required Credentials credentials,
+    @required String clientId,
+    @required String mergeIntoClientId,
+    @required String password,
+    @required String idToken,
+  }) async {
+    final url = credentials.url + '/clients/$mergeIntoClientId/$clientId/merge';
+
+    final dynamic response = await webClient.post(url, credentials.token,
+        password: password, idToken: idToken);
+
+    final ClientItemResponse clientResponse =
+        serializers.deserializeWith(ClientItemResponse.serializer, response);
+
+    return clientResponse.data;
   }
 
   Future<ClientEntity> saveData(

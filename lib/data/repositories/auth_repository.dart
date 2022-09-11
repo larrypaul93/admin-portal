@@ -51,6 +51,7 @@ class AuthRepository {
   }
 
   Future<LoginResponse> oauthSignUp({
+    @required String url,
     @required String idToken,
     @required String accessToken,
     @required String referralCode,
@@ -67,8 +68,7 @@ class AuthRepository {
     };
 
     return sendRequest(
-        url: formatApiUrl(Constants.hostedApiUrl) +
-            '/oauth_login?create=true&rc=$referralCode',
+        url: formatApiUrl(url) + '/oauth_login?create=true&rc=$referralCode',
         data: credentials,
         secret: Config.API_SECRET);
   }
@@ -98,16 +98,22 @@ class AuthRepository {
     );
   }
 
-  Future<LoginResponse> oauthLogin(
-      {@required String idToken,
-      @required String accessToken,
-      @required String url,
-      @required String secret,
-      @required String platform,
-      @required String provider}) async {
+  Future<LoginResponse> oauthLogin({
+    @required String idToken,
+    @required String accessToken,
+    @required String url,
+    @required String secret,
+    @required String platform,
+    @required String provider,
+    @required String email,
+    @required String authCode,
+  }) async {
     final credentials = {
       'id_token': idToken,
       'provider': provider,
+      'access_token': accessToken,
+      'email': email,
+      'auth_code': authCode,
     };
     url = formatApiUrl(url) + '/oauth_login';
 

@@ -1,6 +1,7 @@
 // Package imports:
 import 'package:built_collection/built_collection.dart';
 import 'package:invoiceninja_flutter/redux/reports/reports_selectors.dart';
+import 'package:invoiceninja_flutter/utils/formatting.dart';
 import 'package:memoize/memoize.dart';
 
 // Project imports:
@@ -34,6 +35,7 @@ enum ExpenseReportFields {
   invoice_amount,
   invoice_date,
   vendor,
+  project,
   expense1,
   expense2,
   expense3,
@@ -46,9 +48,11 @@ enum ExpenseReportFields {
   tax_amount1,
   tax_amount2,
   tax_amount3,
+  created_at,
+  updated_at,
 }
 
-var memoizedExpenseReport = memo9((
+var memoizedExpenseReport = memo10((
   UserCompanyEntity userCompany,
   ReportsUIState reportsUIState,
   BuiltMap<String, ExpenseEntity> expenseMap,
@@ -56,6 +60,7 @@ var memoizedExpenseReport = memo9((
   BuiltMap<String, InvoiceEntity> invoiceMap,
   BuiltMap<String, ClientEntity> clientMap,
   BuiltMap<String, VendorEntity> vendorMap,
+  BuiltMap<String, ProjectEntity> projectMap,
   BuiltMap<String, UserEntity> userMap,
   StaticState staticState,
 ) =>
@@ -67,6 +72,7 @@ var memoizedExpenseReport = memo9((
       invoiceMap,
       clientMap,
       vendorMap,
+      projectMap,
       userMap,
       staticState,
     ));
@@ -79,6 +85,7 @@ ReportResult expenseReport(
   BuiltMap<String, InvoiceEntity> invoiceMap,
   BuiltMap<String, ClientEntity> clientMap,
   BuiltMap<String, VendorEntity> vendorMap,
+  BuiltMap<String, ProjectEntity> projectMap,
   BuiltMap<String, UserEntity> userMap,
   StaticState staticState,
 ) {
@@ -99,6 +106,7 @@ ReportResult expenseReport(
     ExpenseReportFields.invoice,
     ExpenseReportFields.vendor,
     ExpenseReportFields.category,
+    ExpenseReportFields.date,
   ];
 
   if (expenseReportSettings.columns.isNotEmpty) {
@@ -115,6 +123,7 @@ ReportResult expenseReport(
     final client = clientMap[expense.clientId] ?? ClientEntity();
     final invoice = invoiceMap[expense.invoiceId] ?? InvoiceEntity();
     final vendor = vendorMap[expense.vendorId] ?? VendorEntity();
+    final project = projectMap[expense.projectId] ?? ProjectEntity();
 
     if (expense.isDeleted) {
       continue;
@@ -195,6 +204,9 @@ ReportResult expenseReport(
         case ExpenseReportFields.vendor:
           value = vendor?.listDisplayName;
           break;
+        case ExpenseReportFields.project:
+          value = project?.name;
+          break;
         case ExpenseReportFields.expense1:
           value = presentCustomField(
             value: expense.customValue1,
@@ -246,6 +258,12 @@ ReportResult expenseReport(
           break;
         case ExpenseReportFields.tax_amount3:
           value = expense.calculateTaxAmount3;
+          break;
+        case ExpenseReportFields.updated_at:
+          value = convertTimestampToDateString(expense.updatedAt);
+          break;
+        case ExpenseReportFields.created_at:
+          value = convertTimestampToDateString(expense.createdAt);
           break;
       }
 

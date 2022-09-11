@@ -4,7 +4,7 @@ import 'package:html2md/html2md.dart' as html2md;
 
 // Project imports:
 import 'package:invoiceninja_flutter/constants.dart';
-import 'package:invoiceninja_flutter/data/models/entities.dart';
+import 'package:invoiceninja_flutter/data/models/contact_model.dart';
 import 'package:invoiceninja_flutter/data/models/models.dart';
 import 'package:invoiceninja_flutter/redux/app/app_actions.dart';
 import 'package:invoiceninja_flutter/redux/client/client_selectors.dart';
@@ -19,9 +19,11 @@ import 'package:invoiceninja_flutter/ui/app/scrollable_listview.dart';
 import 'package:invoiceninja_flutter/ui/credit/credit_pdf_vm.dart';
 import 'package:invoiceninja_flutter/ui/invoice/invoice_email_vm.dart';
 import 'package:invoiceninja_flutter/ui/invoice/invoice_pdf_vm.dart';
+import 'package:invoiceninja_flutter/ui/purchase_order/purchase_order_pdf_vm.dart';
 import 'package:invoiceninja_flutter/ui/quote/quote_pdf_vm.dart';
 import 'package:invoiceninja_flutter/ui/settings/templates_and_reminders.dart';
 import 'package:invoiceninja_flutter/utils/completers.dart';
+import 'package:invoiceninja_flutter/utils/dialogs.dart';
 import 'package:invoiceninja_flutter/utils/localization.dart';
 import 'package:invoiceninja_flutter/utils/platforms.dart';
 import 'package:invoiceninja_flutter/utils/super_editor/super_editor.dart';
@@ -92,6 +94,9 @@ class _InvoiceEmailViewState extends State<InvoiceEmailView>
         break;
       case EntityType.credit:
         selectedTemplate = EmailTemplate.credit;
+        break;
+      case EntityType.purchaseOrder:
+        selectedTemplate = EmailTemplate.purchase_order;
         break;
     }
   }
@@ -173,12 +178,19 @@ class _InvoiceEmailViewState extends State<InvoiceEmailView>
     final viewModel = widget.viewModel;
     final invoice = widget.viewModel.invoice;
     final client = viewModel.client;
+    final vendor = viewModel.vendor;
     final state = viewModel.state;
     final settings = getClientSettings(state, client);
     final contacts = invoice.invitations
-        .map((invitation) => client.contacts.firstWhere(
-            (contact) => contact.id == invitation.contactId,
-            orElse: () => null))
+        .map((invitation) =>
+            (invoice.isPurchaseOrder ? vendor.contacts : client.contacts)
+                .firstWhere(
+                    (contact) =>
+                        contact.id ==
+                        (invoice.isPurchaseOrder
+                            ? invitation.vendorContactId
+                            : invitation.clientContactId),
+                    orElse: () => null))
         .toList();
 
     return Padding(
@@ -190,7 +202,9 @@ class _InvoiceEmailViewState extends State<InvoiceEmailView>
                   ': ' +
                   contacts
                       .where((contact) => contact != null)
-                      .map((contact) => contact.fullNameWithEmail)
+                      .map((contact) => invoice.isPurchaseOrder
+                          ? (contact as VendorContactEntity).fullNameOrEmail
+                          : (contact as ContactEntity).fullNameWithEmail)
                       .join(', '))),
           SizedBox(width: 4),
           DropdownButtonHideUnderline(
@@ -224,6 +238,10 @@ class _InvoiceEmailViewState extends State<InvoiceEmailView>
                   DropdownMenuItem<EmailTemplate>(
                     child: Text(localization.thirdReminder),
                     value: EmailTemplate.reminder3,
+                  ),
+                  DropdownMenuItem<EmailTemplate>(
+                    child: Text(localization.endlessReminder),
+                    value: EmailTemplate.reminder_endless,
                   ),
                 ],
                 if ((settings.emailSubjectCustom1 ?? '').isNotEmpty)
@@ -277,8 +295,10 @@ class _InvoiceEmailViewState extends State<InvoiceEmailView>
     final localization = AppLocalization.of(context);
     final viewModel = widget.viewModel;
     final state = viewModel.state;
-    final enableCustomEmail =
-        state.isSelfHosted || state.isProPlan || state.isTrial;
+    final enableCustomEmail = state.isSelfHosted ||
+        state.isProPlan ||
+        state.isTrial ||
+        !state.account.accountSmsVerified;
 
     return Column(
       children: [
@@ -287,15 +307,18 @@ class _InvoiceEmailViewState extends State<InvoiceEmailView>
             padding: const EdgeInsets.only(bottom: 10),
             child: IconMessage(
               localization.customEmailsDisabledHelp,
-              trailing: TextButton(
-                child: Text(
-                  localization.upgrade.toUpperCase(),
-                  style: TextStyle(
-                    color: Colors.white,
-                  ),
-                ),
-                onPressed: () => launch(state.userCompany.ninjaPortalUrl),
-              ),
+              trailing: isApple()
+                  ? null
+                  : TextButton(
+                      child: Text(
+                        localization.upgrade.toUpperCase(),
+                        style: TextStyle(
+                          color: Colors.white,
+                        ),
+                      ),
+                      onPressed: () => launchUrl(
+                          Uri.parse(state.userCompany.ninjaPortalUrl)),
+                    ),
             ),
           ),
         ColoredBox(
@@ -354,8 +377,11 @@ class _InvoiceEmailViewState extends State<InvoiceEmailView>
     final localization = AppLocalization.of(context);
     final invoice = widget.viewModel.invoice;
     final client = widget.viewModel.client;
-    final activities = client.getActivities(
-        invoiceId: invoice.id, typeId: kActivityEmailInvoice);
+    final vendor = widget.viewModel.vendor;
+
+    final activities = ((invoice.isPurchaseOrder ? vendor : client)
+            as HasActivities)
+        .getActivities(invoiceId: invoice.id, typeId: kActivityEmailInvoice);
 
     if (activities.isEmpty) {
       return HelpText(localization.noHistory);
@@ -374,6 +400,7 @@ class _InvoiceEmailViewState extends State<InvoiceEmailView>
   Widget build(BuildContext context) {
     final localization = AppLocalization.of(context);
     final viewModel = widget.viewModel;
+    final state = viewModel.state;
     final invoice = viewModel.invoice;
 
     if (isDesktop(context)) {
@@ -383,8 +410,13 @@ class _InvoiceEmailViewState extends State<InvoiceEmailView>
         onCancelPressed: (context) => viewEntity(entity: invoice),
         saveLabel: localization.send,
         onSavePressed: (context) {
-          viewModel.onSendPressed(context, selectedTemplate,
-              _subjectController.text, _bodyController.text);
+          if (state.account.accountSmsVerified || state.isSelfHosted) {
+            viewModel.onSendPressed(context, selectedTemplate,
+                _subjectController.text, _bodyController.text);
+          } else {
+            showMessageDialog(
+                context: context, message: localization.verifyPhoneNumberHelp);
+          }
         },
         body: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -433,11 +465,13 @@ class _InvoiceEmailViewState extends State<InvoiceEmailView>
                     Expanded(
                       child: TabBarView(
                         children: [
-                          invoice.isCredit
-                              ? CreditPdfScreen(showAppBar: false)
-                              : invoice.isQuote
-                                  ? QuotePdfScreen(showAppBar: false)
-                                  : InvoicePdfScreen(showAppBar: false),
+                          invoice.isPurchaseOrder
+                              ? PurchaseOrderPdfScreen(showAppBar: false)
+                              : invoice.isCredit
+                                  ? CreditPdfScreen(showAppBar: false)
+                                  : invoice.isQuote
+                                      ? QuotePdfScreen(showAppBar: false)
+                                      : InvoicePdfScreen(showAppBar: false),
                           _buildHistory(context),
                         ],
                       ),

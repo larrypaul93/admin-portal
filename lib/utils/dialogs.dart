@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 
 // Package imports:
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:invoiceninja_flutter/main_app.dart';
 import 'package:invoiceninja_flutter/redux/task/task_actions.dart';
 import 'package:invoiceninja_flutter/redux/task_status/task_status_selectors.dart';
 import 'package:invoiceninja_flutter/utils/formatting.dart';
@@ -26,6 +27,9 @@ import 'package:invoiceninja_flutter/utils/icons.dart';
 import 'package:invoiceninja_flutter/utils/localization.dart';
 import 'package:invoiceninja_flutter/utils/oauth.dart';
 
+import 'package:invoiceninja_flutter/utils/web_stub.dart'
+    if (dart.library.html) 'package:invoiceninja_flutter/utils/web.dart';
+
 void showRefreshDataDialog(
     {@required BuildContext context, bool includeStatic = false}) async {
   final store = StoreProvider.of<AppState>(context);
@@ -44,7 +48,7 @@ void showRefreshDataDialog(
             children: <Widget>[LoadingDialog()],
           ));
 
-  AppBuilder.of(context).rebuild();
+  AppBuilder.of(navigatorKey.currentContext).rebuild();
 }
 
 void showErrorDialog({
@@ -177,6 +181,7 @@ void passwordCallback({
   @required BuildContext context,
   @required Function(String, String) callback,
   bool alwaysRequire = false,
+  bool skipOAuth = false,
 }) {
   final store = StoreProvider.of<AppState>(context);
   final state = store.state;
@@ -208,7 +213,11 @@ void passwordCallback({
     return;
   }
 
-  if (user.oauthProvider.isEmpty || !supportsGoogleOAuth()) {
+  if (user.oauthProvider.isEmpty ||
+      skipOAuth ||
+      (user.isConnectedToGoogle && !supportsGoogleOAuth()) ||
+      (user.isConnectedToApple && !supportsAppleOAuth()) ||
+      (user.isConnectedToMicrosoft && !supportsMicrosoftOAuth())) {
     showDialog<Null>(
       context: context,
       barrierDismissible: false,
@@ -223,34 +232,58 @@ void passwordCallback({
   }
 
   try {
-    GoogleOAuth.signIn((idToken, accessToken) {
-      if ((!alwaysRequire && !state.company.oauthPasswordRequired) ||
-          !user.hasPassword) {
-        print('## 4');
-        callback(null, idToken);
-      } else {
-        print('## 5');
-        showDialog<AlertDialog>(
-          context: context,
-          barrierDismissible: false,
-          builder: (BuildContext context) {
-            return PasswordConfirmation(
-              callback: callback,
-              idToken: idToken,
-            );
-          },
-        );
-      }
-    }, isSilent: true);
+    if (user.isConnectedToGoogle) {
+      GoogleOAuth.signIn((idToken, accessToken) {
+        if ((!alwaysRequire && !state.company.oauthPasswordRequired) ||
+            !user.hasPassword) {
+          print('## 4');
+          callback(null, idToken);
+        } else {
+          print('## 5');
+          showDialog<AlertDialog>(
+            context: context,
+            barrierDismissible: false,
+            builder: (BuildContext context) {
+              return PasswordConfirmation(
+                callback: callback,
+                idToken: idToken,
+              );
+            },
+          );
+        }
+      }, isSilent: true);
+    } else if (user.isConnectedToMicrosoft) {
+      WebUtils.microsoftLogin((idToken, accessToken) {
+        if ((!alwaysRequire && !state.company.oauthPasswordRequired) ||
+            !user.hasPassword) {
+          print('## 6');
+          callback(null, idToken);
+        } else {
+          print('## 7');
+          showDialog<AlertDialog>(
+            context: context,
+            barrierDismissible: false,
+            builder: (BuildContext context) {
+              return PasswordConfirmation(
+                callback: callback,
+                idToken: idToken,
+              );
+            },
+          );
+        }
+      }, (dynamic error) {
+        showErrorDialog(context: context, message: error);
+      });
+    }
   } catch (error) {
     showErrorDialog(context: context, message: '$error');
   }
 
-  print('## 6');
+  print('## 8');
 }
 
 class PasswordConfirmation extends StatefulWidget {
-  const PasswordConfirmation({@required this.callback, this.idToken});
+  const PasswordConfirmation({@required this.callback, this.idToken = ''});
 
   final Function(String, String) callback;
   final String idToken;
@@ -449,6 +482,16 @@ void cloneToDialog({
                   onTap: () {
                     Navigator.of(context).pop();
                     handleEntityAction(invoice, EntityAction.cloneToRecurring);
+                  },
+                ),
+              if (userCompany.canCreate(EntityType.purchaseOrder))
+                ListTile(
+                  leading: Icon(getEntityIcon(EntityType.purchaseOrder)),
+                  title: Text(localization.purchaseOrder),
+                  onTap: () {
+                    Navigator.of(context).pop();
+                    handleEntityAction(
+                        invoice, EntityAction.cloneToPurchaseOrder);
                   },
                 ),
             ],

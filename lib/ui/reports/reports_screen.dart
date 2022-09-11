@@ -112,6 +112,11 @@ class ReportsScreen extends StatelessWidget {
       kReportProduct,
       kReportProfitAndLoss,
       kReportTask,
+      if (state.company.isModuleEnabled(EntityType.vendor)) ...[
+        kReportVendor,
+        if (state.company.isModuleEnabled(EntityType.purchaseOrder))
+          kReportPurchaseOrder,
+      ],
     ]..sort((a, b) => a.compareTo(b));
 
     final reportChildren = [
@@ -314,6 +319,7 @@ class ReportsScreen extends StatelessWidget {
         appBar: AppBar(
           centerTitle: false,
           automaticallyImplyLeading: false,
+          leadingWidth: isMobile(context) ? kMinInteractiveDimension : 0,
           leading: leading,
           title: Row(
             mainAxisSize: MainAxisSize.min,
@@ -408,10 +414,12 @@ class ReportsScreen extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     HelpText(localization.upgradeToViewReports),
-                    AppButton(
-                      label: localization.upgrade.toUpperCase(),
-                      onPressed: () => launch(state.userCompany.ninjaPortalUrl),
-                    )
+                    if (!isApple())
+                      AppButton(
+                        label: localization.upgrade.toUpperCase(),
+                        onPressed: () => launchUrl(
+                            Uri.parse(state.userCompany.ninjaPortalUrl)),
+                      )
                   ],
                 ),
               )
@@ -702,6 +710,18 @@ enum ReportColumnType {
   bool,
   age,
   duration,
+}
+
+bool canTotalColumn(String column) {
+  if (column == 'notification_threshold') {
+    return false;
+  }
+
+  if (column.contains('_rate')) {
+    return false;
+  }
+
+  return true;
 }
 
 ReportColumnType getReportColumnType(String column, BuildContext context) {
@@ -1320,10 +1340,13 @@ class ReportResult {
           }
           value = value + ' (' + values['count'].floor().toString() + ')';
         } else if (columnType == ReportColumnType.number) {
+          final currencyId = values['${column}_currency_id'];
           value = formatNumber(values[column], context,
               formatNumberType: column == 'quantity'
                   ? FormatNumberType.double
-                  : FormatNumberType.money);
+                  : FormatNumberType.money,
+              currencyId:
+                  currencyId == null ? null : currencyId.round().toString());
         } else if (columnType == ReportColumnType.duration) {
           value = formatDuration(Duration(seconds: values[column].toInt()));
         }
@@ -1384,7 +1407,9 @@ class ReportResult {
     final store = StoreProvider.of<AppState>(context);
     final company = store.state.company;
     final localization = AppLocalization.of(context);
-    final sortedColumns = columns.toList()
+    final sortedColumns = columns
+        .where((column) => canTotalColumn(column))
+        .toList()
       ..sort((String str1, String str2) => str1.compareTo(str2));
 
     //for (String column in sortedColumns)
@@ -1443,9 +1468,10 @@ class ReportResult {
       for (var j = 0; j < row.length; j++) {
         final cell = row[j];
         final column = columns[j];
-        final canTotal = cell is ReportNumberValue ||
-            cell is ReportDurationValue ||
-            cell is ReportAgeValue;
+        final canTotal = (cell is ReportNumberValue ||
+                cell is ReportDurationValue ||
+                cell is ReportAgeValue) &&
+            canTotalColumn(column);
 
         String currencyId = '';
         if (canTotal) {

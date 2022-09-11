@@ -361,7 +361,8 @@ class _ClientPortalState extends State<ClientPortal>
                                 text: localization.viewDocs.toUpperCase(),
                               ),
                             ),
-                            onPressed: () => launch(kDocsCustomDomainUrl),
+                            onPressed: () =>
+                                launchUrl(Uri.parse(kDocsCustomDomainUrl)),
                           )
                         else
                           SizedBox()
@@ -404,12 +405,21 @@ class _ClientPortalState extends State<ClientPortal>
                   ),
                   */
                   BoolDropdownButton(
-                      label: localization.documentUpload,
+                      label: localization.clientDocumentUpload,
                       helpLabel: localization.documentUploadHelp,
-                      value: settings.enablePortalUploads,
+                      value: settings.enableClientPortalUploads,
                       iconData: MdiIcons.upload,
-                      onChanged: (value) => viewModel.onSettingsChanged(settings
-                          .rebuild((b) => b..enablePortalUploads = value))),
+                      onChanged: (value) => viewModel.onSettingsChanged(
+                          settings.rebuild(
+                              (b) => b..enableClientPortalUploads = value))),
+                  BoolDropdownButton(
+                      label: localization.vendorDocumentUpload,
+                      helpLabel: localization.vendorDocumentUploadHelp,
+                      value: settings.enableVendorPortalUploads,
+                      iconData: MdiIcons.upload,
+                      onChanged: (value) => viewModel.onSettingsChanged(
+                          settings.rebuild(
+                              (b) => b..enableVendorPortalUploads = value))),
                   if (!state.settingsUIState.isFiltered)
                     BoolDropdownButton(
                       label: localization.storefront,

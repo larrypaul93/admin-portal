@@ -44,7 +44,9 @@ class EntityEditContactsVM {
     @required this.company,
     @required this.invoice,
     @required this.client,
-    @required this.onAddContact,
+    @required this.vendor,
+    @required this.onAddClientContact,
+    @required this.onAddVendorContact,
     @required this.onRemoveContact,
   });
 
@@ -52,7 +54,9 @@ class EntityEditContactsVM {
   final CompanyEntity company;
   final InvoiceEntity invoice;
   final ClientEntity client;
-  final Function(ContactEntity) onAddContact;
+  final VendorEntity vendor;
+  final Function(ContactEntity) onAddClientContact;
+  final Function(VendorContactEntity) onAddVendorContact;
   final Function(InvitationEntity) onRemoveContact;
 }
 
@@ -62,14 +66,18 @@ class InvoiceEditContactsVM extends EntityEditContactsVM {
     @required CompanyEntity company,
     @required InvoiceEntity invoice,
     @required ClientEntity client,
-    @required Function(ContactEntity) onAddContact,
+    @required VendorEntity vendor,
+    @required Function(ContactEntity) onAddClientContact,
+    @required Function(VendorContactEntity) onAddVendorContact,
     @required Function(InvitationEntity) onRemoveContact,
   }) : super(
           state: state,
           company: company,
           invoice: invoice,
           client: client,
-          onAddContact: onAddContact,
+          vendor: vendor,
+          onAddClientContact: onAddClientContact,
+          onAddVendorContact: onAddVendorContact,
           onRemoveContact: onRemoveContact,
         );
 
@@ -98,13 +106,14 @@ class InvoiceEditContactsVM extends EntityEditContactsVM {
       company: state.company,
       invoice: entity,
       client: state.clientState.map[(entity as BelongsToClient).clientId],
-      onAddContact: (ContactEntity contact) {
+      vendor: state.vendorState.map[(entity as BelongsToVendor).vendorId],
+      onAddClientContact: (ContactEntity contact) {
         InvitationEntity invitation;
         // prevent un-checking/checking a contact from creating a new invitation
         if (entity.isOld) {
           final origEntity =
               state.getEntityMap(entityType)[entity.id] as InvoiceEntity;
-          invitation = origEntity.getInvitationForContact(contact);
+          invitation = origEntity.getInvitationForClientContact(contact);
         }
 
         if (entity.entityType == EntityType.quote) {
@@ -119,7 +128,21 @@ class InvoiceEditContactsVM extends EntityEditContactsVM {
         } else if (entity.entityType == EntityType.invoice) {
           store.dispatch(
               AddInvoiceContact(contact: contact, invitation: invitation));
-        } else if (entity.entityType == EntityType.purchaseOrder) {
+        } else {
+          print(
+              'ERROR: entityType $entityType not handled in invoice_edit_contacts_vm');
+        }
+      },
+      onAddVendorContact: (VendorContactEntity contact) {
+        InvitationEntity invitation;
+        // prevent un-checking/checking a contact from creating a new invitation
+        if (entity.isOld) {
+          final origEntity =
+              state.getEntityMap(entityType)[entity.id] as InvoiceEntity;
+          invitation = origEntity.getInvitationForVendorContact(contact);
+        }
+
+        if (entity.entityType == EntityType.purchaseOrder) {
           store.dispatch(AddPurchaseOrderContact(
               contact: contact, invitation: invitation));
         } else {
@@ -136,7 +159,7 @@ class InvoiceEditContactsVM extends EntityEditContactsVM {
           store.dispatch(RemoveRecurringInvoiceContact(invitation: invitation));
         } else if (entity.entityType == EntityType.invoice) {
           store.dispatch(RemoveInvoiceContact(invitation: invitation));
-        } else if (entity.entityType == EntityType.invoice) {
+        } else if (entity.entityType == EntityType.purchaseOrder) {
           store.dispatch(RemovePurchaseOrderContact(invitation: invitation));
         } else {
           print(

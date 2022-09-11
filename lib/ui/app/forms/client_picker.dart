@@ -20,8 +20,9 @@ class ClientPicker extends StatelessWidget {
     @required this.clientId,
     @required this.clientState,
     @required this.onSelected,
-    @required this.onAddPressed,
+    this.onAddPressed,
     this.autofocus,
+    this.excludeIds = const [],
   });
 
   final String clientId;
@@ -29,6 +30,7 @@ class ClientPicker extends StatelessWidget {
   final Function(SelectableEntity) onSelected;
   final Function(Completer<SelectableEntity> completer) onAddPressed;
   final bool autofocus;
+  final List<String> excludeIds;
 
   @override
   Widget build(BuildContext context) {
@@ -49,6 +51,7 @@ class ClientPicker extends StatelessWidget {
           : null,
       onSelected: onSelected,
       onAddPressed: onAddPressed,
+      excludeIds: excludeIds,
     );
   }
 }

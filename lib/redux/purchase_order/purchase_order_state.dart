@@ -56,8 +56,10 @@ abstract class PurchaseOrderUIState extends Object
     implements Built<PurchaseOrderUIState, PurchaseOrderUIStateBuilder> {
   factory PurchaseOrderUIState(PrefStateSortField sortField) {
     return _$PurchaseOrderUIState._(
-      listUIState: ListUIState(sortField?.field ?? PurchaseOrderFields.number,
-          sortAscending: sortField?.ascending),
+      listUIState: ListUIState(
+        sortField?.field ?? PurchaseOrderFields.number,
+        sortAscending: sortField?.ascending ?? false,
+      ),
       editing: InvoiceEntity(),
       selectedId: '',
       tabIndex: 0,
@@ -75,6 +77,10 @@ abstract class PurchaseOrderUIState extends Object
   @nullable
   @BuiltValueField(serialize: false)
   int get editingItemIndex;
+
+  @nullable
+  @BuiltValueField(serialize: false)
+  String get historyActivityId;
 
   @override
   bool get isCreatingNew => editing.isNew;

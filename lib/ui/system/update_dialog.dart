@@ -89,6 +89,9 @@ class _UpdateDialogState extends State<UpdateDialog> {
                       Text(
                           '• ${localization.latestVersion}: v${account.latestVersion}'),
                     ],
+                    // TODO remove this in a few months
+                    SizedBox(height: 20),
+                    Text(localization.php81Required),
                     if (account.isDocker) ...[
                       SizedBox(height: 20),
                       Text(localization.toUpdateRun + ':'),
@@ -116,13 +119,13 @@ class _UpdateDialogState extends State<UpdateDialog> {
           if (account.isUpdateAvailable)
             TextButton(
               child: Text(localization.releaseNotes.toUpperCase()),
-              onPressed: () => launch(kReleaseNotesUrl),
+              onPressed: () => launchUrl(Uri.parse(kReleaseNotesUrl)),
             )
           else
             TextButton(
               child: Text(localization.viewChanges.toUpperCase()),
-              onPressed: () => launch(kGitHubDiffUrl.replaceFirst(
-                  'VERSION', account.currentVersion)),
+              onPressed: () => launchUrl(Uri.parse(kGitHubDiffUrl.replaceFirst(
+                  'VERSION', account.currentVersion))),
             ),
           if (!account.isDocker)
             TextButton(

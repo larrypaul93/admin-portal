@@ -35,8 +35,10 @@ class UserDetailsScreen extends StatelessWidget {
     return StoreConnector<AppState, UserDetailsVM>(
       converter: UserDetailsVM.fromStore,
       builder: (context, viewModel) {
+        final state = viewModel.state;
         return UserDetails(
-            key: ValueKey(viewModel.state.settingsUIState.updatedAt),
+            key: ValueKey(
+                state.settingsUIState.updatedAt + state.user.updatedAt),
             viewModel: viewModel);
       },
     );
@@ -57,6 +59,7 @@ class UserDetailsVM {
     @required this.onConnectMicrosoftPressed,
     @required this.onDisconnectMicrosoftPressed,
     @required this.onDisconnectMicrosoftEmailPressed,
+    @required this.onDisconnectApplePressed,
   });
 
   static UserDetailsVM fromStore(Store<AppState> store) {
@@ -172,6 +175,7 @@ class UserDetailsVM {
             callback: (_) {
               passwordCallback(
                   context: context,
+                  skipOAuth: true,
                   callback: (password, idToken) {
                     final completer = snackBarCompleter<Null>(context,
                         AppLocalization.of(context).disconnectedGoogle);
@@ -211,6 +215,7 @@ class UserDetailsVM {
                         provider: UserEntity.OAUTH_PROVIDER_GOOGLE,
                         password: password,
                         idToken: idToken,
+                        accessToken: accessToken,
                         completer: completer,
                       ),
                     );
@@ -219,8 +224,8 @@ class UserDetailsVM {
                 if (!signedIn) {
                   showErrorDialog(
                       context: context,
-                      message:
-                          AppLocalization.of(context).anErrorOccurredTryAgain);
+                      message: AppLocalization.of(navigatorKey.currentContext)
+                          .anErrorOccurredTryAgain);
                 }
               } catch (error) {
                 showErrorDialog(context: context, message: error);
@@ -237,12 +242,47 @@ class UserDetailsVM {
 
         confirmCallback(
             context: context,
+            skip: true,
             callback: (_) {
               passwordCallback(
                   context: context,
                   callback: (password, idToken) {
                     final completer = snackBarCompleter<Null>(context,
                         AppLocalization.of(context).disconnectedMicrosoft);
+                    completer.future.then((value) {
+                      WebUtils.microsoftLogout();
+                    });
+                    store.dispatch(
+                      SaveAuthUserRequest(
+                        user: state.user.rebuild((b) => b..oauthProvider = ''),
+                        password: password,
+                        idToken: idToken,
+                        completer: completer,
+                      ),
+                    );
+                  });
+            });
+      },
+      onDisconnectApplePressed: (context) {
+        if (!state.user.hasPassword) {
+          showErrorDialog(
+              context: context,
+              message: AppLocalization.of(context).pleaseFirstSetAPassword);
+          return;
+        }
+
+        confirmCallback(
+            context: context,
+            callback: (_) {
+              passwordCallback(
+                  context: context,
+                  skipOAuth: true,
+                  callback: (password, idToken) {
+                    final completer = snackBarCompleter<Null>(context,
+                        AppLocalization.of(context).disconnectedMicrosoft);
+                    completer.future.then((value) {
+                      WebUtils.microsoftLogout();
+                    });
                     store.dispatch(
                       SaveAuthUserRequest(
                         user: state.user.rebuild((b) => b..oauthProvider = ''),
@@ -268,6 +308,7 @@ class UserDetailsVM {
                       provider: UserEntity.OAUTH_PROVIDER_MICROSOFT,
                       password: password,
                       idToken: idToken,
+                      accessToken: accessToken,
                       completer: completer,
                     ),
                   );
@@ -349,4 +390,5 @@ class UserDetailsVM {
   final Function(BuildContext, Completer, String) onConnectGmailPressed;
   final Function(BuildContext) onDisconnectGmailPressed;
   final Function(BuildContext) onDisableTwoFactorPressed;
+  final Function(BuildContext) onDisconnectApplePressed;
 }

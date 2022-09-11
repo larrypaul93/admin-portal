@@ -51,6 +51,7 @@ class InvoicePresenter extends EntityPresenter {
       InvoiceFields.isViewed,
       InvoiceFields.autoBillEnabled,
       InvoiceFields.lastSentDate,
+      InvoiceFields.lastSentTemplate,
       InvoiceFields.nextSendDate,
       InvoiceFields.project,
       InvoiceFields.vendor,
@@ -94,7 +95,8 @@ class InvoicePresenter extends EntityPresenter {
       case InvoiceFields.lastSentDate:
         return Text(formatDate(invoice.lastSentDate, context));
       case InvoiceFields.nextSendDate:
-        return Text(formatDate(invoice.nextSendDate, context));
+        return Text(
+            invoice.isPaid ? '' : formatDate(invoice.nextSendDate, context));
       case InvoiceFields.reminder1Sent:
         return Text(formatDate(invoice.reminder1Sent, context));
       case InvoiceFields.reminder2Sent:
@@ -172,7 +174,7 @@ class InvoicePresenter extends EntityPresenter {
         return CopyToClipboard(
           value: contact.email,
           showBorder: true,
-          onLongPress: () => launch('mailto:${contact.email}'),
+          onLongPress: () => launchUrl(Uri.parse('mailto:${contact.email}')),
         );
       case InvoiceFields.partial:
         return Text(formatNumber(invoice.partial, context));
@@ -187,6 +189,21 @@ class InvoicePresenter extends EntityPresenter {
             state.recurringInvoiceState.get(invoice.recurringId);
         return LinkTextRelatedEntity(
             entity: recurringInvoice, relation: invoice);
+      case InvoiceFields.lastSentTemplate:
+        if (invoice.reminderLastSent.isNotEmpty &&
+            invoice.reminderLastSent != invoice.reminder3Sent) {
+          return Text(localization.endlessReminder);
+        } else if ((invoice.reminder3Sent ?? '').isNotEmpty) {
+          return Text(localization.thirdReminder);
+        } else if ((invoice.reminder2Sent ?? '').isNotEmpty) {
+          return Text(localization.secondReminder);
+        } else if ((invoice.reminder1Sent ?? '').isNotEmpty) {
+          return Text(localization.firstReminder);
+        } else if ((invoice.lastSentDate ?? '').isNotEmpty) {
+          return Text(localization.initialEmail);
+        } else {
+          return Text('');
+        }
     }
 
     return super.getField(field: field, context: context);

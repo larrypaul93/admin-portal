@@ -278,6 +278,25 @@ class ArchiveRecurringInvoicesFailure implements StopSaving {
   final List<InvoiceEntity> recurringInvoices;
 }
 
+class SendNowRecurringInvoicesRequest implements StartSaving {
+  SendNowRecurringInvoicesRequest(this.completer, this.recurringInvoiceIds);
+
+  final Completer completer;
+  final List<String> recurringInvoiceIds;
+}
+
+class SendNowRecurringInvoicesSuccess implements StopSaving, PersistData {
+  SendNowRecurringInvoicesSuccess(this.recurringInvoices);
+
+  final List<InvoiceEntity> recurringInvoices;
+}
+
+class SendNowRecurringInvoicesFailure implements StopSaving {
+  SendNowRecurringInvoicesFailure(this.recurringInvoices);
+
+  final List<InvoiceEntity> recurringInvoices;
+}
+
 class DeleteRecurringInvoicesRequest implements StartSaving {
   DeleteRecurringInvoicesRequest(this.completer, this.recurringInvoiceIds);
 
@@ -457,10 +476,18 @@ void handleRecurringInvoiceAction(BuildContext context,
           ShowPdfRecurringInvoice(invoice: recurringInvoice, context: context));
       break;
     case EntityAction.clientPortal:
-      if (await canLaunch(recurringInvoice.invitationSilentLink)) {
-        await launch(recurringInvoice.invitationSilentLink,
-            forceSafariVC: false, forceWebView: false);
-      }
+      launchUrl(Uri.parse(recurringInvoice.invitationSilentLink));
+      break;
+    case EntityAction.cloneToPurchaseOrder:
+      final designId = getDesignIdForVendorByEntity(
+          state: state,
+          vendorId: recurringInvoice.vendorId,
+          entityType: EntityType.purchaseOrder);
+      createEntity(
+          context: context,
+          entity: recurringInvoice.clone.rebuild((b) => b
+            ..entityType = EntityType.purchaseOrder
+            ..designId = designId));
       break;
     case EntityAction.cloneToOther:
       cloneToDialog(context: context, invoice: recurringInvoice);
@@ -580,14 +607,15 @@ void handleRecurringInvoiceAction(BuildContext context,
         ),
       );
       break;
-    case EntityAction.emailInvoice:
-      store.dispatch(SaveRecurringInvoiceRequest(
-          recurringInvoice: recurringInvoice,
-          action: action,
-          completer: snackBarCompleter<InvoiceEntity>(
+    case EntityAction.sendNow:
+      store.dispatch(SendNowRecurringInvoicesRequest(
+        snackBarCompleter<Null>(
             context,
-            localization.emailedInvoice,
-          )));
+            recurringInvoiceIds.length == 1
+                ? localization.emailedInvoice
+                : localization.emailedInvoice),
+        recurringInvoiceIds,
+      ));
       break;
   }
 }
