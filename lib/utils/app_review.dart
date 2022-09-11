@@ -1,15 +1,12 @@
-import 'package:in_app_review/in_app_review.dart';
-import 'package:invoiceninja_flutter/constants.dart';
+import 'package:invoiceninja_flutter/main_app.dart';
 import 'package:invoiceninja_flutter/utils/platforms.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class AppReview {
-  static final InAppReview inAppReview = InAppReview.instance;
+  static Future<bool> isAvailable() async => false;
 
-  static Future<bool> isAvailable() async => await inAppReview.isAvailable();
+  static void requestReview() => null;
 
-  static void requestReview() => inAppReview.requestReview();
-
-  static void openStoreListing() => inAppReview.openStoreListing(
-      appStoreId: isAndroid() ? kPlayStoreAppId : kAppStoreAppId,
-      microsoftStoreId: kMicrosoftAppStoreId);
+  static void openStoreListing() =>
+      launch(getRateAppURL(navigatorKey.currentContext));
 }
