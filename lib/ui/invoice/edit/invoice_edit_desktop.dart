@@ -925,6 +925,23 @@ class InvoiceEditDesktopState extends State<InvoiceEditDesktop>
                               surcharge3Controller: _surcharge3Controller,
                               surcharge4Controller: _surcharge4Controller,
                             ),
+                          for (MapEntry<String, double> lineTax in invoice
+                              .calculateLineTaxes(
+                                  context: context,
+                                  precision:
+                                      precisionForInvoice(state, invoice))
+                              .entries)
+                            TextFormField(
+                              enabled: false,
+                              decoration: InputDecoration(
+                                labelText: lineTax.key,
+                              ),
+                              textAlign: TextAlign.end,
+                              key: ValueKey(
+                                  '__invoice_line_tax_${lineTax.key}_${invoice.clientId}__'),
+                              initialValue: formatNumber(lineTax.value, context,
+                                  clientId: invoice.clientId),
+                            ),
                           if (company.enableFirstInvoiceTaxRate ||
                               invoice.taxName1.isNotEmpty)
                             TaxRateDropdown(

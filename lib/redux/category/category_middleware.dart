@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:invoiceninja_flutter/data/models/category_model.dart';
+import 'package:invoiceninja_flutter/redux/product/product_actions.dart';
 import 'package:redux/redux.dart';
 import 'package:invoiceninja_flutter/main_app.dart';
 import 'package:invoiceninja_flutter/redux/app/app_actions.dart';
@@ -224,11 +225,10 @@ Middleware<AppState> _loadCategories(CategoryRepository repository) {
       if (action.completer != null) {
         action.completer.complete(null);
       }
-      /*
-      if (state.productState.isStale) {
-        store.dispatch(LoadProducts());
-      }
-      */
+
+      // if (state.productState.isStale) {
+      store.dispatch(LoadProducts());
+      // }
     }).catchError((Object error) {
       print(error);
       store.dispatch(LoadCategoriesFailure(error));

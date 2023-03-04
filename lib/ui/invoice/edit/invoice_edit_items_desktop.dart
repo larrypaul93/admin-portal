@@ -1011,7 +1011,7 @@ class _InvoiceEditItemsDesktopState extends State<InvoiceEditItemsDesktop> {
                                     index);
                               },
                               selectedDate: lineItems[index].serviced,
-                              firstDate: DateTime.now(),
+                              // firstDate: DateTime.now(),
                             ),
                           ),
                         );

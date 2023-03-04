@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:invoiceninja_flutter/data/models/contact_model.dart';
+import 'package:invoiceninja_flutter/redux/category/category_actions.dart';
 import 'package:invoiceninja_flutter/redux/product/product_actions.dart';
 import 'package:redux/redux.dart';
 import 'package:invoiceninja_flutter/main_app.dart';
@@ -234,7 +235,8 @@ Middleware<AppState> _loadContacts(ContactRepository repository) {
           action.completer.complete(null);
         }
         // store.dispatch(LoadProducts());
-        store.dispatch(LoadProducts());
+        // store.dispatch(LoadProducts());
+        store.dispatch(LoadCategories());
       }
     }).catchError((Object error) {
       print(error);

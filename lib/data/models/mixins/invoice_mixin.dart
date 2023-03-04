@@ -147,6 +147,56 @@ abstract class CalculateInvoiceTotal {
     return map;
   }
 
+  String _formatTaxRate(
+      {double taxRate, String taxName, BuildContext context}) {
+    return '${formatNumber(taxRate, context, formatNumberType: FormatNumberType.percent)} ${taxName}';
+  }
+
+  Map<String, double> calculateLineTaxes(
+      {@required int precision, @required BuildContext context}) {
+    double total = calculateSubtotal(precision: precision);
+    double taxAmount;
+    final map = <String, double>{};
+
+    lineItems.forEach((item) {
+      final double taxRate1 = round(item.taxRate1, 3);
+      final double taxRate2 = round(item.taxRate2, 3);
+      final double taxRate3 = round(item.taxRate3, 3);
+
+      final lineTotal = getItemTaxable(item, total, precision);
+
+      if (taxRate1 != 0) {
+        taxAmount = _calculateTaxAmount(
+            lineTotal, taxRate1, usesInclusiveTaxes, precision);
+        map.update(
+            _formatTaxRate(
+                context: context, taxName: item.taxName1, taxRate: taxRate1),
+            (value) => value + taxAmount,
+            ifAbsent: () => taxAmount);
+      }
+      if (taxRate2 != 0) {
+        taxAmount = _calculateTaxAmount(
+            lineTotal, taxRate2, usesInclusiveTaxes, precision);
+        map.update(
+            _formatTaxRate(
+                context: context, taxName: item.taxName2, taxRate: taxRate2),
+            (value) => value + taxAmount,
+            ifAbsent: () => taxAmount);
+      }
+      if (taxRate3 != 0) {
+        taxAmount = _calculateTaxAmount(
+            lineTotal, taxRate3, usesInclusiveTaxes, precision);
+        map.update(
+            _formatTaxRate(
+                context: context, taxName: item.taxName3, taxRate: taxRate3),
+            (value) => value + taxAmount,
+            ifAbsent: () => taxAmount);
+      }
+    });
+
+    return map;
+  }
+
   double getTaxable() {
     double total = 0;
 
