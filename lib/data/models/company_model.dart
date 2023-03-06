@@ -43,6 +43,7 @@ class CompanyFields {
   static const String custom4 = 'custom4';
   static const String cityStatePostal = 'city_state_postal';
   static const String postalCityState = 'postal_city_state';
+  static const String postalCity = 'postal_city';
 }
 
 abstract class CompanyEntity extends Object
@@ -79,11 +80,14 @@ abstract class CompanyEntity extends Object
       defaultTaskIsDateBased: false,
       slackWebhookUrl: '',
       googleAnalyticsKey: '',
+      matomoUrl: '',
+      matomoId: '',
       clientCanRegister: true,
       autoStartTasks: false,
       invoiceTaskTimelog: true,
       invoiceTaskDatelog: true,
       invoiceTaskProject: false,
+      invoiceTaskHours: false,
       isLarge: false,
       enableShopApi: false,
       convertProductExchangeRate: false,
@@ -111,12 +115,17 @@ abstract class CompanyEntity extends Object
       markdownEmailEnabled: true,
       useCommaAsDecimalPlace: false,
       reportIncludeDrafts: false,
+      reportIncludeDeleted: false,
       stopOnUnpaidRecurring: false,
       useQuoteTermsOnConversion: false,
       enableApplyingPayments: false,
       trackInventory: false,
       stockNotificationThreshold: 0,
       stockNotification: true,
+      invoiceTaskLock: false,
+      convertPaymentCurrency: false,
+      convertExpenseCurrency: false,
+      notifyVendorWhenPaid: false,
       groups: BuiltList<GroupEntity>(),
       taxRates: BuiltList<TaxRateEntity>(),
       taskStatuses: BuiltList<TaskStatusEntity>(),
@@ -151,6 +160,10 @@ abstract class CompanyEntity extends Object
       systemLogs: BuiltList<SystemLogEntity>(),
       clientRegistrationFields: BuiltList<RegistrationFieldEntity>(),
       purchaseOrders: BuiltList<InvoiceEntity>(),
+      bankAccounts: BuiltList<BankAccountEntity>(),
+      transactions: BuiltList<TransactionEntity>(),
+      transactionRules: BuiltList<TransactionRuleEntity>(),
+      schedules: BuiltList<ScheduleEntity>(),
     );
   }
 
@@ -275,6 +288,9 @@ abstract class CompanyEntity extends Object
   @BuiltValueField(wireName: 'report_include_drafts')
   bool get reportIncludeDrafts;
 
+  @BuiltValueField(wireName: 'report_include_deleted')
+  bool get reportIncludeDeleted;
+
   @BuiltValueField(wireName: 'use_quote_terms_on_conversion')
   bool get useQuoteTermsOnConversion;
 
@@ -289,6 +305,18 @@ abstract class CompanyEntity extends Object
 
   @BuiltValueField(wireName: 'stock_notification')
   bool get stockNotification;
+
+  @BuiltValueField(wireName: 'invoice_task_lock')
+  bool get invoiceTaskLock;
+
+  @BuiltValueField(wireName: 'convert_payment_currency')
+  bool get convertPaymentCurrency;
+
+  @BuiltValueField(wireName: 'convert_expense_currency')
+  bool get convertExpenseCurrency;
+
+  @BuiltValueField(wireName: 'notify_vendor_when_paid')
+  bool get notifyVendorWhenPaid;
 
   BuiltList<GroupEntity> get groups;
 
@@ -338,6 +366,15 @@ abstract class CompanyEntity extends Object
   @BuiltValueField(wireName: 'purchase_orders')
   BuiltList<InvoiceEntity> get purchaseOrders;
 
+  @BuiltValueField(wireName: 'bank_integrations')
+  BuiltList<BankAccountEntity> get bankAccounts;
+
+  @BuiltValueField(wireName: 'bank_transactions')
+  BuiltList<TransactionEntity> get transactions;
+
+  @BuiltValueField(wireName: 'bank_transaction_rules')
+  BuiltList<TransactionRuleEntity> get transactionRules;
+
   BuiltList<TaskEntity> get tasks;
 
   BuiltList<ProjectEntity> get projects;
@@ -349,6 +386,9 @@ abstract class CompanyEntity extends Object
   BuiltList<DesignEntity> get designs;
 
   BuiltList<DocumentEntity> get documents;
+
+  @BuiltValueField(wireName: 'task_schedulers')
+  BuiltList<ScheduleEntity> get schedules;
 
   @BuiltValueField(wireName: 'tokens_hashed')
   BuiltList<TokenEntity> get tokens;
@@ -375,6 +415,12 @@ abstract class CompanyEntity extends Object
   @BuiltValueField(wireName: 'google_analytics_key')
   String get googleAnalyticsKey;
 
+  @BuiltValueField(wireName: 'matomo_url')
+  String get matomoUrl;
+
+  @BuiltValueField(wireName: 'matomo_id')
+  String get matomoId;
+
   @BuiltValueField(wireName: 'mark_expenses_invoiceable')
   bool get markExpensesInvoiceable;
 
@@ -395,6 +441,9 @@ abstract class CompanyEntity extends Object
 
   @BuiltValueField(wireName: 'invoice_task_project')
   bool get invoiceTaskProject;
+
+  @BuiltValueField(wireName: 'invoice_task_hours')
+  bool get invoiceTaskHours;
 
   @BuiltValueField(wireName: 'auto_start_tasks')
   bool get autoStartTasks;
@@ -605,6 +654,9 @@ abstract class CompanyEntity extends Object
           ..payments.clear()
           ..quotes.clear()
           ..purchaseOrders.clear()
+          ..bankAccounts.clear()
+          ..transactions.clear()
+          ..transactionRules.clear()
           ..credits.clear()
           ..tasks.clear()
           ..projects.clear()
@@ -647,6 +699,9 @@ abstract class CompanyEntity extends Object
     } else if (entityType == EntityType.purchaseOrder &&
         enabledModules & kModulePurchaseOrders == 0) {
       return false;
+    } else if (entityType == EntityType.transaction &&
+        enabledModules & kModuleTransactions == 0) {
+      return false;
     }
 
     return true;
@@ -678,15 +733,27 @@ abstract class CompanyEntity extends Object
     ..stockNotificationThreshold = 0
     ..stockNotification = true
     ..reportIncludeDrafts = false
+    ..reportIncludeDeleted = false
     ..convertRateToClient = true
     ..stopOnUnpaidRecurring = false
     ..numberOfExpenseTaxRates = 0
     ..invoiceTaskProject = false
+    ..invoiceTaskHours = false
+    ..invoiceTaskLock = false
+    ..matomoUrl = ''
+    ..matomoId = ''
+    ..convertPaymentCurrency = false
+    ..convertExpenseCurrency = false
+    ..notifyVendorWhenPaid = false
     ..systemLogs.replace(BuiltList<SystemLogEntity>())
     ..subscriptions.replace(BuiltList<SubscriptionEntity>())
     ..recurringExpenses.replace(BuiltList<ExpenseEntity>())
     ..clientRegistrationFields.replace(BuiltList<RegistrationFieldEntity>())
-    ..purchaseOrders.replace(BuiltList<InvoiceEntity>());
+    ..purchaseOrders.replace(BuiltList<InvoiceEntity>())
+    ..bankAccounts.replace(BuiltList<BankAccountEntity>())
+    ..transactions.replace(BuiltList<TransactionEntity>())
+    ..transactionRules.replace(BuiltList<TransactionRuleEntity>())
+    ..schedules.replace(BuiltList<ScheduleEntity>());
 
   static Serializer<CompanyEntity> get serializer => _$companyEntitySerializer;
 }
@@ -779,6 +846,13 @@ abstract class GatewayEntity extends Object
       return true;
     }
 
+    if ('autobill'.contains(filter) &&
+        options.values
+            .where((option) => option.supportTokenBilling)
+            .isNotEmpty) {
+      return true;
+    }
+
     final gatewayIds = options.keys.toList();
     final localization = AppLocalization.of(navigatorKey.currentContext);
 
@@ -798,6 +872,13 @@ abstract class GatewayEntity extends Object
   String matchesFilterValue(String filter) {
     if (filter == null || filter.isEmpty) {
       return null;
+    }
+
+    if ('autobill'.contains(filter) &&
+        options.values
+            .where((option) => option.supportTokenBilling)
+            .isNotEmpty) {
+      return 'Auto-Bill';
     }
 
     final gatewayIds = options.keys.toList();
@@ -982,8 +1063,8 @@ abstract class UserCompanyEntity
   bool canCreate(EntityType entityType) =>
       can(UserPermission.create, entityType);
 
-  bool canViewOrCreate(EntityType entityType) =>
-      canView(entityType) || canCreate(entityType);
+  bool canViewCreateOrEdit(EntityType entityType) =>
+      canView(entityType) || canCreate(entityType) || canEdit(entityType);
 
   bool canEditEntity(BaseEntity entity) {
     if (entity == null) {
@@ -1018,6 +1099,7 @@ abstract class UserSettingsEntity
       accentColor: kDefaultAccentColor,
       numberYearsActive: 3,
       tableColumns: BuiltMap<String, BuiltList<String>>(),
+      reactTableColumns: BuiltMap<String, BuiltList<String>>(),
       reportSettings: BuiltMap<String, ReportSettingsEntity>(),
       includeDeletedClients: false,
       dashboardFields: BuiltList<DashboardField>(<DashboardField>[
@@ -1052,6 +1134,9 @@ abstract class UserSettingsEntity
   @BuiltValueField(wireName: 'table_columns')
   BuiltMap<String, BuiltList<String>> get tableColumns;
 
+  @BuiltValueField(wireName: 'react_table_column')
+  BuiltMap<String, BuiltList<String>> get reactTableColumns;
+
   @BuiltValueField(wireName: 'report_settings')
   BuiltMap<String, ReportSettingsEntity> get reportSettings;
 
@@ -1083,6 +1168,7 @@ abstract class UserSettingsEntity
     ..accentColor = kDefaultAccentColor
     ..numberYearsActive = 3
     ..tableColumns.replace(BuiltMap<String, BuiltList<String>>())
+    ..reactTableColumns.replace(BuiltMap<String, BuiltList<String>>())
     ..reportSettings.replace(BuiltMap<String, ReportSettingsEntity>())
     ..dashboardFields.replace(BuiltList<DashboardField>(<DashboardField>[
       DashboardField(

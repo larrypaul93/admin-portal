@@ -63,6 +63,10 @@ class GeneratedNumbersVM {
           store.dispatch(UpdateSettings(settings: settings));
         },
         onSavePressed: (context) {
+          if (!state.isProPlan && !state.isTrial) {
+            return;
+          }
+
           Debouncer.runOnComplete(() {
             final settingsUIState = store.state.uiState.settingsUIState;
             switch (settingsUIState.entityType) {

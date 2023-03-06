@@ -576,7 +576,11 @@ class _$ContactListResponse extends ContactListResponse {
   int __hashCode;
   @override
   int get hashCode {
-    return __hashCode ??= $jf($jc(0, data.hashCode));
+    if (__hashCode != null) return __hashCode;
+    var _$hash = 0;
+    _$hash = $jc(_$hash, data.hashCode);
+    _$hash = $jf(_$hash);
+    return __hashCode ??= _$hash;
   }
 
   @override
@@ -671,7 +675,11 @@ class _$ContactItemResponse extends ContactItemResponse {
   int __hashCode;
   @override
   int get hashCode {
-    return __hashCode ??= $jf($jc(0, data.hashCode));
+    if (__hashCode != null) return __hashCode;
+    var _$hash = 0;
+    _$hash = $jc(_$hash, data.hashCode);
+    _$hash = $jf(_$hash);
+    return __hashCode ??= _$hash;
   }
 
   @override
@@ -1068,44 +1076,64 @@ class _$ContactEntity extends ContactEntity {
   int __hashCode;
   @override
   int get hashCode {
-    return __hashCode ??= $jf($jc(
-        $jc(
-            $jc(
-                $jc(
-                    $jc(
-                        $jc(
-                            $jc(
-                                $jc(
-                                    $jc(
-                                        $jc(
-                                            $jc(
-                                                $jc(
-                                                    $jc(
-                                                        $jc(
-                                                            $jc(
-                                                                $jc(
-                                                                    $jc(
-                                                                        $jc(
-                                                                            $jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc(0, firstName.hashCode), lastName.hashCode), email.hashCode), password.hashCode), phone.hashCode), contactKey.hashCode), isPrimary.hashCode), sendEmail.hashCode), customValue1.hashCode), customValue2.hashCode), customValue3.hashCode), customValue4.hashCode), address1.hashCode), address2.hashCode), city.hashCode), state.hashCode), postalCode.hashCode), countryId.hashCode), region.hashCode), fax.hashCode), phoneHome.hashCode), phoneMain.hashCode), phoneTollFree.hashCode), phoneCell.hashCode), homeAddress1.hashCode), homeAddress2.hashCode), homeCity.hashCode), homeState.hashCode), homePostalCode.hashCode), homeCountryId.hashCode), headOfficeAddress1.hashCode), headOfficeAddress2.hashCode), headOfficeCity.hashCode), headOfficeState.hashCode), headOfficePostalCode.hashCode),
-                                                                                headOfficeCountryId.hashCode),
-                                                                            mainAddress1.hashCode),
-                                                                        mainAddress2.hashCode),
-                                                                    mainCity.hashCode),
-                                                                mainState.hashCode),
-                                                            mainPostalCode.hashCode),
-                                                        mainCountryId.hashCode),
-                                                    lastLogin.hashCode),
-                                                link.hashCode),
-                                            groupId.hashCode),
-                                        number.hashCode),
-                                    isChanged.hashCode),
-                                createdAt.hashCode),
-                            updatedAt.hashCode),
-                        archivedAt.hashCode),
-                    isDeleted.hashCode),
-                createdUserId.hashCode),
-            assignedUserId.hashCode),
-        id.hashCode));
+    if (__hashCode != null) return __hashCode;
+    var _$hash = 0;
+    _$hash = $jc(_$hash, firstName.hashCode);
+    _$hash = $jc(_$hash, lastName.hashCode);
+    _$hash = $jc(_$hash, email.hashCode);
+    _$hash = $jc(_$hash, password.hashCode);
+    _$hash = $jc(_$hash, phone.hashCode);
+    _$hash = $jc(_$hash, contactKey.hashCode);
+    _$hash = $jc(_$hash, isPrimary.hashCode);
+    _$hash = $jc(_$hash, sendEmail.hashCode);
+    _$hash = $jc(_$hash, customValue1.hashCode);
+    _$hash = $jc(_$hash, customValue2.hashCode);
+    _$hash = $jc(_$hash, customValue3.hashCode);
+    _$hash = $jc(_$hash, customValue4.hashCode);
+    _$hash = $jc(_$hash, address1.hashCode);
+    _$hash = $jc(_$hash, address2.hashCode);
+    _$hash = $jc(_$hash, city.hashCode);
+    _$hash = $jc(_$hash, state.hashCode);
+    _$hash = $jc(_$hash, postalCode.hashCode);
+    _$hash = $jc(_$hash, countryId.hashCode);
+    _$hash = $jc(_$hash, region.hashCode);
+    _$hash = $jc(_$hash, fax.hashCode);
+    _$hash = $jc(_$hash, phoneHome.hashCode);
+    _$hash = $jc(_$hash, phoneMain.hashCode);
+    _$hash = $jc(_$hash, phoneTollFree.hashCode);
+    _$hash = $jc(_$hash, phoneCell.hashCode);
+    _$hash = $jc(_$hash, homeAddress1.hashCode);
+    _$hash = $jc(_$hash, homeAddress2.hashCode);
+    _$hash = $jc(_$hash, homeCity.hashCode);
+    _$hash = $jc(_$hash, homeState.hashCode);
+    _$hash = $jc(_$hash, homePostalCode.hashCode);
+    _$hash = $jc(_$hash, homeCountryId.hashCode);
+    _$hash = $jc(_$hash, headOfficeAddress1.hashCode);
+    _$hash = $jc(_$hash, headOfficeAddress2.hashCode);
+    _$hash = $jc(_$hash, headOfficeCity.hashCode);
+    _$hash = $jc(_$hash, headOfficeState.hashCode);
+    _$hash = $jc(_$hash, headOfficePostalCode.hashCode);
+    _$hash = $jc(_$hash, headOfficeCountryId.hashCode);
+    _$hash = $jc(_$hash, mainAddress1.hashCode);
+    _$hash = $jc(_$hash, mainAddress2.hashCode);
+    _$hash = $jc(_$hash, mainCity.hashCode);
+    _$hash = $jc(_$hash, mainState.hashCode);
+    _$hash = $jc(_$hash, mainPostalCode.hashCode);
+    _$hash = $jc(_$hash, mainCountryId.hashCode);
+    _$hash = $jc(_$hash, lastLogin.hashCode);
+    _$hash = $jc(_$hash, link.hashCode);
+    _$hash = $jc(_$hash, groupId.hashCode);
+    _$hash = $jc(_$hash, number.hashCode);
+    _$hash = $jc(_$hash, isChanged.hashCode);
+    _$hash = $jc(_$hash, createdAt.hashCode);
+    _$hash = $jc(_$hash, updatedAt.hashCode);
+    _$hash = $jc(_$hash, archivedAt.hashCode);
+    _$hash = $jc(_$hash, isDeleted.hashCode);
+    _$hash = $jc(_$hash, createdUserId.hashCode);
+    _$hash = $jc(_$hash, assignedUserId.hashCode);
+    _$hash = $jc(_$hash, id.hashCode);
+    _$hash = $jf(_$hash);
+    return __hashCode ??= _$hash;
   }
 
   @override
@@ -1560,4 +1588,4 @@ class ContactEntityBuilder
   }
 }
 
-// ignore_for_file: always_put_control_body_on_new_line,always_specify_types,annotate_overrides,avoid_annotating_with_dynamic,avoid_as,avoid_catches_without_on_clauses,avoid_returning_this,deprecated_member_use_from_same_package,lines_longer_than_80_chars,no_leading_underscores_for_local_identifiers,omit_local_variable_types,prefer_expression_function_bodies,sort_constructors_first,test_types_in_equals,unnecessary_const,unnecessary_new,unnecessary_lambdas
+// ignore_for_file: deprecated_member_use_from_same_package,type=lint

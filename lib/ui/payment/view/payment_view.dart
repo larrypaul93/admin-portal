@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 // Package imports:
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:invoiceninja_flutter/redux/invoice/invoice_selectors.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 // Project imports:
@@ -43,6 +44,7 @@ class _PaymentViewState extends State<PaymentView> {
     final state = StoreProvider.of<AppState>(context).state;
     final client = state.clientState.map[payment.clientId] ??
         ClientEntity(id: payment.clientId);
+    final transaction = state.transactionState.get(payment.transactionId);
     final localization = AppLocalization.of(context);
 
     final companyGateway =
@@ -155,6 +157,11 @@ class _PaymentViewState extends State<PaymentView> {
                         ),
                         ListDivider(),
                       ],
+                      if (payment.transactionId.isNotEmpty)
+                        EntityListTile(
+                          isFilter: widget.isFilter,
+                          entity: transaction,
+                        ),
                       payment.privateNotes != null &&
                               payment.privateNotes.isNotEmpty
                           ? Column(
@@ -177,7 +184,11 @@ class _PaymentViewState extends State<PaymentView> {
                       ? EntityAction.applyPayment
                       : EntityAction.sendEmail,
                   action1Enabled: state.company.enableApplyingPayments
-                      ? payment.applied < payment.amount
+                      ? payment.applied < payment.amount &&
+                          memoizedHasActiveUnpaidInvoices(
+                            payment.clientId,
+                            state.invoiceState.map,
+                          )
                       : true,
                   action2: EntityAction.refundPayment,
                   action2Enabled: payment.refunded < payment.amount,

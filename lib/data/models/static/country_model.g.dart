@@ -224,7 +224,11 @@ class _$CountryListResponse extends CountryListResponse {
   int __hashCode;
   @override
   int get hashCode {
-    return __hashCode ??= $jf($jc(0, data.hashCode));
+    if (__hashCode != null) return __hashCode;
+    var _$hash = 0;
+    _$hash = $jc(_$hash, data.hashCode);
+    _$hash = $jf(_$hash);
+    return __hashCode ??= _$hash;
   }
 
   @override
@@ -319,7 +323,11 @@ class _$CountryItemResponse extends CountryItemResponse {
   int __hashCode;
   @override
   int get hashCode {
-    return __hashCode ??= $jf($jc(0, data.hashCode));
+    if (__hashCode != null) return __hashCode;
+    var _$hash = 0;
+    _$hash = $jc(_$hash, data.hashCode);
+    _$hash = $jf(_$hash);
+    return __hashCode ??= _$hash;
   }
 
   @override
@@ -452,18 +460,18 @@ class _$CountryEntity extends CountryEntity {
   int __hashCode;
   @override
   int get hashCode {
-    return __hashCode ??= $jf($jc(
-        $jc(
-            $jc(
-                $jc(
-                    $jc(
-                        $jc($jc($jc(0, name.hashCode), swapPostalCode.hashCode),
-                            swapCurrencySymbol.hashCode),
-                        thousandSeparator.hashCode),
-                    decimalSeparator.hashCode),
-                iso2.hashCode),
-            iso3.hashCode),
-        id.hashCode));
+    if (__hashCode != null) return __hashCode;
+    var _$hash = 0;
+    _$hash = $jc(_$hash, name.hashCode);
+    _$hash = $jc(_$hash, swapPostalCode.hashCode);
+    _$hash = $jc(_$hash, swapCurrencySymbol.hashCode);
+    _$hash = $jc(_$hash, thousandSeparator.hashCode);
+    _$hash = $jc(_$hash, decimalSeparator.hashCode);
+    _$hash = $jc(_$hash, iso2.hashCode);
+    _$hash = $jc(_$hash, iso3.hashCode);
+    _$hash = $jc(_$hash, id.hashCode);
+    _$hash = $jf(_$hash);
+    return __hashCode ??= _$hash;
   }
 
   @override
@@ -577,4 +585,4 @@ class CountryEntityBuilder
   }
 }
 
-// ignore_for_file: always_put_control_body_on_new_line,always_specify_types,annotate_overrides,avoid_annotating_with_dynamic,avoid_as,avoid_catches_without_on_clauses,avoid_returning_this,deprecated_member_use_from_same_package,lines_longer_than_80_chars,no_leading_underscores_for_local_identifiers,omit_local_variable_types,prefer_expression_function_bodies,sort_constructors_first,test_types_in_equals,unnecessary_const,unnecessary_new,unnecessary_lambdas
+// ignore_for_file: deprecated_member_use_from_same_package,type=lint

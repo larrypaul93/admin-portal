@@ -110,6 +110,10 @@ List<String> filteredPaymentsSelector(
       return false;
     }
 
+    if (!payment.matchesStatuses(paymentListState.statusFilters)) {
+      return false;
+    }
+
     final client =
         clientMap[payment.clientId] ?? ClientEntity(id: payment.clientId);
 
@@ -211,7 +215,3 @@ EntityStats paymentStatsForUser(
 
   return EntityStats(countActive: countActive, countArchived: countArchived);
 }
-
-bool hasPaymentChanges(
-        PaymentEntity payment, BuiltMap<String, PaymentEntity> paymentMap) =>
-    payment.isNew ? payment.isChanged : payment != paymentMap[payment.id];

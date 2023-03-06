@@ -74,6 +74,9 @@ List<String> filteredQuotesSelector(
     } else if (filterEntityType == EntityType.invoice &&
         quote.invoiceId != filterEntityId) {
       return false;
+    } else if (filterEntityType == EntityType.project &&
+        quote.projectId != filterEntityId) {
+      return false;
     }
 
     if (!quote.matchesStates(quoteListState.stateFilters)) {
@@ -180,7 +183,3 @@ EntityStats quoteStatsForUser(
 
   return EntityStats(countActive: countActive, countArchived: countArchived);
 }
-
-bool hasQuoteChanges(
-        InvoiceEntity quote, BuiltMap<String, InvoiceEntity> quoteMap) =>
-    quote.isNew ? quote.isChanged : quote != quoteMap[quote.id];

@@ -1,5 +1,6 @@
 // Flutter imports:
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide DataRow, DataCell, DataColumn;
+import 'package:flutter/material.dart' as mt;
 
 // Package imports:
 import 'package:flutter_redux/flutter_redux.dart';
@@ -30,6 +31,10 @@ import 'package:invoiceninja_flutter/ui/app/history_drawer_vm.dart';
 import 'package:invoiceninja_flutter/ui/app/menu_drawer_vm.dart';
 import 'package:invoiceninja_flutter/ui/app/presenters/entity_presenter.dart';
 import 'package:invoiceninja_flutter/ui/app/scrollable_listview.dart';
+import 'package:invoiceninja_flutter/ui/app/tables/app_data_table.dart';
+import 'package:invoiceninja_flutter/ui/app/tables/app_data_table_source.dart';
+import 'package:invoiceninja_flutter/ui/app/tables/app_paginated_data_table.dart';
+import 'package:invoiceninja_flutter/ui/app/upgrade_dialog.dart';
 import 'package:invoiceninja_flutter/ui/reports/report_charts.dart';
 import 'package:invoiceninja_flutter/ui/reports/reports_screen_vm.dart';
 import 'package:invoiceninja_flutter/utils/colors.dart';
@@ -116,7 +121,10 @@ class ReportsScreen extends StatelessWidget {
         kReportVendor,
         if (state.company.isModuleEnabled(EntityType.purchaseOrder))
           kReportPurchaseOrder,
+        kReportPurchaseOrderItem,
       ],
+      if (state.company.isModuleEnabled(EntityType.transaction))
+        kReportTransaction,
     ]..sort((a, b) => a.compareTo(b));
 
     final reportChildren = [
@@ -414,16 +422,25 @@ class ReportsScreen extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     HelpText(localization.upgradeToViewReports),
-                    if (!isApple())
+                    if (!isApple() || supportsInAppPurchase())
                       AppButton(
-                        label: localization.upgrade.toUpperCase(),
-                        onPressed: () => launchUrl(
-                            Uri.parse(state.userCompany.ninjaPortalUrl)),
-                      )
+                          label: localization.upgrade.toUpperCase(),
+                          onPressed: () {
+                            if (supportsInAppPurchase()) {
+                              showDialog<void>(
+                                context: context,
+                                builder: (context) => UpgradeDialog(),
+                              );
+                            } else {
+                              launchUrl(
+                                  Uri.parse(state.userCompany.ninjaPortalUrl));
+                            }
+                          })
                   ],
                 ),
               )
             : ScrollableListView(
+                primary: true,
                 key: ValueKey(
                     '${viewModel.state.company.id}_${viewModel.state.isSaving}_${reportsState.report}_${reportsState.group}'),
                 children: <Widget>[
@@ -658,8 +675,9 @@ class _ReportDataTableState extends State<ReportDataTable> {
           ),
         SingleChildScrollView(
           padding: const EdgeInsets.all(12),
-          child: PaginatedDataTable(
-            showFirstLastButtons: true,
+          child: AppPaginatedDataTable(
+            //showFirstLastButtons: true,
+            subtractOneFromCount: true,
             header: SizedBox(),
             sortColumnIndex: sortedColumns.contains(reportSettings.sortColumn)
                 ? sortedColumns.indexOf(reportSettings.sortColumn)
@@ -687,7 +705,7 @@ class TotalsDataTable extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return DataTable(
+    return mt.DataTable(
       sortColumnIndex: reportSettings.sortTotalsIndex != null &&
               reportResult.columns.length > reportSettings.sortTotalsIndex
           ? reportSettings.sortTotalsIndex
@@ -763,7 +781,7 @@ ReportColumnType getReportColumnType(String column, BuildContext context) {
   }
 }
 
-class ReportDataTableSource extends DataTableSource {
+class ReportDataTableSource extends AppDataTableSource {
   ReportDataTableSource({
     @required this.context,
     @required this.textEditingControllers,
@@ -1342,7 +1360,7 @@ class ReportResult {
         } else if (columnType == ReportColumnType.number) {
           final currencyId = values['${column}_currency_id'];
           value = formatNumber(values[column], context,
-              formatNumberType: column == 'quantity'
+              formatNumberType: column.toLowerCase().contains('quantity')
                   ? FormatNumberType.double
                   : FormatNumberType.money,
               currencyId:
@@ -1402,7 +1420,7 @@ class ReportResult {
     }
   }
 
-  List<DataColumn> totalColumns(
+  List<mt.DataColumn> totalColumns(
       BuildContext context, Function(int, bool) onSortCallback) {
     final store = StoreProvider.of<AppState>(context);
     final company = store.state.company;
@@ -1416,11 +1434,11 @@ class ReportResult {
     //  print('## $column => ${getReportColumnType(column, context)}');
 
     final totalColumns = [
-      DataColumn(
+      mt.DataColumn(
         label: Text(localization.currency),
         onSort: onSortCallback,
       ),
-      DataColumn(
+      mt.DataColumn(
         label: Text(localization.count),
         onSort: onSortCallback,
       ),
@@ -1430,7 +1448,7 @@ class ReportResult {
           ReportColumnType.age,
           ReportColumnType.duration,
         ].contains(getReportColumnType(column, context)))
-          DataColumn(
+          mt.DataColumn(
             label: Text(
               company.getCustomFieldLabel(column).isEmpty
                   ? localization.lookup(column)
@@ -1447,8 +1465,8 @@ class ReportResult {
     return totalColumns;
   }
 
-  List<DataRow> totalRows(BuildContext context) {
-    final rows = <DataRow>[];
+  List<mt.DataRow> totalRows(BuildContext context) {
+    final rows = <mt.DataRow>[];
     final store = StoreProvider.of<AppState>(context);
     final state = store.state;
     final reportState = state.uiState.reportsUIState;
@@ -1567,11 +1585,11 @@ class ReportResult {
 
     keys.forEach((currencyId) {
       final values = totals[currencyId];
-      final cells = <DataCell>[
-        DataCell(Text(
+      final cells = <mt.DataCell>[
+        mt.DataCell(Text(
             store.state.staticState.currencyMap[currencyId]?.listDisplayName ??
                 '')),
-        DataCell(Text(values['count'].toInt().toString())),
+        mt.DataCell(Text(values['count'].toInt().toString())),
       ];
 
       allFields.forEach((field) {
@@ -1590,12 +1608,12 @@ class ReportResult {
                     ? FormatNumberType.double
                     : FormatNumberType.money);
           }
-          cells.add(DataCell(Text(value)));
+          cells.add(mt.DataCell(Text(value)));
         }
       });
 
       //print('## Total Rows: ${cells.length}');
-      rows.add(DataRow(cells: cells));
+      rows.add(mt.DataRow(cells: cells));
     });
 
     return rows;
@@ -1791,7 +1809,11 @@ class ReportNumberValue extends ReportElement {
 
   @override
   String renderText(BuildContext context, String column) {
-    if (currencyId == null) {
+    if (currencyId == null ||
+        column.endsWith('_rate') ||
+        column.endsWith('_rate1') ||
+        column.endsWith('_rate2') ||
+        column.endsWith('_rate3')) {
       return formatNumber(value, context,
           formatNumberType: FormatNumberType.double);
     }

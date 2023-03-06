@@ -19,7 +19,6 @@ import 'package:invoiceninja_flutter/ui/user/edit/user_edit_vm.dart';
 import 'package:invoiceninja_flutter/utils/completers.dart';
 import 'package:invoiceninja_flutter/utils/localization.dart';
 import 'package:invoiceninja_flutter/utils/platforms.dart';
-import 'package:invoiceninja_flutter/utils/strings.dart';
 
 class UserEdit extends StatefulWidget {
   const UserEdit({
@@ -40,7 +39,6 @@ class _UserEditState extends State<UserEdit>
   final _debouncer = Debouncer();
   final FocusScopeNode _focusNode = FocusScopeNode();
   TabController _controller;
-  bool autoValidate = false;
 
   final _firstNameController = TextEditingController();
   final _lastNameController = TextEditingController();
@@ -140,6 +138,16 @@ class _UserEditState extends State<UserEdit>
         user.rebuild((b) => b..userCompany.permissions = permissionsString));
   }
 
+  void _onSavePressed(BuildContext context) {
+    final bool isValid = _formKey.currentState.validate();
+
+    if (!isValid) {
+      return;
+    }
+
+    widget.viewModel.onSavePressed(context);
+  }
+
   @override
   Widget build(BuildContext context) {
     final viewModel = widget.viewModel;
@@ -168,19 +176,7 @@ class _UserEditState extends State<UserEdit>
         ],
       ),
       onCancelPressed: (context) => viewModel.onCancelPressed(context),
-      onSavePressed: (context) {
-        final bool isValid = _formKey.currentState.validate();
-
-        setState(() {
-          autoValidate = !isValid ?? false;
-        });
-
-        if (!isValid) {
-          return;
-        }
-
-        viewModel.onSavePressed(context);
-      },
+      onSavePressed: _onSavePressed,
       body: AppTabForm(
         focusNode: _focusNode,
         formKey: _formKey,
@@ -197,8 +193,7 @@ class _UserEditState extends State<UserEdit>
                     validator: (val) => val.isEmpty || val.trim().isEmpty
                         ? localization.pleaseEnterAFirstName
                         : null,
-                    autovalidate: autoValidate,
-                    onSavePressed: viewModel.onSavePressed,
+                    onSavePressed: _onSavePressed,
                     keyboardType: TextInputType.name,
                   ),
                   DecoratedFormField(
@@ -207,8 +202,7 @@ class _UserEditState extends State<UserEdit>
                     validator: (val) => val.isEmpty || val.trim().isEmpty
                         ? localization.pleaseEnterALastName
                         : null,
-                    autovalidate: autoValidate,
-                    onSavePressed: viewModel.onSavePressed,
+                    onSavePressed: _onSavePressed,
                     keyboardType: TextInputType.name,
                   ),
                   DecoratedFormField(
@@ -217,46 +211,45 @@ class _UserEditState extends State<UserEdit>
                     validator: (val) => val.isEmpty || val.trim().isEmpty
                         ? localization.pleaseEnterYourEmail
                         : null,
-                    autovalidate: autoValidate,
-                    onSavePressed: viewModel.onSavePressed,
+                    onSavePressed: _onSavePressed,
                     keyboardType: TextInputType.emailAddress,
                   ),
                   DecoratedFormField(
                     label: localization.phone,
                     controller: _phoneController,
-                    onSavePressed: viewModel.onSavePressed,
+                    onSavePressed: _onSavePressed,
                     keyboardType: TextInputType.phone,
                   ),
                   /*
                   PasswordFormField(
                     controller: _passwordController,
                     autoValidate: autoValidate,
-                    onSavePressed: viewModel.onSavePressed,
+                    onSavePressed: _onSavePressed,
                   ),
                   */
                   CustomField(
                     controller: _custom1Controller,
                     field: CustomFieldType.user1,
                     value: user.customValue1,
-                    onSavePressed: viewModel.onSavePressed,
+                    onSavePressed: _onSavePressed,
                   ),
                   CustomField(
                     controller: _custom2Controller,
                     field: CustomFieldType.user2,
                     value: user.customValue2,
-                    onSavePressed: viewModel.onSavePressed,
+                    onSavePressed: _onSavePressed,
                   ),
                   CustomField(
                     controller: _custom3Controller,
                     field: CustomFieldType.user3,
                     value: user.customValue3,
-                    onSavePressed: viewModel.onSavePressed,
+                    onSavePressed: _onSavePressed,
                   ),
                   CustomField(
                     controller: _custom4Controller,
                     field: CustomFieldType.user4,
                     value: user.customValue4,
-                    onSavePressed: viewModel.onSavePressed,
+                    onSavePressed: _onSavePressed,
                   ),
                 ],
               ),
@@ -300,10 +293,10 @@ class _UserEditState extends State<UserEdit>
                           label: Text(localization.create),
                         ),
                         DataColumn(
-                          label: Text(localization.view),
+                          label: Text(localization.viewAll),
                         ),
                         DataColumn(
-                          label: Text(localization.edit),
+                          label: Text(localization.editAll),
                         ),
                       ],
                       rows: [
@@ -352,22 +345,24 @@ class _UserEditState extends State<UserEdit>
                           EntityType.product,
                           EntityType.category,
                           EntityType.invoice,
-                          EntityType.payment,
                           EntityType.recurringInvoice,
+                          EntityType.payment,
                           EntityType.quote,
                           EntityType.credit,
                           EntityType.project,
                           EntityType.task,
                           EntityType.vendor,
+                          EntityType.purchaseOrder,
                           EntityType.expense,
+                          EntityType.recurringExpense,
+                          EntityType.transaction,
                         ]
                             .where((entityType) =>
                                 state.company.isModuleEnabled(entityType))
                             .map((EntityType type) {
-                          final createPermission =
-                              'create_' + toSnakeCase('$type');
-                          final editPermission = 'edit_' + toSnakeCase('$type');
-                          final viewPermission = 'view_' + toSnakeCase('$type');
+                          final createPermission = 'create_' + type.apiValue;
+                          final editPermission = 'edit_' + type.apiValue;
+                          final viewPermission = 'view_' + type.apiValue;
                           return DataRow(cells: [
                             DataCell(Text(localization.lookup('$type')),
                                 onTap: () {

@@ -53,6 +53,18 @@ class _$UIStateSerializer implements StructuredSerializer<UIState> {
       'invoiceUIState',
       serializers.serialize(object.invoiceUIState,
           specifiedType: const FullType(InvoiceUIState)),
+      'scheduleUIState',
+      serializers.serialize(object.scheduleUIState,
+          specifiedType: const FullType(ScheduleUIState)),
+      'transactionRuleUIState',
+      serializers.serialize(object.transactionRuleUIState,
+          specifiedType: const FullType(TransactionRuleUIState)),
+      'transactionUIState',
+      serializers.serialize(object.transactionUIState,
+          specifiedType: const FullType(TransactionUIState)),
+      'bankAccountUIState',
+      serializers.serialize(object.bankAccountUIState,
+          specifiedType: const FullType(BankAccountUIState)),
       'purchaseOrderUIState',
       serializers.serialize(object.purchaseOrderUIState,
           specifiedType: const FullType(PurchaseOrderUIState)),
@@ -218,6 +230,26 @@ class _$UIStateSerializer implements StructuredSerializer<UIState> {
           result.invoiceUIState.replace(serializers.deserialize(value,
               specifiedType: const FullType(InvoiceUIState)) as InvoiceUIState);
           break;
+        case 'scheduleUIState':
+          result.scheduleUIState.replace(serializers.deserialize(value,
+                  specifiedType: const FullType(ScheduleUIState))
+              as ScheduleUIState);
+          break;
+        case 'transactionRuleUIState':
+          result.transactionRuleUIState.replace(serializers.deserialize(value,
+                  specifiedType: const FullType(TransactionRuleUIState))
+              as TransactionRuleUIState);
+          break;
+        case 'transactionUIState':
+          result.transactionUIState.replace(serializers.deserialize(value,
+                  specifiedType: const FullType(TransactionUIState))
+              as TransactionUIState);
+          break;
+        case 'bankAccountUIState':
+          result.bankAccountUIState.replace(serializers.deserialize(value,
+                  specifiedType: const FullType(BankAccountUIState))
+              as BankAccountUIState);
+          break;
         case 'purchaseOrderUIState':
           result.purchaseOrderUIState.replace(serializers.deserialize(value,
                   specifiedType: const FullType(PurchaseOrderUIState))
@@ -368,6 +400,14 @@ class _$UIState extends UIState {
   @override
   final InvoiceUIState invoiceUIState;
   @override
+  final ScheduleUIState scheduleUIState;
+  @override
+  final TransactionRuleUIState transactionRuleUIState;
+  @override
+  final TransactionUIState transactionUIState;
+  @override
+  final BankAccountUIState bankAccountUIState;
+  @override
   final PurchaseOrderUIState purchaseOrderUIState;
   @override
   final CategoryUIState categoryUIState;
@@ -437,6 +477,10 @@ class _$UIState extends UIState {
       this.productUIState,
       this.clientUIState,
       this.invoiceUIState,
+      this.scheduleUIState,
+      this.transactionRuleUIState,
+      this.transactionUIState,
+      this.bankAccountUIState,
       this.purchaseOrderUIState,
       this.categoryUIState,
       this.contactUIState,
@@ -486,6 +530,14 @@ class _$UIState extends UIState {
         clientUIState, r'UIState', 'clientUIState');
     BuiltValueNullFieldError.checkNotNull(
         invoiceUIState, r'UIState', 'invoiceUIState');
+    BuiltValueNullFieldError.checkNotNull(
+        scheduleUIState, r'UIState', 'scheduleUIState');
+    BuiltValueNullFieldError.checkNotNull(
+        transactionRuleUIState, r'UIState', 'transactionRuleUIState');
+    BuiltValueNullFieldError.checkNotNull(
+        transactionUIState, r'UIState', 'transactionUIState');
+    BuiltValueNullFieldError.checkNotNull(
+        bankAccountUIState, r'UIState', 'bankAccountUIState');
     BuiltValueNullFieldError.checkNotNull(
         purchaseOrderUIState, r'UIState', 'purchaseOrderUIState');
     BuiltValueNullFieldError.checkNotNull(
@@ -564,6 +616,10 @@ class _$UIState extends UIState {
         productUIState == other.productUIState &&
         clientUIState == other.clientUIState &&
         invoiceUIState == other.invoiceUIState &&
+        scheduleUIState == other.scheduleUIState &&
+        transactionRuleUIState == other.transactionRuleUIState &&
+        transactionUIState == other.transactionUIState &&
+        bankAccountUIState == other.bankAccountUIState &&
         purchaseOrderUIState == other.purchaseOrderUIState &&
         categoryUIState == other.categoryUIState &&
         contactUIState == other.contactUIState &&
@@ -595,44 +651,53 @@ class _$UIState extends UIState {
   int __hashCode;
   @override
   int get hashCode {
-    return __hashCode ??= $jf($jc(
-        $jc(
-            $jc(
-                $jc(
-                    $jc(
-                        $jc(
-                            $jc(
-                                $jc(
-                                    $jc(
-                                        $jc(
-                                            $jc(
-                                                $jc(
-                                                    $jc(
-                                                        $jc(
-                                                            $jc(
-                                                                $jc(
-                                                                    $jc(
-                                                                        $jc(
-                                                                            $jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc(0, selectedCompanyIndex.hashCode), currentRoute.hashCode), previousRoute.hashCode), loadingEntityType.hashCode), previewStack.hashCode), filterStack.hashCode), filter.hashCode), filterClearedAt.hashCode), lastActivityAt.hashCode), dashboardUIState.hashCode), productUIState.hashCode), clientUIState.hashCode), invoiceUIState.hashCode), purchaseOrderUIState.hashCode), categoryUIState.hashCode), contactUIState.hashCode), recurringExpenseUIState.hashCode), subscriptionUIState.hashCode), taskStatusUIState.hashCode), expenseCategoryUIState.hashCode),
-                                                                                recurringInvoiceUIState.hashCode),
-                                                                            webhookUIState.hashCode),
-                                                                        tokenUIState.hashCode),
-                                                                    paymentTermUIState.hashCode),
-                                                                designUIState.hashCode),
-                                                            creditUIState.hashCode),
-                                                        userUIState.hashCode),
-                                                    taxRateUIState.hashCode),
-                                                companyGatewayUIState.hashCode),
-                                            groupUIState.hashCode),
-                                        documentUIState.hashCode),
-                                    expenseUIState.hashCode),
-                                vendorUIState.hashCode),
-                            taskUIState.hashCode),
-                        projectUIState.hashCode),
-                    paymentUIState.hashCode),
-                quoteUIState.hashCode),
-            settingsUIState.hashCode),
-        reportsUIState.hashCode));
+    if (__hashCode != null) return __hashCode;
+    var _$hash = 0;
+    _$hash = $jc(_$hash, selectedCompanyIndex.hashCode);
+    _$hash = $jc(_$hash, currentRoute.hashCode);
+    _$hash = $jc(_$hash, previousRoute.hashCode);
+    _$hash = $jc(_$hash, loadingEntityType.hashCode);
+    _$hash = $jc(_$hash, previewStack.hashCode);
+    _$hash = $jc(_$hash, filterStack.hashCode);
+    _$hash = $jc(_$hash, filter.hashCode);
+    _$hash = $jc(_$hash, filterClearedAt.hashCode);
+    _$hash = $jc(_$hash, lastActivityAt.hashCode);
+    _$hash = $jc(_$hash, dashboardUIState.hashCode);
+    _$hash = $jc(_$hash, productUIState.hashCode);
+    _$hash = $jc(_$hash, clientUIState.hashCode);
+    _$hash = $jc(_$hash, invoiceUIState.hashCode);
+    _$hash = $jc(_$hash, scheduleUIState.hashCode);
+    _$hash = $jc(_$hash, transactionRuleUIState.hashCode);
+    _$hash = $jc(_$hash, transactionUIState.hashCode);
+    _$hash = $jc(_$hash, bankAccountUIState.hashCode);
+    _$hash = $jc(_$hash, purchaseOrderUIState.hashCode);
+    _$hash = $jc(_$hash, categoryUIState.hashCode);
+    _$hash = $jc(_$hash, contactUIState.hashCode);
+    _$hash = $jc(_$hash, recurringExpenseUIState.hashCode);
+    _$hash = $jc(_$hash, subscriptionUIState.hashCode);
+    _$hash = $jc(_$hash, taskStatusUIState.hashCode);
+    _$hash = $jc(_$hash, expenseCategoryUIState.hashCode);
+    _$hash = $jc(_$hash, recurringInvoiceUIState.hashCode);
+    _$hash = $jc(_$hash, webhookUIState.hashCode);
+    _$hash = $jc(_$hash, tokenUIState.hashCode);
+    _$hash = $jc(_$hash, paymentTermUIState.hashCode);
+    _$hash = $jc(_$hash, designUIState.hashCode);
+    _$hash = $jc(_$hash, creditUIState.hashCode);
+    _$hash = $jc(_$hash, userUIState.hashCode);
+    _$hash = $jc(_$hash, taxRateUIState.hashCode);
+    _$hash = $jc(_$hash, companyGatewayUIState.hashCode);
+    _$hash = $jc(_$hash, groupUIState.hashCode);
+    _$hash = $jc(_$hash, documentUIState.hashCode);
+    _$hash = $jc(_$hash, expenseUIState.hashCode);
+    _$hash = $jc(_$hash, vendorUIState.hashCode);
+    _$hash = $jc(_$hash, taskUIState.hashCode);
+    _$hash = $jc(_$hash, projectUIState.hashCode);
+    _$hash = $jc(_$hash, paymentUIState.hashCode);
+    _$hash = $jc(_$hash, quoteUIState.hashCode);
+    _$hash = $jc(_$hash, settingsUIState.hashCode);
+    _$hash = $jc(_$hash, reportsUIState.hashCode);
+    _$hash = $jf(_$hash);
+    return __hashCode ??= _$hash;
   }
 
   @override
@@ -651,6 +716,10 @@ class _$UIState extends UIState {
           ..add('productUIState', productUIState)
           ..add('clientUIState', clientUIState)
           ..add('invoiceUIState', invoiceUIState)
+          ..add('scheduleUIState', scheduleUIState)
+          ..add('transactionRuleUIState', transactionRuleUIState)
+          ..add('transactionUIState', transactionUIState)
+          ..add('bankAccountUIState', bankAccountUIState)
           ..add('purchaseOrderUIState', purchaseOrderUIState)
           ..add('categoryUIState', categoryUIState)
           ..add('contactUIState', contactUIState)
@@ -752,6 +821,31 @@ class UIStateBuilder implements Builder<UIState, UIStateBuilder> {
       _$this._invoiceUIState ??= new InvoiceUIStateBuilder();
   set invoiceUIState(InvoiceUIStateBuilder invoiceUIState) =>
       _$this._invoiceUIState = invoiceUIState;
+
+  ScheduleUIStateBuilder _scheduleUIState;
+  ScheduleUIStateBuilder get scheduleUIState =>
+      _$this._scheduleUIState ??= new ScheduleUIStateBuilder();
+  set scheduleUIState(ScheduleUIStateBuilder scheduleUIState) =>
+      _$this._scheduleUIState = scheduleUIState;
+
+  TransactionRuleUIStateBuilder _transactionRuleUIState;
+  TransactionRuleUIStateBuilder get transactionRuleUIState =>
+      _$this._transactionRuleUIState ??= new TransactionRuleUIStateBuilder();
+  set transactionRuleUIState(
+          TransactionRuleUIStateBuilder transactionRuleUIState) =>
+      _$this._transactionRuleUIState = transactionRuleUIState;
+
+  TransactionUIStateBuilder _transactionUIState;
+  TransactionUIStateBuilder get transactionUIState =>
+      _$this._transactionUIState ??= new TransactionUIStateBuilder();
+  set transactionUIState(TransactionUIStateBuilder transactionUIState) =>
+      _$this._transactionUIState = transactionUIState;
+
+  BankAccountUIStateBuilder _bankAccountUIState;
+  BankAccountUIStateBuilder get bankAccountUIState =>
+      _$this._bankAccountUIState ??= new BankAccountUIStateBuilder();
+  set bankAccountUIState(BankAccountUIStateBuilder bankAccountUIState) =>
+      _$this._bankAccountUIState = bankAccountUIState;
 
   PurchaseOrderUIStateBuilder _purchaseOrderUIState;
   PurchaseOrderUIStateBuilder get purchaseOrderUIState =>
@@ -933,6 +1027,10 @@ class UIStateBuilder implements Builder<UIState, UIStateBuilder> {
       _productUIState = $v.productUIState.toBuilder();
       _clientUIState = $v.clientUIState.toBuilder();
       _invoiceUIState = $v.invoiceUIState.toBuilder();
+      _scheduleUIState = $v.scheduleUIState.toBuilder();
+      _transactionRuleUIState = $v.transactionRuleUIState.toBuilder();
+      _transactionUIState = $v.transactionUIState.toBuilder();
+      _bankAccountUIState = $v.bankAccountUIState.toBuilder();
       _purchaseOrderUIState = $v.purchaseOrderUIState.toBuilder();
       _categoryUIState = $v.categoryUIState.toBuilder();
       _contactUIState = $v.contactUIState.toBuilder();
@@ -1001,6 +1099,10 @@ class UIStateBuilder implements Builder<UIState, UIStateBuilder> {
               productUIState: productUIState.build(),
               clientUIState: clientUIState.build(),
               invoiceUIState: invoiceUIState.build(),
+              scheduleUIState: scheduleUIState.build(),
+              transactionRuleUIState: transactionRuleUIState.build(),
+              transactionUIState: transactionUIState.build(),
+              bankAccountUIState: bankAccountUIState.build(),
               purchaseOrderUIState: purchaseOrderUIState.build(),
               categoryUIState: categoryUIState.build(),
               contactUIState: contactUIState.build(),
@@ -1043,6 +1145,14 @@ class UIStateBuilder implements Builder<UIState, UIStateBuilder> {
         clientUIState.build();
         _$failedField = 'invoiceUIState';
         invoiceUIState.build();
+        _$failedField = 'scheduleUIState';
+        scheduleUIState.build();
+        _$failedField = 'transactionRuleUIState';
+        transactionRuleUIState.build();
+        _$failedField = 'transactionUIState';
+        transactionUIState.build();
+        _$failedField = 'bankAccountUIState';
+        bankAccountUIState.build();
         _$failedField = 'purchaseOrderUIState';
         purchaseOrderUIState.build();
         _$failedField = 'categoryUIState';
@@ -1106,4 +1216,4 @@ class UIStateBuilder implements Builder<UIState, UIStateBuilder> {
   }
 }
 
-// ignore_for_file: always_put_control_body_on_new_line,always_specify_types,annotate_overrides,avoid_annotating_with_dynamic,avoid_as,avoid_catches_without_on_clauses,avoid_returning_this,deprecated_member_use_from_same_package,lines_longer_than_80_chars,no_leading_underscores_for_local_identifiers,omit_local_variable_types,prefer_expression_function_bodies,sort_constructors_first,test_types_in_equals,unnecessary_const,unnecessary_new,unnecessary_lambdas
+// ignore_for_file: deprecated_member_use_from_same_package,type=lint

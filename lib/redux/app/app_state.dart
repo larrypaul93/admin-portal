@@ -11,6 +11,7 @@ import 'package:built_value/serializer.dart';
 import 'package:invoiceninja_flutter/data/models/service_report.dart';
 import 'package:invoiceninja_flutter/redux/service_report/service_reports_state.dart';
 import 'package:invoiceninja_flutter/ui/contact/contact_screen.dart';
+import 'package:invoiceninja_flutter/redux/settings/settings_state.dart';
 import 'package:invoiceninja_flutter/ui/purchase_order/purchase_order_screen.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
@@ -20,58 +21,36 @@ import 'package:invoiceninja_flutter/constants.dart';
 import 'package:invoiceninja_flutter/data/models/account_model.dart';
 import 'package:invoiceninja_flutter/data/models/models.dart';
 import 'package:invoiceninja_flutter/redux/auth/auth_state.dart';
-import 'package:invoiceninja_flutter/redux/client/client_selectors.dart';
 import 'package:invoiceninja_flutter/redux/client/client_state.dart';
 import 'package:invoiceninja_flutter/redux/company/company_state.dart';
-import 'package:invoiceninja_flutter/redux/company_gateway/company_gateway_selectors.dart';
 import 'package:invoiceninja_flutter/redux/company_gateway/company_gateway_state.dart';
-import 'package:invoiceninja_flutter/redux/credit/credit_selectors.dart';
 import 'package:invoiceninja_flutter/redux/credit/credit_state.dart';
 import 'package:invoiceninja_flutter/redux/dashboard/dashboard_state.dart';
-import 'package:invoiceninja_flutter/redux/design/design_selectors.dart';
 import 'package:invoiceninja_flutter/redux/design/design_state.dart';
 import 'package:invoiceninja_flutter/redux/document/document_state.dart';
-import 'package:invoiceninja_flutter/redux/expense/expense_selectors.dart';
 import 'package:invoiceninja_flutter/redux/expense/expense_state.dart';
-import 'package:invoiceninja_flutter/redux/expense_category/expense_category_selectors.dart';
 import 'package:invoiceninja_flutter/redux/expense_category/expense_category_state.dart';
-import 'package:invoiceninja_flutter/redux/group/group_selectors.dart';
 import 'package:invoiceninja_flutter/redux/group/group_state.dart';
-import 'package:invoiceninja_flutter/redux/invoice/invoice_selectors.dart';
 import 'package:invoiceninja_flutter/redux/invoice/invoice_state.dart';
-import 'package:invoiceninja_flutter/redux/payment/payment_selectors.dart';
 import 'package:invoiceninja_flutter/redux/payment/payment_state.dart';
-import 'package:invoiceninja_flutter/redux/payment_term/payment_term_selectors.dart';
 import 'package:invoiceninja_flutter/redux/payment_term/payment_term_state.dart';
-import 'package:invoiceninja_flutter/redux/product/product_selectors.dart';
 import 'package:invoiceninja_flutter/redux/product/product_state.dart';
-import 'package:invoiceninja_flutter/redux/project/project_selectors.dart';
 import 'package:invoiceninja_flutter/redux/project/project_state.dart';
-import 'package:invoiceninja_flutter/redux/quote/quote_selectors.dart';
 import 'package:invoiceninja_flutter/redux/quote/quote_state.dart';
-import 'package:invoiceninja_flutter/redux/recurring_expense/recurring_expense_selectors.dart';
 import 'package:invoiceninja_flutter/redux/recurring_expense/recurring_expense_state.dart';
-import 'package:invoiceninja_flutter/redux/recurring_invoice/recurring_invoice_selectors.dart';
 import 'package:invoiceninja_flutter/redux/recurring_invoice/recurring_invoice_state.dart';
 import 'package:invoiceninja_flutter/redux/static/static_state.dart';
-import 'package:invoiceninja_flutter/redux/subscription/subscription_selectors.dart';
 import 'package:invoiceninja_flutter/redux/subscription/subscription_state.dart';
-import 'package:invoiceninja_flutter/redux/task/task_selectors.dart';
 import 'package:invoiceninja_flutter/redux/task/task_state.dart';
-import 'package:invoiceninja_flutter/redux/task_status/task_status_selectors.dart';
 import 'package:invoiceninja_flutter/redux/task_status/task_status_state.dart';
-import 'package:invoiceninja_flutter/redux/tax_rate/tax_rate_selectors.dart';
 import 'package:invoiceninja_flutter/redux/tax_rate/tax_rate_state.dart';
-import 'package:invoiceninja_flutter/redux/token/token_selectors.dart';
 import 'package:invoiceninja_flutter/redux/token/token_state.dart';
 import 'package:invoiceninja_flutter/redux/ui/entity_ui_state.dart';
 import 'package:invoiceninja_flutter/redux/ui/list_ui_state.dart';
 import 'package:invoiceninja_flutter/redux/ui/pref_state.dart';
 import 'package:invoiceninja_flutter/redux/ui/ui_state.dart';
 import 'package:invoiceninja_flutter/redux/user/user_state.dart';
-import 'package:invoiceninja_flutter/redux/vendor/vendor_selectors.dart';
 import 'package:invoiceninja_flutter/redux/vendor/vendor_state.dart';
-import 'package:invoiceninja_flutter/redux/webhook/webhook_selectors.dart';
 import 'package:invoiceninja_flutter/redux/webhook/webhook_state.dart';
 import 'package:invoiceninja_flutter/ui/app/screen_imports.dart';
 import 'package:invoiceninja_flutter/ui/credit/credit_screen.dart';
@@ -90,8 +69,9 @@ import 'package:invoiceninja_flutter/ui/webhook/edit/webhook_edit_vm.dart';
 import 'package:invoiceninja_flutter/utils/colors.dart';
 import 'package:invoiceninja_flutter/utils/formatting.dart';
 import 'package:invoiceninja_flutter/utils/platforms.dart';
-
-// STARTER: import - do not remove comment
+import 'package:invoiceninja_flutter/redux/transaction/transaction_state.dart';
+import 'package:invoiceninja_flutter/ui/transaction/edit/transaction_edit_vm.dart';
+import 'package:invoiceninja_flutter/redux/bank_account/bank_account_state.dart';
 import 'package:invoiceninja_flutter/redux/purchase_order/purchase_order_state.dart';
 import 'package:invoiceninja_flutter/ui/purchase_order/edit/purchase_order_edit_vm.dart';
 import 'package:invoiceninja_flutter/redux/purchase_order/purchase_order_selectors.dart';
@@ -102,6 +82,12 @@ import 'package:invoiceninja_flutter/redux/category/category_selectors.dart';
 import 'package:invoiceninja_flutter/redux/contact/contact_state.dart';
 import 'package:invoiceninja_flutter/ui/contact/edit/contact_edit_vm.dart';
 import 'package:invoiceninja_flutter/redux/contact/contact_selectors.dart';
+// STARTER: import - do not remove comment
+import 'package:invoiceninja_flutter/redux/schedule/schedule_state.dart';
+import 'package:invoiceninja_flutter/ui/schedule/edit/schedule_edit_vm.dart';
+
+import 'package:invoiceninja_flutter/redux/transaction_rule/transaction_rule_state.dart';
+import 'package:invoiceninja_flutter/ui/transaction_rule/edit/transaction_rule_edit_vm.dart';
 
 part 'app_state.g.dart';
 
@@ -109,6 +95,7 @@ abstract class AppState implements Built<AppState, AppStateBuilder> {
   factory AppState({
     @required PrefState prefState,
     @required bool reportErrors,
+    @required bool isWhiteLabeled,
     String url,
     String referralCode,
     String currentRoute,
@@ -117,6 +104,7 @@ abstract class AppState implements Built<AppState, AppStateBuilder> {
       isLoading: false,
       isSaving: false,
       isTesting: false,
+      isWhiteLabeled: isWhiteLabeled,
       dismissedNativeWarning: false,
       lastError: '',
       authState: AuthState(
@@ -145,6 +133,8 @@ abstract class AppState implements Built<AppState, AppStateBuilder> {
   bool get isSaving;
 
   bool get isTesting;
+
+  bool get isWhiteLabeled;
 
   bool get dismissedNativeWarning;
 
@@ -303,6 +293,18 @@ abstract class AppState implements Built<AppState, AppStateBuilder> {
       case EntityType.invoice:
         return invoiceState.map;
       // STARTER: states switch map - do not remove comment
+      case EntityType.schedule:
+        return scheduleState.map;
+
+      case EntityType.transactionRule:
+        return transactionRuleState.map;
+
+      case EntityType.transaction:
+        return transactionState.map;
+
+      case EntityType.bankAccount:
+        return bankAccountState.map;
+
       case EntityType.purchaseOrder:
         return purchaseOrderState.map;
       case EntityType.category:
@@ -392,6 +394,18 @@ abstract class AppState implements Built<AppState, AppStateBuilder> {
       case EntityType.invoice:
         return invoiceState.list;
       // STARTER: states switch list - do not remove comment
+      case EntityType.schedule:
+        return scheduleState.list;
+
+      case EntityType.transactionRule:
+        return transactionRuleState.list;
+
+      case EntityType.transaction:
+        return transactionState.list;
+
+      case EntityType.bankAccount:
+        return bankAccountState.list;
+
       case EntityType.purchaseOrder:
         return purchaseOrderState.list;
       case EntityType.category:
@@ -469,6 +483,18 @@ abstract class AppState implements Built<AppState, AppStateBuilder> {
       case EntityType.invoice:
         return invoiceUIState;
       // STARTER: states switch - do not remove comment
+      case EntityType.schedule:
+        return scheduleUIState;
+
+      case EntityType.transactionRule:
+        return transactionRuleUIState;
+
+      case EntityType.transaction:
+        return transactionUIState;
+
+      case EntityType.bankAccount:
+        return bankAccountUIState;
+
       case EntityType.purchaseOrder:
         return purchaseOrderUIState;
       case EntityType.category:
@@ -547,6 +573,27 @@ abstract class AppState implements Built<AppState, AppStateBuilder> {
   ListUIState get invoiceListState => uiState.invoiceUIState.listUIState;
 
   // STARTER: state getters - do not remove comment
+  ScheduleState get scheduleState => userCompanyState.scheduleState;
+  ListUIState get scheduleListState => uiState.scheduleUIState.listUIState;
+  ScheduleUIState get scheduleUIState => uiState.scheduleUIState;
+
+  TransactionRuleState get transactionRuleState =>
+      userCompanyState.transactionRuleState;
+  ListUIState get transactionRuleListState =>
+      uiState.transactionRuleUIState.listUIState;
+  TransactionRuleUIState get transactionRuleUIState =>
+      uiState.transactionRuleUIState;
+
+  TransactionState get transactionState => userCompanyState.transactionState;
+  ListUIState get transactionListState =>
+      uiState.transactionUIState.listUIState;
+  TransactionUIState get transactionUIState => uiState.transactionUIState;
+
+  BankAccountState get bankAccountState => userCompanyState.bankAccountState;
+  ListUIState get bankAccountListState =>
+      uiState.bankAccountUIState.listUIState;
+  BankAccountUIState get bankAccountUIState => uiState.bankAccountUIState;
+
   PurchaseOrderState get purchaseOrderState =>
       userCompanyState.purchaseOrderState;
   ListUIState get purchaseOrderListState =>
@@ -706,66 +753,62 @@ abstract class AppState implements Built<AppState, AppStateBuilder> {
   bool hasChanges() {
     switch (uiState.currentRoute) {
       case ClientEditScreen.route:
-        return hasClientChanges(clientUIState.editing, clientState.map);
+        return clientUIState.editing.isChanged == true;
       case ProductEditScreen.route:
-        return hasProductChanges(productUIState.editing, productState.map);
+        return productUIState.editing.isChanged == true;
       case InvoiceEditScreen.route:
-        return hasInvoiceChanges(invoiceUIState.editing, invoiceState.map);
+        return invoiceUIState.editing.isChanged == true;
       case PaymentEditScreen.route:
-        return hasPaymentChanges(paymentUIState.editing, paymentState.map);
+        return paymentUIState.editing.isChanged == true;
       case QuoteEditScreen.route:
-        return hasQuoteChanges(quoteUIState.editing, quoteState.map);
+        return quoteUIState.editing.isChanged == true;
       case ProjectEditScreen.route:
-        return hasProjectChanges(projectUIState.editing, projectState.map);
+        return projectUIState.editing.isChanged == true;
       case TaskEditScreen.route:
-        return hasTaskChanges(taskUIState.editing, taskState.map);
+        return taskUIState.editing.isChanged == true;
       case VendorEditScreen.route:
-        return hasVendorChanges(vendorUIState.editing, vendorState.map);
+        return vendorUIState.editing.isChanged == true;
       case ExpenseEditScreen.route:
-        return hasExpenseChanges(expenseUIState.editing, expenseState.map);
+        return expenseUIState.editing.isChanged == true;
       case GroupEditScreen.route:
-        return hasGroupChanges(groupUIState.editing, groupState.map);
+        return groupUIState.editing.isChanged == true;
       case TaxRateEditScreen.route:
-        return hasTaxRateChanges(taxRateUIState.editing, taxRateState.map);
+        return taxRateUIState.editing.isChanged == true;
       case CompanyGatewayEditScreen.route:
-        return hasCompanyGatewayChanges(
-            companyGatewayUIState.editing, companyGatewayState.map);
+        return companyGatewayUIState.editing.isChanged == true;
       case CreditEditScreen.route:
-        return hasCreditChanges(creditUIState.editing, creditState.map);
+        return creditUIState.editing.isChanged == true;
       // STARTER: has changes - do not remove comment
+      case ScheduleEditScreen.route:
+        return scheduleUIState.editing.isChanged == true;
+      case TransactionRuleEditScreen.route:
+        return transactionRuleUIState.editing.isChanged == true;
+      case TransactionEditScreen.route:
+        return transactionUIState.editing.isChanged == true;
       case PurchaseOrderEditScreen.route:
-        return hasPurchaseOrderChanges(
-            purchaseOrderUIState.editing, purchaseOrderState.map);
+        return purchaseOrderUIState.editing.isChanged == true;
       case CategoryEditScreen.route:
-        return hasCategoryChanges(categoryUIState.editing, categoryState.map);
-
+        return categoryUIState.editing.isChanged == true;
       case ContactEditScreen.route:
-        return hasContactChanges(contactUIState.editing, contactState.map);
-
+        return contactUIState.editing.isChanged == true;
       case RecurringExpenseEditScreen.route:
-        return hasRecurringExpenseChanges(
-            recurringExpenseUIState.editing, recurringExpenseState.map);
+        return recurringExpenseUIState.editing.isChanged == true;
       case SubscriptionEditScreen.route:
-        return hasSubscriptionChanges(
-            subscriptionUIState.editing, subscriptionState.map);
+        return subscriptionUIState.editing.isChanged == true;
       case TaskStatusEditScreen.route:
-        return hasTaskStatusChanges(
-            taskStatusUIState.editing, taskStatusState.map);
+        return taskStatusUIState.editing.isChanged == true;
       case ExpenseCategoryEditScreen.route:
-        return hasExpenseCategoryChanges(
-            expenseCategoryUIState.editing, expenseCategoryState.map);
+        return expenseCategoryUIState.editing.isChanged == true;
       case RecurringInvoiceEditScreen.route:
-        return hasRecurringInvoiceChanges(
-            recurringInvoiceUIState.editing, recurringInvoiceState.map);
+        return recurringInvoiceUIState.editing.isChanged == true;
       case WebhookEditScreen.route:
-        return hasWebhookChanges(webhookUIState.editing, webhookState.map);
+        return webhookUIState.editing.isChanged == true;
       case TokenEditScreen.route:
-        return hasTokenChanges(tokenUIState.editing, tokenState.map);
+        return tokenUIState.editing.isChanged == true;
       case PaymentTermEditScreen.route:
-        return hasPaymentTermChanges(
-            paymentTermUIState.editing, paymentTermState.map);
+        return paymentTermUIState.editing.isChanged == true;
       case DesignEditScreen.route:
-        return hasDesignChanges(designUIState.editing, designState.map);
+        return designUIState.editing.isChanged == true;
     }
 
     if (uiState.isInSettings) {
@@ -815,8 +858,8 @@ abstract class AppState implements Built<AppState, AppStateBuilder> {
 
   bool get reportErrors => account?.reportErrors ?? false;
 
-  int get recordsPerPage =>
-      isHosted ? kHostedRecordsPerPage : kSelfhostedRecordsPerPage;
+  // int get recordsPerPage =>
+  //     isHosted ? kHostedRecordsPerPage : kSelfhostedRecordsPerPage;
 
   bool get isHosted => account == null ? authState.isHosted : account.isHosted;
 
@@ -825,8 +868,6 @@ abstract class AppState implements Built<AppState, AppStateBuilder> {
   bool get isDemo => cleanApiUrl(authState.url) == kAppDemoUrl;
 
   bool get isStaging => cleanApiUrl(authState.url) == kAppStagingUrl;
-
-  bool get isWhiteLabeled => account.plan == kPlanWhiteLabel;
 
   bool get isProPlan => isEnterprisePlan || account.plan == kPlanPro;
 
@@ -925,8 +966,10 @@ abstract class AppState implements Built<AppState, AppStateBuilder> {
       }
     }
 
-    if (DesignEditScreen.route == uiState.currentRoute) {
+    if (uiState.currentRoute == DesignEditScreen.route) {
       isFullScreen = true;
+    } else if (uiState.currentRoute == InvoiceDesignScreen.route) {
+      isFullScreen = settingsUIState.showPdfPreview;
     }
 
     return isFullScreen;
@@ -983,11 +1026,20 @@ abstract class AppState implements Built<AppState, AppStateBuilder> {
     //return 'FREQ: ${recurringInvoiceUIState.editing.frequencyId}';
     //return '## Logs: ${company.systemLogs}';
 
-    //var str = '\n\n';
-    //for (var userCompany in userCompanyStates) {
-    //  str += userCompany.company.id + ' => ' + userCompany.token.token + '\n';
-    //}
-    //return str;
+    /*
+    var str = '\n\n\n';
+    for (var userCompany in userCompanyStates) {
+      //str += userCompany.company.id + ' => ' + userCompany.token.token + '\n';
+      str += '## ' +
+          userCompany.company.displayName +
+          ' => ' +
+          userCompany.clientState.list.length.toString() +
+          ' ' +
+          userCompany.lastUpdated.toString() +
+          '\n';
+    }
+    return str;
+    */
 
     return '\n\nForce: ${clientUIState.forceSelected}'
         '\n\nURL: ${authState.url}'
@@ -1024,4 +1076,14 @@ class SelectionState {
   final String selectedId;
   final String filterEntityId;
   final EntityType filterEntityType;
+
+  @override
+  bool operator ==(Object other) {
+    if (other is SelectionState) {
+      return selectedId == other.selectedId &&
+          filterEntityId == other.filterEntityId &&
+          filterEntityType == other.filterEntityType;
+    }
+    return false;
+  }
 }

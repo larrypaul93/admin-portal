@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:built_collection/built_collection.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:flutter_styled_toast/flutter_styled_toast.dart';
+import 'package:invoiceninja_flutter/ui/app/sms_verification.dart';
 import 'package:invoiceninja_flutter/utils/platforms.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -55,7 +56,6 @@ class _UserDetailsState extends State<UserDetails>
       GlobalKey<FormState>(debugLabel: '_userDetails');
   final FocusScopeNode _focusNode = FocusScopeNode();
   TabController _controller;
-  bool autoValidate = false;
 
   final _firstNameController = TextEditingController();
   final _lastNameController = TextEditingController();
@@ -64,7 +64,7 @@ class _UserDetailsState extends State<UserDetails>
   final _passwordController = TextEditingController();
 
   List<TextEditingController> _controllers = [];
-  final _debouncer = Debouncer(sendFirstAction: true);
+  final _debouncer = Debouncer();
 
   @override
   void initState() {
@@ -136,10 +136,6 @@ class _UserDetailsState extends State<UserDetails>
   void _onSavePressed(BuildContext context) {
     final bool isValid = _formKey.currentState.validate();
 
-    setState(() {
-      autoValidate = !isValid ?? false;
-    });
-
     if (!isValid) {
       return;
     }
@@ -163,7 +159,9 @@ class _UserDetailsState extends State<UserDetails>
               .toUpperCase(),
           textAlign: TextAlign.center,
         ),
-        onPressed: state.user.isConnectedToEmail
+        onPressed: user.isConnectedToEmail ||
+                user.isConnectedToApple ||
+                user.isConnectedToMicrosoft
             ? null
             : () {
                 if (state.settingsUIState.isChanged) {
@@ -219,7 +217,9 @@ class _UserDetailsState extends State<UserDetails>
               .toUpperCase(),
           textAlign: TextAlign.center,
         ),
-        onPressed: state.user.isConnectedToEmail
+        onPressed: user.isConnectedToEmail ||
+                user.isConnectedToGoogle ||
+                user.isConnectedToApple
             ? null
             : () {
                 if (state.settingsUIState.isChanged) {
@@ -276,19 +276,22 @@ class _UserDetailsState extends State<UserDetails>
               .toUpperCase(),
           textAlign: TextAlign.center,
         ),
-        onPressed: () {
-          if (state.settingsUIState.isChanged) {
-            showMessageDialog(
-                context: context, message: localization.errorUnsavedChanges);
-            return;
-          }
+        onPressed: user.isConnectedToGoogle || user.isConnectedToMicrosoft
+            ? null
+            : () {
+                if (state.settingsUIState.isChanged) {
+                  showMessageDialog(
+                      context: context,
+                      message: localization.errorUnsavedChanges);
+                  return;
+                }
 
-          if (state.user.isConnectedToApple) {
-            viewModel.onDisconnectApplePressed(context);
-          } else {
-            // do nothing
-          }
-        },
+                if (state.user.isConnectedToApple) {
+                  viewModel.onDisconnectApplePressed(context);
+                } else {
+                  // do nothing
+                }
+              },
       ),
     );
 
@@ -312,6 +315,7 @@ class _UserDetailsState extends State<UserDetails>
         tabController: _controller,
         children: <Widget>[
           ScrollableListView(
+            primary: true,
             children: <Widget>[
               FormCard(children: <Widget>[
                 DecoratedFormField(
@@ -320,7 +324,6 @@ class _UserDetailsState extends State<UserDetails>
                   validator: (val) => val.isEmpty || val.trim().isEmpty
                       ? localization.pleaseEnterAFirstName
                       : null,
-                  autovalidate: autoValidate,
                   onSavePressed: _onSavePressed,
                   keyboardType: TextInputType.name,
                 ),
@@ -330,7 +333,6 @@ class _UserDetailsState extends State<UserDetails>
                   validator: (val) => val.isEmpty || val.trim().isEmpty
                       ? localization.pleaseEnterALastName
                       : null,
-                  autovalidate: autoValidate,
                   onSavePressed: _onSavePressed,
                   keyboardType: TextInputType.name,
                 ),
@@ -340,7 +342,6 @@ class _UserDetailsState extends State<UserDetails>
                   validator: (val) => val.isEmpty || val.trim().isEmpty
                       ? localization.pleaseEnterYourEmail
                       : null,
-                  autovalidate: autoValidate,
                   onSavePressed: _onSavePressed,
                   keyboardType: TextInputType.emailAddress,
                 ),
@@ -352,7 +353,6 @@ class _UserDetailsState extends State<UserDetails>
                 ),
                 PasswordFormField(
                   controller: _passwordController,
-                  autoValidate: autoValidate,
                   onSavePressed: _onSavePressed,
                 ),
               ]),
@@ -391,7 +391,7 @@ class _UserDetailsState extends State<UserDetails>
                               .toUpperCase(),
                           textAlign: TextAlign.center,
                         ),
-                        onPressed: () {
+                        onPressed: () async {
                           if (state.settingsUIState.isChanged) {
                             showMessageDialog(
                                 context: context,
@@ -411,11 +411,27 @@ class _UserDetailsState extends State<UserDetails>
                               return;
                             }
 
-                            showDialog<void>(
-                              context: context,
-                              builder: (BuildContext context) =>
-                                  _EnableTwoFactor(state: viewModel.state),
-                            );
+                            if (state.isHosted && !state.user.phoneVerified) {
+                              final bool phoneVerified = await showDialog<bool>(
+                                context: context,
+                                builder: (BuildContext context) =>
+                                    UserSmsVerification(),
+                              );
+
+                              if (phoneVerified == true) {
+                                showDialog<void>(
+                                  context: context,
+                                  builder: (BuildContext context) =>
+                                      _EnableTwoFactor(state: viewModel.state),
+                                );
+                              }
+                            } else {
+                              showDialog<void>(
+                                context: context,
+                                builder: (BuildContext context) =>
+                                    _EnableTwoFactor(state: viewModel.state),
+                              );
+                            }
                           }
                         },
                       ),
@@ -474,6 +490,7 @@ class _UserDetailsState extends State<UserDetails>
             ],
           ),
           ScrollableListView(
+            primary: true,
             children: <Widget>[
               NotificationSettings(
                 user: user,

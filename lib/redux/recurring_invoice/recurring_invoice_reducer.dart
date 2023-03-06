@@ -1,6 +1,7 @@
 // Package imports:
 import 'package:built_collection/built_collection.dart';
 import 'package:invoiceninja_flutter/data/models/contact_model.dart';
+import 'package:invoiceninja_flutter/redux/client/client_actions.dart';
 import 'package:redux/redux.dart';
 
 // Project imports:
@@ -243,6 +244,10 @@ final recurringInvoiceListReducer = combineReducers<ListUIState>([
       _removeFromListMultiselect),
   TypedReducer<ListUIState, ClearRecurringInvoiceMultiselect>(
       _clearListMultiselect),
+  TypedReducer<ListUIState, FilterByEntity>(
+      (state, action) => state.rebuild((b) => b
+        ..filter = null
+        ..filterClearedAt = DateTime.now().millisecondsSinceEpoch)),
 ]);
 
 ListUIState _filterRecurringInvoicesByCustom1(
@@ -380,7 +385,20 @@ final recurringInvoicesReducer = combineReducers<RecurringInvoiceState>([
       _restoreRecurringInvoiceSuccess),
   TypedReducer<RecurringInvoiceState, SendNowRecurringInvoicesSuccess>(
       _sendNowRecurringInvoiceSuccess),
+  TypedReducer<RecurringInvoiceState, PurgeClientSuccess>(_purgeClientSuccess),
 ]);
+
+RecurringInvoiceState _purgeClientSuccess(
+    RecurringInvoiceState invoiceState, PurgeClientSuccess action) {
+  final ids = invoiceState.map.values
+      .where((each) => each.clientId == action.clientId)
+      .map((each) => each.id)
+      .toList();
+
+  return invoiceState.rebuild((b) => b
+    ..map.removeWhere((p0, p1) => ids.contains(p0))
+    ..list.removeWhere((p0) => ids.contains(p0)));
+}
 
 RecurringInvoiceState _archiveRecurringInvoiceSuccess(
     RecurringInvoiceState recurringInvoiceState,

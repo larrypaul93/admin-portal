@@ -190,6 +190,12 @@ class _$ProductEntitySerializer implements StructuredSerializer<ProductEntity> {
       'stock_notification',
       serializers.serialize(object.stockNotification,
           specifiedType: const FullType(bool)),
+      'product_image',
+      serializers.serialize(object.imageUrl,
+          specifiedType: const FullType(String)),
+      'max_quantity',
+      serializers.serialize(object.maxQuantity,
+          specifiedType: const FullType(int)),
       'documents',
       serializers.serialize(object.documents,
           specifiedType: const FullType(
@@ -383,6 +389,14 @@ class _$ProductEntitySerializer implements StructuredSerializer<ProductEntity> {
           result.stockNotification = serializers.deserialize(value,
               specifiedType: const FullType(bool)) as bool;
           break;
+        case 'product_image':
+          result.imageUrl = serializers.deserialize(value,
+              specifiedType: const FullType(String)) as String;
+          break;
+        case 'max_quantity':
+          result.maxQuantity = serializers.deserialize(value,
+              specifiedType: const FullType(int)) as int;
+          break;
         case 'documents':
           result.documents.replace(serializers.deserialize(value,
                   specifiedType: const FullType(
@@ -458,7 +472,11 @@ class _$ProductListResponse extends ProductListResponse {
   int __hashCode;
   @override
   int get hashCode {
-    return __hashCode ??= $jf($jc(0, data.hashCode));
+    if (__hashCode != null) return __hashCode;
+    var _$hash = 0;
+    _$hash = $jc(_$hash, data.hashCode);
+    _$hash = $jf(_$hash);
+    return __hashCode ??= _$hash;
   }
 
   @override
@@ -553,7 +571,11 @@ class _$ProductItemResponse extends ProductItemResponse {
   int __hashCode;
   @override
   int get hashCode {
-    return __hashCode ??= $jf($jc(0, data.hashCode));
+    if (__hashCode != null) return __hashCode;
+    var _$hash = 0;
+    _$hash = $jc(_$hash, data.hashCode);
+    _$hash = $jf(_$hash);
+    return __hashCode ??= _$hash;
   }
 
   @override
@@ -675,6 +697,10 @@ class _$ProductEntity extends ProductEntity {
   @override
   final bool stockNotification;
   @override
+  final String imageUrl;
+  @override
+  final int maxQuantity;
+  @override
   final BuiltList<DocumentEntity> documents;
   @override
   final bool isChanged;
@@ -725,6 +751,8 @@ class _$ProductEntity extends ProductEntity {
       this.stockQuantity,
       this.stockNotificationThreshold,
       this.stockNotification,
+      this.imageUrl,
+      this.maxQuantity,
       this.documents,
       this.isChanged,
       this.createdAt,
@@ -779,6 +807,10 @@ class _$ProductEntity extends ProductEntity {
     BuiltValueNullFieldError.checkNotNull(
         stockNotification, r'ProductEntity', 'stockNotification');
     BuiltValueNullFieldError.checkNotNull(
+        imageUrl, r'ProductEntity', 'imageUrl');
+    BuiltValueNullFieldError.checkNotNull(
+        maxQuantity, r'ProductEntity', 'maxQuantity');
+    BuiltValueNullFieldError.checkNotNull(
         documents, r'ProductEntity', 'documents');
     BuiltValueNullFieldError.checkNotNull(
         createdAt, r'ProductEntity', 'createdAt');
@@ -828,6 +860,8 @@ class _$ProductEntity extends ProductEntity {
         stockQuantity == other.stockQuantity &&
         stockNotificationThreshold == other.stockNotificationThreshold &&
         stockNotification == other.stockNotification &&
+        imageUrl == other.imageUrl &&
+        maxQuantity == other.maxQuantity &&
         documents == other.documents &&
         isChanged == other.isChanged &&
         createdAt == other.createdAt &&
@@ -842,44 +876,49 @@ class _$ProductEntity extends ProductEntity {
   int __hashCode;
   @override
   int get hashCode {
-    return __hashCode ??= $jf($jc(
-        $jc(
-            $jc(
-                $jc(
-                    $jc(
-                        $jc(
-                            $jc(
-                                $jc(
-                                    $jc(
-                                        $jc(
-                                            $jc(
-                                                $jc(
-                                                    $jc(
-                                                        $jc(
-                                                            $jc(
-                                                                $jc(
-                                                                    $jc(
-                                                                        $jc(
-                                                                            $jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc(0, productKey.hashCode), notes.hashCode), cost.hashCode), price.hashCode), quantity.hashCode), taxName1.hashCode), taxRate1.hashCode), taxName2.hashCode), taxRate2.hashCode), taxName3.hashCode), taxRate3.hashCode), customValue1.hashCode), customValue2.hashCode), customValue3.hashCode), customValue4.hashCode), categoryId.hashCode), subCategoryId.hashCode), partNo.hashCode),
-                                                                                onHand.hashCode),
-                                                                            upc.hashCode),
-                                                                        vendorId.hashCode),
-                                                                    sku.hashCode),
-                                                                category.hashCode),
-                                                            subCategory.hashCode),
-                                                        vendor.hashCode),
-                                                    stockQuantity.hashCode),
-                                                stockNotificationThreshold.hashCode),
-                                            stockNotification.hashCode),
-                                        documents.hashCode),
-                                    isChanged.hashCode),
-                                createdAt.hashCode),
-                            updatedAt.hashCode),
-                        archivedAt.hashCode),
-                    isDeleted.hashCode),
-                createdUserId.hashCode),
-            assignedUserId.hashCode),
-        id.hashCode));
+    if (__hashCode != null) return __hashCode;
+    var _$hash = 0;
+    _$hash = $jc(_$hash, productKey.hashCode);
+    _$hash = $jc(_$hash, notes.hashCode);
+    _$hash = $jc(_$hash, cost.hashCode);
+    _$hash = $jc(_$hash, price.hashCode);
+    _$hash = $jc(_$hash, quantity.hashCode);
+    _$hash = $jc(_$hash, taxName1.hashCode);
+    _$hash = $jc(_$hash, taxRate1.hashCode);
+    _$hash = $jc(_$hash, taxName2.hashCode);
+    _$hash = $jc(_$hash, taxRate2.hashCode);
+    _$hash = $jc(_$hash, taxName3.hashCode);
+    _$hash = $jc(_$hash, taxRate3.hashCode);
+    _$hash = $jc(_$hash, customValue1.hashCode);
+    _$hash = $jc(_$hash, customValue2.hashCode);
+    _$hash = $jc(_$hash, customValue3.hashCode);
+    _$hash = $jc(_$hash, customValue4.hashCode);
+    _$hash = $jc(_$hash, categoryId.hashCode);
+    _$hash = $jc(_$hash, subCategoryId.hashCode);
+    _$hash = $jc(_$hash, partNo.hashCode);
+    _$hash = $jc(_$hash, onHand.hashCode);
+    _$hash = $jc(_$hash, upc.hashCode);
+    _$hash = $jc(_$hash, vendorId.hashCode);
+    _$hash = $jc(_$hash, sku.hashCode);
+    _$hash = $jc(_$hash, category.hashCode);
+    _$hash = $jc(_$hash, subCategory.hashCode);
+    _$hash = $jc(_$hash, vendor.hashCode);
+    _$hash = $jc(_$hash, stockQuantity.hashCode);
+    _$hash = $jc(_$hash, stockNotificationThreshold.hashCode);
+    _$hash = $jc(_$hash, stockNotification.hashCode);
+    _$hash = $jc(_$hash, imageUrl.hashCode);
+    _$hash = $jc(_$hash, maxQuantity.hashCode);
+    _$hash = $jc(_$hash, documents.hashCode);
+    _$hash = $jc(_$hash, isChanged.hashCode);
+    _$hash = $jc(_$hash, createdAt.hashCode);
+    _$hash = $jc(_$hash, updatedAt.hashCode);
+    _$hash = $jc(_$hash, archivedAt.hashCode);
+    _$hash = $jc(_$hash, isDeleted.hashCode);
+    _$hash = $jc(_$hash, createdUserId.hashCode);
+    _$hash = $jc(_$hash, assignedUserId.hashCode);
+    _$hash = $jc(_$hash, id.hashCode);
+    _$hash = $jf(_$hash);
+    return __hashCode ??= _$hash;
   }
 
   @override
@@ -913,6 +952,8 @@ class _$ProductEntity extends ProductEntity {
           ..add('stockQuantity', stockQuantity)
           ..add('stockNotificationThreshold', stockNotificationThreshold)
           ..add('stockNotification', stockNotification)
+          ..add('imageUrl', imageUrl)
+          ..add('maxQuantity', maxQuantity)
           ..add('documents', documents)
           ..add('isChanged', isChanged)
           ..add('createdAt', createdAt)
@@ -1049,6 +1090,14 @@ class ProductEntityBuilder
   set stockNotification(bool stockNotification) =>
       _$this._stockNotification = stockNotification;
 
+  String _imageUrl;
+  String get imageUrl => _$this._imageUrl;
+  set imageUrl(String imageUrl) => _$this._imageUrl = imageUrl;
+
+  int _maxQuantity;
+  int get maxQuantity => _$this._maxQuantity;
+  set maxQuantity(int maxQuantity) => _$this._maxQuantity = maxQuantity;
+
   ListBuilder<DocumentEntity> _documents;
   ListBuilder<DocumentEntity> get documents =>
       _$this._documents ??= new ListBuilder<DocumentEntity>();
@@ -1124,6 +1173,8 @@ class ProductEntityBuilder
       _stockQuantity = $v.stockQuantity;
       _stockNotificationThreshold = $v.stockNotificationThreshold;
       _stockNotification = $v.stockNotification;
+      _imageUrl = $v.imageUrl;
+      _maxQuantity = $v.maxQuantity;
       _documents = $v.documents.toBuilder();
       _isChanged = $v.isChanged;
       _createdAt = $v.createdAt;
@@ -1194,6 +1245,8 @@ class ProductEntityBuilder
               stockQuantity: BuiltValueNullFieldError.checkNotNull(stockQuantity, r'ProductEntity', 'stockQuantity'),
               stockNotificationThreshold: BuiltValueNullFieldError.checkNotNull(stockNotificationThreshold, r'ProductEntity', 'stockNotificationThreshold'),
               stockNotification: BuiltValueNullFieldError.checkNotNull(stockNotification, r'ProductEntity', 'stockNotification'),
+              imageUrl: BuiltValueNullFieldError.checkNotNull(imageUrl, r'ProductEntity', 'imageUrl'),
+              maxQuantity: BuiltValueNullFieldError.checkNotNull(maxQuantity, r'ProductEntity', 'maxQuantity'),
               documents: documents.build(),
               isChanged: isChanged,
               createdAt: BuiltValueNullFieldError.checkNotNull(createdAt, r'ProductEntity', 'createdAt'),
@@ -1226,4 +1279,4 @@ class ProductEntityBuilder
   }
 }
 
-// ignore_for_file: always_put_control_body_on_new_line,always_specify_types,annotate_overrides,avoid_annotating_with_dynamic,avoid_as,avoid_catches_without_on_clauses,avoid_returning_this,deprecated_member_use_from_same_package,lines_longer_than_80_chars,no_leading_underscores_for_local_identifiers,omit_local_variable_types,prefer_expression_function_bodies,sort_constructors_first,test_types_in_equals,unnecessary_const,unnecessary_new,unnecessary_lambdas
+// ignore_for_file: deprecated_member_use_from_same_package,type=lint

@@ -6,7 +6,6 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 
 // Project imports:
-import 'package:invoiceninja_flutter/data/models/company_gateway_model.dart';
 import 'package:invoiceninja_flutter/data/models/entities.dart';
 import 'package:invoiceninja_flutter/main_app.dart';
 import 'package:invoiceninja_flutter/redux/app/app_state.dart';
@@ -53,8 +52,7 @@ class _CompanyDetailsState extends State<CompanyDetails>
 
   final FocusScopeNode _focusNode = FocusScopeNode();
   TabController _controller;
-  bool autoValidate = false;
-  final _debouncer = Debouncer(sendFirstAction: true);
+  final _debouncer = Debouncer();
 
   final _nameController = TextEditingController();
   final _idNumberController = TextEditingController();
@@ -263,16 +261,18 @@ class _CompanyDetailsState extends State<CompanyDetails>
         tabController: _controller,
         children: <Widget>[
           ScrollableListView(
+            primary: true,
             children: <Widget>[
               FormCard(
                 children: <Widget>[
                   DecoratedFormField(
                     label: localization.name,
                     controller: _nameController,
+                    /*
                     validator: (val) => val.isEmpty || val.trim().isEmpty
                         ? localization.pleaseEnterAName
                         : null,
-                    autovalidate: autoValidate,
+                        */
                     onSavePressed: viewModel.onSavePressed,
                     keyboardType: TextInputType.text,
                   ),
@@ -386,6 +386,7 @@ class _CompanyDetailsState extends State<CompanyDetails>
           ),
           AutofillGroup(
             child: ScrollableListView(
+              primary: true,
               children: <Widget>[
                 FormCard(
                   isLast: true,
@@ -443,6 +444,7 @@ class _CompanyDetailsState extends State<CompanyDetails>
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20),
             child: ScrollableListView(
+              primary: true,
               children: <Widget>[
                 Builder(
                   builder: (context) {
@@ -456,6 +458,14 @@ class _CompanyDetailsState extends State<CompanyDetails>
                               label: localization.delete,
                               iconData: Icons.delete,
                               onPressed: () {
+                                if (state.settingsUIState.isChanged) {
+                                  showMessageDialog(
+                                      context: context,
+                                      message:
+                                          localization.errorUnsavedChanges);
+                                  return;
+                                }
+
                                 confirmCallback(
                                     context: context,
                                     callback: (_) =>
@@ -471,6 +481,13 @@ class _CompanyDetailsState extends State<CompanyDetails>
                             label: localization.uploadLogo,
                             iconData: Icons.cloud_upload,
                             onPressed: () async {
+                              if (state.settingsUIState.isChanged) {
+                                showMessageDialog(
+                                    context: context,
+                                    message: localization.errorUnsavedChanges);
+                                return;
+                              }
+
                               final multipartFile = await pickFile(
                                 fileIndex: 'company_logo',
                                 fileType: FileType.image,
@@ -497,36 +514,11 @@ class _CompanyDetailsState extends State<CompanyDetails>
             ),
           ),
           ScrollableListView(
+            primary: true,
             children: <Widget>[
               FormCard(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: <Widget>[
-                  AppDropdownButton<String>(
-                      labelText: localization.autoBill,
-                      value: settings.autoBill,
-                      onChanged: (dynamic value) => viewModel.onSettingsChanged(
-                          settings.rebuild((b) => b..autoBill = value)),
-                      items: [
-                        CompanyGatewayEntity.TOKEN_BILLING_ALWAYS,
-                        CompanyGatewayEntity.TOKEN_BILLING_OPT_OUT,
-                        CompanyGatewayEntity.TOKEN_BILLING_OPT_IN,
-                        CompanyGatewayEntity.TOKEN_BILLING_OFF
-                      ]
-                          .map((value) => DropdownMenuItem(
-                                child: Text(localization.lookup(value)),
-                                value: value,
-                              ))
-                          .toList()),
-                  EntityDropdown(
-                    entityType: EntityType.paymentType,
-                    entityList: memoizedPaymentTypeList(
-                        state.staticState.paymentTypeMap),
-                    labelText: localization.paymentType,
-                    entityId: settings.defaultPaymentTypeId,
-                    onSelected: (paymentType) => viewModel.onSettingsChanged(
-                        settings.rebuild(
-                            (b) => b..defaultPaymentTypeId = paymentType?.id)),
-                  ),
                   if (company.isModuleEnabled(EntityType.invoice))
                     AppDropdownButton<String>(
                       showBlank: true,
@@ -626,24 +618,6 @@ class _CompanyDetailsState extends State<CompanyDetails>
               FormCard(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: <Widget>[
-                    BoolDropdownButton(
-                      value: settings.clientManualPaymentNotification,
-                      onChanged: (value) => viewModel.onSettingsChanged(
-                          settings.rebuild((b) =>
-                              b..clientManualPaymentNotification = value)),
-                      label: localization.manualPaymentEmail,
-                      helpLabel: localization.emailReceipt,
-                      iconData: Icons.email,
-                    ),
-                    BoolDropdownButton(
-                      value: settings.clientOnlinePaymentNotification,
-                      onChanged: (value) => viewModel.onSettingsChanged(
-                          settings.rebuild((b) =>
-                              b..clientOnlinePaymentNotification = value)),
-                      label: localization.onlinePaymentEmail,
-                      helpLabel: localization.emailReceipt,
-                      iconData: Icons.email,
-                    ),
                     BoolDropdownButton(
                       value: company.useQuoteTermsOnConversion,
                       onChanged: (value) => viewModel.onCompanyChanged(

@@ -11,6 +11,7 @@ import 'package:invoiceninja_flutter/redux/app/app_actions.dart';
 import 'package:invoiceninja_flutter/redux/app/app_state.dart';
 import 'package:invoiceninja_flutter/ui/app/lists/selected_indicator.dart';
 import 'package:invoiceninja_flutter/utils/localization.dart';
+import 'package:invoiceninja_flutter/utils/platforms.dart';
 
 class DismissibleEntity extends StatelessWidget {
   const DismissibleEntity({
@@ -18,7 +19,7 @@ class DismissibleEntity extends StatelessWidget {
     @required this.entity,
     @required this.child,
     @required this.isSelected,
-    this.showCheckbox = true,
+    this.showMultiselect = true,
     this.isDismissible = true,
   });
 
@@ -26,7 +27,7 @@ class DismissibleEntity extends StatelessWidget {
   final BaseEntity entity;
   final Widget child;
   final bool isSelected;
-  final bool showCheckbox;
+  final bool showMultiselect;
   final bool isDismissible;
 
   @override
@@ -41,8 +42,9 @@ class DismissibleEntity extends StatelessWidget {
         store.state.getListState(entity.entityType).isInMultiselect();
 
     final widget = SelectedIndicator(
-      isSelected: isSelected &&
-          showCheckbox &&
+      isSelected: isDesktop(context) &&
+          isSelected &&
+          showMultiselect &&
           isDismissible &&
           !isMultiselect &&
           !entity.entityType.isSetting,
@@ -63,7 +65,7 @@ class DismissibleEntity extends StatelessWidget {
       startActionPane: ActionPane(
         motion: const DrawerMotion(),
         children: [
-          if (showCheckbox)
+          if (showMultiselect)
             SlidableAction(
               onPressed: (context) =>
                   handleEntityAction(entity, EntityAction.toggleMultiselect),

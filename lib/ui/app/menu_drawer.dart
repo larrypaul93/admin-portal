@@ -13,6 +13,7 @@ import 'package:invoiceninja_flutter/redux/auth/auth_actions.dart';
 import 'package:invoiceninja_flutter/redux/reports/reports_actions.dart';
 import 'package:invoiceninja_flutter/redux/settings/settings_actions.dart';
 import 'package:invoiceninja_flutter/ui/app/sms_verification.dart';
+import 'package:invoiceninja_flutter/ui/app/upgrade_dialog.dart';
 import 'package:invoiceninja_flutter/utils/app_review.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:pointer_interceptor/pointer_interceptor.dart';
@@ -138,7 +139,7 @@ class _MenuDrawerState extends State<MenuDrawer> {
                                 );
                             }
                           },
-                    icon: Icon(Icons.chevron_left))
+                    icon: Icon(MdiIcons.arrowLeftCircleOutline))
                 : Padding(
                     padding: const EdgeInsets.only(right: 2),
                     child: _companyLogo(company),
@@ -342,315 +343,373 @@ class _MenuDrawerState extends State<MenuDrawer> {
                             : _expandedCompanySelector),
                 state.credentials.token.isEmpty
                     ? SizedBox()
-                    : Expanded(
-                        child: Container(
-                        color: inactiveColor.isNotEmpty
-                            ? convertHexStringToColor(inactiveColor)
-                            : Theme.of(context).cardColor,
-                        child: ScrollableListView(
-                          children: <Widget>[
-                            if (state.account.debugEnabled && kReleaseMode)
-                              if (state.isMenuCollapsed)
-                                Tooltip(
-                                  message: localization.debugModeIsEnabled,
-                                  child: ListTile(
-                                    contentPadding:
-                                        const EdgeInsets.only(left: 20),
-                                    onTap: () =>
-                                        launchUrl(Uri.parse(kDebugModeUrl)),
-                                    leading:
-                                        Icon(Icons.warning, color: Colors.red),
-                                  ),
-                                )
-                              else
-                                Material(
-                                  child: ListTile(
-                                    tileColor: Colors.red.shade800,
-                                    title: Padding(
-                                      padding: const EdgeInsets.only(bottom: 6),
-                                      child: IconText(
-                                        icon: Icons.warning,
-                                        text: localization.debugModeIsEnabled,
-                                        style: TextStyle(color: Colors.white),
+                    : Theme(
+                        data: state.prefState.enableDarkMode ||
+                                (state.prefState.customColors[PrefState
+                                            .THEME_SIDEBAR_INACTIVE_BACKGROUND_COLOR] ??
+                                        '')
+                                    .isNotEmpty
+                            ? ThemeData.dark()
+                            : ThemeData.light(),
+                        child: Expanded(
+                          child: Container(
+                            color: inactiveColor.isNotEmpty
+                                ? convertHexStringToColor(inactiveColor)
+                                : Theme.of(context).cardColor,
+                            child: ScrollableListView(
+                              children: <Widget>[
+                                if (state.account.debugEnabled && kReleaseMode)
+                                  if (state.isMenuCollapsed)
+                                    Tooltip(
+                                      message: localization.debugModeIsEnabled,
+                                      child: ListTile(
+                                        contentPadding:
+                                            const EdgeInsets.only(left: 20),
+                                        onTap: () =>
+                                            launchUrl(Uri.parse(kDebugModeUrl)),
+                                        leading: Icon(Icons.warning,
+                                            color: Colors.red),
+                                      ),
+                                    )
+                                  else
+                                    Material(
+                                      child: ListTile(
+                                        tileColor: Colors.red.shade800,
+                                        title: Padding(
+                                          padding:
+                                              const EdgeInsets.only(bottom: 6),
+                                          child: IconText(
+                                            icon: Icons.warning,
+                                            text:
+                                                localization.debugModeIsEnabled,
+                                            style:
+                                                TextStyle(color: Colors.white),
+                                          ),
+                                        ),
+                                        subtitle: Text(
+                                          localization.debugModeIsEnabledHelp,
+                                          style: TextStyle(color: Colors.white),
+                                        ),
+                                        onTap: () =>
+                                            launchUrl(Uri.parse(kDebugModeUrl)),
                                       ),
                                     ),
-                                    subtitle: Text(
-                                      localization.debugModeIsEnabledHelp,
-                                      style: TextStyle(color: Colors.white),
-                                    ),
-                                    onTap: () =>
-                                        launchUrl(Uri.parse(kDebugModeUrl)),
-                                  ),
-                                ),
-                            if (!state.account.accountSmsVerified &&
-                                state.isHosted)
-                              if (state.isMenuCollapsed)
-                                Tooltip(
-                                  message: localization.verifyPhoneNumberHelp,
-                                  child: ListTile(
-                                    contentPadding:
-                                        const EdgeInsets.only(left: 12),
-                                    leading: IconButton(
-                                      onPressed: () {
-                                        showDialog<void>(
-                                          context: context,
-                                          builder: (BuildContext context) =>
-                                              SmsVerification(),
-                                        );
-                                      },
-                                      icon: Icon(Icons.warning,
-                                          color: Colors.orange),
-                                    ),
-                                  ),
-                                )
-                              else
-                                Material(
-                                  child: ListTile(
-                                    tileColor: Colors.orange.shade800,
-                                    subtitle: Text(
-                                      localization.verifyPhoneNumberHelp,
-                                      style: TextStyle(color: Colors.white),
-                                    ),
-                                    onTap: () {
-                                      showDialog<void>(
-                                        context: context,
-                                        builder: (BuildContext context) =>
-                                            SmsVerification(),
-                                      );
-                                    },
-                                  ),
-                                )
-                            else if (state.company.isDisabled &&
-                                state.userCompany.isAdmin)
-                              if (state.isMenuCollapsed)
-                                Tooltip(
-                                  message: localization.companyDisabledWarning,
-                                  child: ListTile(
-                                    contentPadding:
-                                        const EdgeInsets.only(left: 12),
-                                    leading: IconButton(
-                                      onPressed: () =>
+                                if (!state.account.accountSmsVerified &&
+                                    state.isHosted)
+                                  if (state.isMenuCollapsed)
+                                    Tooltip(
+                                      message:
+                                          localization.verifyPhoneNumberHelp,
+                                      child: ListTile(
+                                        contentPadding:
+                                            const EdgeInsets.only(left: 12),
+                                        leading: IconButton(
+                                          onPressed: () {
+                                            showDialog<void>(
+                                              context: context,
+                                              builder: (BuildContext context) =>
+                                                  AccountSmsVerification(),
+                                            );
+                                          },
+                                          icon: Icon(Icons.warning,
+                                              color: Colors.orange),
+                                        ),
+                                      ),
+                                    )
+                                  else
+                                    Material(
+                                      child: ListTile(
+                                        tileColor: Colors.orange.shade800,
+                                        subtitle: Text(
+                                          localization.verifyPhoneNumberHelp,
+                                          style: TextStyle(color: Colors.white),
+                                        ),
+                                        onTap: () {
+                                          showDialog<void>(
+                                            context: context,
+                                            builder: (BuildContext context) =>
+                                                AccountSmsVerification(),
+                                          );
+                                        },
+                                      ),
+                                    )
+                                else if (state.user.isTwoFactorEnabled &&
+                                    !state.user.phoneVerified &&
+                                    state.isHosted)
+                                  if (state.isMenuCollapsed)
+                                    Tooltip(
+                                      message:
+                                          localization.verifyPhoneNumber2faHelp,
+                                      child: ListTile(
+                                        contentPadding:
+                                            const EdgeInsets.only(left: 12),
+                                        leading: IconButton(
+                                          onPressed: () {
+                                            showDialog<void>(
+                                              context: context,
+                                              builder: (BuildContext context) =>
+                                                  UserSmsVerification(
+                                                showChangeNumber: true,
+                                              ),
+                                            );
+                                          },
+                                          icon: Icon(Icons.warning,
+                                              color: Colors.orange),
+                                        ),
+                                      ),
+                                    )
+                                  else
+                                    Material(
+                                      child: ListTile(
+                                        tileColor: Colors.orange.shade800,
+                                        subtitle: Text(
+                                          localization.verifyPhoneNumber2faHelp,
+                                          style: TextStyle(color: Colors.white),
+                                        ),
+                                        onTap: () {
+                                          showDialog<void>(
+                                            context: context,
+                                            builder: (BuildContext context) =>
+                                                UserSmsVerification(),
+                                          );
+                                        },
+                                      ),
+                                    )
+                                else if (state.company.isDisabled &&
+                                    state.userCompany.isAdmin)
+                                  if (state.isMenuCollapsed)
+                                    Tooltip(
+                                      message:
+                                          localization.companyDisabledWarning,
+                                      child: ListTile(
+                                        contentPadding:
+                                            const EdgeInsets.only(left: 12),
+                                        leading: IconButton(
+                                          onPressed: () =>
+                                              store.dispatch(ViewSettings(
+                                            section: kSettingsAccountManagement,
+                                            company: company,
+                                          )),
+                                          icon: Icon(Icons.warning,
+                                              color: Colors.orange),
+                                        ),
+                                      ),
+                                    )
+                                  else
+                                    Material(
+                                      child: ListTile(
+                                        tileColor: Colors.orange.shade800,
+                                        title: Padding(
+                                          padding:
+                                              const EdgeInsets.only(bottom: 6),
+                                          child: IconText(
+                                            icon: Icons.warning,
+                                            text: localization.warning,
+                                            style:
+                                                TextStyle(color: Colors.white),
+                                          ),
+                                        ),
+                                        subtitle: Text(
+                                          localization.companyDisabledWarning,
+                                          style: TextStyle(color: Colors.white),
+                                        ),
+                                        onTap: () {
                                           store.dispatch(ViewSettings(
-                                        section: kSettingsAccountManagement,
-                                        company: company,
-                                      )),
-                                      icon: Icon(Icons.warning,
-                                          color: Colors.orange),
-                                    ),
-                                  ),
-                                )
-                              else
-                                Material(
-                                  child: ListTile(
-                                    tileColor: Colors.orange.shade800,
-                                    title: Padding(
-                                      padding: const EdgeInsets.only(bottom: 6),
-                                      child: IconText(
-                                        icon: Icons.warning,
-                                        text: localization.warning,
-                                        style: TextStyle(color: Colors.white),
+                                            section: kSettingsAccountManagement,
+                                            company: company,
+                                          ));
+                                        },
                                       ),
                                     ),
-                                    subtitle: Text(
-                                      localization.companyDisabledWarning,
-                                      style: TextStyle(color: Colors.white),
-                                    ),
-                                    onTap: () {
-                                      store.dispatch(ViewSettings(
-                                        section: kSettingsAccountManagement,
-                                        company: company,
-                                      ));
-                                    },
-                                  ),
-                                ),
-                            if (state.userCompany.isOwner &&
-                                state.isHosted &&
-                                !isPaidAccount(context) &&
-                                !isApple() &&
-                                kReleaseMode)
-                              Material(
-                                child: Tooltip(
-                                  message: state.isMenuCollapsed
-                                      ? localization.upgrade
-                                      : '',
-                                  child: ListTile(
-                                    dense: true,
-                                    contentPadding:
-                                        const EdgeInsets.only(left: 12),
-                                    tileColor: Colors.green,
-                                    leading: IconButton(
-                                      onPressed: () => store.dispatch(
-                                          ViewSettings(
+                                if (state.userCompany.isOwner &&
+                                    state.isHosted &&
+                                    !isPaidAccount(context) &&
+                                    (!isApple() || supportsInAppPurchase()))
+                                  Material(
+                                    child: Tooltip(
+                                      message: state.isMenuCollapsed
+                                          ? localization.upgrade
+                                          : '',
+                                      child: ListTile(
+                                        dense: true,
+                                        contentPadding:
+                                            const EdgeInsets.only(left: 12),
+                                        tileColor: Colors.green,
+                                        leading: IconButton(
+                                          onPressed: () => store.dispatch(
+                                              ViewSettings(
+                                                  clearFilter: true,
+                                                  company: company,
+                                                  user: state.user,
+                                                  section:
+                                                      kSettingsAccountManagement)),
+                                          icon: Icon(
+                                            Icons.arrow_circle_up,
+                                            color: Colors.white,
+                                          ),
+                                        ),
+                                        title: state.isMenuCollapsed
+                                            ? SizedBox()
+                                            : Text(
+                                                localization.upgrade,
+                                                style: Theme.of(context)
+                                                    .textTheme
+                                                    .bodyText1
+                                                    .copyWith(
+                                                      fontSize: 14,
+                                                      color: Colors.white,
+                                                    ),
+                                              ),
+                                        onTap: () {
+                                          store.dispatch(ViewSettings(
                                               clearFilter: true,
                                               company: company,
                                               user: state.user,
                                               section:
-                                                  kSettingsAccountManagement)),
-                                      icon: Icon(
-                                        Icons.arrow_circle_up,
-                                        color: Colors.white,
+                                                  kSettingsAccountManagement));
+                                        },
                                       ),
                                     ),
-                                    title: state.isMenuCollapsed
-                                        ? SizedBox()
-                                        : Text(
-                                            localization.upgrade,
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .bodyText1
-                                                .copyWith(
-                                                  fontSize: 14,
-                                                  color: Colors.white,
-                                                ),
-                                          ),
-                                    onTap: () {
-                                      /*
-                                      showDialog<void>(
-                                          context: context,
-                                          builder: (BuildContext context) =>
-                                              UpgradeDialog());
-                                      */
-
-                                      store.dispatch(ViewSettings(
-                                          clearFilter: true,
-                                          company: company,
-                                          user: state.user,
-                                          section: kSettingsAccountManagement));
-                                    },
                                   ),
+                                DrawerTile(
+                                  company: company,
+                                  icon: getEntityIcon(EntityType.dashboard),
+                                  title: localization.dashboard,
+                                  onTap: () => viewEntitiesByType(
+                                      entityType: EntityType.dashboard),
+                                  onLongPress: () =>
+                                      store.dispatch(ViewDashboard(filter: '')),
                                 ),
-                              ),
-                            DrawerTile(
-                              company: company,
-                              icon: getEntityIcon(EntityType.dashboard),
-                              title: localization.dashboard,
-                              onTap: () => viewEntitiesByType(
-                                  entityType: EntityType.dashboard),
-                              onLongPress: () =>
-                                  store.dispatch(ViewDashboard(filter: '')),
+                                DrawerTile(
+                                  company: company,
+                                  entityType: EntityType.client,
+                                  icon: getEntityIcon(EntityType.client),
+                                  title: localization.clients,
+                                  iconTooltip: localization.newClient,
+                                ),
+                                DrawerTile(
+                                  company: company,
+                                  entityType: EntityType.contact,
+                                  icon: getEntityIcon(EntityType.contact),
+                                  title: localization.contacts,
+                                ),
+                                DrawerTile(
+                                  company: company,
+                                  entityType: EntityType.category,
+                                  icon: getEntityIcon(EntityType.category),
+                                  title: localization.category,
+                                ),
+                                DrawerTile(
+                                  company: company,
+                                  entityType: EntityType.product,
+                                  icon: getEntityIcon(EntityType.product),
+                                  title: localization.products,
+                                  iconTooltip: localization.newProduct,
+                                ),
+                                DrawerTile(
+                                  company: company,
+                                  entityType: EntityType.invoice,
+                                  icon: getEntityIcon(EntityType.invoice),
+                                  title: localization.invoices,
+                                  iconTooltip: localization.newInvoice,
+                                ),
+                                DrawerTile(
+                                  company: company,
+                                  entityType: EntityType.recurringInvoice,
+                                  icon: getEntityIcon(
+                                      EntityType.recurringInvoice),
+                                  title: localization.recurringInvoices,
+                                  iconTooltip: localization.newRecurringInvoice,
+                                ),
+                                DrawerTile(
+                                  company: company,
+                                  entityType: EntityType.payment,
+                                  icon: getEntityIcon(EntityType.payment),
+                                  title: localization.payments,
+                                  iconTooltip: localization.newPayment,
+                                ),
+                                DrawerTile(
+                                  company: company,
+                                  entityType: EntityType.quote,
+                                  icon: getEntityIcon(EntityType.quote),
+                                  title: localization.quotes,
+                                  iconTooltip: localization.newQuote,
+                                ),
+                                DrawerTile(
+                                  company: company,
+                                  entityType: EntityType.credit,
+                                  icon: getEntityIcon(EntityType.credit),
+                                  title: localization.credits,
+                                  iconTooltip: localization.newCredit,
+                                ),
+                                DrawerTile(
+                                  company: company,
+                                  entityType: EntityType.project,
+                                  icon: getEntityIcon(EntityType.project),
+                                  title: localization.projects,
+                                  iconTooltip: localization.newProject,
+                                ),
+                                DrawerTile(
+                                  company: company,
+                                  entityType: EntityType.task,
+                                  icon: getEntityIcon(EntityType.task),
+                                  title: localization.tasks,
+                                  iconTooltip: localization.newTask,
+                                ),
+                                DrawerTile(
+                                  company: company,
+                                  entityType: EntityType.vendor,
+                                  icon: getEntityIcon(EntityType.vendor),
+                                  title: localization.vendors,
+                                  iconTooltip: localization.newVendor,
+                                ),
+                                DrawerTile(
+                                  company: company,
+                                  entityType: EntityType.purchaseOrder,
+                                  icon: getEntityIcon(EntityType.purchaseOrder),
+                                  title: localization.purchaseOrders,
+                                ),
+                                DrawerTile(
+                                  company: company,
+                                  entityType: EntityType.expense,
+                                  icon: getEntityIcon(EntityType.expense),
+                                  title: localization.expenses,
+                                  iconTooltip: localization.newExpense,
+                                ),
+                                // STARTER: menu - do not remove comment
+                                DrawerTile(
+                                  company: company,
+                                  entityType: EntityType.recurringExpense,
+                                  icon: getEntityIcon(
+                                      EntityType.recurringExpense),
+                                  title: localization.recurringExpenses,
+                                ),
+                                DrawerTile(
+                                  company: company,
+                                  entityType: EntityType.transaction,
+                                  icon: getEntityIcon(EntityType.transaction),
+                                  title: localization.transactions,
+                                ),
+                                if (!isApple() || state.isProPlan)
+                                  DrawerTile(
+                                    company: company,
+                                    icon: getEntityIcon(EntityType.reports),
+                                    title: localization.reports,
+                                    onTap: () => viewEntitiesByType(
+                                        entityType: EntityType.reports),
+                                  ),
+                                DrawerTile(
+                                  company: company,
+                                  icon: getEntityIcon(EntityType.settings),
+                                  title: localization.settings,
+                                  onTap: () => viewEntitiesByType(
+                                      entityType: EntityType.settings),
+                                ),
+                              ],
                             ),
-                            DrawerTile(
-                              company: company,
-                              entityType: EntityType.client,
-                              icon: getEntityIcon(EntityType.client),
-                              title: localization.clients,
-                              iconTooltip: localization.newClient,
-                            ),
-
-                            DrawerTile(
-                              company: company,
-                              entityType: EntityType.contact,
-                              icon: getEntityIcon(EntityType.contact),
-                              title: localization.contacts,
-                            ),
-                            DrawerTile(
-                              company: company,
-                              entityType: EntityType.category,
-                              icon: getEntityIcon(EntityType.category),
-                              title: localization.category,
-                            ),
-                            DrawerTile(
-                              company: company,
-                              entityType: EntityType.product,
-                              icon: getEntityIcon(EntityType.product),
-                              title: localization.products,
-                              iconTooltip: localization.newProduct,
-                            ),
-                            DrawerTile(
-                              company: company,
-                              entityType: EntityType.invoice,
-                              icon: getEntityIcon(EntityType.invoice),
-                              title: localization.invoices,
-                              iconTooltip: localization.newInvoice,
-                            ),
-                            DrawerTile(
-                              company: company,
-                              entityType: EntityType.recurringInvoice,
-                              icon: getEntityIcon(EntityType.recurringInvoice),
-                              title: localization.recurringInvoices,
-                              iconTooltip: localization.newRecurringInvoice,
-                            ),
-                            DrawerTile(
-                              company: company,
-                              entityType: EntityType.payment,
-                              icon: getEntityIcon(EntityType.payment),
-                              title: localization.payments,
-                              iconTooltip: localization.newPayment,
-                            ),
-                            DrawerTile(
-                              company: company,
-                              entityType: EntityType.quote,
-                              icon: getEntityIcon(EntityType.quote),
-                              title: localization.quotes,
-                              iconTooltip: localization.newQuote,
-                            ),
-                            DrawerTile(
-                              company: company,
-                              entityType: EntityType.credit,
-                              icon: getEntityIcon(EntityType.credit),
-                              title: localization.credits,
-                              iconTooltip: localization.newCredit,
-                            ),
-                            DrawerTile(
-                              company: company,
-                              entityType: EntityType.project,
-                              icon: getEntityIcon(EntityType.project),
-                              title: localization.projects,
-                              iconTooltip: localization.newProject,
-                            ),
-                            DrawerTile(
-                              company: company,
-                              entityType: EntityType.task,
-                              icon: getEntityIcon(EntityType.task),
-                              title: localization.tasks,
-                              iconTooltip: localization.newTask,
-                            ),
-                            DrawerTile(
-                              company: company,
-                              entityType: EntityType.vendor,
-                              icon: getEntityIcon(EntityType.vendor),
-                              title: localization.vendors,
-                              iconTooltip: localization.newVendor,
-                            ),
-                            DrawerTile(
-                              company: company,
-                              entityType: EntityType.purchaseOrder,
-                              icon: getEntityIcon(EntityType.purchaseOrder),
-                              title: localization.purchaseOrders,
-                            ),
-                            DrawerTile(
-                              company: company,
-                              entityType: EntityType.expense,
-                              icon: getEntityIcon(EntityType.expense),
-                              title: localization.expenses,
-                              iconTooltip: localization.newExpense,
-                            ),
-                            // STARTER: menu - do not remove comment
-
-                            DrawerTile(
-                              company: company,
-                              entityType: EntityType.recurringExpense,
-                              icon: getEntityIcon(EntityType.recurringExpense),
-                              title: localization.recurringExpenses,
-                            ),
-                            if (!isApple() || state.isProPlan)
-                              DrawerTile(
-                                company: company,
-                                icon: getEntityIcon(EntityType.reports),
-                                title: localization.reports,
-                                onTap: () => viewEntitiesByType(
-                                    entityType: EntityType.reports),
-                              ),
-                            DrawerTile(
-                              company: company,
-                              icon: getEntityIcon(EntityType.settings),
-                              title: localization.settings,
-                              onTap: () => viewEntitiesByType(
-                                  entityType: EntityType.settings),
-                            ),
-                          ],
+                          ),
                         ),
-                      )),
+                      ),
                 SizedBox(
                   height: kTopBottomBarHeight,
                   child: AppBorder(
@@ -711,7 +770,7 @@ class _DrawerTileState extends State<DrawerTile> {
 
     if (!Config.DEMO_MODE) {
       if (widget.entityType != null &&
-          !userCompany.canViewOrCreate(widget.entityType)) {
+          !userCompany.canViewCreateOrEdit(widget.entityType)) {
         return Container();
       }
     }
@@ -825,7 +884,10 @@ class _DrawerTileState extends State<DrawerTile> {
     }
 
     Widget iconWidget;
-    if (widget.title == localization.dashboard) {
+    if ([
+      localization.dashboard,
+      localization.settings,
+    ].contains(widget.title)) {
       iconWidget = IconButton(
         icon: Icon(
           Icons.search,
@@ -835,10 +897,15 @@ class _DrawerTileState extends State<DrawerTile> {
           if (isMobile(context)) {
             navigator.pop();
           }
-          store.dispatch(ViewDashboard(
-              filter: uiState.mainRoute == 'dashboard' && uiState.filter == ''
-                  ? null
-                  : ''));
+          if (widget.title == localization.dashboard) {
+            store.dispatch(ViewDashboard(
+                filter: uiState.mainRoute == 'dashboard' && uiState.filter == ''
+                    ? null
+                    : ''));
+          } else if (widget.title == localization.settings) {
+            store.dispatch(ViewSettings(company: state.company));
+            store.dispatch(FilterSettings(''));
+          }
         },
       );
     } else if (userCompany.canCreate(widget.entityType)) {
@@ -947,7 +1014,7 @@ class SidebarFooter extends StatelessWidget {
           if (state.isMenuCollapsed) ...[
             Expanded(child: SizedBox())
           ] else ...[
-            if (!Config.DEMO_MODE && !state.isDemo)
+            if (!Config.DEMO_MODE && !state.isDemo && account.isOld)
               if (state.isSelfHosted && !account.isSchedulerRunning)
                 IconButton(
                   tooltip: prefState.enableTooltips ? localization.error : '',
@@ -988,7 +1055,7 @@ class SidebarFooter extends StatelessWidget {
                 )
               else if (state.isSelfHosted &&
                   !state.account.disableAutoUpdate &&
-                  !state.account.isDocker &&
+                  state.userCompany.isAdmin &&
                   state.isUpdateAvailable)
                 IconButton(
                   tooltip: prefState.enableTooltips
@@ -1031,10 +1098,6 @@ class SidebarFooter extends StatelessWidget {
                         child: Text(localization.download.toUpperCase()),
                       ),
                       TextButton(
-                        onPressed: () => launchUrl(Uri.parse(kDocsPerformance)),
-                        child: Text(localization.learnMore.toUpperCase()),
-                      ),
-                      TextButton(
                         onPressed: () {
                           Navigator.of(context).pop();
                           store.dispatch(DismissNativeWarning());
@@ -1073,7 +1136,7 @@ class SidebarFooter extends StatelessWidget {
                     url += '/basic-settings/#$subRoute';
                   }
                 } else if (uiState.mainRoute == kDashboard) {
-                  url += '/introduction';
+                  url += '/user-guide';
                 } else if (uiState.mainRoute == kReports) {
                   url += '/$kReports';
                 } else {
@@ -1085,12 +1148,12 @@ class SidebarFooter extends StatelessWidget {
               },
               tooltip: prefState.enableTooltips ? localization.userGuide : '',
             ),
-            IconButton(
-              icon: Icon(Icons.info_outline),
-              // prevent the modal from being stuck over the pdf
-              onPressed: () => _showAbout(context),
-              tooltip: prefState.enableTooltips ? localization.about : '',
-            ),
+            if (state.userCompany.isAdmin)
+              IconButton(
+                icon: Icon(Icons.info_outline),
+                onPressed: () => _showAbout(context),
+                tooltip: prefState.enableTooltips ? localization.about : '',
+              ),
             /*
             if (kDebugMode)
               IconButton(
@@ -1318,17 +1381,24 @@ void _showAbout(BuildContext context) async {
                           .replaceFirst(':value', state.appVersion));
                     },
                     onLongPress: () {
-                      showMessageDialog(
+                      if (kReleaseMode) {
+                        showMessageDialog(
+                            context: context,
+                            message: FLUTTER_VERSION['channel'].toUpperCase() +
+                                ' • ' +
+                                FLUTTER_VERSION['frameworkVersion'],
+                            secondaryActions: [
+                              TextButton(
+                                child: Text(localization.logout.toUpperCase()),
+                                onPressed: () => store.dispatch(UserLogout()),
+                              ),
+                            ]);
+                      } else {
+                        showDialog<void>(
                           context: context,
-                          message: FLUTTER_VERSION['channel'].toUpperCase() +
-                              ' • ' +
-                              FLUTTER_VERSION['frameworkVersion'],
-                          secondaryActions: [
-                            TextButton(
-                              child: Text(localization.logout.toUpperCase()),
-                              onPressed: () => store.dispatch(UserLogout()),
-                            ),
-                          ]);
+                          builder: (context) => UpgradeDialog(),
+                        );
+                      }
                     },
                   ),
                   SizedBox(height: 8),
@@ -1337,134 +1407,136 @@ void _showAbout(BuildContext context) async {
                     title: Text(state.user.fullName),
                     subtitle: Text(state.user.email),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 4),
-                    child: AppButton(
-                      label: localization.appPlatforms.toUpperCase(),
-                      iconData: MdiIcons.desktopMac,
-                      onPressed: () {
-                        showDialog<AlertDialog>(
-                            context: context,
-                            builder: (BuildContext context) {
-                              return AlertDialog(
-                                actions: [
-                                  TextButton(
-                                    child: Text(
-                                        localization.sourceCode.toUpperCase()),
-                                    onPressed: () {
-                                      showDialog<AlertDialog>(
-                                        context: context,
-                                        builder: (BuildContext context) {
-                                          return AlertDialog(
-                                            actions: [
-                                              TextButton(
-                                                child: Text(localization.close
-                                                    .toUpperCase()),
-                                                onPressed: () =>
-                                                    Navigator.of(context).pop(),
-                                              ),
-                                            ],
-                                            content: Column(
-                                              mainAxisSize: MainAxisSize.min,
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.stretch,
-                                              children: [
-                                                Text('Backend'),
-                                                AppButton(
-                                                  label: 'Laravel/PHP',
-                                                  iconData: MdiIcons.server,
-                                                  onPressed: () => launchUrl(
-                                                      Uri.parse(
-                                                          kSourceCodeBackend)),
-                                                ),
-                                                Padding(
-                                                  padding:
-                                                      const EdgeInsets.only(
-                                                          top: 30),
-                                                  child: Text('Frontend'),
-                                                ),
-                                                AppButton(
-                                                  label: 'Flutter/Dart',
-                                                  iconData:
-                                                      MdiIcons.desktopClassic,
-                                                  onPressed: () => launchUrl(
-                                                      Uri.parse(
-                                                          kSourceCodeFrontend)),
-                                                ),
-                                                AppButton(
-                                                  label: 'Storefront SDK',
-                                                  iconData: MdiIcons.tools,
-                                                  onPressed: () => launchUrl(
-                                                      Uri.parse(
-                                                          kSourceCodeFrontendSDK)),
+                  if (!isApple())
+                    Padding(
+                      padding: const EdgeInsets.only(top: 4),
+                      child: AppButton(
+                        label: localization.appPlatforms.toUpperCase(),
+                        iconData: MdiIcons.desktopMac,
+                        onPressed: () {
+                          showDialog<AlertDialog>(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return AlertDialog(
+                                  actions: [
+                                    TextButton(
+                                      child: Text(localization.sourceCode
+                                          .toUpperCase()),
+                                      onPressed: () {
+                                        showDialog<AlertDialog>(
+                                          context: context,
+                                          builder: (BuildContext context) {
+                                            return AlertDialog(
+                                              actions: [
+                                                TextButton(
+                                                  child: Text(localization.close
+                                                      .toUpperCase()),
+                                                  onPressed: () =>
+                                                      Navigator.of(context)
+                                                          .pop(),
                                                 ),
                                               ],
-                                            ),
-                                          );
-                                        },
-                                      );
-                                    },
-                                  ),
-                                  TextButton(
-                                    child:
-                                        Text(localization.close.toUpperCase()),
-                                    onPressed: () =>
-                                        Navigator.of(context).pop(),
-                                  ),
-                                ],
-                                content: Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  crossAxisAlignment:
-                                      CrossAxisAlignment.stretch,
-                                  children: [
-                                    Text(localization.desktop),
-                                    AppButton(
-                                      label: 'Windows',
-                                      iconData: MdiIcons.microsoftWindows,
+                                              content: Column(
+                                                mainAxisSize: MainAxisSize.min,
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.stretch,
+                                                children: [
+                                                  Text('Backend'),
+                                                  AppButton(
+                                                    label: 'Laravel/PHP',
+                                                    iconData: MdiIcons.server,
+                                                    onPressed: () => launchUrl(
+                                                        Uri.parse(
+                                                            kSourceCodeBackend)),
+                                                  ),
+                                                  Padding(
+                                                    padding:
+                                                        const EdgeInsets.only(
+                                                            top: 30),
+                                                    child: Text('Frontend'),
+                                                  ),
+                                                  AppButton(
+                                                    label: 'Flutter/Dart',
+                                                    iconData:
+                                                        MdiIcons.desktopClassic,
+                                                    onPressed: () => launchUrl(
+                                                        Uri.parse(
+                                                            kSourceCodeFrontend)),
+                                                  ),
+                                                  AppButton(
+                                                    label: 'Storefront SDK',
+                                                    iconData: MdiIcons.tools,
+                                                    onPressed: () => launchUrl(
+                                                        Uri.parse(
+                                                            kSourceCodeFrontendSDK)),
+                                                  ),
+                                                ],
+                                              ),
+                                            );
+                                          },
+                                        );
+                                      },
+                                    ),
+                                    TextButton(
+                                      child: Text(
+                                          localization.close.toUpperCase()),
                                       onPressed: () =>
-                                          launchUrl(Uri.parse(kWindowsUrl)),
-                                    ),
-                                    AppButton(
-                                      label: 'macOS',
-                                      iconData: MdiIcons.apple,
-                                      onPressed: () =>
-                                          launchUrl(Uri.parse(kMacOSUrl)),
-                                    ),
-                                    AppButton(
-                                      label: 'Linux',
-                                      iconData: MdiIcons.linux,
-                                      onPressed: () =>
-                                          launchUrl(Uri.parse(kLinuxUrl)),
-                                    ),
-                                    Padding(
-                                      padding: const EdgeInsets.only(top: 30),
-                                      child: Text(localization.mobile),
-                                    ),
-                                    AppButton(
-                                      label: 'iOS',
-                                      iconData: MdiIcons.apple,
-                                      onPressed: () =>
-                                          launchUrl(Uri.parse(kAppleStoreUrl)),
-                                    ),
-                                    AppButton(
-                                      label: 'Android',
-                                      iconData: MdiIcons.android,
-                                      onPressed: () =>
-                                          launchUrl(Uri.parse(kGoogleStoreUrl)),
-                                    ),
-                                    AppButton(
-                                      label: 'F-Droid',
-                                      iconData: MdiIcons.android,
-                                      onPressed: () => launchUrl(
-                                          Uri.parse(kGoogleFDroidUrl)),
+                                          Navigator.of(context).pop(),
                                     ),
                                   ],
-                                ),
-                              );
-                            });
-                      },
+                                  content: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.stretch,
+                                    children: [
+                                      Text(localization.desktop),
+                                      AppButton(
+                                        label: 'Windows',
+                                        iconData: MdiIcons.microsoftWindows,
+                                        onPressed: () =>
+                                            launchUrl(Uri.parse(kWindowsUrl)),
+                                      ),
+                                      AppButton(
+                                        label: 'macOS',
+                                        iconData: MdiIcons.apple,
+                                        onPressed: () =>
+                                            launchUrl(Uri.parse(kMacOSUrl)),
+                                      ),
+                                      AppButton(
+                                        label: 'Linux',
+                                        iconData: MdiIcons.linux,
+                                        onPressed: () =>
+                                            launchUrl(Uri.parse(kLinuxUrl)),
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.only(top: 30),
+                                        child: Text(localization.mobile),
+                                      ),
+                                      AppButton(
+                                        label: 'iOS',
+                                        iconData: MdiIcons.apple,
+                                        onPressed: () => launchUrl(
+                                            Uri.parse(kAppleStoreUrl)),
+                                      ),
+                                      AppButton(
+                                        label: 'Android',
+                                        iconData: MdiIcons.android,
+                                        onPressed: () => launchUrl(
+                                            Uri.parse(kGoogleStoreUrl)),
+                                      ),
+                                      AppButton(
+                                        label: 'F-Droid',
+                                        iconData: MdiIcons.android,
+                                        onPressed: () => launchUrl(
+                                            Uri.parse(kGoogleFDroidUrl)),
+                                      ),
+                                    ],
+                                  ),
+                                );
+                              });
+                        },
+                      ),
                     ),
-                  ),
                   AppButton(
                     label: (localization.releaseNotes).toUpperCase(),
                     iconData: MdiIcons.note,
@@ -1485,7 +1557,7 @@ void _showAbout(BuildContext context) async {
                       },
                     ),
                     if (!state.account.disableAutoUpdate &&
-                        !state.account.isDocker)
+                        (!state.account.isDocker || state.isUpdateAvailable))
                       AppButton(
                         label: (state.isUpdateAvailable
                                 ? localization.updateApp

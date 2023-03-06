@@ -4,7 +4,10 @@ import 'package:flutter/material.dart';
 
 // Package imports:
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:invoiceninja_flutter/main_app.dart';
+import 'package:invoiceninja_flutter/ui/app/upgrade_dialog.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 // Project imports:
@@ -55,6 +58,8 @@ class _AccountManagementState extends State<AccountManagement>
 
   final _debouncer = Debouncer();
   final _trackingIdController = TextEditingController();
+  final _matomoUrl = TextEditingController();
+  final _matomoId = TextEditingController();
 
   List<TextEditingController> _controllers = [];
 
@@ -78,14 +83,19 @@ class _AccountManagementState extends State<AccountManagement>
   void didChangeDependencies() {
     _controllers = [
       _trackingIdController,
+      _matomoId,
+      _matomoUrl,
     ];
 
     _controllers
         .forEach((dynamic controller) => controller.removeListener(_onChanged));
 
     final viewModel = widget.viewModel;
+    final company = viewModel.company;
 
-    _trackingIdController.text = viewModel.company.googleAnalyticsKey;
+    _trackingIdController.text = company.googleAnalyticsKey;
+    _matomoId.text = company.matomoId;
+    _matomoUrl.text = company.matomoUrl;
 
     _controllers
         .forEach((dynamic controller) => controller.addListener(_onChanged));
@@ -94,8 +104,10 @@ class _AccountManagementState extends State<AccountManagement>
   }
 
   void _onChanged() {
-    final company = widget.viewModel.company.rebuild(
-        (b) => b..googleAnalyticsKey = _trackingIdController.text.trim());
+    final company = widget.viewModel.company.rebuild((b) => b
+      ..googleAnalyticsKey = _trackingIdController.text.trim()
+      ..matomoId = _matomoId.text.trim()
+      ..matomoUrl = _matomoUrl.text.trim());
     if (company != widget.viewModel.company) {
       _debouncer.run(() {
         widget.viewModel.onCompanyChanged(company);
@@ -187,9 +199,9 @@ class _AccountManagementState extends State<AccountManagement>
         children: <Widget>[
           _AccountOverview(viewModel: viewModel),
           ScrollableListView(
+            primary: true,
             children: <Widget>[
               FormCard(
-                  // TODO change to kModules.keys
                   children: kModules.keys.map((module) {
                 return CheckboxListTile(
                   controlAffinity: ListTileControlAffinity.leading,
@@ -210,7 +222,7 @@ class _AccountManagementState extends State<AccountManagement>
               }).toList()),
             ],
           ),
-          ScrollableListView(children: [
+          ScrollableListView(primary: true, children: [
             FormCard(
               children: [
                 LearnMoreUrl(
@@ -222,9 +234,25 @@ class _AccountManagementState extends State<AccountManagement>
                   ),
                 ),
               ],
-            )
+            ),
+            FormCard(
+              isLast: true,
+              children: [
+                DecoratedFormField(
+                  label: localization.matomoId,
+                  controller: _matomoId,
+                  keyboardType: TextInputType.text,
+                ),
+                DecoratedFormField(
+                  label: localization.matomoUrl,
+                  controller: _matomoUrl,
+                  keyboardType: TextInputType.url,
+                ),
+              ],
+            ),
           ]),
           ScrollableListView(
+            primary: true,
             children: [
               FormCard(
                 children: [
@@ -315,6 +343,7 @@ class _AccountOverview extends StatelessWidget {
     }
 
     return ScrollableListView(
+      primary: true,
       children: <Widget>[
         AppHeader(
           label: localization.plan,
@@ -336,57 +365,67 @@ class _AccountOverview extends StatelessWidget {
             ),
           ),
         if (state.userCompany.ninjaPortalUrl.isNotEmpty &&
-            !isApple() &&
+            (!isApple() || supportsInAppPurchase()) &&
             state.isHosted)
           Padding(
             padding: const EdgeInsets.only(left: 16, top: 16, right: 16),
             child: OutlinedButton(
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: IconText(
-                  icon: MdiIcons.openInNew,
-                  text: (account.isEligibleForTrial
-                          ? localization.startFreeTrial
-                          : localization.changePlan)
-                      .toUpperCase(),
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: IconText(
+                    icon: MdiIcons.openInNew,
+                    text:
+                        (account.isEligibleForTrial && !supportsInAppPurchase()
+                                ? localization.startFreeTrial
+                                : localization.changePlan)
+                            .toUpperCase(),
+                  ),
                 ),
-              ),
-              onPressed: () =>
-                  launchUrl(Uri.parse(state.userCompany.ninjaPortalUrl)),
-            ),
+                onPressed: () {
+                  if (supportsInAppPurchase()) {
+                    showDialog<void>(
+                      context: context,
+                      builder: (context) => UpgradeDialog(),
+                    );
+                  } else {
+                    launchUrl(Uri.parse(state.userCompany.ninjaPortalUrl));
+                  }
+                }),
           ),
+        FormCard(children: [
+          SwitchListTile(
+            value: !company.isDisabled,
+            onChanged: (value) {
+              viewModel.onCompanyChanged(
+                  company.rebuild((b) => b..isDisabled = !value));
+            },
+            title: Text(localization.activateCompany),
+            subtitle: Text(localization.activateCompanyHelp),
+            activeColor: Theme.of(context).colorScheme.secondary,
+          ),
+          SwitchListTile(
+            value: company.markdownEnabled,
+            onChanged: (value) {
+              viewModel.onCompanyChanged(
+                  company.rebuild((b) => b..markdownEnabled = value));
+            },
+            title: Text(localization.enablePdfMarkdown),
+            subtitle: Text(localization.enableMarkdownHelp),
+            activeColor: Theme.of(context).colorScheme.secondary,
+          ),
+          SwitchListTile(
+            value: company.markdownEmailEnabled,
+            onChanged: (value) {
+              viewModel.onCompanyChanged(
+                  company.rebuild((b) => b..markdownEmailEnabled = value));
+            },
+            title: Text(localization.enableEmailMarkdown),
+            subtitle: Text(localization.enableEmailMarkdownHelp),
+            activeColor: Theme.of(context).colorScheme.secondary,
+          ),
+        ]),
         FormCard(
           children: [
-            SwitchListTile(
-              value: !company.isDisabled,
-              onChanged: (value) {
-                viewModel.onCompanyChanged(
-                    company.rebuild((b) => b..isDisabled = !value));
-              },
-              title: Text(localization.activateCompany),
-              subtitle: Text(localization.activateCompanyHelp),
-              activeColor: Theme.of(context).colorScheme.secondary,
-            ),
-            SwitchListTile(
-              value: company.markdownEnabled,
-              onChanged: (value) {
-                viewModel.onCompanyChanged(
-                    company.rebuild((b) => b..markdownEnabled = value));
-              },
-              title: Text(localization.enablePdfMarkdown),
-              subtitle: Text(localization.enableMarkdownHelp),
-              activeColor: Theme.of(context).colorScheme.secondary,
-            ),
-            SwitchListTile(
-              value: company.markdownEmailEnabled,
-              onChanged: (value) {
-                viewModel.onCompanyChanged(
-                    company.rebuild((b) => b..markdownEmailEnabled = value));
-              },
-              title: Text(localization.enableEmailMarkdown),
-              subtitle: Text(localization.enableEmailMarkdownHelp),
-              activeColor: Theme.of(context).colorScheme.secondary,
-            ),
             SwitchListTile(
               value: company.reportIncludeDrafts,
               onChanged: (value) {
@@ -395,6 +434,16 @@ class _AccountOverview extends StatelessWidget {
               },
               title: Text(localization.includeDrafts),
               subtitle: Text(localization.includeDraftsHelp),
+              activeColor: Theme.of(context).colorScheme.secondary,
+            ),
+            SwitchListTile(
+              value: company.reportIncludeDeleted,
+              onChanged: (value) {
+                viewModel.onCompanyChanged(
+                    company.rebuild((b) => b..reportIncludeDeleted = value));
+              },
+              title: Text(localization.includeDeleted),
+              subtitle: Text(localization.includeDeletedHelp),
               activeColor: Theme.of(context).colorScheme.secondary,
             ),
           ],
@@ -517,81 +566,107 @@ class _AccountOverview extends StatelessWidget {
                 ),
               ),
             ])),
-        Padding(
-          padding: const EdgeInsets.only(top: 16, right: 16, left: 16),
-          child: ListDivider(),
-        ),
-        Padding(
-          padding: const EdgeInsets.all(16),
-          child: Row(
-            children: [
-              Expanded(
-                child: AppButton(
-                  label: localization.purgeData.toUpperCase(),
-                  color: Colors.red,
-                  iconData: isMobile(context) ? null : Icons.delete,
-                  onPressed: () {
-                    confirmCallback(
-                        context: context,
-                        message:
-                            localization.purgeDataMessage + _getDataStats(),
-                        typeToConfirm: localization.purge.toLowerCase(),
-                        callback: (_) {
-                          passwordCallback(
-                              alwaysRequire: true,
-                              context: context,
-                              callback: (password, idToken) {
-                                viewModel.onPurgeData(
-                                    context, password, idToken);
-                              });
-                        });
-                  },
-                ),
-              ),
-              SizedBox(width: kGutterWidth),
-              Expanded(
-                child: AppButton(
-                  label: companies.length == 1
-                      ? localization.cancelAccount.toUpperCase()
-                      : localization.deleteCompany.toUpperCase(),
-                  color: Colors.red,
-                  iconData: isMobile(context) ? null : Icons.delete,
-                  onPressed: () {
-                    String message = companies.length == 1
-                        ? localization.cancelAccountMessage
-                        : localization.deleteCompanyMessage;
-
-                    message = message.replaceFirst(
-                        ':company',
-                        company.displayName.isEmpty
-                            ? localization.newCompany
-                            : company.displayName);
-                    message += _getDataStats();
-
-                    confirmCallback(
-                        context: context,
-                        message: message,
-                        typeToConfirm: localization.delete.toLowerCase(),
-                        askForReason: true,
-                        callback: (String reason) {
-                          passwordCallback(
-                              alwaysRequire: true,
-                              context: context,
-                              callback: (password, idToken) {
-                                viewModel.onCompanyDelete(
-                                  context,
-                                  password,
-                                  idToken,
-                                  reason,
-                                );
-                              });
-                        });
-                  },
-                ),
-              ),
-            ],
+        if (state.userCompany.isOwner && !state.isDemo) ...[
+          Padding(
+            padding: const EdgeInsets.only(top: 16, right: 16, left: 16),
+            child: ListDivider(),
           ),
-        ),
+          Padding(
+            padding: const EdgeInsets.all(16),
+            child: Row(
+              children: [
+                Expanded(
+                  child: AppButton(
+                    label: localization.purgeData.toUpperCase(),
+                    color: Colors.red,
+                    iconData: isMobile(context) ? null : Icons.delete,
+                    onPressed: () {
+                      confirmCallback(
+                          context: context,
+                          message:
+                              localization.purgeDataMessage + _getDataStats(),
+                          typeToConfirm: localization.purge.toLowerCase(),
+                          callback: (_) {
+                            passwordCallback(
+                                alwaysRequire: true,
+                                context: context,
+                                callback: (password, idToken) {
+                                  viewModel.onPurgeData(
+                                      context, password, idToken);
+                                });
+                          });
+                    },
+                  ),
+                ),
+                SizedBox(width: kGutterWidth),
+                Expanded(
+                  child: AppButton(
+                    label: companies.length == 1
+                        ? localization.cancelAccount.toUpperCase()
+                        : localization.deleteCompany.toUpperCase(),
+                    color: Colors.red,
+                    iconData: isMobile(context) ? null : Icons.delete,
+                    onPressed: () {
+                      String message = companies.length == 1
+                          ? localization.cancelAccountMessage
+                          : localization.deleteCompanyMessage;
+
+                      message = message.replaceFirst(
+                          ':company',
+                          company.displayName.isEmpty
+                              ? localization.newCompany
+                              : company.displayName);
+                      message += _getDataStats();
+
+                      confirmCallback(
+                          context: context,
+                          message: message,
+                          typeToConfirm: localization.delete.toLowerCase(),
+                          askForReason: true,
+                          callback: (String reason) async {
+                            if (state.user.isConnectedToApple &&
+                                !state.user.hasPassword) {
+                              final credentials =
+                                  await SignInWithApple.getAppleIDCredential(
+                                scopes: [
+                                  AppleIDAuthorizationScopes.email,
+                                  AppleIDAuthorizationScopes.fullName,
+                                ],
+                                webAuthenticationOptions:
+                                    WebAuthenticationOptions(
+                                  clientId: kAppleOAuthClientId,
+                                  redirectUri:
+                                      Uri.parse(kAppleOAuthRedirectUrl),
+                                ),
+                              );
+
+                              viewModel.onCompanyDelete(
+                                navigatorKey.currentContext,
+                                '',
+                                credentials.identityToken,
+                                reason,
+                              );
+                            } else {
+                              passwordCallback(
+                                  alwaysRequire: true,
+                                  context: context,
+                                  callback: (password, idToken) {
+                                    viewModel.onCompanyDelete(
+                                      context,
+                                      password,
+                                      idToken,
+                                      reason,
+                                    );
+                                  });
+                            }
+                          });
+                    },
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
       ],
     );
   }

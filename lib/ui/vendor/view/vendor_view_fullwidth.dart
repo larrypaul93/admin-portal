@@ -9,6 +9,7 @@ import 'package:invoiceninja_flutter/ui/app/form_card.dart';
 import 'package:invoiceninja_flutter/ui/app/forms/app_tab_bar.dart';
 import 'package:invoiceninja_flutter/ui/app/icon_text.dart';
 import 'package:invoiceninja_flutter/ui/app/screen_imports.dart';
+import 'package:invoiceninja_flutter/ui/vendor/view/vendor_view_activity.dart';
 import 'package:invoiceninja_flutter/ui/vendor/view/vendor_view_documents.dart';
 import 'package:invoiceninja_flutter/utils/formatting.dart';
 import 'package:invoiceninja_flutter/utils/localization.dart';
@@ -112,10 +113,13 @@ class _VendorViewFullwidthState extends State<VendorViewFullwidth>
                 if (vendor.website.isNotEmpty)
                   Padding(
                     padding: const EdgeInsets.symmetric(vertical: 4),
-                    child: CopyToClipboard(
-                      value: vendor.website,
+                    child: InkWell(
+                      onTap: () =>
+                          launchUrl(Uri.parse(untrimUrl(vendor.website))),
                       child: IconText(
-                          icon: MdiIcons.earth, text: trimUrl(vendor.website)),
+                        icon: MdiIcons.earth,
+                        text: trimUrl(vendor.website),
+                      ),
                     ),
                   ),
                 SizedBox(height: 4),
@@ -151,6 +155,10 @@ class _VendorViewFullwidthState extends State<VendorViewFullwidth>
                 ),
                 SizedBox(height: 8),
                 if (billingAddress.isNotEmpty) ...[
+                  Text(
+                    localization.billingAddress,
+                    style: TextStyle(color: Colors.grey),
+                  ),
                   Row(
                     children: [
                       Expanded(
@@ -197,45 +205,52 @@ class _VendorViewFullwidthState extends State<VendorViewFullwidth>
                 right: kMobileDialogPadding / (!showStanding ? 1 : 2),
                 bottom: kMobileDialogPadding,
                 left: kMobileDialogPadding / 2),
-            child: ListView(
+            child: Scrollbar(
+              thumbVisibility: true,
               controller: _scrollController3,
-              children: [
-                Text(
-                  localization.contacts,
-                  style: Theme.of(context).textTheme.headline6,
-                ),
-                SizedBox(height: 8),
-                ...vendor.contacts.map((contact) {
-                  return Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        contact.fullName,
-                        style: Theme.of(context).textTheme.subtitle1,
-                      ),
-                      if (contact.email.isNotEmpty)
-                        Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 4),
-                          child: CopyToClipboard(
-                            value: contact.email,
-                            child: IconText(
-                                icon: Icons.email, text: contact.email),
-                          ),
+              child: ListView(
+                controller: _scrollController3,
+                children: [
+                  Text(
+                    localization.contacts +
+                        (vendor.contacts.length > 1
+                            ? ' (${vendor.contacts.length})'
+                            : ''),
+                    style: Theme.of(context).textTheme.headline6,
+                  ),
+                  SizedBox(height: 8),
+                  ...vendor.contacts.map((contact) {
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          contact.fullName,
+                          style: Theme.of(context).textTheme.subtitle1,
                         ),
-                      if (contact.phone.isNotEmpty)
-                        Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 4),
-                          child: CopyToClipboard(
-                            value: contact.phone,
-                            child: IconText(
-                                icon: Icons.phone, text: contact.phone),
+                        if (contact.email.isNotEmpty)
+                          Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 4),
+                            child: CopyToClipboard(
+                              value: contact.email,
+                              child: IconText(
+                                  icon: Icons.email, text: contact.email),
+                            ),
                           ),
-                        ),
-                      SizedBox(height: 16),
-                    ],
-                  );
-                }).toList()
-              ],
+                        if (contact.phone.isNotEmpty)
+                          Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 4),
+                            child: CopyToClipboard(
+                              value: contact.phone,
+                              child: IconText(
+                                  icon: Icons.phone, text: contact.phone),
+                            ),
+                          ),
+                        SizedBox(height: 16),
+                      ],
+                    );
+                  }).toList()
+                ],
+              ),
             ),
           )),
           if (showStanding)
@@ -252,7 +267,7 @@ class _VendorViewFullwidthState extends State<VendorViewFullwidth>
                     bottom: kMobileDialogPadding,
                     left: kMobileDialogPadding / 2),
                 child: DefaultTabController(
-                  length: 2,
+                  length: 3,
                   child: SizedBox(
                     height: minHeight,
                     child: Column(
@@ -268,6 +283,9 @@ class _VendorViewFullwidthState extends State<VendorViewFullwidth>
                               text: documents.isEmpty
                                   ? localization.documents
                                   : '${localization.documents} (${documents.length})',
+                            ),
+                            Tab(
+                              child: Text(localization.activity),
                             ),
                           ],
                         ),
@@ -300,6 +318,13 @@ class _VendorViewFullwidthState extends State<VendorViewFullwidth>
                               RefreshIndicator(
                                 onRefresh: () => viewModel.onRefreshed(context),
                                 child: VendorViewDocuments(
+                                  viewModel: viewModel,
+                                  key: ValueKey(viewModel.vendor.id),
+                                ),
+                              ),
+                              RefreshIndicator(
+                                onRefresh: () => viewModel.onRefreshed(context),
+                                child: VendorViewActivity(
                                   viewModel: viewModel,
                                   key: ValueKey(viewModel.vendor.id),
                                 ),

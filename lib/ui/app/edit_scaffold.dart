@@ -6,6 +6,8 @@ import 'package:flutter_redux/flutter_redux.dart';
 import 'package:invoiceninja_flutter/ui/app/forms/save_cancel_buttons.dart';
 import 'package:invoiceninja_flutter/ui/app/icon_text.dart';
 import 'package:invoiceninja_flutter/ui/app/loading_indicator.dart';
+import 'package:invoiceninja_flutter/ui/app/upgrade_dialog.dart';
+import 'package:invoiceninja_flutter/ui/transaction/edit/transaction_edit_vm.dart';
 import 'package:overflow_view/overflow_view.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -58,17 +60,13 @@ class EditScaffold extends StatelessWidget {
     final state = store.state;
     final account = state.account;
     final localization = AppLocalization.of(context);
+    Function bannerClick;
 
     bool showUpgradeBanner = false;
-    bool isEnabled = (isMobile(context) ||
-            !state.uiState.isInSettings ||
-            state.uiState.isEditing ||
-            state.settingsUIState.isChanged) &&
-        !state.isSaving &&
-        (entity?.isEditable ?? true);
+    bool isEnabled = !state.isSaving && (entity?.isEditable ?? true);
     bool isCancelEnabled = false;
     String upgradeMessage = state.userCompany.isOwner
-        ? (state.account.trialStarted.isEmpty
+        ? (state.account.isEligibleForTrial && !supportsInAppPurchase()
             ? localization.startFreeTrialMessage
             : localization.upgradeToPaidPlan)
         : localization.ownerUpgradeToPaidPlan;
@@ -96,10 +94,22 @@ class EditScaffold extends StatelessWidget {
       isCancelEnabled = true;
     }
 
+    if (TransactionEditScreen.route.contains(state.uiState.baseRoute) &&
+        state.bankAccountState.list.isEmpty) {
+      showUpgradeBanner = true;
+      if (state.isEnterprisePlan) {
+        upgradeMessage = localization.clickHereToConnectBankAccount;
+        bannerClick =
+            () => store.dispatch(ViewSettings(section: kSettingsBankAccounts));
+      } else {
+        upgradeMessage = localization.upgradeToConnectBankAccount;
+      }
+    }
+
     final entityActions = <EntityAction>[
       if (isDesktop(context) &&
           ((isEnabled && onSavePressed != null) || isCancelEnabled))
-        EntityAction.cancel,
+        EntityAction.back,
       EntityAction.save,
       ...(actions ?? []).where((action) => action != null),
     ];
@@ -119,33 +129,41 @@ class EditScaffold extends StatelessWidget {
         child: Scaffold(
           body: state.companies.isEmpty
               ? LoadingIndicator()
-              : showUpgradeBanner && !isApple()
-                  ? Column(
+              : Stack(
+                  alignment: Alignment.topCenter,
+                  children: [
+                    Column(
                       children: [
-                        InkWell(
-                          child: IconMessage(
-                            upgradeMessage,
-                            color: Colors.orange.shade800,
+                        if (showUpgradeBanner &&
+                            state.userCompany.isOwner &&
+                            (!isApple() || supportsInAppPurchase()))
+                          InkWell(
+                            child: IconMessage(
+                              upgradeMessage,
+                              color: Colors.orange.shade800,
+                            ),
+                            onTap: () async {
+                              if (bannerClick != null) {
+                                bannerClick();
+                              } else if (supportsInAppPurchase()) {
+                                showDialog<void>(
+                                  context: context,
+                                  builder: (context) => UpgradeDialog(),
+                                );
+                              } else {
+                                launchUrl(Uri.parse(
+                                    state.userCompany.ninjaPortalUrl));
+                              }
+                            },
                           ),
-                          onTap: state.userCompany.isOwner
-                              ? () async {
-                                  launchUrl(Uri.parse(
-                                      state.userCompany.ninjaPortalUrl));
-                                }
-                              : null,
+                        Expanded(
+                          child: body,
                         ),
-                        Expanded(child: body),
                       ],
-                    )
-                  : state.isSaving && isDesktop(context)
-                      ? Stack(
-                          alignment: Alignment.topCenter,
-                          children: [
-                            body,
-                            LinearProgressIndicator(),
-                          ],
-                        )
-                      : body,
+                    ),
+                    if (state.isSaving) LinearProgressIndicator(),
+                  ],
+                ),
           drawer: isDesktop(context) ? MenuDrawerBuilder() : null,
           appBar: AppBar(
             centerTitle: false,
@@ -185,7 +203,8 @@ class EditScaffold extends StatelessWidget {
                                 }
 
                                 return OutlinedButton(
-                                  style: action == EntityAction.save
+                                  style: action == EntityAction.save &&
+                                          isEnabled
                                       ? ButtonStyle(
                                           backgroundColor:
                                               MaterialStateProperty.all(state
@@ -215,7 +234,7 @@ class EditScaffold extends StatelessWidget {
                                   onPressed: state.isSaving
                                       ? null
                                       : () {
-                                          if (action == EntityAction.cancel) {
+                                          if (action == EntityAction.back) {
                                             if (onCancelPressed != null) {
                                               onCancelPressed(context);
                                             } else {
@@ -317,18 +336,26 @@ class EditScaffold extends StatelessWidget {
                             child: ConstrainedBox(
                               constraints: BoxConstraints(minWidth: 60),
                               child: IconText(
-                                icon: getEntityActionIcon(EntityAction.cancel),
-                                text: localization.cancel,
+                                icon: getEntityActionIcon(EntityAction.back),
+                                text: (entity != null &&
+                                        entity.entityType.isSetting)
+                                    ? localization.back
+                                    : localization.cancel,
                                 style: state.isSaving ? null : textStyle,
                               ),
                             ),
                           ),
                           SizedBox(width: 8),
                           OutlinedButton(
-                            style: ButtonStyle(
-                                backgroundColor: MaterialStateProperty.all(state
-                                    .prefState.colorThemeModel.colorSuccess)),
-                            onPressed: state.isSaving || onSavePressed == null
+                            style: isEnabled
+                                ? ButtonStyle(
+                                    backgroundColor: MaterialStateProperty.all(
+                                        state.prefState.colorThemeModel
+                                            .colorSuccess))
+                                : null,
+                            onPressed: !isEnabled ||
+                                    state.isSaving ||
+                                    onSavePressed == null
                                 ? null
                                 : () {
                                     // Clear focus now to prevent un-focus after save from

@@ -150,6 +150,18 @@ class _$CompanyGatewayEntitySerializer
       'require_contact_email',
       serializers.serialize(object.requireContactEmail,
           specifiedType: const FullType(bool)),
+      'require_custom_value1',
+      serializers.serialize(object.requireCustomValue1,
+          specifiedType: const FullType(bool)),
+      'require_custom_value2',
+      serializers.serialize(object.requireCustomValue2,
+          specifiedType: const FullType(bool)),
+      'require_custom_value3',
+      serializers.serialize(object.requireCustomValue3,
+          specifiedType: const FullType(bool)),
+      'require_custom_value4',
+      serializers.serialize(object.requireCustomValue4,
+          specifiedType: const FullType(bool)),
       'require_cvv',
       serializers.serialize(object.requireCvv,
           specifiedType: const FullType(bool)),
@@ -297,6 +309,22 @@ class _$CompanyGatewayEntitySerializer
           break;
         case 'require_contact_email':
           result.requireContactEmail = serializers.deserialize(value,
+              specifiedType: const FullType(bool)) as bool;
+          break;
+        case 'require_custom_value1':
+          result.requireCustomValue1 = serializers.deserialize(value,
+              specifiedType: const FullType(bool)) as bool;
+          break;
+        case 'require_custom_value2':
+          result.requireCustomValue2 = serializers.deserialize(value,
+              specifiedType: const FullType(bool)) as bool;
+          break;
+        case 'require_custom_value3':
+          result.requireCustomValue3 = serializers.deserialize(value,
+              specifiedType: const FullType(bool)) as bool;
+          break;
+        case 'require_custom_value4':
+          result.requireCustomValue4 = serializers.deserialize(value,
               specifiedType: const FullType(bool)) as bool;
           break;
         case 'require_cvv':
@@ -552,7 +580,11 @@ class _$CompanyGatewayListResponse extends CompanyGatewayListResponse {
   int __hashCode;
   @override
   int get hashCode {
-    return __hashCode ??= $jf($jc(0, data.hashCode));
+    if (__hashCode != null) return __hashCode;
+    var _$hash = 0;
+    _$hash = $jc(_$hash, data.hashCode);
+    _$hash = $jf(_$hash);
+    return __hashCode ??= _$hash;
   }
 
   @override
@@ -649,7 +681,11 @@ class _$CompanyGatewayItemResponse extends CompanyGatewayItemResponse {
   int __hashCode;
   @override
   int get hashCode {
-    return __hashCode ??= $jf($jc(0, data.hashCode));
+    if (__hashCode != null) return __hashCode;
+    var _$hash = 0;
+    _$hash = $jc(_$hash, data.hashCode);
+    _$hash = $jf(_$hash);
+    return __hashCode ??= _$hash;
   }
 
   @override
@@ -737,6 +773,14 @@ class _$CompanyGatewayEntity extends CompanyGatewayEntity {
   @override
   final bool requireContactEmail;
   @override
+  final bool requireCustomValue1;
+  @override
+  final bool requireCustomValue2;
+  @override
+  final bool requireCustomValue3;
+  @override
+  final bool requireCustomValue4;
+  @override
   final bool requireCvv;
   @override
   final bool updateDetails;
@@ -792,6 +836,10 @@ class _$CompanyGatewayEntity extends CompanyGatewayEntity {
       this.requireClientPhone,
       this.requireContactName,
       this.requireContactEmail,
+      this.requireCustomValue1,
+      this.requireCustomValue2,
+      this.requireCustomValue3,
+      this.requireCustomValue4,
       this.requireCvv,
       this.updateDetails,
       this.feesAndLimitsMap,
@@ -829,6 +877,14 @@ class _$CompanyGatewayEntity extends CompanyGatewayEntity {
         requireContactName, r'CompanyGatewayEntity', 'requireContactName');
     BuiltValueNullFieldError.checkNotNull(
         requireContactEmail, r'CompanyGatewayEntity', 'requireContactEmail');
+    BuiltValueNullFieldError.checkNotNull(
+        requireCustomValue1, r'CompanyGatewayEntity', 'requireCustomValue1');
+    BuiltValueNullFieldError.checkNotNull(
+        requireCustomValue2, r'CompanyGatewayEntity', 'requireCustomValue2');
+    BuiltValueNullFieldError.checkNotNull(
+        requireCustomValue3, r'CompanyGatewayEntity', 'requireCustomValue3');
+    BuiltValueNullFieldError.checkNotNull(
+        requireCustomValue4, r'CompanyGatewayEntity', 'requireCustomValue4');
     BuiltValueNullFieldError.checkNotNull(
         requireCvv, r'CompanyGatewayEntity', 'requireCvv');
     BuiltValueNullFieldError.checkNotNull(
@@ -884,6 +940,10 @@ class _$CompanyGatewayEntity extends CompanyGatewayEntity {
         requireClientPhone == other.requireClientPhone &&
         requireContactName == other.requireContactName &&
         requireContactEmail == other.requireContactEmail &&
+        requireCustomValue1 == other.requireCustomValue1 &&
+        requireCustomValue2 == other.requireCustomValue2 &&
+        requireCustomValue3 == other.requireCustomValue3 &&
+        requireCustomValue4 == other.requireCustomValue4 &&
         requireCvv == other.requireCvv &&
         updateDetails == other.updateDetails &&
         feesAndLimitsMap == other.feesAndLimitsMap &&
@@ -909,44 +969,43 @@ class _$CompanyGatewayEntity extends CompanyGatewayEntity {
   int __hashCode;
   @override
   int get hashCode {
-    return __hashCode ??= $jf($jc(
-        $jc(
-            $jc(
-                $jc(
-                    $jc(
-                        $jc(
-                            $jc(
-                                $jc(
-                                    $jc(
-                                        $jc(
-                                            $jc(
-                                                $jc(
-                                                    $jc(
-                                                        $jc(
-                                                            $jc(
-                                                                $jc(
-                                                                    $jc(
-                                                                        $jc(
-                                                                            $jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc(0, gatewayId.hashCode), acceptedCreditCards.hashCode), requireShippingAddress.hashCode), requireBillingAddress.hashCode), requireClientName.hashCode), requirePostalCode.hashCode), requireClientPhone.hashCode), requireContactName.hashCode), requireContactEmail.hashCode), requireCvv.hashCode),
-                                                                                updateDetails.hashCode),
-                                                                            feesAndLimitsMap.hashCode),
-                                                                        systemLogs.hashCode),
-                                                                    customValue1.hashCode),
-                                                                customValue2.hashCode),
-                                                            customValue3.hashCode),
-                                                        customValue4.hashCode),
-                                                    config.hashCode),
-                                                tokenBilling.hashCode),
-                                            isTestMode.hashCode),
-                                        label.hashCode),
-                                    isChanged.hashCode),
-                                createdAt.hashCode),
-                            updatedAt.hashCode),
-                        archivedAt.hashCode),
-                    isDeleted.hashCode),
-                createdUserId.hashCode),
-            assignedUserId.hashCode),
-        id.hashCode));
+    if (__hashCode != null) return __hashCode;
+    var _$hash = 0;
+    _$hash = $jc(_$hash, gatewayId.hashCode);
+    _$hash = $jc(_$hash, acceptedCreditCards.hashCode);
+    _$hash = $jc(_$hash, requireShippingAddress.hashCode);
+    _$hash = $jc(_$hash, requireBillingAddress.hashCode);
+    _$hash = $jc(_$hash, requireClientName.hashCode);
+    _$hash = $jc(_$hash, requirePostalCode.hashCode);
+    _$hash = $jc(_$hash, requireClientPhone.hashCode);
+    _$hash = $jc(_$hash, requireContactName.hashCode);
+    _$hash = $jc(_$hash, requireContactEmail.hashCode);
+    _$hash = $jc(_$hash, requireCustomValue1.hashCode);
+    _$hash = $jc(_$hash, requireCustomValue2.hashCode);
+    _$hash = $jc(_$hash, requireCustomValue3.hashCode);
+    _$hash = $jc(_$hash, requireCustomValue4.hashCode);
+    _$hash = $jc(_$hash, requireCvv.hashCode);
+    _$hash = $jc(_$hash, updateDetails.hashCode);
+    _$hash = $jc(_$hash, feesAndLimitsMap.hashCode);
+    _$hash = $jc(_$hash, systemLogs.hashCode);
+    _$hash = $jc(_$hash, customValue1.hashCode);
+    _$hash = $jc(_$hash, customValue2.hashCode);
+    _$hash = $jc(_$hash, customValue3.hashCode);
+    _$hash = $jc(_$hash, customValue4.hashCode);
+    _$hash = $jc(_$hash, config.hashCode);
+    _$hash = $jc(_$hash, tokenBilling.hashCode);
+    _$hash = $jc(_$hash, isTestMode.hashCode);
+    _$hash = $jc(_$hash, label.hashCode);
+    _$hash = $jc(_$hash, isChanged.hashCode);
+    _$hash = $jc(_$hash, createdAt.hashCode);
+    _$hash = $jc(_$hash, updatedAt.hashCode);
+    _$hash = $jc(_$hash, archivedAt.hashCode);
+    _$hash = $jc(_$hash, isDeleted.hashCode);
+    _$hash = $jc(_$hash, createdUserId.hashCode);
+    _$hash = $jc(_$hash, assignedUserId.hashCode);
+    _$hash = $jc(_$hash, id.hashCode);
+    _$hash = $jf(_$hash);
+    return __hashCode ??= _$hash;
   }
 
   @override
@@ -962,6 +1021,10 @@ class _$CompanyGatewayEntity extends CompanyGatewayEntity {
           ..add('requireClientPhone', requireClientPhone)
           ..add('requireContactName', requireContactName)
           ..add('requireContactEmail', requireContactEmail)
+          ..add('requireCustomValue1', requireCustomValue1)
+          ..add('requireCustomValue2', requireCustomValue2)
+          ..add('requireCustomValue3', requireCustomValue3)
+          ..add('requireCustomValue4', requireCustomValue4)
           ..add('requireCvv', requireCvv)
           ..add('updateDetails', updateDetails)
           ..add('feesAndLimitsMap', feesAndLimitsMap)
@@ -1037,6 +1100,26 @@ class CompanyGatewayEntityBuilder
   bool get requireContactEmail => _$this._requireContactEmail;
   set requireContactEmail(bool requireContactEmail) =>
       _$this._requireContactEmail = requireContactEmail;
+
+  bool _requireCustomValue1;
+  bool get requireCustomValue1 => _$this._requireCustomValue1;
+  set requireCustomValue1(bool requireCustomValue1) =>
+      _$this._requireCustomValue1 = requireCustomValue1;
+
+  bool _requireCustomValue2;
+  bool get requireCustomValue2 => _$this._requireCustomValue2;
+  set requireCustomValue2(bool requireCustomValue2) =>
+      _$this._requireCustomValue2 = requireCustomValue2;
+
+  bool _requireCustomValue3;
+  bool get requireCustomValue3 => _$this._requireCustomValue3;
+  set requireCustomValue3(bool requireCustomValue3) =>
+      _$this._requireCustomValue3 = requireCustomValue3;
+
+  bool _requireCustomValue4;
+  bool get requireCustomValue4 => _$this._requireCustomValue4;
+  set requireCustomValue4(bool requireCustomValue4) =>
+      _$this._requireCustomValue4 = requireCustomValue4;
 
   bool _requireCvv;
   bool get requireCvv => _$this._requireCvv;
@@ -1127,7 +1210,9 @@ class CompanyGatewayEntityBuilder
   String get id => _$this._id;
   set id(String id) => _$this._id = id;
 
-  CompanyGatewayEntityBuilder();
+  CompanyGatewayEntityBuilder() {
+    CompanyGatewayEntity._initializeBuilder(this);
+  }
 
   CompanyGatewayEntityBuilder get _$this {
     final $v = _$v;
@@ -1142,6 +1227,10 @@ class CompanyGatewayEntityBuilder
       _requireClientPhone = $v.requireClientPhone;
       _requireContactName = $v.requireContactName;
       _requireContactEmail = $v.requireContactEmail;
+      _requireCustomValue1 = $v.requireCustomValue1;
+      _requireCustomValue2 = $v.requireCustomValue2;
+      _requireCustomValue3 = $v.requireCustomValue3;
+      _requireCustomValue4 = $v.requireCustomValue4;
       _requireCvv = $v.requireCvv;
       _updateDetails = $v.updateDetails;
       _feesAndLimitsMap = $v.feesAndLimitsMap.toBuilder();
@@ -1200,9 +1289,13 @@ class CompanyGatewayEntityBuilder
               requirePostalCode: requirePostalCode,
               requireClientPhone: BuiltValueNullFieldError.checkNotNull(
                   requireClientPhone, r'CompanyGatewayEntity', 'requireClientPhone'),
-              requireContactName: BuiltValueNullFieldError.checkNotNull(
-                  requireContactName, r'CompanyGatewayEntity', 'requireContactName'),
+              requireContactName:
+                  BuiltValueNullFieldError.checkNotNull(requireContactName, r'CompanyGatewayEntity', 'requireContactName'),
               requireContactEmail: BuiltValueNullFieldError.checkNotNull(requireContactEmail, r'CompanyGatewayEntity', 'requireContactEmail'),
+              requireCustomValue1: BuiltValueNullFieldError.checkNotNull(requireCustomValue1, r'CompanyGatewayEntity', 'requireCustomValue1'),
+              requireCustomValue2: BuiltValueNullFieldError.checkNotNull(requireCustomValue2, r'CompanyGatewayEntity', 'requireCustomValue2'),
+              requireCustomValue3: BuiltValueNullFieldError.checkNotNull(requireCustomValue3, r'CompanyGatewayEntity', 'requireCustomValue3'),
+              requireCustomValue4: BuiltValueNullFieldError.checkNotNull(requireCustomValue4, r'CompanyGatewayEntity', 'requireCustomValue4'),
               requireCvv: BuiltValueNullFieldError.checkNotNull(requireCvv, r'CompanyGatewayEntity', 'requireCvv'),
               updateDetails: BuiltValueNullFieldError.checkNotNull(updateDetails, r'CompanyGatewayEntity', 'updateDetails'),
               feesAndLimitsMap: feesAndLimitsMap.build(),
@@ -1347,30 +1440,23 @@ class _$FeesAndLimitsSettings extends FeesAndLimitsSettings {
   int __hashCode;
   @override
   int get hashCode {
-    return __hashCode ??= $jf($jc(
-        $jc(
-            $jc(
-                $jc(
-                    $jc(
-                        $jc(
-                            $jc(
-                                $jc(
-                                    $jc(
-                                        $jc(
-                                            $jc(
-                                                $jc($jc(0, minLimit.hashCode),
-                                                    maxLimit.hashCode),
-                                                feeAmount.hashCode),
-                                            feePercent.hashCode),
-                                        feeCap.hashCode),
-                                    taxRate1.hashCode),
-                                taxName1.hashCode),
-                            taxRate2.hashCode),
-                        taxName2.hashCode),
-                    taxRate3.hashCode),
-                taxName3.hashCode),
-            adjustFeePercent.hashCode),
-        isEnabled.hashCode));
+    if (__hashCode != null) return __hashCode;
+    var _$hash = 0;
+    _$hash = $jc(_$hash, minLimit.hashCode);
+    _$hash = $jc(_$hash, maxLimit.hashCode);
+    _$hash = $jc(_$hash, feeAmount.hashCode);
+    _$hash = $jc(_$hash, feePercent.hashCode);
+    _$hash = $jc(_$hash, feeCap.hashCode);
+    _$hash = $jc(_$hash, taxRate1.hashCode);
+    _$hash = $jc(_$hash, taxName1.hashCode);
+    _$hash = $jc(_$hash, taxRate2.hashCode);
+    _$hash = $jc(_$hash, taxName2.hashCode);
+    _$hash = $jc(_$hash, taxRate3.hashCode);
+    _$hash = $jc(_$hash, taxName3.hashCode);
+    _$hash = $jc(_$hash, adjustFeePercent.hashCode);
+    _$hash = $jc(_$hash, isEnabled.hashCode);
+    _$hash = $jf(_$hash);
+    return __hashCode ??= _$hash;
   }
 
   @override
@@ -1519,4 +1605,4 @@ class FeesAndLimitsSettingsBuilder
   }
 }
 
-// ignore_for_file: always_put_control_body_on_new_line,always_specify_types,annotate_overrides,avoid_annotating_with_dynamic,avoid_as,avoid_catches_without_on_clauses,avoid_returning_this,deprecated_member_use_from_same_package,lines_longer_than_80_chars,no_leading_underscores_for_local_identifiers,omit_local_variable_types,prefer_expression_function_bodies,sort_constructors_first,test_types_in_equals,unnecessary_const,unnecessary_new,unnecessary_lambdas
+// ignore_for_file: deprecated_member_use_from_same_package,type=lint

@@ -18,11 +18,10 @@ import 'package:invoiceninja_flutter/main_app.dart';
 import 'package:invoiceninja_flutter/redux/app/app_actions.dart';
 import 'package:invoiceninja_flutter/redux/app/app_state.dart';
 import 'package:invoiceninja_flutter/redux/quote/quote_actions.dart';
-import 'package:invoiceninja_flutter/redux/quote/quote_selectors.dart';
 import 'package:invoiceninja_flutter/redux/ui/ui_actions.dart';
 import 'package:invoiceninja_flutter/ui/app/dialogs/error_dialog.dart';
 import 'package:invoiceninja_flutter/ui/invoice/edit/invoice_edit_vm.dart';
-import 'package:invoiceninja_flutter/ui/quote/quote_edit.dart';
+import 'package:invoiceninja_flutter/ui/quote/edit/quote_edit.dart';
 import 'package:invoiceninja_flutter/ui/quote/view/quote_view_vm.dart';
 import 'package:invoiceninja_flutter/utils/completers.dart';
 
@@ -54,7 +53,7 @@ class QuoteEditVM extends AbstractInvoiceEditVM {
     InvoiceEntity invoice,
     int invoiceItemIndex,
     InvoiceEntity origInvoice,
-    Function(BuildContext) onSavePressed,
+    Function(BuildContext, [EntityAction]) onSavePressed,
     Function(List<InvoiceItemEntity>, String, String) onItemsAdded,
     bool isSaving,
     Function(BuildContext) onCancelPressed,
@@ -99,7 +98,7 @@ class QuoteEditVM extends AbstractInvoiceEditVM {
             return null;
           }
           if (quote.isOld &&
-              !hasQuoteChanges(quote, state.quoteState.map) &&
+              quote.isChanged != true &&
               action != null &&
               action.isClientSide) {
             handleEntityAction(quote, action);

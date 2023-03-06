@@ -133,6 +133,18 @@ class _$SubscriptionEntitySerializer
       'recurring_product_ids',
       serializers.serialize(object.recurringProductIds,
           specifiedType: const FullType(String)),
+      'optional_product_ids',
+      serializers.serialize(object.optionalProductIds,
+          specifiedType: const FullType(String)),
+      'optional_recurring_product_ids',
+      serializers.serialize(object.optionalRecurringProductIds,
+          specifiedType: const FullType(String)),
+      'registration_required',
+      serializers.serialize(object.registrationRequired,
+          specifiedType: const FullType(bool)),
+      'use_inventory_management',
+      serializers.serialize(object.useInventoryManagement,
+          specifiedType: const FullType(bool)),
       'frequency_id',
       serializers.serialize(object.frequencyId,
           specifiedType: const FullType(String)),
@@ -252,6 +264,22 @@ class _$SubscriptionEntitySerializer
         case 'recurring_product_ids':
           result.recurringProductIds = serializers.deserialize(value,
               specifiedType: const FullType(String)) as String;
+          break;
+        case 'optional_product_ids':
+          result.optionalProductIds = serializers.deserialize(value,
+              specifiedType: const FullType(String)) as String;
+          break;
+        case 'optional_recurring_product_ids':
+          result.optionalRecurringProductIds = serializers.deserialize(value,
+              specifiedType: const FullType(String)) as String;
+          break;
+        case 'registration_required':
+          result.registrationRequired = serializers.deserialize(value,
+              specifiedType: const FullType(bool)) as bool;
+          break;
+        case 'use_inventory_management':
+          result.useInventoryManagement = serializers.deserialize(value,
+              specifiedType: const FullType(bool)) as bool;
           break;
         case 'frequency_id':
           result.frequencyId = serializers.deserialize(value,
@@ -464,7 +492,11 @@ class _$SubscriptionListResponse extends SubscriptionListResponse {
   int __hashCode;
   @override
   int get hashCode {
-    return __hashCode ??= $jf($jc(0, data.hashCode));
+    if (__hashCode != null) return __hashCode;
+    var _$hash = 0;
+    _$hash = $jc(_$hash, data.hashCode);
+    _$hash = $jf(_$hash);
+    return __hashCode ??= _$hash;
   }
 
   @override
@@ -561,7 +593,11 @@ class _$SubscriptionItemResponse extends SubscriptionItemResponse {
   int __hashCode;
   @override
   int get hashCode {
-    return __hashCode ??= $jf($jc(0, data.hashCode));
+    if (__hashCode != null) return __hashCode;
+    var _$hash = 0;
+    _$hash = $jc(_$hash, data.hashCode);
+    _$hash = $jf(_$hash);
+    return __hashCode ??= _$hash;
   }
 
   @override
@@ -637,6 +673,14 @@ class _$SubscriptionEntity extends SubscriptionEntity {
   @override
   final String recurringProductIds;
   @override
+  final String optionalProductIds;
+  @override
+  final String optionalRecurringProductIds;
+  @override
+  final bool registrationRequired;
+  @override
+  final bool useInventoryManagement;
+  @override
   final String frequencyId;
   @override
   final String autoBill;
@@ -694,6 +738,10 @@ class _$SubscriptionEntity extends SubscriptionEntity {
       this.groupId,
       this.productIds,
       this.recurringProductIds,
+      this.optionalProductIds,
+      this.optionalRecurringProductIds,
+      this.registrationRequired,
+      this.useInventoryManagement,
       this.frequencyId,
       this.autoBill,
       this.promoCode,
@@ -726,6 +774,14 @@ class _$SubscriptionEntity extends SubscriptionEntity {
         productIds, r'SubscriptionEntity', 'productIds');
     BuiltValueNullFieldError.checkNotNull(
         recurringProductIds, r'SubscriptionEntity', 'recurringProductIds');
+    BuiltValueNullFieldError.checkNotNull(
+        optionalProductIds, r'SubscriptionEntity', 'optionalProductIds');
+    BuiltValueNullFieldError.checkNotNull(optionalRecurringProductIds,
+        r'SubscriptionEntity', 'optionalRecurringProductIds');
+    BuiltValueNullFieldError.checkNotNull(
+        registrationRequired, r'SubscriptionEntity', 'registrationRequired');
+    BuiltValueNullFieldError.checkNotNull(useInventoryManagement,
+        r'SubscriptionEntity', 'useInventoryManagement');
     BuiltValueNullFieldError.checkNotNull(
         frequencyId, r'SubscriptionEntity', 'frequencyId');
     BuiltValueNullFieldError.checkNotNull(
@@ -784,6 +840,10 @@ class _$SubscriptionEntity extends SubscriptionEntity {
         groupId == other.groupId &&
         productIds == other.productIds &&
         recurringProductIds == other.recurringProductIds &&
+        optionalProductIds == other.optionalProductIds &&
+        optionalRecurringProductIds == other.optionalRecurringProductIds &&
+        registrationRequired == other.registrationRequired &&
+        useInventoryManagement == other.useInventoryManagement &&
         frequencyId == other.frequencyId &&
         autoBill == other.autoBill &&
         promoCode == other.promoCode &&
@@ -813,44 +873,42 @@ class _$SubscriptionEntity extends SubscriptionEntity {
   int __hashCode;
   @override
   int get hashCode {
-    return __hashCode ??= $jf($jc(
-        $jc(
-            $jc(
-                $jc(
-                    $jc(
-                        $jc(
-                            $jc(
-                                $jc(
-                                    $jc(
-                                        $jc(
-                                            $jc(
-                                                $jc(
-                                                    $jc(
-                                                        $jc(
-                                                            $jc(
-                                                                $jc(
-                                                                    $jc(
-                                                                        $jc(
-                                                                            $jc($jc($jc($jc($jc($jc($jc($jc($jc($jc(0, name.hashCode), groupId.hashCode), productIds.hashCode), recurringProductIds.hashCode), frequencyId.hashCode), autoBill.hashCode), promoCode.hashCode), promoDiscount.hashCode), price.hashCode),
-                                                                                isAmountDiscount.hashCode),
-                                                                            allowCancellation.hashCode),
-                                                                        perSeatEnabled.hashCode),
-                                                                    maxSeatsLimit.hashCode),
-                                                                trialEnabled.hashCode),
-                                                            trialDuration.hashCode),
-                                                        allowQueryOverrides.hashCode),
-                                                    allowPlanChanges.hashCode),
-                                                refundPeriod.hashCode),
-                                            webhookConfiguration.hashCode),
-                                        purchasePage.hashCode),
-                                    isChanged.hashCode),
-                                createdAt.hashCode),
-                            updatedAt.hashCode),
-                        archivedAt.hashCode),
-                    isDeleted.hashCode),
-                createdUserId.hashCode),
-            assignedUserId.hashCode),
-        id.hashCode));
+    if (__hashCode != null) return __hashCode;
+    var _$hash = 0;
+    _$hash = $jc(_$hash, name.hashCode);
+    _$hash = $jc(_$hash, groupId.hashCode);
+    _$hash = $jc(_$hash, productIds.hashCode);
+    _$hash = $jc(_$hash, recurringProductIds.hashCode);
+    _$hash = $jc(_$hash, optionalProductIds.hashCode);
+    _$hash = $jc(_$hash, optionalRecurringProductIds.hashCode);
+    _$hash = $jc(_$hash, registrationRequired.hashCode);
+    _$hash = $jc(_$hash, useInventoryManagement.hashCode);
+    _$hash = $jc(_$hash, frequencyId.hashCode);
+    _$hash = $jc(_$hash, autoBill.hashCode);
+    _$hash = $jc(_$hash, promoCode.hashCode);
+    _$hash = $jc(_$hash, promoDiscount.hashCode);
+    _$hash = $jc(_$hash, price.hashCode);
+    _$hash = $jc(_$hash, isAmountDiscount.hashCode);
+    _$hash = $jc(_$hash, allowCancellation.hashCode);
+    _$hash = $jc(_$hash, perSeatEnabled.hashCode);
+    _$hash = $jc(_$hash, maxSeatsLimit.hashCode);
+    _$hash = $jc(_$hash, trialEnabled.hashCode);
+    _$hash = $jc(_$hash, trialDuration.hashCode);
+    _$hash = $jc(_$hash, allowQueryOverrides.hashCode);
+    _$hash = $jc(_$hash, allowPlanChanges.hashCode);
+    _$hash = $jc(_$hash, refundPeriod.hashCode);
+    _$hash = $jc(_$hash, webhookConfiguration.hashCode);
+    _$hash = $jc(_$hash, purchasePage.hashCode);
+    _$hash = $jc(_$hash, isChanged.hashCode);
+    _$hash = $jc(_$hash, createdAt.hashCode);
+    _$hash = $jc(_$hash, updatedAt.hashCode);
+    _$hash = $jc(_$hash, archivedAt.hashCode);
+    _$hash = $jc(_$hash, isDeleted.hashCode);
+    _$hash = $jc(_$hash, createdUserId.hashCode);
+    _$hash = $jc(_$hash, assignedUserId.hashCode);
+    _$hash = $jc(_$hash, id.hashCode);
+    _$hash = $jf(_$hash);
+    return __hashCode ??= _$hash;
   }
 
   @override
@@ -860,6 +918,10 @@ class _$SubscriptionEntity extends SubscriptionEntity {
           ..add('groupId', groupId)
           ..add('productIds', productIds)
           ..add('recurringProductIds', recurringProductIds)
+          ..add('optionalProductIds', optionalProductIds)
+          ..add('optionalRecurringProductIds', optionalRecurringProductIds)
+          ..add('registrationRequired', registrationRequired)
+          ..add('useInventoryManagement', useInventoryManagement)
           ..add('frequencyId', frequencyId)
           ..add('autoBill', autoBill)
           ..add('promoCode', promoCode)
@@ -908,6 +970,26 @@ class SubscriptionEntityBuilder
   String get recurringProductIds => _$this._recurringProductIds;
   set recurringProductIds(String recurringProductIds) =>
       _$this._recurringProductIds = recurringProductIds;
+
+  String _optionalProductIds;
+  String get optionalProductIds => _$this._optionalProductIds;
+  set optionalProductIds(String optionalProductIds) =>
+      _$this._optionalProductIds = optionalProductIds;
+
+  String _optionalRecurringProductIds;
+  String get optionalRecurringProductIds => _$this._optionalRecurringProductIds;
+  set optionalRecurringProductIds(String optionalRecurringProductIds) =>
+      _$this._optionalRecurringProductIds = optionalRecurringProductIds;
+
+  bool _registrationRequired;
+  bool get registrationRequired => _$this._registrationRequired;
+  set registrationRequired(bool registrationRequired) =>
+      _$this._registrationRequired = registrationRequired;
+
+  bool _useInventoryManagement;
+  bool get useInventoryManagement => _$this._useInventoryManagement;
+  set useInventoryManagement(bool useInventoryManagement) =>
+      _$this._useInventoryManagement = useInventoryManagement;
 
   String _frequencyId;
   String get frequencyId => _$this._frequencyId;
@@ -1016,7 +1098,9 @@ class SubscriptionEntityBuilder
   String get id => _$this._id;
   set id(String id) => _$this._id = id;
 
-  SubscriptionEntityBuilder();
+  SubscriptionEntityBuilder() {
+    SubscriptionEntity._initializeBuilder(this);
+  }
 
   SubscriptionEntityBuilder get _$this {
     final $v = _$v;
@@ -1025,6 +1109,10 @@ class SubscriptionEntityBuilder
       _groupId = $v.groupId;
       _productIds = $v.productIds;
       _recurringProductIds = $v.recurringProductIds;
+      _optionalProductIds = $v.optionalProductIds;
+      _optionalRecurringProductIds = $v.optionalRecurringProductIds;
+      _registrationRequired = $v.registrationRequired;
+      _useInventoryManagement = $v.useInventoryManagement;
       _frequencyId = $v.frequencyId;
       _autoBill = $v.autoBill;
       _promoCode = $v.promoCode;
@@ -1081,14 +1169,19 @@ class SubscriptionEntityBuilder
                   productIds, r'SubscriptionEntity', 'productIds'),
               recurringProductIds: BuiltValueNullFieldError.checkNotNull(
                   recurringProductIds, r'SubscriptionEntity', 'recurringProductIds'),
-              frequencyId: BuiltValueNullFieldError.checkNotNull(
-                  frequencyId, r'SubscriptionEntity', 'frequencyId'),
-              autoBill: BuiltValueNullFieldError.checkNotNull(
-                  autoBill, r'SubscriptionEntity', 'autoBill'),
-              promoCode: BuiltValueNullFieldError.checkNotNull(
-                  promoCode, r'SubscriptionEntity', 'promoCode'),
-              promoDiscount:
-                  BuiltValueNullFieldError.checkNotNull(promoDiscount, r'SubscriptionEntity', 'promoDiscount'),
+              optionalProductIds: BuiltValueNullFieldError.checkNotNull(
+                  optionalProductIds, r'SubscriptionEntity', 'optionalProductIds'),
+              optionalRecurringProductIds: BuiltValueNullFieldError.checkNotNull(
+                  optionalRecurringProductIds,
+                  r'SubscriptionEntity',
+                  'optionalRecurringProductIds'),
+              registrationRequired: BuiltValueNullFieldError.checkNotNull(
+                  registrationRequired, r'SubscriptionEntity', 'registrationRequired'),
+              useInventoryManagement: BuiltValueNullFieldError.checkNotNull(useInventoryManagement, r'SubscriptionEntity', 'useInventoryManagement'),
+              frequencyId: BuiltValueNullFieldError.checkNotNull(frequencyId, r'SubscriptionEntity', 'frequencyId'),
+              autoBill: BuiltValueNullFieldError.checkNotNull(autoBill, r'SubscriptionEntity', 'autoBill'),
+              promoCode: BuiltValueNullFieldError.checkNotNull(promoCode, r'SubscriptionEntity', 'promoCode'),
+              promoDiscount: BuiltValueNullFieldError.checkNotNull(promoDiscount, r'SubscriptionEntity', 'promoDiscount'),
               price: BuiltValueNullFieldError.checkNotNull(price, r'SubscriptionEntity', 'price'),
               isAmountDiscount: BuiltValueNullFieldError.checkNotNull(isAmountDiscount, r'SubscriptionEntity', 'isAmountDiscount'),
               allowCancellation: BuiltValueNullFieldError.checkNotNull(allowCancellation, r'SubscriptionEntity', 'allowCancellation'),
@@ -1183,12 +1276,15 @@ class _$WebhookConfigurationEntity extends WebhookConfigurationEntity {
   int __hashCode;
   @override
   int get hashCode {
-    return __hashCode ??= $jf($jc(
-        $jc(
-            $jc($jc($jc(0, returnUrl.hashCode), postPurchaseUrl.hashCode),
-                postPurchaseRestMethod.hashCode),
-            postPurchaseHeaders.hashCode),
-        postPurchaseBody.hashCode));
+    if (__hashCode != null) return __hashCode;
+    var _$hash = 0;
+    _$hash = $jc(_$hash, returnUrl.hashCode);
+    _$hash = $jc(_$hash, postPurchaseUrl.hashCode);
+    _$hash = $jc(_$hash, postPurchaseRestMethod.hashCode);
+    _$hash = $jc(_$hash, postPurchaseHeaders.hashCode);
+    _$hash = $jc(_$hash, postPurchaseBody.hashCode);
+    _$hash = $jf(_$hash);
+    return __hashCode ??= _$hash;
   }
 
   @override
@@ -1300,4 +1396,4 @@ class WebhookConfigurationEntityBuilder
   }
 }
 
-// ignore_for_file: always_put_control_body_on_new_line,always_specify_types,annotate_overrides,avoid_annotating_with_dynamic,avoid_as,avoid_catches_without_on_clauses,avoid_returning_this,deprecated_member_use_from_same_package,lines_longer_than_80_chars,no_leading_underscores_for_local_identifiers,omit_local_variable_types,prefer_expression_function_bodies,sort_constructors_first,test_types_in_equals,unnecessary_const,unnecessary_new,unnecessary_lambdas
+// ignore_for_file: deprecated_member_use_from_same_package,type=lint

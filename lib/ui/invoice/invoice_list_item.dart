@@ -22,12 +22,18 @@ class InvoiceListItem extends StatelessWidget {
   const InvoiceListItem({
     @required this.invoice,
     this.filter,
-    this.showCheckbox = true,
+    this.onTap,
+    this.isChecked = false,
+    this.showCheckbox = false,
+    this.showSelected = true,
   });
 
   final InvoiceEntity invoice;
   final String filter;
   final bool showCheckbox;
+  final bool isChecked;
+  final Function onTap;
+  final bool showSelected;
 
   @override
   Widget build(BuildContext context) {
@@ -36,9 +42,6 @@ class InvoiceListItem extends StatelessWidget {
     final client = state.clientState.get(invoice.clientId);
     final uiState = state.uiState;
     final invoiceUIState = uiState.invoiceUIState;
-    final listUIState = state.getUIState(invoice.entityType).listUIState;
-    final isInMultiselect = showCheckbox && listUIState.isInMultiselect();
-    final isChecked = isInMultiselect && listUIState.isSelected(invoice.id);
     final textStyle = TextStyle(fontSize: 16);
     final localization = AppLocalization.of(context);
     final filterMatch = filter != null && filter.isNotEmpty
@@ -70,23 +73,27 @@ class InvoiceListItem extends StatelessWidget {
 
     return DismissibleEntity(
         isSelected: isDesktop(context) &&
+            showSelected &&
             invoice.id ==
                 (uiState.isEditing
                     ? invoiceUIState.editing.id
                     : invoiceUIState.selectedId),
-        showCheckbox: showCheckbox,
+        showMultiselect: showSelected,
         userCompany: state.userCompany,
         entity: invoice,
         child: LayoutBuilder(
             builder: (BuildContext context, BoxConstraints constraints) {
           return constraints.maxWidth > kTableListWidthCutoff
               ? InkWell(
-                  onTap: () => selectEntity(
-                    entity: invoice,
-                    forceView: !showCheckbox,
-                  ),
-                  onLongPress: () =>
-                      selectEntity(entity: invoice, longPress: true),
+                  onTap: () => onTap != null
+                      ? onTap()
+                      : selectEntity(
+                          entity: invoice,
+                          forceView: !showCheckbox,
+                        ),
+                  onLongPress: () => onTap != null
+                      ? null
+                      : selectEntity(entity: invoice, longPress: true),
                   child: Padding(
                     padding: const EdgeInsets.only(
                       left: 10,
@@ -98,9 +105,8 @@ class InvoiceListItem extends StatelessWidget {
                       children: <Widget>[
                         Padding(
                             padding: const EdgeInsets.only(right: 16),
-                            child: isInMultiselect
+                            child: showCheckbox
                                 ? IgnorePointer(
-                                    ignoring: listUIState.isInMultiselect(),
                                     child: Checkbox(
                                       value: isChecked,
                                       materialTapTargetSize:
@@ -167,7 +173,7 @@ class InvoiceListItem extends StatelessWidget {
                         SizedBox(width: 10),
                         Text(
                           formatNumber(
-                              invoice.balance > 0
+                              invoice.balance != 0
                                   ? invoice.balance
                                   : invoice.amount,
                               context,
@@ -182,13 +188,14 @@ class InvoiceListItem extends StatelessWidget {
                   ),
                 )
               : ListTile(
-                  onTap: () =>
-                      selectEntity(entity: invoice, forceView: !showCheckbox),
-                  onLongPress: () =>
-                      selectEntity(entity: invoice, longPress: true),
-                  leading: isInMultiselect
+                  onTap: () => onTap != null
+                      ? onTap()
+                      : selectEntity(entity: invoice, forceView: !showCheckbox),
+                  onLongPress: () => onTap != null
+                      ? null
+                      : selectEntity(entity: invoice, longPress: true),
+                  leading: showCheckbox
                       ? IgnorePointer(
-                          ignoring: listUIState.isInMultiselect(),
                           child: Checkbox(
                             value: isChecked,
                             materialTapTargetSize:
@@ -213,7 +220,7 @@ class InvoiceListItem extends StatelessWidget {
                         SizedBox(width: 4),
                         Text(
                             formatNumber(
-                                invoice.balance > 0
+                                invoice.balance != 0
                                     ? invoice.balance
                                     : invoice.amount,
                                 context,

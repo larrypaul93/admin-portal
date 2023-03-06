@@ -214,6 +214,7 @@ class CreditListItem extends StatelessWidget {
                               ? Text((((credit.number ?? '').isEmpty
                                           ? localization.pending
                                           : credit.number) +
+                                      ' • ' +
                                       formatDate(credit.date, context) +
                                       (credit.documents.isNotEmpty
                                           ? '  📎'
@@ -226,14 +227,14 @@ class CreditListItem extends StatelessWidget {
                                 ),
                         ),
                         Text(
-                            localization
-                                .lookup(kCreditStatuses[credit.statusId]),
+                            localization.lookup(
+                                kCreditStatuses[credit.calculatedStatusId]),
                             style: TextStyle(
                               color: !credit.isSent
                                   ? textColor
                                   : CreditStatusColors(
                                           state.prefState.colorThemeModel)
-                                      .colors[credit.statusId],
+                                      .colors[credit.calculatedStatusId],
                             )),
                       ],
                     ),

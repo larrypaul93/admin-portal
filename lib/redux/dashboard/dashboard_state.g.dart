@@ -248,10 +248,14 @@ class _$DashboardUIState extends DashboardUIState {
   int __hashCode;
   @override
   int get hashCode {
-    return __hashCode ??= $jf($jc(
-        $jc($jc($jc(0, settings.hashCode), selectedEntityType.hashCode),
-            selectedEntities.hashCode),
-        showSidebar.hashCode));
+    if (__hashCode != null) return __hashCode;
+    var _$hash = 0;
+    _$hash = $jc(_$hash, settings.hashCode);
+    _$hash = $jc(_$hash, selectedEntityType.hashCode);
+    _$hash = $jc(_$hash, selectedEntities.hashCode);
+    _$hash = $jc(_$hash, showSidebar.hashCode);
+    _$hash = $jf(_$hash);
+    return __hashCode ??= _$hash;
   }
 
   @override
@@ -446,26 +450,21 @@ class _$DashboardUISettings extends DashboardUISettings {
   int __hashCode;
   @override
   int get hashCode {
-    return __hashCode ??= $jf($jc(
-        $jc(
-            $jc(
-                $jc(
-                    $jc(
-                        $jc(
-                            $jc(
-                                $jc(
-                                    $jc(
-                                        $jc($jc(0, dateRange.hashCode),
-                                            customStartDate.hashCode),
-                                        customEndDate.hashCode),
-                                    enableComparison.hashCode),
-                                compareDateRange.hashCode),
-                            compareCustomStartDate.hashCode),
-                        compareCustomEndDate.hashCode),
-                    offset.hashCode),
-                currencyId.hashCode),
-            includeTaxes.hashCode),
-        groupBy.hashCode));
+    if (__hashCode != null) return __hashCode;
+    var _$hash = 0;
+    _$hash = $jc(_$hash, dateRange.hashCode);
+    _$hash = $jc(_$hash, customStartDate.hashCode);
+    _$hash = $jc(_$hash, customEndDate.hashCode);
+    _$hash = $jc(_$hash, enableComparison.hashCode);
+    _$hash = $jc(_$hash, compareDateRange.hashCode);
+    _$hash = $jc(_$hash, compareCustomStartDate.hashCode);
+    _$hash = $jc(_$hash, compareCustomEndDate.hashCode);
+    _$hash = $jc(_$hash, offset.hashCode);
+    _$hash = $jc(_$hash, currencyId.hashCode);
+    _$hash = $jc(_$hash, includeTaxes.hashCode);
+    _$hash = $jc(_$hash, groupBy.hashCode);
+    _$hash = $jf(_$hash);
+    return __hashCode ??= _$hash;
   }
 
   @override
@@ -605,4 +604,4 @@ class DashboardUISettingsBuilder
   }
 }
 
-// ignore_for_file: always_put_control_body_on_new_line,always_specify_types,annotate_overrides,avoid_annotating_with_dynamic,avoid_as,avoid_catches_without_on_clauses,avoid_returning_this,deprecated_member_use_from_same_package,lines_longer_than_80_chars,no_leading_underscores_for_local_identifiers,omit_local_variable_types,prefer_expression_function_bodies,sort_constructors_first,test_types_in_equals,unnecessary_const,unnecessary_new,unnecessary_lambdas
+// ignore_for_file: deprecated_member_use_from_same_package,type=lint

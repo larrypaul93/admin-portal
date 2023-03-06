@@ -53,14 +53,13 @@ class _ClientPortalState extends State<ClientPortal>
   TabController _controller;
 
   final _webClient = WebClient();
-  bool _autoValidate = false;
   bool _isSubdomainUnique = true;
   bool _isCheckingSubdomain = false;
 
-  final _debouncer = Debouncer(
-    milliseconds: kMillisecondsToDebounceSave,
-    sendFirstAction: true,
-  );
+  final _subdomainDebouncer =
+      SimpleDebouncer(milliseconds: kMillisecondsToDebounceSave);
+  final _debouncer = Debouncer();
+
   final _subdomainController = TextEditingController();
   final _portalDomainController = TextEditingController();
   final _customCssController = TextEditingController();
@@ -96,7 +95,7 @@ class _ClientPortalState extends State<ClientPortal>
   void _validateSubdomain() {
     setState(() => _isSubdomainUnique = false);
 
-    _debouncer.run(() {
+    _subdomainDebouncer.run(() {
       final subdomain = _subdomainController.text.trim();
       final store = StoreProvider.of<AppState>(context);
       final state = store.state;
@@ -218,10 +217,6 @@ class _ClientPortalState extends State<ClientPortal>
   void _onSavePressed(BuildContext context) {
     final bool isValid = _formKey.currentState.validate();
 
-    setState(() {
-      _autoValidate = !isValid;
-    });
-
     if (!isValid || _isCheckingSubdomain) {
       return;
     }
@@ -304,7 +299,6 @@ class _ClientPortalState extends State<ClientPortal>
                         company.portalMode == kClientPortalModeSubdomain) ...[
                       DecoratedFormField(
                         label: localization.subdomain,
-                        autovalidate: _autoValidate,
                         controller: _subdomainController,
                         keyboardType: TextInputType.text,
                         hint: localization.subdomainHelp,
@@ -347,7 +341,7 @@ class _ClientPortalState extends State<ClientPortal>
                                     state.isHosted
                                 ? localization.pleaseEnterAValue
                                 : null,
-                        onSavePressed: viewModel.onSavePressed,
+                        onSavePressed: _onSavePressed,
                       ),
                       SizedBox(height: 16),
                       if (state.isEnterprisePlan)
@@ -412,14 +406,25 @@ class _ClientPortalState extends State<ClientPortal>
                       onChanged: (value) => viewModel.onSettingsChanged(
                           settings.rebuild(
                               (b) => b..enableClientPortalUploads = value))),
-                  BoolDropdownButton(
-                      label: localization.vendorDocumentUpload,
-                      helpLabel: localization.vendorDocumentUploadHelp,
-                      value: settings.enableVendorPortalUploads,
-                      iconData: MdiIcons.upload,
-                      onChanged: (value) => viewModel.onSettingsChanged(
-                          settings.rebuild(
-                              (b) => b..enableVendorPortalUploads = value))),
+                  if (company.isModuleEnabled(EntityType.vendor))
+                    BoolDropdownButton(
+                        label: localization.vendorDocumentUpload,
+                        helpLabel: localization.vendorDocumentUploadHelp,
+                        value: settings.enableVendorPortalUploads,
+                        iconData: MdiIcons.upload,
+                        onChanged: (value) => viewModel.onSettingsChanged(
+                            settings.rebuild(
+                                (b) => b..enableVendorPortalUploads = value))),
+                  if (company.isModuleEnabled(EntityType.purchaseOrder) &&
+                      company.isModuleEnabled(EntityType.quote))
+                    BoolDropdownButton(
+                        label: localization.acceptPurchaseOrderNumber,
+                        helpLabel: localization.acceptPurchaseOrderNumberHelp,
+                        value: settings.acceptPurchaseOrderNumber,
+                        iconData: Icons.numbers,
+                        onChanged: (value) => viewModel.onSettingsChanged(
+                            settings.rebuild(
+                                (b) => b..acceptPurchaseOrderNumber = value))),
                   if (!state.settingsUIState.isFiltered)
                     BoolDropdownButton(
                       label: localization.storefront,

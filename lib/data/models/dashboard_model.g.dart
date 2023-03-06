@@ -8,6 +8,7 @@ part of 'dashboard_model.dart';
 
 const DateRange _$last7Days = const DateRange._('last7Days');
 const DateRange _$last30Days = const DateRange._('last30Days');
+const DateRange _$last365Days = const DateRange._('last365Days');
 const DateRange _$thisMonth = const DateRange._('thisMonth');
 const DateRange _$lastMonth = const DateRange._('lastMonth');
 const DateRange _$thisQuarter = const DateRange._('thisQuarter');
@@ -22,6 +23,8 @@ DateRange _$valueOf(String name) {
       return _$last7Days;
     case 'last30Days':
       return _$last30Days;
+    case 'last365Days':
+      return _$last365Days;
     case 'thisMonth':
       return _$thisMonth;
     case 'lastMonth':
@@ -44,6 +47,7 @@ DateRange _$valueOf(String name) {
 final BuiltSet<DateRange> _$values = new BuiltSet<DateRange>(const <DateRange>[
   _$last7Days,
   _$last30Days,
+  _$last365Days,
   _$thisMonth,
   _$lastMonth,
   _$thisQuarter,
@@ -119,4 +123,4 @@ class _$DateRangeComparisonSerializer
       DateRangeComparison.valueOf(serialized as String);
 }
 
-// ignore_for_file: always_put_control_body_on_new_line,always_specify_types,annotate_overrides,avoid_annotating_with_dynamic,avoid_as,avoid_catches_without_on_clauses,avoid_returning_this,deprecated_member_use_from_same_package,lines_longer_than_80_chars,no_leading_underscores_for_local_identifiers,omit_local_variable_types,prefer_expression_function_bodies,sort_constructors_first,test_types_in_equals,unnecessary_const,unnecessary_new,unnecessary_lambdas
+// ignore_for_file: deprecated_member_use_from_same_package,type=lint

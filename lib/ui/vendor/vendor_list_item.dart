@@ -16,22 +16,22 @@ import 'package:invoiceninja_flutter/utils/platforms.dart';
 
 class VendorListItem extends StatelessWidget {
   const VendorListItem({
-    @required this.user,
     @required this.vendor,
-    @required this.filter,
+    this.filter = '',
     this.onTap,
     this.onLongPress,
+    this.showCheck = false,
     this.onCheckboxChanged,
     this.isChecked = false,
   });
 
-  final UserEntity user;
   final GestureTapCallback onTap;
   final GestureTapCallback onLongPress;
   final VendorEntity vendor;
   final String filter;
   final Function(bool) onCheckboxChanged;
   final bool isChecked;
+  final bool showCheck;
 
   @override
   Widget build(BuildContext context) {
@@ -42,19 +42,18 @@ class VendorListItem extends StatelessWidget {
     final filterMatch = filter != null && filter.isNotEmpty
         ? vendor.matchesFilterValue(filter)
         : null;
-    final listUIState = vendorUIState.listUIState;
-    final isInMultiselect = listUIState.isInMultiselect();
-    final showCheckbox = onCheckboxChanged != null || isInMultiselect;
     final textStyle = TextStyle(fontSize: 16);
     final textColor = Theme.of(context).textTheme.bodyText1.color;
     final documents = vendor.documents ?? <DocumentEntity>[];
 
     return DismissibleEntity(
       isSelected: isDesktop(context) &&
+          !showCheck &&
           vendor.id ==
               (uiState.isEditing
                   ? vendorUIState.editing.id
                   : vendorUIState.selectedId),
+      showMultiselect: showCheck,
       userCompany: store.state.userCompany,
       entity: vendor,
       child: LayoutBuilder(
@@ -77,17 +76,15 @@ class VendorListItem extends StatelessWidget {
                     children: <Widget>[
                       Padding(
                         padding: const EdgeInsets.only(right: 16),
-                        child: showCheckbox
+                        child: showCheck
                             ? Padding(
                                 padding: const EdgeInsets.only(right: 20),
                                 child: IgnorePointer(
-                                  ignoring: listUIState.isInMultiselect(),
                                   child: Checkbox(
                                     value: isChecked,
                                     materialTapTargetSize:
                                         MaterialTapTargetSize.shrinkWrap,
-                                    onChanged: (value) =>
-                                        onCheckboxChanged(value),
+                                    onChanged: (value) => null,
                                     activeColor:
                                         Theme.of(context).colorScheme.secondary,
                                   ),
@@ -160,14 +157,13 @@ class VendorListItem extends StatelessWidget {
                 onLongPress: () => onLongPress != null
                     ? onLongPress()
                     : selectEntity(entity: vendor, longPress: true),
-                leading: showCheckbox
+                leading: showCheck
                     ? IgnorePointer(
-                        ignoring: listUIState.isInMultiselect(),
                         child: Checkbox(
                           value: isChecked,
                           materialTapTargetSize:
                               MaterialTapTargetSize.shrinkWrap,
-                          onChanged: (value) => onCheckboxChanged(value),
+                          onChanged: (value) => null,
                           activeColor: Theme.of(context).colorScheme.secondary,
                         ),
                       )

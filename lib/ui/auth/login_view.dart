@@ -6,6 +6,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:invoiceninja_flutter/ui/app/app_title_bar.dart';
+import 'package:invoiceninja_flutter/ui/app/sms_verification.dart';
 
 // Package imports:
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
@@ -77,7 +78,7 @@ class _LoginState extends State<LoginView> {
   bool _createAccount = false;
 
   bool _recoverPassword = false;
-  bool _autoValidate = false;
+  bool _disable2FA = false;
   bool _termsChecked = false;
   bool _privacyChecked = false;
 
@@ -157,7 +158,6 @@ class _LoginState extends State<LoginView> {
                 : kAppProductionUrl;
 
     setState(() {
-      _autoValidate = !isValid ?? false;
       _loginError = '';
     });
 
@@ -223,7 +223,6 @@ class _LoginState extends State<LoginView> {
     final viewModel = widget.viewModel;
 
     setState(() {
-      _autoValidate = !isValid ?? false;
       _loginError = '';
     });
 
@@ -238,6 +237,7 @@ class _LoginState extends State<LoginView> {
         _loginError = '';
         if (_recoverPassword) {
           _recoverPassword = false;
+          _disable2FA = false;
           _buttonController.reset();
           showDialog<MessageDialog>(
               context: context,
@@ -265,13 +265,25 @@ class _LoginState extends State<LoginView> {
 
     if (_loginType == LOGIN_TYPE_EMAIL) {
       if (_recoverPassword) {
-        viewModel.onRecoverPressed(
-          context,
-          completer,
-          email: _emailController.text,
-          url: url,
-          secret: _isSelfHosted ? _secretController.text : '',
-        );
+        if (_disable2FA) {
+          _buttonController.reset();
+          _disable2FA = false;
+          _recoverPassword = false;
+          showDialog<void>(
+            context: context,
+            builder: (BuildContext context) => UserSmsVerification(
+              email: _emailController.text.trim(),
+            ),
+          );
+        } else {
+          viewModel.onRecoverPressed(
+            context,
+            completer,
+            email: _emailController.text,
+            url: url,
+            secret: _isSelfHosted ? _secretController.text : '',
+          );
+        }
       } else {
         viewModel.onLoginPressed(
           context,
@@ -318,6 +330,7 @@ class _LoginState extends State<LoginView> {
 
     return SafeArea(
       child: ScrollableListView(
+        primary: true,
         children: <Widget>[
           if (isWindows()) AppTitleBar(),
           Container(
@@ -325,31 +338,30 @@ class _LoginState extends State<LoginView> {
             height: 16,
             color: state.accentColor,
           ),
-          Padding(
-            padding: EdgeInsets.symmetric(vertical: 25),
-            child: Center(
-              child: InkWell(
-                // TODO correct this
-                child: Image.asset(
-                    state.prefState.enableDarkMode
-                        ? 'assets/images/logo_dark.png'
-                        : 'assets/images/logo_light.png',
-                    height: 50),
-                onTap: isApple()
-                    ? null
-                    : () {
-                        launchUrl(Uri.parse(kSiteUrl));
-                      },
-                onLongPress: () {
-                  if (kReleaseMode) {
-                    return;
-                  }
+          if (state.isWhiteLabeled)
+            SizedBox(height: 50)
+          else
+            Padding(
+              padding: EdgeInsets.symmetric(vertical: 25),
+              child: Center(
+                child: InkWell(
+                  // TODO correct this
+                  child: Image.asset(
+                      state.prefState.enableDarkMode
+                          ? 'assets/images/logo_dark.png'
+                          : 'assets/images/logo_light.png',
+                      height: 50),
+                  onTap: () => launchUrl(Uri.parse(kSiteUrl)),
+                  onLongPress: () {
+                    if (kReleaseMode) {
+                      return;
+                    }
 
-                  setState(() => _tokenLogin = !_tokenLogin);
-                },
+                    setState(() => _tokenLogin = !_tokenLogin);
+                  },
+                ),
               ),
             ),
-          ),
           if (_tokenLogin)
             FormCard(
               forceNarrow: true,
@@ -387,35 +399,41 @@ class _LoginState extends State<LoginView> {
                         if (!_recoverPassword &&
                             (!kIsWeb || !kReleaseMode)) ...[
                           RuledText(localization.selectPlatform),
-                          AppToggleButtons(
-                            tabLabels: [
-                              localization.hosted,
-                              localization.selfhosted,
-                            ],
-                            selectedIndex: _isSelfHosted ? 1 : 0,
-                            onTabChanged: (index) {
-                              setState(() {
-                                _isSelfHosted = index == 1;
-                                _createAccount = false;
-                                _loginError = '';
-                                if (index == 1) {
-                                  _loginType = LOGIN_TYPE_EMAIL;
-                                }
-                              });
-                            },
+                          Padding(
+                            padding: const EdgeInsets.only(bottom: 20),
+                            child: AppToggleButtons(
+                              tabLabels: [
+                                localization.hosted,
+                                localization.selfhosted,
+                              ],
+                              selectedIndex: _isSelfHosted ? 1 : 0,
+                              onTabChanged: (index) {
+                                setState(() {
+                                  _isSelfHosted = index == 1;
+                                  _createAccount = false;
+                                  _loginError = '';
+                                  if (index == 1) {
+                                    _loginType = LOGIN_TYPE_EMAIL;
+                                  }
+                                });
+                              },
+                            ),
                           ),
                         ],
                         if (!_isSelfHosted && _loginTypes.length > 1) ...[
                           RuledText(localization.selectMethod),
-                          AppToggleButtons(
-                            tabLabels: _loginTypes,
-                            selectedIndex: _loginTypes.indexOf(_loginType),
-                            onTabChanged: (index) {
-                              setState(() {
-                                _loginType = _loginTypes[index];
-                                _loginError = '';
-                              });
-                            },
+                          Padding(
+                            padding: const EdgeInsets.only(bottom: 20),
+                            child: AppToggleButtons(
+                              tabLabels: _loginTypes,
+                              selectedIndex: _loginTypes.indexOf(_loginType),
+                              onTabChanged: (index) {
+                                setState(() {
+                                  _loginType = _loginTypes[index];
+                                  _loginError = '';
+                                });
+                              },
+                            ),
                           )
                         ],
                         Padding(
@@ -428,7 +446,6 @@ class _LoginState extends State<LoginView> {
                                   controller: _emailController,
                                   label: localization.email,
                                   keyboardType: TextInputType.emailAddress,
-                                  autovalidate: _autoValidate,
                                   validator: (val) =>
                                       val.isEmpty || val.trim().isEmpty
                                           ? localization.pleaseEnterYourEmail
@@ -441,7 +458,6 @@ class _LoginState extends State<LoginView> {
                                   !_recoverPassword)
                                 PasswordFormField(
                                   controller: _passwordController,
-                                  autoValidate: false,
                                   newPassword: _createAccount,
                                   onSavePressed: (_) => _submitForm(),
                                 ),
@@ -470,7 +486,6 @@ class _LoginState extends State<LoginView> {
                                   labelText:
                                       '${localization.secret} (${localization.optional})',
                                   controller: _secretController,
-                                  autoValidate: _autoValidate,
                                   validate: false,
                                   onSavePressed: (_) => _submitForm(),
                                 ),
@@ -589,7 +604,9 @@ class _LoginState extends State<LoginView> {
                               child: Row(
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
-                                  if (_loginType == LOGIN_TYPE_EMAIL)
+                                  if (_disable2FA)
+                                    Icon(Icons.smartphone, color: Colors.white)
+                                  else if (_loginType == LOGIN_TYPE_EMAIL)
                                     Icon(Icons.mail, color: Colors.white)
                                   else if (_loginType == LOGIN_TYPE_MICROSOFT)
                                     Icon(MdiIcons.microsoft,
@@ -605,24 +622,29 @@ class _LoginState extends State<LoginView> {
                                     ),
                                   SizedBox(width: 10),
                                   Text(
-                                    _recoverPassword
-                                        ? localization.recoverPassword
-                                        : _createAccount
-                                            ? (_loginType == LOGIN_TYPE_EMAIL
-                                                ? localization.emailSignUp
-                                                : _loginType ==
-                                                        LOGIN_TYPE_MICROSOFT
-                                                    ? localization
-                                                        .microsoftSignUp
-                                                    : localization.googleSignUp)
-                                            : (_loginType == LOGIN_TYPE_EMAIL
-                                                ? localization.emailSignIn
-                                                : _loginType ==
-                                                        LOGIN_TYPE_MICROSOFT
-                                                    ? localization
-                                                        .microsoftSignIn
-                                                    : localization
-                                                        .googleSignIn),
+                                    _disable2FA
+                                        ? localization.sendCode
+                                        : _recoverPassword
+                                            ? localization.recoverPassword
+                                            : _createAccount
+                                                ? (_loginType ==
+                                                        LOGIN_TYPE_EMAIL
+                                                    ? localization.emailSignUp
+                                                    : _loginType ==
+                                                            LOGIN_TYPE_MICROSOFT
+                                                        ? localization
+                                                            .microsoftSignUp
+                                                        : localization
+                                                            .googleSignUp)
+                                                : (_loginType ==
+                                                        LOGIN_TYPE_EMAIL
+                                                    ? localization.emailSignIn
+                                                    : _loginType ==
+                                                            LOGIN_TYPE_MICROSOFT
+                                                        ? localization
+                                                            .microsoftSignIn
+                                                        : localization
+                                                            .googleSignIn),
                                     style: TextStyle(
                                         fontSize: 18, color: Colors.white),
                                   )
@@ -632,7 +654,6 @@ class _LoginState extends State<LoginView> {
                     ),
                     if (!_isSelfHosted &&
                         !_recoverPassword &&
-                        !isApple() &&
                         (!kIsWeb || state.authState.isHosted))
                       Padding(
                           padding: const EdgeInsets.only(top: 6, bottom: 10),
@@ -668,11 +689,34 @@ class _LoginState extends State<LoginView> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
-                  if (!_createAccount)
+                  if (_recoverPassword) ...[
+                    if (!_disable2FA && !_isSelfHosted)
+                      InkWell(
+                        onTap: () {
+                          setState(() {
+                            _disable2FA = true;
+                          });
+                        },
+                        child: Padding(
+                          padding: const EdgeInsets.all(14),
+                          child: Row(
+                              mainAxisSize: MainAxisSize.max,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: <Widget>[
+                                Icon(Icons.lock, size: 16),
+                                SizedBox(width: 8),
+                                Text(localization.disable2fa),
+                              ]),
+                        ),
+                      ),
                     InkWell(
                       onTap: () {
                         setState(() {
-                          _recoverPassword = !_recoverPassword;
+                          if (_disable2FA) {
+                            _disable2FA = false;
+                          } else {
+                            _recoverPassword = false;
+                          }
                         });
                       },
                       child: Padding(
@@ -681,71 +725,93 @@ class _LoginState extends State<LoginView> {
                             mainAxisSize: MainAxisSize.max,
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: <Widget>[
-                              if (!_recoverPassword)
-                                Icon(MdiIcons.lock, size: 16),
+                              Icon(Icons.cancel, size: 16),
                               SizedBox(width: 8),
-                              Text(_recoverPassword
-                                  ? localization.cancel
-                                  : localization.recoverPassword),
+                              Text(localization.cancel),
                             ]),
                       ),
                     ),
-                  if (!_recoverPassword && !_isSelfHosted)
-                    InkWell(
-                      onTap: () {
-                        launchUrl(Uri.parse(kStatusCheckUrl));
-                      },
-                      child: Padding(
-                        padding: const EdgeInsets.all(14),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.max,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Icon(Icons.security, size: 16),
-                            SizedBox(width: 8),
-                            Text(localization.checkStatus)
-                          ],
+                  ] else ...[
+                    if (!_createAccount)
+                      InkWell(
+                        onTap: () {
+                          setState(() {
+                            _recoverPassword = true;
+                          });
+                        },
+                        child: Padding(
+                          padding: const EdgeInsets.all(14),
+                          child: Row(
+                              mainAxisSize: MainAxisSize.max,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: <Widget>[
+                                if (!_recoverPassword)
+                                  Icon(MdiIcons.lock, size: 16),
+                                SizedBox(width: 8),
+                                Text(_recoverPassword
+                                    ? localization.cancel
+                                    : localization.recoverPassword),
+                              ]),
                         ),
                       ),
-                    ),
-                  if (!_recoverPassword)
-                    if (kIsWeb)
+                    if (!_recoverPassword && !_isSelfHosted)
                       InkWell(
-                        onTap: () =>
-                            launchUrl(Uri.parse(getNativeAppUrl(platform))),
+                        onTap: () {
+                          launchUrl(Uri.parse(kStatusCheckUrl));
+                        },
                         child: Padding(
                           padding: const EdgeInsets.all(14),
                           child: Row(
                             mainAxisSize: MainAxisSize.max,
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Icon(getNativeAppIcon(platform), size: 16),
+                              Icon(Icons.security, size: 16),
                               SizedBox(width: 8),
-                              Text('$platform ${localization.app}')
+                              Text(localization.checkStatus)
                             ],
                           ),
                         ),
-                      )
-                    else
-                      InkWell(
-                        onTap: () => launchUrl(Uri.parse(kDocsUrl)),
-                        child: Padding(
-                          padding: const EdgeInsets.all(14),
-                          child: Row(
-                            mainAxisSize: MainAxisSize.max,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Icon(Icons.book, size: 16),
-                              SizedBox(width: 8),
-                              Text(localization.documentation)
-                            ],
+                      ),
+                    if (!_recoverPassword)
+                      if (kIsWeb)
+                        InkWell(
+                          onTap: () =>
+                              launchUrl(Uri.parse(getNativeAppUrl(platform))),
+                          child: Padding(
+                            padding: const EdgeInsets.all(14),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.max,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(getNativeAppIcon(platform), size: 16),
+                                SizedBox(width: 8),
+                                Text('$platform ${localization.app}')
+                              ],
+                            ),
                           ),
-                        ),
-                      )
+                        )
+                      else
+                        InkWell(
+                          onTap: () => launchUrl(Uri.parse(kDocsUrl)),
+                          child: Padding(
+                            padding: const EdgeInsets.all(14),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.max,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(Icons.book, size: 16),
+                                SizedBox(width: 8),
+                                Text(localization.documentation)
+                              ],
+                            ),
+                          ),
+                        )
+                  ]
                 ],
               ),
             ],
-          )
+          ),
+          SizedBox(height: 20),
         ],
       ),
     );

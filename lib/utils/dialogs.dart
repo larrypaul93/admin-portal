@@ -189,7 +189,7 @@ void passwordCallback({
   final user = state.user;
 
   print(
-      '## Confirm password: $alwaysRequire, ${user.hasPassword}, ${state.hasRecentlyEnteredPassword}, ${user.oauthProvider.isEmpty}, ${state.company.oauthPasswordRequired}');
+      '## Confirm password: $alwaysRequire, ${user.hasPassword}, ${state.hasRecentlyEnteredPassword}, ${user.oauthProvider}, ${state.company.oauthPasswordRequired}');
 
   if (alwaysRequire && !user.hasPassword) {
     showMessageDialog(
@@ -215,8 +215,9 @@ void passwordCallback({
 
   if (user.oauthProvider.isEmpty ||
       skipOAuth ||
+      user.isConnectedToApple ||
+      //(user.isConnectedToApple && !supportsAppleOAuth()) ||
       (user.isConnectedToGoogle && !supportsGoogleOAuth()) ||
-      (user.isConnectedToApple && !supportsAppleOAuth()) ||
       (user.isConnectedToMicrosoft && !supportsMicrosoftOAuth())) {
     showDialog<Null>(
       context: context,
@@ -391,11 +392,13 @@ class _FieldConfirmationState extends State<FieldConfirmation> {
   String _field;
 
   void _submit() {
-    if ((_field ?? '').isEmpty) {
+    final value = (_field ?? '').trim();
+
+    if (value.isEmpty) {
       return;
     }
     Navigator.pop(context);
-    widget.callback(_field);
+    widget.callback(value);
   }
 
   @override

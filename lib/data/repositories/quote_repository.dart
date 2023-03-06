@@ -27,7 +27,7 @@ class QuoteRepository {
   Future<InvoiceEntity> loadItem(
       Credentials credentials, String entityId) async {
     final dynamic response = await webClient.get(
-        '${credentials.url}/quotes/$entityId?include=history,activities',
+        '${credentials.url}/quotes/$entityId?include=activities.history',
         credentials.token);
 
     final InvoiceItemResponse quoteResponse = await compute<dynamic, dynamic>(
@@ -38,9 +38,9 @@ class QuoteRepository {
   }
 
   Future<BuiltList<InvoiceEntity>> loadList(Credentials credentials, int page,
-      int createdAt, bool filterDeleted, int recordsPerPage) async {
+      int createdAt, bool filterDeleted) async {
     String url = credentials.url +
-        '/quotes?per_page=$recordsPerPage&page=$page&created_at=$createdAt';
+        '/quotes?per_page=$kMaxRecordsPerPage&page=$page&created_at=$createdAt';
 
     if (filterDeleted) {
       url += '&filter_deleted_clients=true';
@@ -83,9 +83,9 @@ class QuoteRepository {
     dynamic response;
 
     if (quote.isNew) {
-      url = credentials.url + '/quotes?include=history,activities';
+      url = credentials.url + '/quotes?include=activities.history';
     } else {
-      url = '${credentials.url}/quotes/${quote.id}?include=history,activities';
+      url = '${credentials.url}/quotes/${quote.id}?include=activities.history';
     }
 
     if (action == EntityAction.convertToInvoice) {
@@ -94,6 +94,13 @@ class QuoteRepository {
       url += '&mark_sent=true';
     } else if (action == EntityAction.approve) {
       url += '&approve=true';
+    }
+
+    if (quote.saveDefaultTerms) {
+      url += '&save_default_terms=true';
+    }
+    if (quote.saveDefaultFooter) {
+      url += '&save_default_footer=true';
     }
 
     if (quote.isNew) {

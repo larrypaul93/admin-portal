@@ -70,6 +70,7 @@ class InvoiceFields {
   static const String poNumber = 'po_number';
   static const String date = 'date';
   static const String dueDate = 'due_date';
+  static const String dueDateDays = 'due_date_days';
   static const String nextSendDate = 'next_send_date';
   static const String lastSentDate = 'last_sent_date';
   static const String lastSentTemplate = 'last_sent_template';
@@ -201,7 +202,10 @@ abstract class InvoiceEntity extends Object
         isAmountDiscount: false,
         partial: 0.0,
         partialDueDate: '',
-        autoBillEnabled: false,
+        autoBillEnabled:
+            ((entityType ?? EntityType.invoice) == EntityType.invoice)
+                ? settings.autoBillStandardInvoices ?? false
+                : false,
         customValue1: '',
         customValue2: '',
         customValue3: '',
@@ -231,7 +235,7 @@ abstract class InvoiceEntity extends Object
                     .map((contact) =>
                         InvitationEntity(vendorContactId: contact.id))
                     .toList())
-                : BuiltList<InvitationEntity>(),
+                : BuiltList(<InvitationEntity>[InvitationEntity()]),
         updatedAt: 0,
         archivedAt: 0,
         isDeleted: false,
@@ -249,6 +253,8 @@ abstract class InvoiceEntity extends Object
         frequencyId: kFrequencyMonthly,
         remainingCycles: -1,
         dueDateDays: 'terms',
+        saveDefaultTerms: false,
+        saveDefaultFooter: false,
         attachPdf: false,
         interest: false,
         interestPaid: 0,
@@ -260,6 +266,10 @@ abstract class InvoiceEntity extends Object
   @override
   @memoized
   int get hashCode;
+
+  @nullable
+  @BuiltValueField(wireName: 'idempotency_key')
+  String get idempotencyKey;
 
   InvoiceEntity moveLineItem(int oldIndex, int newIndex) {
     final lineItem = lineItems[oldIndex];
@@ -315,6 +325,7 @@ abstract class InvoiceEntity extends Object
         ..requiredSignature = false
         ..serviceReportId = null
         ..interest = false
+        ..partialDueDate = ''
         ..documents.clear()
         ..lineItems.replace(lineItems
             .where((lineItem) =>
@@ -640,9 +651,30 @@ abstract class InvoiceEntity extends Object
   @BuiltValueField(compare: false)
   BuiltList<ActivityEntity> get activities;
 
-  bool get isApproved =>
-      isQuote &&
-      [kQuoteStatusApproved, kQuoteStatusConverted].contains(statusId);
+  @BuiltValueField(serialize: false)
+  bool get saveDefaultTerms;
+
+  @BuiltValueField(serialize: false)
+  bool get saveDefaultFooter;
+
+  bool get isApproved {
+    if (isQuote &&
+        [
+          kQuoteStatusApproved,
+          kQuoteStatusConverted,
+        ].contains(statusId)) {
+      return true;
+    }
+
+    if (isPurchaseOrder &&
+        [
+          kPurchaseOrderStatusAccepted,
+        ].contains(statusId)) {
+      return true;
+    }
+
+    return false;
+  }
 
   bool get hasClient => '${clientId ?? ''}'.isNotEmpty;
 
@@ -674,7 +706,9 @@ abstract class InvoiceEntity extends Object
 
   List<InvoiceHistoryEntity> get history => activities
       .where((activity) =>
-          activity.history != null && (activity.history.id ?? '').isNotEmpty)
+          activity.history != null &&
+          (activity.history.id ?? '').isNotEmpty &&
+          activity.history.createdAt > 0)
       .map((activity) => activity.history)
       .toList();
 
@@ -752,13 +786,11 @@ abstract class InvoiceEntity extends Object
             (invoiceA.number ?? '').isEmpty ? 'ZZZZZZZZZZ' : invoiceA.number;
         var invoiceBNumber =
             (invoiceB.number ?? '').isEmpty ? 'ZZZZZZZZZZ' : invoiceB.number;
-        invoiceANumber = recurringPrefix.isNotEmpty &&
-                //(invoiceA.recurringId ?? '').isNotEmpty &&
+        invoiceANumber = (recurringPrefix ?? '').isNotEmpty &&
                 invoiceANumber.startsWith(recurringPrefix)
             ? invoiceANumber.replaceFirst(recurringPrefix, '')
             : invoiceANumber;
-        invoiceBNumber = recurringPrefix.isNotEmpty &&
-                //(invoiceB.recurringId ?? '').isNotEmpty &&
+        invoiceBNumber = (recurringPrefix ?? '').isNotEmpty &&
                 invoiceBNumber.startsWith(recurringPrefix)
             ? invoiceBNumber.replaceFirst(recurringPrefix, '')
             : invoiceBNumber;
@@ -911,6 +943,9 @@ abstract class InvoiceEntity extends Object
         response =
             vendorA.name.toLowerCase().compareTo(vendorB.name.toLowerCase());
         break;
+      case InvoiceFields.dueDateDays:
+        response = invoiceA.dueDateDays.compareTo(invoiceB.dueDateDays);
+        break;
       default:
         print('## ERROR: sort by invoice.$sortField is not implemented');
         break;
@@ -1043,6 +1078,7 @@ abstract class InvoiceEntity extends Object
 
       if (multiselect) {
         if (!isRecurring) {
+          actions.add(EntityAction.bulkPrint);
           actions.add(EntityAction.bulkDownload);
         }
       } else {
@@ -1073,7 +1109,12 @@ abstract class InvoiceEntity extends Object
 
         if (userCompany.canCreate(EntityType.payment)) {
           if (isPayable && isInvoice) {
-            actions.addAll([EntityAction.markPaid, EntityAction.newPayment]);
+            actions.addAll([
+              EntityAction.newPayment,
+              EntityAction.markPaid,
+              if (client != null && client.gatewayTokens.isNotEmpty)
+                EntityAction.autoBill,
+            ]);
           } else if (isCredit) {
             if (balanceOrAmount < 0) {
               actions.add(EntityAction.markPaid);
@@ -1084,10 +1125,6 @@ abstract class InvoiceEntity extends Object
         }
 
         if (isQuote) {
-          if ((projectId ?? '').isEmpty) {
-            actions.add(EntityAction.convertToProject);
-          }
-
           if ((invoiceId ?? '').isEmpty) {
             if (!isApproved) {
               actions.add(EntityAction.approve);
@@ -1095,6 +1132,10 @@ abstract class InvoiceEntity extends Object
             actions.add(EntityAction.convertToInvoice);
           } else {
             actions.add(EntityAction.viewInvoice);
+          }
+
+          if ((projectId ?? '').isEmpty) {
+            actions.add(EntityAction.convertToProject);
           }
         } else if (isPurchaseOrder) {
           if (!isCancelled) {
@@ -1250,6 +1291,8 @@ abstract class InvoiceEntity extends Object
 
   bool get isRecurring => [EntityType.recurringInvoice].contains(entityType);
 
+  bool get isLinkedToRecurring => (recurringId ?? '').isNotEmpty;
+
   bool get hasExchangeRate => exchangeRate != 1 && exchangeRate != 0;
 
   EmailTemplate get emailTemplate => isPurchaseOrder
@@ -1269,9 +1312,13 @@ abstract class InvoiceEntity extends Object
 
   bool get isSent => statusId != kInvoiceStatusDraft;
 
+  bool get isApplied => isCredit && statusId == kCreditStatusApplied;
+
   bool get isUnpaid {
     if (isQuote) {
       return !isApproved;
+    } else if (isCredit) {
+      return !isApplied;
     } else {
       return !isPaid;
     }
@@ -1315,14 +1362,27 @@ abstract class InvoiceEntity extends Object
       }
     } else {
       if (isPastDue && !isCancelledOrReversed) {
-        return kInvoiceStatusPastDue;
+        if (isInvoice) {
+          return kInvoiceStatusPastDue;
+        } else if (isQuote) {
+          return kQuoteStatusExpired;
+        }
       }
+
       if (isViewed &&
           isUnpaid &&
           !isPartial &&
           !isCancelledOrReversed &&
           !isApproved) {
-        return isInvoice ? kInvoiceStatusViewed : kQuoteStatusViewed;
+        if (isInvoice) {
+          return kInvoiceStatusViewed;
+        } else if (isQuote) {
+          return kQuoteStatusViewed;
+        } else if (isCredit) {
+          return kCreditStatusViewed;
+        } else if (isPurchaseOrder) {
+          return kPurchaseOrderStatusViewed;
+        }
       }
     }
 
@@ -1360,7 +1420,7 @@ abstract class InvoiceEntity extends Object
   /// Gets taxes in the form { taxName1: { amount: 0, paid: 0} , ... }
   Map<String, Map<String, dynamic>> getTaxes(int precision) {
     final taxes = <String, Map<String, dynamic>>{};
-    final taxable = getTaxable();
+    final taxable = getTaxable(precision);
 
     double calculateAmount(double taxable, double rate) {
       if (usesInclusiveTaxes) {
@@ -1482,6 +1542,8 @@ abstract class InvoiceEntity extends Object
     ..projectId = ''
     ..expenseId = ''
     ..vendorId = ''
+    ..saveDefaultTerms = false
+    ..saveDefaultFooter = false
     ..autoBillEnabled = false
     ..subscriptionId = '';
 
@@ -1494,6 +1556,7 @@ class ProductItemFields {
   static const String unitCost = 'unit_cost';
   static const String productCost = 'product_cost';
   static const String tax = 'tax';
+  static const String taxAmount = 'tax_amount';
   static const String quantity = 'quantity';
   static const String lineTotal = 'line_total';
   static const String grossLineTotal = 'gross_line_total';
@@ -1519,6 +1582,7 @@ class TaskItemFields {
   static const String rate = 'rate';
   static const String serviceCost = 'service_cost';
   static const String tax = 'tax';
+  static const String taxAmount = 'tax_amount';
   static const String hours = 'hours';
   static const String lineTotal = 'line_total';
   static const String grossLineTotal = 'gross_line_total';
@@ -1657,7 +1721,10 @@ abstract class InvoiceItemEntity
 
     return calculateTaxAmount(taxRate1) +
         calculateTaxAmount(taxRate2) +
-        calculateTaxAmount(taxRate3);
+        calculateTaxAmount(taxRate3) +
+        calculateTaxAmount(invoice.taxRate1) +
+        calculateTaxAmount(invoice.taxRate2) +
+        calculateTaxAmount(invoice.taxRate3);
   }
 
   double netTotal(InvoiceEntity invoice, int precision) =>

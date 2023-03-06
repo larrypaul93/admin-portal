@@ -120,7 +120,7 @@ class InvoiceSidebar extends StatelessWidget {
               itemBuilder: (BuildContext context, int index) {
                 return InvoiceListItem(
                   invoice: upcomingInvoices[index],
-                  showCheckbox: false,
+                  showSelected: false,
                 );
               },
               separatorBuilder: (context, index) => ListDivider(),
@@ -134,7 +134,7 @@ class InvoiceSidebar extends StatelessWidget {
               itemBuilder: (BuildContext context, int index) {
                 return InvoiceListItem(
                   invoice: pastDueInvoices[index],
-                  showCheckbox: false,
+                  showSelected: false,
                 );
               },
               separatorBuilder: (context, index) => ListDivider(),
@@ -152,7 +152,7 @@ class InvoiceSidebar extends StatelessWidget {
                     ? SizedBox()
                     : InvoiceListItem(
                         invoice: invoice,
-                        showCheckbox: false,
+                        showSelected: false,
                       );
               },
               separatorBuilder: (context, index) => ListDivider(),
@@ -187,7 +187,7 @@ class PaymentSidebar extends StatelessWidget {
               itemBuilder: (BuildContext context, int index) {
                 return PaymentListItem(
                   payment: recentPayments[index],
-                  showCheckbox: false,
+                  showSelected: false,
                 );
               },
               separatorBuilder: (context, index) => ListDivider(),
@@ -205,7 +205,7 @@ class PaymentSidebar extends StatelessWidget {
                     ? SizedBox()
                     : PaymentListItem(
                         payment: payment,
-                        showCheckbox: false,
+                        showSelected: false,
                       );
               },
               separatorBuilder: (context, index) => ListDivider(),
@@ -391,6 +391,7 @@ class ExpenseSidbar extends StatelessWidget {
                 return ExpenseListItem(
                   expense: upcomingExpenses[index],
                   showCheckbox: false,
+                  showSelected: false,
                 );
               },
               separatorBuilder: (context, index) => ListDivider(),
@@ -406,6 +407,7 @@ class ExpenseSidbar extends StatelessWidget {
                 return ExpenseListItem(
                   expense: recentExpenses[index],
                   showCheckbox: false,
+                  showSelected: false,
                 );
               },
               separatorBuilder: (context, index) => ListDivider(),
@@ -424,6 +426,7 @@ class ExpenseSidbar extends StatelessWidget {
                     : ExpenseListItem(
                         expense: expense,
                         showCheckbox: false,
+                        showSelected: false,
                       );
               },
               separatorBuilder: (context, index) => ListDivider(),

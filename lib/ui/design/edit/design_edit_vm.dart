@@ -70,6 +70,10 @@ class DesignEditVM {
         store.dispatch(UpdateCurrentRoute(state.uiState.previousRoute));
       },
       onSavePressed: (BuildContext context) {
+        if (!state.isProPlan && !state.isTrial) {
+          return;
+        }
+
         Debouncer.runOnComplete(() {
           final design = store.state.designUIState.editing;
           final completer = snackBarCompleter<DesignEntity>(

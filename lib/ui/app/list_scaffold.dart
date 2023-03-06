@@ -40,7 +40,7 @@ class ListScaffold extends StatelessWidget {
   final Widget appBarTitle;
   final List<Widget> appBarActions;
   final List<Widget> appBarLeadingActions;
-  final Function() onHamburgerLongPress;
+  final Function onHamburgerLongPress;
   final String onCancelSettingsSection;
   final int onCancelSettingsIndex;
   final Function onCheckboxPressed;
@@ -54,18 +54,11 @@ class ListScaffold extends StatelessWidget {
     final isSettings = entityType.isSetting;
 
     Widget leading = SizedBox();
-    if (isSettings) {
-      leading = isMobile(context)
-          ? IconButton(
-              icon: Icon(Icons.arrow_back),
-              onPressed: () => Navigator.pop(context),
-            )
-          : IconButton(
-              icon: Icon(Icons.add),
-              onPressed: () {
-                createEntityByType(entityType: entityType, context: context);
-              },
-            );
+    if (isSettings && isMobile(context)) {
+      leading = IconButton(
+        icon: Icon(Icons.arrow_back),
+        onPressed: () => Navigator.pop(context),
+      );
     } else if (isMobile(context) || state.prefState.isMenuFloated) {
       leading = Builder(
         builder: (context) => InkWell(
@@ -79,9 +72,11 @@ class ListScaffold extends StatelessWidget {
           ),
         ),
       );
-    } else if (entityType != null && entityType != EntityType.settings) {
+    } else if (entityType != null &&
+        entityType != EntityType.settings &&
+        state.userCompany.canCreate(entityType)) {
       leading = Padding(
-        padding: const EdgeInsets.only(left: 20, right: 12),
+        padding: const EdgeInsets.only(left: 16, right: 14),
         child: OutlinedButton(
           style: ButtonStyle(
               backgroundColor: MaterialStateProperty.all(
@@ -91,7 +86,7 @@ class ListScaffold extends StatelessWidget {
           },
           child: IconText(
             text: localization.create,
-            icon: Icons.add_circle_outline,
+            icon: Icons.add,
             style: TextStyle(color: Colors.white),
           ),
         ),
@@ -100,7 +95,9 @@ class ListScaffold extends StatelessWidget {
 
     double leadingWidth = 0;
     if (entityType == EntityType.settings) {
-      leadingWidth = isDesktop(context) ? 0 : kMinInteractiveDimension;
+      leadingWidth = isDesktop(context) && !state.prefState.isMenuFloated
+          ? 0
+          : kMinInteractiveDimension;
     } else {
       leadingWidth = (isDesktop(context) ? 100 : 10) +
           (kMinInteractiveDimension - 4) *
@@ -167,23 +164,23 @@ class ListScaffold extends StatelessWidget {
                 if (!isSettings &&
                     (isMobile(context) || !state.prefState.isHistoryVisible))
                   Builder(builder: (context) {
-                    return InkWell(
-                      onTap: () {
-                        if (isMobile(context) ||
-                            state.prefState.isHistoryFloated) {
-                          Scaffold.of(context).openEndDrawer();
-                        } else {
-                          store.dispatch(UpdateUserPreferences(
-                              sidebar: AppSidebar.history));
-                        }
-                      },
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 12),
-                        child: Icon(
-                          Icons.history,
-                          color: state.headerTextColor,
-                        ),
-                      ),
+                    return Padding(
+                      padding: const EdgeInsets.only(right: 8),
+                      child: IconButton(
+                          padding: const EdgeInsets.only(right: 8),
+                          onPressed: () {
+                            if (isMobile(context) ||
+                                state.prefState.isHistoryFloated) {
+                              Scaffold.of(context).openEndDrawer();
+                            } else {
+                              store.dispatch(UpdateUserPreferences(
+                                  sidebar: AppSidebar.history));
+                            }
+                          },
+                          icon: Icon(
+                            Icons.history,
+                            color: state.headerTextColor,
+                          )),
                     );
                   })
                 /*

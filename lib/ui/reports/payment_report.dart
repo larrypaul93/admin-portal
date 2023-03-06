@@ -18,6 +18,7 @@ enum PaymentReportFields {
   amount,
   client,
   client_number,
+  client_email,
   client_balance,
   client_address1,
   client_address2,
@@ -112,13 +113,13 @@ ReportResult paymentReport(
     for (var paymentId in paymentMap.keys) {
       final payment = paymentMap[paymentId] ?? PaymentEntity();
       paymentInvoiceMap[payment.id] = [];
-      if (payment.isDeleted) {
+      if (payment.isDeleted && !userCompany.company.reportIncludeDeleted) {
         continue;
       }
       for (var invoicePaymentable in payment.invoicePaymentables) {
         final invoice =
             invoiceMap[invoicePaymentable.invoiceId] ?? InvoiceEntity();
-        if (invoice.isDeleted) {
+        if (invoice.isDeleted && !userCompany.company.reportIncludeDeleted) {
           continue;
         }
         paymentInvoiceMap[payment.id].add(invoice.number);
@@ -130,13 +131,13 @@ ReportResult paymentReport(
     for (var paymentId in paymentMap.keys) {
       final payment = paymentMap[paymentId] ?? PaymentEntity();
       paymentCreditMap[payment.id] = [];
-      if (payment.isDeleted) {
+      if (payment.isDeleted && !userCompany.company.reportIncludeDeleted) {
         continue;
       }
-      for (var creditPaymentable in payment.invoicePaymentables) {
+      for (var creditPaymentable in payment.creditPaymentables) {
         final credit =
             creditMap[creditPaymentable.invoiceId] ?? InvoiceEntity();
-        if (credit.isDeleted) {
+        if (credit.isDeleted && !userCompany.company.reportIncludeDeleted) {
           continue;
         }
         paymentCreditMap[payment.id].add(credit.number);
@@ -148,7 +149,8 @@ ReportResult paymentReport(
     final payment = paymentMap[paymentId] ?? PaymentEntity();
     final client = clientMap[payment.clientId] ?? ClientEntity();
 
-    if (payment.isDeleted || client.isDeleted) {
+    if ((payment.isDeleted && !userCompany.company.reportIncludeDeleted) ||
+        client.isDeleted) {
       continue;
     }
 
@@ -219,6 +221,9 @@ ReportResult paymentReport(
         case PaymentReportFields.client_number:
           value = client.number;
           break;
+        case PaymentReportFields.client_email:
+          value = client.primaryContact.email;
+          break;
         case PaymentReportFields.transaction_reference:
           value = payment.transactionReference;
           break;
@@ -283,7 +288,7 @@ ReportResult paymentReport(
             value: value, currencyId: payment.exchangeCurrencyId));
       } else if (value.runtimeType == double || value.runtimeType == int) {
         row.add(payment.getReportDouble(
-            value: value, currencyId: payment.currencyId));
+            value: value, currencyId: client.currencyId));
       } else {
         row.add(payment.getReportString(value: value));
       }

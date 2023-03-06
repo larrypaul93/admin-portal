@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 
 // Package imports:
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:invoiceninja_flutter/main_app.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
 // Project imports:
@@ -29,6 +30,15 @@ bool supportsAppleOAuth() => kIsWeb || isApple();
 
 // TODO remove this function
 bool supportsMicrosoftOAuth() => kIsWeb;
+
+bool supportsInAppPurchase() {
+  final store = StoreProvider.of<AppState>(navigatorKey.currentContext);
+  if (store.state.isSelfHosted) {
+    return false;
+  }
+
+  return isIOS() || isAndroid() || isMacOS();
+}
 
 bool isDesktopOS() => isMacOS() || isWindows() || isLinux();
 

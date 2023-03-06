@@ -4,7 +4,7 @@ class Constants {
 }
 
 // TODO remove version once #46609 is fixed
-const String kClientVersion = '5.0.92';
+const String kClientVersion = '5.0.108';
 const String kMinServerVersion = '5.0.4';
 
 const String kAppName = 'Invoice Ninja';
@@ -17,8 +17,10 @@ const String kWhiteLabelUrl =
     'https://app.invoiceninja.com/buy_now/?account_key=AsFmBAeLXF0IKf7tmi0eiyZfmWW9hxMT&product_id=3';
 const String kPrivacyPolicyURL = 'https://www.invoiceninja.com/privacy-policy';
 const String kTermsOfServiceURL = 'https://www.invoiceninja.com/terms';
+const String kBankingURL = 'https://invoiceninja.com/banking/';
 const String kTransifexURL =
     'https://www.transifex.com/invoice-ninja/invoice-ninja';
+const String kWebhookSiteURL = 'https://webhook.site';
 const String kSourceCodeBackend =
     'https://github.com/invoiceninja/invoiceninja/tree/v5-stable';
 const String kSourceCodeFrontend =
@@ -38,7 +40,7 @@ const String kGoogleFDroidUrl =
 const String kMacOSUrl = 'https://apps.apple.com/app/id1503970375';
 const String kLinuxUrl = 'https://snapcraft.io/invoiceninja';
 const String kWindowsUrl =
-    'https://www.microsoft.com/en-us/p/invoice-ninja/$kMicrosoftAppStoreId';
+    'https://apps.microsoft.com/store/detail/invoice-ninja/9N3F2BBCFDR6';
 
 const String kSlackUrl = 'http://slack.invoiceninja.com';
 const String kGitHubUrl = 'https://github.com/invoiceninja';
@@ -47,17 +49,20 @@ const String kFacebookUrl = 'https://www.facebook.com/invoiceninja';
 const String kYouTubeUrl =
     'https://www.youtube.com/channel/UCXAHcBvhW05PDtWYIq7WDFA/videos';
 
+const String kAppleOAuthClientId = 'com.invoiceninja.client';
+const String kAppleOAuthRedirectUrl = 'https://invoicing.co/auth/apple';
+
 const String kReleaseNotesUrl =
-    'https://github.com/invoiceninja/invoiceninja/wiki/Release-notes';
+    'https://github.com/invoiceninja/invoiceninja/releases';
 const String kDocsUrl = 'https://invoiceninja.github.io';
 const String kDocsCustomDomainUrl =
     'https://invoiceninja.github.io/docs/hosted-custom-domain';
-const String kDocsCustomFieldsUrl =
+const String kDocsCustomDesignUrl =
     'https://invoiceninja.github.io/docs/custom-fields';
+const String kDocsCustomFieldsUrl =
+    'https://invoiceninja.github.io/docs/custom-fields/#custom-fields';
 const String kDocsStripeConnectUrl =
     'https://invoiceninja.github.io/docs/hosted-stripe';
-const String kDocsPerformance =
-    'https://invoiceninja.github.io/docs/introduction/#performance';
 
 const String kForumUrl = 'https://forum.invoiceninja.com';
 const String kApiDocsURL =
@@ -165,11 +170,10 @@ const double kLighterOpacity = .6;
 
 const int kMaxNumberOfCompanies = 10;
 const int kMaxNumberOfHistory = 50;
-const int kMaxPostSeconds = 60;
-const int kMaxRawPostSeconds = 300;
+const int kMaxPostSeconds = 120;
+const int kMaxRawPostSeconds = 600;
 const int kMaxEntitiesPerBulkAction = 100;
-const int kHostedRecordsPerPage = 10000;
-const int kSelfhostedRecordsPerPage = 5000;
+const int kMaxRecordsPerPage = 500;
 const int kMillisecondsToTimerRefreshData = 1000 * 60 * 5; // 5 minutes
 const int kMillisecondsToRefreshData = 1000 * 60 * 15; // 15 minutes
 const int kUpdatedAtBufferSeconds = 600;
@@ -254,6 +258,7 @@ const kQuoteStatuses = {
   kQuoteStatusViewed: 'viewed',
 };
 
+const String kCreditStatusViewed = '-1';
 const String kCreditStatusDraft = '1';
 const String kCreditStatusSent = '2';
 const String kCreditStatusPartial = '3';
@@ -264,8 +269,10 @@ const kCreditStatuses = {
   kCreditStatusSent: 'sent',
   kCreditStatusPartial: 'partial',
   kCreditStatusApplied: 'applied',
+  kCreditStatusViewed: 'viewed',
 };
 
+const String kPurchaseOrderStatusViewed = '-1';
 const String kPurchaseOrderStatusDraft = '1';
 const String kPurchaseOrderStatusSent = '2';
 const String kPurchaseOrderStatusAccepted = '3';
@@ -278,6 +285,7 @@ const kPurchaseOrderStatuses = {
   kPurchaseOrderStatusAccepted: 'accepted',
   kPurchaseOrderStatusReceived: 'received',
   kPurchaseOrderStatusCancelled: 'cancelled',
+  kPurchaseOrderStatusViewed: 'viewed',
 };
 
 const String kGatewayTypeCreditCard = '1';
@@ -302,6 +310,7 @@ const String kGatewayTypeACSS = '19';
 const String kGatewayTypeBECS = '20';
 const String kGatewayTypeInstantBankPay = '21';
 const String kGatewayTypeFPX = '22';
+const String kGatewayTypeKlarna = '23';
 
 const kGatewayTypes = {
   kGatewayTypeCreditCard: 'credit_card',
@@ -326,6 +335,7 @@ const kGatewayTypes = {
   kGatewayTypeBECS: 'becs',
   kGatewayTypeInstantBankPay: 'instant_bank_pay',
   kGatewayTypeFPX: 'fpx',
+  kGatewayTypeKlarna: 'klarna',
 };
 
 const String kNotificationChannelEmail = 'email';
@@ -344,15 +354,20 @@ const String kNotificationsPaymentFailure = 'payment_failure';
 const String kNotificationsInvoiceCreated = 'invoice_created';
 const String kNotificationsInvoiceSent = 'invoice_sent';
 const String kNotificationsInvoiceLate = 'invoice_late';
+const String kNotificationsInvoiceViewed = 'invoice_viewed';
 const String kNotificationsQuoteCreated = 'quote_created';
 const String kNotificationsQuoteSent = 'quote_sent';
-const String kNotificationsCreditCreated = 'credit_created';
-const String kNotificationsCreditSent = 'credit_sent';
 const String kNotificationsQuoteViewed = 'quote_viewed';
 const String kNotificationsQuoteExpired = 'quote_expired';
-const String kNotificationsInvoiceViewed = 'invoice_viewed';
-const String kNotificationsCreditViewed = 'credit_viewed';
 const String kNotificationsQuoteApproved = 'quote_approved';
+const String kNotificationsCreditCreated = 'credit_created';
+const String kNotificationsCreditSent = 'credit_sent';
+const String kNotificationsCreditViewed = 'credit_viewed';
+const String kNotificationsPurchaseOrderCreated = 'purchase_order_created';
+const String kNotificationsPurchaseOrderSent = 'purchase_order_sent';
+const String kNotificationsPurchaseOrderViewed = 'purchase_order_viewed';
+const String kNotificationsPurchaseOrderAccepted = 'purchase_order_accepted';
+const String kNotificationsInventoryThreshold = 'inventory_threshold';
 
 const kNotificationEvents = [
   kNotificationsInvoiceCreated,
@@ -369,6 +384,11 @@ const kNotificationEvents = [
   kNotificationsCreditCreated,
   kNotificationsCreditSent,
   kNotificationsCreditViewed,
+  kNotificationsPurchaseOrderCreated,
+  kNotificationsPurchaseOrderSent,
+  kNotificationsPurchaseOrderViewed,
+  kNotificationsPurchaseOrderAccepted,
+  kNotificationsInventoryThreshold,
 ];
 
 const String kGatewayStripe = 'd14dd26a37cecc30fdd65700bfb55b23';
@@ -415,6 +435,12 @@ const String kSwitchValueNo = 'no';
 const String kTaskStatusLogged = '-1';
 const String kTaskStatusRunning = '-2';
 const String kTaskStatusInvoiced = '-3';
+
+const kTaskStatuses = {
+  kTaskStatusLogged: 'logged',
+  kTaskStatusRunning: 'running',
+  kTaskStatusInvoiced: 'invoiced',
+};
 
 const String kMain = 'main';
 const String kSettings = 'settings';
@@ -496,6 +522,15 @@ const String kSettingsExpenseCategoryEdit = 'expense_category/edit';
 const String kSettingsTaskStatuses = 'task_status';
 const String kSettingsTaskStatusView = 'task_status/view';
 const String kSettingsTaskStatusEdit = 'task_status/edit';
+const String kSettingsBankAccounts = 'bank_accounts';
+const String kSettingsBankAccountsView = 'bank_accounts/view';
+const String kSettingsBankAccountsEdit = 'bank_accounts/edit';
+const String kSettingsTransactionRules = 'transaction_rules';
+const String kSettingsTransactionRulesView = 'transaction_rules/view';
+const String kSettingsTransactionRulesEdit = 'transaction_rules/edit';
+const String kSettingsSchedules = 'schedules';
+const String kSettingsSchedulesView = 'schedules/view';
+const String kSettingsSchedulesEdit = 'schedules/edit';
 
 const List<String> kAdvancedSettings = [
   kSettingsCustomDesigns,
@@ -508,6 +543,7 @@ const List<String> kAdvancedSettings = [
   kSettingsTemplatesAndReminders,
   kSettingsSubscriptions,
   kSettingsUserManagement,
+  kSettingsTransactionRules,
 ];
 
 const String kReportClient = 'client';
@@ -528,7 +564,9 @@ const String kReportQuoteItem = 'quote_item';
 const String kReportRecurringExpense = 'recurring_expense';
 const String kReportRecurringInvoice = 'recurring_invoice';
 const String kReportPurchaseOrder = 'purchase_order';
+const String kReportPurchaseOrderItem = 'purchase_order_item';
 const String kReportVendor = 'vendor';
+const String kReportTransaction = 'transaction';
 
 const String kPdfFieldsClientDetails = 'client_details';
 const String kPdfFieldsCompanyDetails = 'company_details';
@@ -581,6 +619,20 @@ const kExpenseStatuses = {
   kExpenseStatusPaid: 'paid',
 };
 
+const String kTransactionStatusUnmatched = '1';
+const String kTransactionStatusMatched = '2';
+const String kTransactionStatusConverted = '3';
+const String kTransactionStatusDeposit = '-1';
+const String kTransactionStatusWithdrawal = '-2';
+
+const kTransactionStatuses = {
+  kTransactionStatusUnmatched: 'unmatched',
+  kTransactionStatusMatched: 'matched',
+  kTransactionStatusConverted: 'converted',
+  kTransactionStatusDeposit: 'deposit',
+  kTransactionStatusWithdrawal: 'withdrawal',
+};
+
 const String kDefaultCurrencyId = '1';
 const String kDefaultDateFormat = '5';
 const String kDefaultAccentColor = '#2F7DC3';
@@ -604,7 +656,7 @@ const int kModuleExpenses = 16;
 const int kModuleProjects = 32;
 const int kModuleVendors = 64;
 const int kModuleTickets = 128;
-const int kModuleProposals = 256;
+const int kModuleTransactions = 256;
 const int kModuleRecurringExpenses = 512;
 const int kModuleRecurringTasks = 1024;
 const int kModuleRecurringQuotes = 2048;
@@ -623,6 +675,7 @@ const Map<int, String> kModules = {
   kModulePurchaseOrders: 'purchase_orders',
   kModuleExpenses: 'expenses',
   kModuleRecurringExpenses: 'recurring_expenses',
+  kModuleTransactions: 'transactions',
   //kModuleTickets: 'tickets',
   //kModuleRecurringTasks: 'recurring_tasks',
   //kModuleRecurringQuotes: 'recurring_quotes',
@@ -742,6 +795,10 @@ const kMonthsOfTheYear = {
 };
 
 const kFrequencyMonthly = '5';
+
+const kStatementStatusAll = 'all';
+const kStatementStatusPaid = 'paid';
+const kStatementStatusUnpaid = 'unpaid';
 
 const kFrequencies = {
   '1': 'freq_daily',

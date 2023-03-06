@@ -32,6 +32,10 @@ const EntityType _$invoiceItem = const EntityType._('invoiceItem');
 const EntityType _$design = const EntityType._('design');
 const EntityType _$category = const EntityType._('category');
 const EntityType _$serviceReport = const EntityType._('serviceReport');
+const EntityType _$schedule = const EntityType._('schedule');
+const EntityType _$transactionRule = const EntityType._('transactionRule');
+const EntityType _$transaction = const EntityType._('transaction');
+const EntityType _$bankAccount = const EntityType._('bankAccount');
 const EntityType _$recurringExpense = const EntityType._('recurringExpense');
 const EntityType _$recurringQuote = const EntityType._('recurringQuote');
 const EntityType _$subscription = const EntityType._('subscription');
@@ -107,6 +111,14 @@ EntityType _$typeValueOf(String name) {
       return _$category;
     case 'serviceReport':
       return _$serviceReport;
+    case 'schedule':
+      return _$schedule;
+    case 'transactionRule':
+      return _$transactionRule;
+    case 'transaction':
+      return _$transaction;
+    case 'bankAccount':
+      return _$bankAccount;
     case 'recurringExpense':
       return _$recurringExpense;
     case 'recurringQuote':
@@ -180,6 +192,10 @@ final BuiltSet<EntityType> _$typeValues =
   _$design,
   _$category,
   _$serviceReport,
+  _$schedule,
+  _$transactionRule,
+  _$transaction,
+  _$bankAccount,
   _$recurringExpense,
   _$recurringQuote,
   _$subscription,
@@ -628,6 +644,13 @@ class _$ActivityEntitySerializer
         ..add(serializers.serialize(value,
             specifiedType: const FullType(String)));
     }
+    value = object.vendorContactId;
+    if (value != null) {
+      result
+        ..add('vendor_contact_id')
+        ..add(serializers.serialize(value,
+            specifiedType: const FullType(String)));
+    }
     value = object.tokenId;
     if (value != null) {
       result
@@ -735,6 +758,10 @@ class _$ActivityEntitySerializer
           break;
         case 'vendor_id':
           result.vendorId = serializers.deserialize(value,
+              specifiedType: const FullType(String)) as String;
+          break;
+        case 'vendor_contact_id':
+          result.vendorContactId = serializers.deserialize(value,
               specifiedType: const FullType(String)) as String;
           break;
         case 'token_id':
@@ -874,7 +901,11 @@ class _$ErrorMessage extends ErrorMessage {
   int __hashCode;
   @override
   int get hashCode {
-    return __hashCode ??= $jf($jc(0, message.hashCode));
+    if (__hashCode != null) return __hashCode;
+    var _$hash = 0;
+    _$hash = $jc(_$hash, message.hashCode);
+    _$hash = $jf(_$hash);
+    return __hashCode ??= _$hash;
   }
 
   @override
@@ -961,8 +992,12 @@ class _$LoginResponse extends LoginResponse {
   int __hashCode;
   @override
   int get hashCode {
-    return __hashCode ??=
-        $jf($jc($jc(0, userCompanies.hashCode), static.hashCode));
+    if (__hashCode != null) return __hashCode;
+    var _$hash = 0;
+    _$hash = $jc(_$hash, userCompanies.hashCode);
+    _$hash = $jc(_$hash, static.hashCode);
+    _$hash = $jf(_$hash);
+    return __hashCode ??= _$hash;
   }
 
   @override
@@ -1081,6 +1116,8 @@ class _$ActivityEntity extends ActivityEntity {
   @override
   final String vendorId;
   @override
+  final String vendorContactId;
+  @override
   final String tokenId;
   @override
   final InvoiceHistoryEntity history;
@@ -1109,6 +1146,7 @@ class _$ActivityEntity extends ActivityEntity {
       this.taskId,
       this.projectId,
       this.vendorId,
+      this.vendorContactId,
       this.tokenId,
       this.history})
       : super._() {
@@ -1153,6 +1191,7 @@ class _$ActivityEntity extends ActivityEntity {
         taskId == other.taskId &&
         projectId == other.projectId &&
         vendorId == other.vendorId &&
+        vendorContactId == other.vendorContactId &&
         tokenId == other.tokenId &&
         history == other.history;
   }
@@ -1160,44 +1199,33 @@ class _$ActivityEntity extends ActivityEntity {
   int __hashCode;
   @override
   int get hashCode {
-    return __hashCode ??= $jf($jc(
-        $jc(
-            $jc(
-                $jc(
-                    $jc(
-                        $jc(
-                            $jc(
-                                $jc(
-                                    $jc(
-                                        $jc(
-                                            $jc(
-                                                $jc(
-                                                    $jc(
-                                                        $jc(
-                                                            $jc(
-                                                                $jc(
-                                                                    $jc(
-                                                                        $jc(
-                                                                            $jc($jc($jc($jc(0, notes.hashCode), key.hashCode), activityTypeId.hashCode),
-                                                                                clientId.hashCode),
-                                                                            userId.hashCode),
-                                                                        invoiceId.hashCode),
-                                                                    recurringInvoiceId.hashCode),
-                                                                recurringExpenseId.hashCode),
-                                                            purchaseOrderId.hashCode),
-                                                        quoteId.hashCode),
-                                                    paymentId.hashCode),
-                                                creditId.hashCode),
-                                            updatedAt.hashCode),
-                                        expenseId.hashCode),
-                                    isSystem.hashCode),
-                                ip.hashCode),
-                            contactId.hashCode),
-                        taskId.hashCode),
-                    projectId.hashCode),
-                vendorId.hashCode),
-            tokenId.hashCode),
-        history.hashCode));
+    if (__hashCode != null) return __hashCode;
+    var _$hash = 0;
+    _$hash = $jc(_$hash, notes.hashCode);
+    _$hash = $jc(_$hash, key.hashCode);
+    _$hash = $jc(_$hash, activityTypeId.hashCode);
+    _$hash = $jc(_$hash, clientId.hashCode);
+    _$hash = $jc(_$hash, userId.hashCode);
+    _$hash = $jc(_$hash, invoiceId.hashCode);
+    _$hash = $jc(_$hash, recurringInvoiceId.hashCode);
+    _$hash = $jc(_$hash, recurringExpenseId.hashCode);
+    _$hash = $jc(_$hash, purchaseOrderId.hashCode);
+    _$hash = $jc(_$hash, quoteId.hashCode);
+    _$hash = $jc(_$hash, paymentId.hashCode);
+    _$hash = $jc(_$hash, creditId.hashCode);
+    _$hash = $jc(_$hash, updatedAt.hashCode);
+    _$hash = $jc(_$hash, expenseId.hashCode);
+    _$hash = $jc(_$hash, isSystem.hashCode);
+    _$hash = $jc(_$hash, ip.hashCode);
+    _$hash = $jc(_$hash, contactId.hashCode);
+    _$hash = $jc(_$hash, taskId.hashCode);
+    _$hash = $jc(_$hash, projectId.hashCode);
+    _$hash = $jc(_$hash, vendorId.hashCode);
+    _$hash = $jc(_$hash, vendorContactId.hashCode);
+    _$hash = $jc(_$hash, tokenId.hashCode);
+    _$hash = $jc(_$hash, history.hashCode);
+    _$hash = $jf(_$hash);
+    return __hashCode ??= _$hash;
   }
 
   @override
@@ -1223,6 +1251,7 @@ class _$ActivityEntity extends ActivityEntity {
           ..add('taskId', taskId)
           ..add('projectId', projectId)
           ..add('vendorId', vendorId)
+          ..add('vendorContactId', vendorContactId)
           ..add('tokenId', tokenId)
           ..add('history', history))
         .toString();
@@ -1317,6 +1346,11 @@ class ActivityEntityBuilder
   String get vendorId => _$this._vendorId;
   set vendorId(String vendorId) => _$this._vendorId = vendorId;
 
+  String _vendorContactId;
+  String get vendorContactId => _$this._vendorContactId;
+  set vendorContactId(String vendorContactId) =>
+      _$this._vendorContactId = vendorContactId;
+
   String _tokenId;
   String get tokenId => _$this._tokenId;
   set tokenId(String tokenId) => _$this._tokenId = tokenId;
@@ -1351,6 +1385,7 @@ class ActivityEntityBuilder
       _taskId = $v.taskId;
       _projectId = $v.projectId;
       _vendorId = $v.vendorId;
+      _vendorContactId = $v.vendorContactId;
       _tokenId = $v.tokenId;
       _history = $v.history?.toBuilder();
       _$v = null;
@@ -1402,6 +1437,7 @@ class ActivityEntityBuilder
               taskId: taskId,
               projectId: projectId,
               vendorId: vendorId,
+              vendorContactId: vendorContactId,
               tokenId: tokenId,
               history: _history?.build());
     } catch (_) {
@@ -1479,16 +1515,17 @@ class _$LedgerEntity extends LedgerEntity {
   int __hashCode;
   @override
   int get hashCode {
-    return __hashCode ??= $jf($jc(
-        $jc(
-            $jc(
-                $jc(
-                    $jc($jc($jc(0, notes.hashCode), balance.hashCode),
-                        adjustment.hashCode),
-                    createdAt.hashCode),
-                invoiceId.hashCode),
-            creditId.hashCode),
-        paymentId.hashCode));
+    if (__hashCode != null) return __hashCode;
+    var _$hash = 0;
+    _$hash = $jc(_$hash, notes.hashCode);
+    _$hash = $jc(_$hash, balance.hashCode);
+    _$hash = $jc(_$hash, adjustment.hashCode);
+    _$hash = $jc(_$hash, createdAt.hashCode);
+    _$hash = $jc(_$hash, invoiceId.hashCode);
+    _$hash = $jc(_$hash, creditId.hashCode);
+    _$hash = $jc(_$hash, paymentId.hashCode);
+    _$hash = $jf(_$hash);
+    return __hashCode ??= _$hash;
   }
 
   @override
@@ -1587,4 +1624,4 @@ class LedgerEntityBuilder
   }
 }
 
-// ignore_for_file: always_put_control_body_on_new_line,always_specify_types,annotate_overrides,avoid_annotating_with_dynamic,avoid_as,avoid_catches_without_on_clauses,avoid_returning_this,deprecated_member_use_from_same_package,lines_longer_than_80_chars,no_leading_underscores_for_local_identifiers,omit_local_variable_types,prefer_expression_function_bodies,sort_constructors_first,test_types_in_equals,unnecessary_const,unnecessary_new,unnecessary_lambdas
+// ignore_for_file: deprecated_member_use_from_same_package,type=lint

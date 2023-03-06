@@ -221,6 +221,7 @@ Middleware<AppState> _createLoadState(
 
       final AppState appState = AppState(
               prefState: prefState,
+              isWhiteLabeled: store.state.isWhiteLabeled,
               reportErrors: store.state.account.reportErrors)
           .rebuild((b) => b
             ..authState.replace(authState)
@@ -327,7 +328,9 @@ List<String> _getRoutes(AppState state) {
         }
       }
 
-      route += '/' + part;
+      if (part != 'pdf') {
+        route += '/' + part;
+      }
     }
 
     routes.add(route);
@@ -378,7 +381,7 @@ Middleware<AppState> _createPersistData(
   };
 }
 
-final _persistUIDebouncer = PersistUIDebouncer();
+final _persistUIDebouncer = PersistDebouncer();
 Middleware<AppState> _createPersistUI(PersistenceRepository uiRepository) {
   return (Store<AppState> store, dynamic dynamicAction, NextDispatcher next) {
     final action = dynamicAction as PersistUI;

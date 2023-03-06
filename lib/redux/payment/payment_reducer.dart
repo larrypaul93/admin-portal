@@ -1,5 +1,6 @@
 // Package imports:
 import 'package:built_collection/built_collection.dart';
+import 'package:invoiceninja_flutter/redux/client/client_actions.dart';
 import 'package:redux/redux.dart';
 
 // Project imports:
@@ -54,6 +55,7 @@ Reducer<String> selectedIdReducer = combineReducers([
   TypedReducer<String, SortPayments>((selectedId, action) => ''),
   TypedReducer<String, FilterPayments>((selectedId, action) => ''),
   TypedReducer<String, FilterPaymentsByState>((selectedId, action) => ''),
+  TypedReducer<String, FilterPaymentsByStatus>((selectedId, action) => ''),
   TypedReducer<String, FilterPaymentsByCustom1>((selectedId, action) => ''),
   TypedReducer<String, FilterPaymentsByCustom2>((selectedId, action) => ''),
   TypedReducer<String, FilterPaymentsByCustom3>((selectedId, action) => ''),
@@ -99,6 +101,7 @@ PaymentEntity _updateEditing(PaymentEntity payment, dynamic action) {
 final paymentListReducer = combineReducers<ListUIState>([
   TypedReducer<ListUIState, SortPayments>(_sortPayments),
   TypedReducer<ListUIState, FilterPaymentsByState>(_filterPaymentsByState),
+  TypedReducer<ListUIState, FilterPaymentsByStatus>(_filterPaymentsByStatus),
   TypedReducer<ListUIState, FilterPayments>(_filterPayments),
   TypedReducer<ListUIState, FilterPaymentsByCustom1>(_filterPaymentsByCustom1),
   TypedReducer<ListUIState, FilterPaymentsByCustom2>(_filterPaymentsByCustom2),
@@ -110,6 +113,10 @@ final paymentListReducer = combineReducers<ListUIState>([
       _removeFromListMultiselect),
   TypedReducer<ListUIState, ClearPaymentMultiselect>(_clearListMultiselect),
   TypedReducer<ListUIState, ViewPaymentList>(_viewPaymentList),
+  TypedReducer<ListUIState, FilterByEntity>(
+      (state, action) => state.rebuild((b) => b
+        ..filter = null
+        ..filterClearedAt = DateTime.now().millisecondsSinceEpoch)),
 ]);
 
 ListUIState _viewPaymentList(
@@ -170,6 +177,16 @@ ListUIState _filterPaymentsByState(
   }
 }
 
+ListUIState _filterPaymentsByStatus(
+    ListUIState paymentListState, FilterPaymentsByStatus action) {
+  if (paymentListState.statusFilters.contains(action.status)) {
+    return paymentListState
+        .rebuild((b) => b..statusFilters.remove(action.status));
+  } else {
+    return paymentListState.rebuild((b) => b..statusFilters.add(action.status));
+  }
+}
+
 ListUIState _filterPayments(
     ListUIState paymentListState, FilterPayments action) {
   return paymentListState.rebuild((b) => b
@@ -215,7 +232,20 @@ final paymentsReducer = combineReducers<PaymentState>([
   TypedReducer<PaymentState, ArchivePaymentsSuccess>(_archivePaymentSuccess),
   TypedReducer<PaymentState, DeletePaymentsSuccess>(_deletePaymentSuccess),
   TypedReducer<PaymentState, RestorePaymentsSuccess>(_restorePaymentSuccess),
+  TypedReducer<PaymentState, PurgeClientSuccess>(_purgeClientSuccess),
 ]);
+
+PaymentState _purgeClientSuccess(
+    PaymentState paymentState, PurgeClientSuccess action) {
+  final ids = paymentState.map.values
+      .where((each) => each.clientId == action.clientId)
+      .map((each) => each.id)
+      .toList();
+
+  return paymentState.rebuild((b) => b
+    ..map.removeWhere((p0, p1) => ids.contains(p0))
+    ..list.removeWhere((p0) => ids.contains(p0)));
+}
 
 PaymentState _archivePaymentSuccess(
     PaymentState paymentState, ArchivePaymentsSuccess action) {

@@ -184,6 +184,7 @@ abstract class ExpenseEntity extends Object
     ..date = convertDateTimeToSqlDate()
     ..documents.clear()
     ..transactionReference = ''
+    ..transactionId = ''
     ..paymentTypeId = ''
     ..paymentDate = '');
 
@@ -554,6 +555,10 @@ abstract class ExpenseEntity extends Object
         break;
       case RecurringExpenseFields.nextSendDate:
         response = expenseA.nextSendDate.compareTo(expenseB.nextSendDate);
+        break;
+      case ExpenseFields.status:
+        response =
+            expenseA.calculatedStatusId.compareTo(expenseB.calculatedStatusId);
         break;
       default:
         print('## ERROR: sort by expense.$sortField is not implemented');

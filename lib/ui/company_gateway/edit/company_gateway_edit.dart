@@ -1,5 +1,7 @@
 // Flutter imports:
 import 'package:flutter/material.dart';
+import 'package:invoiceninja_flutter/data/models/settings_model.dart';
+import 'package:invoiceninja_flutter/ui/app/autobill_dropdown_menu_item.dart';
 
 // Package imports:
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
@@ -91,6 +93,7 @@ class _CompanyGatewayEditState extends State<CompanyGatewayEdit>
   Widget build(BuildContext context) {
     final viewModel = widget.viewModel;
     final state = viewModel.state;
+    final company = state.company;
     final localization = AppLocalization.of(context);
     final companyGateway = viewModel.companyGateway;
     final origCompanyGateway = state.companyGatewayState.get(companyGateway.id);
@@ -234,17 +237,29 @@ class _CompanyGatewayEditState extends State<CompanyGatewayEdit>
                     AppDropdownButton<String>(
                       labelText: localization.captureCard,
                       value: companyGateway.tokenBilling,
+                      selectedItemBuilder: (companyGateway.tokenBilling ?? '')
+                              .isEmpty
+                          ? null
+                          : (context) => [
+                                SettingsEntity.AUTO_BILL_ALWAYS,
+                                SettingsEntity.AUTO_BILL_OPT_OUT,
+                                SettingsEntity.AUTO_BILL_OPT_IN,
+                                SettingsEntity.AUTO_BILL_OFF,
+                              ]
+                                  .map(
+                                      (type) => Text(localization.lookup(type)))
+                                  .toList(),
                       onChanged: (dynamic value) => viewModel.onChanged(
                           companyGateway
                               .rebuild((b) => b..tokenBilling = value)),
                       items: [
-                        CompanyGatewayEntity.TOKEN_BILLING_ALWAYS,
-                        CompanyGatewayEntity.TOKEN_BILLING_OPT_OUT,
-                        CompanyGatewayEntity.TOKEN_BILLING_OPT_IN,
-                        CompanyGatewayEntity.TOKEN_BILLING_OFF
+                        SettingsEntity.AUTO_BILL_ALWAYS,
+                        SettingsEntity.AUTO_BILL_OPT_OUT,
+                        SettingsEntity.AUTO_BILL_OPT_IN,
+                        SettingsEntity.AUTO_BILL_OFF
                       ]
                           .map((value) => DropdownMenuItem(
-                                child: Text(localization.lookup(value)),
+                                child: AutobillDropdownMenuItem(type: value),
                                 value: value,
                               ))
                           .toList(),
@@ -310,6 +325,46 @@ class _CompanyGatewayEditState extends State<CompanyGatewayEdit>
                           .rebuild((b) => b..requireContactEmail = value)),
                       controlAffinity: ListTileControlAffinity.leading,
                     ),
+                    if (company.hasCustomField(CustomFieldType.client1))
+                      CheckboxListTile(
+                        activeColor: Theme.of(context).colorScheme.secondary,
+                        title: Text(company
+                            .getCustomFieldLabel(CustomFieldType.client1)),
+                        value: companyGateway.requireCustomValue1,
+                        onChanged: (value) => viewModel.onChanged(companyGateway
+                            .rebuild((b) => b..requireCustomValue1 = value)),
+                        controlAffinity: ListTileControlAffinity.leading,
+                      ),
+                    if (company.hasCustomField(CustomFieldType.client2))
+                      CheckboxListTile(
+                        activeColor: Theme.of(context).colorScheme.secondary,
+                        title: Text(company
+                            .getCustomFieldLabel(CustomFieldType.client2)),
+                        value: companyGateway.requireCustomValue2,
+                        onChanged: (value) => viewModel.onChanged(companyGateway
+                            .rebuild((b) => b..requireCustomValue2 = value)),
+                        controlAffinity: ListTileControlAffinity.leading,
+                      ),
+                    if (company.hasCustomField(CustomFieldType.client3))
+                      CheckboxListTile(
+                        activeColor: Theme.of(context).colorScheme.secondary,
+                        title: Text(company
+                            .getCustomFieldLabel(CustomFieldType.client3)),
+                        value: companyGateway.requireCustomValue3,
+                        onChanged: (value) => viewModel.onChanged(companyGateway
+                            .rebuild((b) => b..requireCustomValue3 = value)),
+                        controlAffinity: ListTileControlAffinity.leading,
+                      ),
+                    if (company.hasCustomField(CustomFieldType.client4))
+                      CheckboxListTile(
+                        activeColor: Theme.of(context).colorScheme.secondary,
+                        title: Text(company
+                            .getCustomFieldLabel(CustomFieldType.client4)),
+                        value: companyGateway.requireCustomValue4,
+                        onChanged: (value) => viewModel.onChanged(companyGateway
+                            .rebuild((b) => b..requireCustomValue4 = value)),
+                        controlAffinity: ListTileControlAffinity.leading,
+                      ),
                     CheckboxListTile(
                       activeColor: Theme.of(context).colorScheme.secondary,
                       title: Text(localization.postalCode),

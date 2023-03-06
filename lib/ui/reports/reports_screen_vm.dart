@@ -11,9 +11,11 @@ import 'package:flutter/widgets.dart';
 import 'package:built_collection/built_collection.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:flutter_styled_toast/flutter_styled_toast.dart';
+import 'package:invoiceninja_flutter/ui/reports/purchase_order_item_report.dart';
 import 'package:invoiceninja_flutter/ui/reports/purchase_order_report.dart';
 import 'package:invoiceninja_flutter/ui/reports/recurring_expense_report.dart';
 import 'package:invoiceninja_flutter/ui/reports/recurring_invoice_report.dart';
+import 'package:invoiceninja_flutter/ui/reports/transaction_report.dart';
 import 'package:invoiceninja_flutter/ui/reports/vendor_report.dart';
 import 'package:invoiceninja_flutter/utils/platforms.dart';
 import 'package:memoize/memoize.dart';
@@ -316,6 +318,17 @@ class ReportsScreenVM {
           state.staticState,
         );
         break;
+      case kReportPurchaseOrderItem:
+        reportResult = memoizedPurchaseOrderItemReport(
+          state.userCompany,
+          state.uiState.reportsUIState,
+          state.productState.map,
+          state.purchaseOrderState.map,
+          state.clientState.map,
+          state.vendorState.map,
+          state.staticState,
+        );
+        break;
       case kReportClient:
         reportResult = memoizedClientReport(
           state.userCompany,
@@ -336,6 +349,19 @@ class ReportsScreenVM {
           state.staticState,
         );
         break;
+      case kReportTransaction:
+        reportResult = memoizedTransactionReport(
+          state.userCompany,
+          state.uiState.reportsUIState,
+          state.transactionState.map,
+          state.vendorState.map,
+          state.expenseState.map,
+          state.expenseCategoryState.map,
+          state.invoiceState.map,
+          state.bankAccountState.map,
+          state.paymentState.map,
+          state.staticState,
+        );
     }
 
     final groupTotals = memoizeedGroupTotals(
@@ -629,7 +655,8 @@ GroupTotals calculateReportTotals({
         }
 
         if (cell is ReportNumberValue && cell.currencyId != null) {
-          totals[group]['${column}_currency_id'] = parseDouble(cell.currencyId);
+          totals[group]['${column}_currency_id'] = parseDouble(
+              shouldConverCurrencies ? company.currencyId : cell.currencyId);
         }
 
         if (cell is ReportNumberValue &&
@@ -644,7 +671,7 @@ GroupTotals calculateReportTotals({
                 toCurrencyId: company.currencyId);
           }
           final toCurrency = currencyMap[company.currencyId];
-          cellValue = round(cellValue * 1 / rate, toCurrency.precision);
+          cellValue = round(cellValue * rate, toCurrency.precision);
           totals[group][column] += cellValue;
         } else {
           totals[group][column] += cell.doubleValue;

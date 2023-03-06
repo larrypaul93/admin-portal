@@ -16,6 +16,7 @@ import 'package:invoiceninja_flutter/ui/app/forms/app_form.dart';
 import 'package:invoiceninja_flutter/ui/app/forms/bool_dropdown_button.dart';
 import 'package:invoiceninja_flutter/ui/app/forms/decorated_form_field.dart';
 import 'package:invoiceninja_flutter/ui/app/icon_message.dart';
+import 'package:invoiceninja_flutter/ui/app/icon_text.dart';
 import 'package:invoiceninja_flutter/ui/app/lists/list_divider.dart';
 import 'package:invoiceninja_flutter/ui/app/loading_indicator.dart';
 import 'package:invoiceninja_flutter/ui/app/scrollable_listview.dart';
@@ -27,6 +28,8 @@ import 'package:invoiceninja_flutter/utils/localization.dart';
 import 'package:invoiceninja_flutter/utils/platforms.dart';
 import 'package:invoiceninja_flutter/utils/super_editor/super_editor.dart';
 import 'package:invoiceninja_flutter/utils/templates.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class TemplatesAndReminders extends StatefulWidget {
   const TemplatesAndReminders({
@@ -44,7 +47,7 @@ class _TemplatesAndRemindersState extends State<TemplatesAndReminders>
     with SingleTickerProviderStateMixin {
   static final GlobalKey<FormState> _formKey =
       GlobalKey<FormState>(debugLabel: '_templatesAndReminders');
-  final _debouncer = Debouncer(sendFirstAction: true);
+  final _debouncer = Debouncer();
 
   EmailTemplate _selectedTemplate;
   int _selectedIndex = 0;
@@ -75,10 +78,7 @@ class _TemplatesAndRemindersState extends State<TemplatesAndReminders>
     final state = widget.viewModel.state;
     final company = state.company;
     final settingsUIState = state.settingsUIState;
-    final length = company.markdownEmailEnabled &&
-            widget.viewModel.state.prefState.isDesktop
-        ? 3
-        : 2;
+    final length = company.markdownEmailEnabled ? 3 : 2;
 
     _focusNode = FocusScopeNode();
     _controller = TabController(
@@ -143,7 +143,6 @@ class _TemplatesAndRemindersState extends State<TemplatesAndReminders>
     }
 
     if (viewModel.state.company.markdownEmailEnabled &&
-        widget.viewModel.state.prefState.isDesktop &&
         _bodyController.text.trim().startsWith('<')) {
       _bodyController.text = html2md.convert(_bodyController.text);
     }
@@ -160,7 +159,6 @@ class _TemplatesAndRemindersState extends State<TemplatesAndReminders>
       _emailPreview = '';
 
       if (state.company.markdownEmailEnabled &&
-          widget.viewModel.state.prefState.isDesktop &&
           _defaultBody.trim().startsWith('<')) {
         _defaultBody = html2md.convert(_defaultBody);
       }
@@ -332,8 +330,7 @@ class _TemplatesAndRemindersState extends State<TemplatesAndReminders>
           Tab(
             text: localization.settings,
           ),
-          if (company.markdownEmailEnabled &&
-              widget.viewModel.state.prefState.isDesktop)
+          if (company.markdownEmailEnabled)
             Tab(
               text: localization.design,
             ),
@@ -349,6 +346,7 @@ class _TemplatesAndRemindersState extends State<TemplatesAndReminders>
         focusNode: _focusNode,
         children: <Widget>[
           ScrollableListView(
+            primary: true,
             children: <Widget>[
               FormCard(children: <Widget>[
                 AppDropdownButton<EmailTemplate>(
@@ -519,6 +517,19 @@ class _TemplatesAndRemindersState extends State<TemplatesAndReminders>
                             .toList()),
                   ],
                 ),
+              Padding(
+                padding: const EdgeInsets.only(left: 16, top: 16, right: 16),
+                child: OutlinedButton(
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: IconText(
+                      text: localization.viewDocs.toUpperCase(),
+                      icon: MdiIcons.openInNew,
+                    ),
+                  ),
+                  onPressed: () => launchUrl(Uri.parse(kDocsCustomFieldsUrl)),
+                ),
+              ),
               VariablesHelp(
                 showInvoiceAsQuote: template == EmailTemplate.quote,
                 showInvoiceAsInvoices: [
@@ -529,8 +540,7 @@ class _TemplatesAndRemindersState extends State<TemplatesAndReminders>
               SizedBox(height: 16),
             ],
           ),
-          if (company.markdownEmailEnabled &&
-              widget.viewModel.state.prefState.isDesktop)
+          if (company.markdownEmailEnabled)
             ColoredBox(
               color: Colors.white,
               child: ExampleEditor(
@@ -607,7 +617,7 @@ class _ReminderSettingsState extends State<ReminderSettings> {
   String _schedule;
 
   List<TextEditingController> _controllers = [];
-  final _debouncer = Debouncer(sendFirstAction: true);
+  final _debouncer = Debouncer();
 
   @override
   void dispose() {
@@ -662,6 +672,7 @@ class _ReminderSettingsState extends State<ReminderSettings> {
 
   @override
   Widget build(BuildContext context) {
+    final state = widget.viewModel.state;
     final localization = AppLocalization.of(context);
 
     return Column(
@@ -675,7 +686,8 @@ class _ReminderSettingsState extends State<ReminderSettings> {
             ),
             AppDropdownButton(
               showBlank: true,
-              blankLabel: localization.disabled,
+              blankLabel:
+                  state.settingsUIState.isFiltered ? '' : localization.disabled,
               value: widget.schedule,
               labelText: localization.schedule,
               onChanged: (dynamic value) {

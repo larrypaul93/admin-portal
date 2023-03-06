@@ -126,6 +126,10 @@ class TimeEditDetailsState extends State<TimeEditDetails> {
     final company = viewModel.company;
     final showEndDate = company.showTaskEndDate;
 
+    // Handle the end time being before the start time
+    final times = _taskTime.asList;
+    final duration = Duration(seconds: times[1] - times[0]);
+
     return AlertDialog(
       content: SingleChildScrollView(
         child: Column(
@@ -133,7 +137,8 @@ class TimeEditDetailsState extends State<TimeEditDetails> {
           children: <Widget>[
             DatePicker(
               key: ValueKey('__date_${_startTimeUpdatedAt}__'),
-              labelText: localization.date,
+              labelText:
+                  showEndDate ? localization.startDate : localization.date,
               selectedDate: _taskTime.startDate == null
                   ? null
                   : convertDateTimeToSqlDate(_taskTime.startDate.toLocal()),
@@ -158,6 +163,22 @@ class TimeEditDetailsState extends State<TimeEditDetails> {
                 });
               },
             ),
+            if (showEndDate)
+              DatePicker(
+                labelText: localization.endDate,
+                key: ValueKey(
+                    '__${_startDateUpdatedAt}_${_durationUpdateAt}_${_endTimeUpdatedAt}__'),
+                selectedDate: _taskTime.endDate == null
+                    ? null
+                    : convertDateTimeToSqlDate(_taskTime.endDate.toLocal()),
+                onSelected: (date, _) {
+                  setState(() {
+                    _taskTime = _taskTime.copyWithEndDate(date);
+                    viewModel.onUpdatedTaskTime(_taskTime, widget.index);
+                    _endDateUpdatedAt = DateTime.now().millisecondsSinceEpoch;
+                  });
+                },
+              ),
             TimePicker(
               key: ValueKey(
                   '__end_time_${_endDateUpdatedAt}_${_durationUpdateAt}__'),
@@ -172,21 +193,6 @@ class TimeEditDetailsState extends State<TimeEditDetails> {
                 });
               },
             ),
-            if (showEndDate)
-              DatePicker(
-                key: ValueKey(
-                    '__${_startDateUpdatedAt}_${_durationUpdateAt}_${_endTimeUpdatedAt}__'),
-                selectedDate: _taskTime.startDate == null
-                    ? null
-                    : convertDateTimeToSqlDate(_taskTime.endDate.toLocal()),
-                onSelected: (date, _) {
-                  setState(() {
-                    _taskTime = _taskTime.copyWithEndDate(date);
-                    viewModel.onUpdatedTaskTime(_taskTime, widget.index);
-                    _endDateUpdatedAt = DateTime.now().millisecondsSinceEpoch;
-                  });
-                },
-              ),
             DurationPicker(
               key: ValueKey(
                   '__duration_${_startTimeUpdatedAt}_${_endTimeUpdatedAt}_${_startDateUpdatedAt}_${_endDateUpdatedAt}_'),
@@ -201,7 +207,7 @@ class TimeEditDetailsState extends State<TimeEditDetails> {
               selectedDuration:
                   (_taskTime.startDate == null || _taskTime.endDate == null)
                       ? null
-                      : _taskTime.duration,
+                      : duration,
             ),
           ],
         ),

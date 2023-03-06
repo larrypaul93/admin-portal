@@ -40,6 +40,14 @@ import 'package:invoiceninja_flutter/redux/vendor/vendor_actions.dart';
 import 'package:invoiceninja_flutter/redux/webhook/webhook_actions.dart';
 
 // STARTER: import - do not remove comment
+import 'package:invoiceninja_flutter/redux/schedule/schedule_actions.dart';
+
+import 'package:invoiceninja_flutter/redux/transaction_rule/transaction_rule_actions.dart';
+
+import 'package:invoiceninja_flutter/redux/transaction/transaction_actions.dart';
+
+import 'package:invoiceninja_flutter/redux/bank_account/bank_account_actions.dart';
+
 import 'package:invoiceninja_flutter/redux/purchase_order/purchase_order_actions.dart';
 import 'package:invoiceninja_flutter/redux/category/category_actions.dart';
 
@@ -47,53 +55,51 @@ import 'package:invoiceninja_flutter/redux/contact/contact_actions.dart';
 
 PrefState prefReducer(
     PrefState state, dynamic action, String selectedCompanyId) {
-  return state.rebuild(
-    (b) => b
-      ..companyPrefs[selectedCompanyId] =
-          companyPrefReducer(state.companyPrefs[selectedCompanyId], action)
-      ..appLayout = layoutReducer(state.appLayout, action)
-      ..rowsPerPage = rowsPerPageReducer(state.rowsPerPage, action)
-      ..moduleLayout = moduleLayoutReducer(state.moduleLayout, action)
-      ..isPreviewVisible =
-          isPreviewVisibleReducer(state.isPreviewVisible, action)
-      ..menuSidebarMode = manuSidebarReducer(state.menuSidebarMode, action)
-      ..historySidebarMode =
-          historySidebarReducer(state.historySidebarMode, action)
-      ..hideDesktopWarning =
-          hideDesktopWarningReducer(state.hideDesktopWarning, action)
-      ..hideGatewayWarning =
-          hideGatewayWarningReducer(state.hideGatewayWarning, action)
-      ..hideReviewApp = hideReviewAppReducer(state.hideReviewApp, action)
-      ..textScaleFactor = textScaleFactorReducer(state.textScaleFactor, action)
-      ..isMenuVisible = menuVisibleReducer(state.isMenuVisible, action)
-      ..isHistoryVisible = historyVisibleReducer(state.isHistoryVisible, action)
-      ..enableDarkMode = darkModeReducer(state.enableDarkMode, action)
-      ..enableJSPDF = enableJspdfReducer(state.enableJSPDF, action)
-      ..enableTooltips = enableTooltipsReducer(state.enableTooltips, action)
-      ..enableFlexibleSearch =
-          enableFlexibleSearchReducer(state.enableFlexibleSearch, action)
-      ..persistData = persistDataReducer(state.persistData, action)
-      ..persistUI = persistUIReducer(state.persistUI, action)
-      ..showKanban = showKanbanReducer(state.showKanban, action)
-      ..isFilterVisible = isFilterVisibleReducer(state.isFilterVisible, action)
-      ..longPressSelectionIsDefault =
-          longPressReducer(state.longPressSelectionIsDefault, action)
-      ..tapSelectedToEdit =
-          tapSelectedToEditReducer(state.tapSelectedToEdit, action)
-      ..requireAuthentication =
-          requireAuthenticationReducer(state.requireAuthentication, action)
-      ..colorTheme = colorThemeReducer(state.colorTheme, action)
-      ..customColors.replace(customColorsReducer(state.customColors, action))
-      ..useSidebarEditor
-          .replace(sidebarEditorReducer(state.useSidebarEditor, action))
-      ..useSidebarViewer
-          .replace(sidebarViewerReducer(state.useSidebarViewer, action))
-      ..sortFields.replace(sortFieldsReducer(state.sortFields, action))
-      ..editAfterSaving = editAfterSavingReducer(state.editAfterSaving, action)
-      ..enableTouchEvents =
-          enableTouchEventsReducer(state.enableTouchEvents, action)
-      ..showPdfPreview = showPdfPreviewReducer(state.showPdfPreview, action),
-  );
+  return state.rebuild((b) => b
+    ..companyPrefs[selectedCompanyId] =
+        companyPrefReducer(state.companyPrefs[selectedCompanyId], action)
+    ..appLayout = layoutReducer(state.appLayout, action)
+    ..rowsPerPage = rowsPerPageReducer(state.rowsPerPage, action)
+    ..moduleLayout = moduleLayoutReducer(state.moduleLayout, action)
+    ..isPreviewVisible = isPreviewVisibleReducer(state.isPreviewVisible, action)
+    ..menuSidebarMode = manuSidebarReducer(state.menuSidebarMode, action)
+    ..historySidebarMode =
+        historySidebarReducer(state.historySidebarMode, action)
+    ..hideDesktopWarning =
+        hideDesktopWarningReducer(state.hideDesktopWarning, action)
+    ..hideGatewayWarning =
+        hideGatewayWarningReducer(state.hideGatewayWarning, action)
+    ..hideReviewApp = hideReviewAppReducer(state.hideReviewApp, action)
+    ..textScaleFactor = textScaleFactorReducer(state.textScaleFactor, action)
+    ..isMenuVisible = menuVisibleReducer(state.isMenuVisible, action)
+    ..isHistoryVisible = historyVisibleReducer(state.isHistoryVisible, action)
+    ..enableDarkMode = darkModeReducer(state.enableDarkMode, action)
+    ..enableTooltips = enableTooltipsReducer(state.enableTooltips, action)
+    ..enableFlexibleSearch =
+        enableFlexibleSearchReducer(state.enableFlexibleSearch, action)
+    ..persistData = persistDataReducer(state.persistData, action)
+    ..persistUI = persistUIReducer(state.persistUI, action)
+    ..showKanban = showKanbanReducer(state.showKanban, action)
+    ..isFilterVisible = isFilterVisibleReducer(state.isFilterVisible, action)
+    ..longPressSelectionIsDefault =
+        longPressReducer(state.longPressSelectionIsDefault, action)
+    ..tapSelectedToEdit =
+        tapSelectedToEditReducer(state.tapSelectedToEdit, action)
+    ..requireAuthentication =
+        requireAuthenticationReducer(state.requireAuthentication, action)
+    ..colorTheme = colorThemeReducer(state.colorTheme, action)
+    ..customColors.replace(customColorsReducer(state.customColors, action))
+    ..useSidebarEditor
+        .replace(sidebarEditorReducer(state.useSidebarEditor, action))
+    ..useSidebarViewer
+        .replace(sidebarViewerReducer(state.useSidebarViewer, action))
+    ..sortFields.replace(sortFieldsReducer(state.sortFields, action))
+    ..editAfterSaving = editAfterSavingReducer(state.editAfterSaving, action)
+    ..enableTouchEvents =
+        enableTouchEventsReducer(state.enableTouchEvents, action)
+    ..showPdfPreview = showPdfPreviewReducer(state.showPdfPreview, action)
+    ..showPdfPreviewSideBySide = showPdfPreviewSideBySideReducer(
+        state.showPdfPreviewSideBySide, action));
 }
 
 BuiltMap<EntityType, PrefStateSortField> _resortFields(
@@ -311,12 +317,6 @@ Reducer<bool> darkModeReducer = combineReducers([
   }),
 ]);
 
-Reducer<bool> enableJspdfReducer = combineReducers([
-  TypedReducer<bool, UpdateUserPreferences>((enableJSPDF, action) {
-    return action.enableJSPDF ?? enableJSPDF;
-  }),
-]);
-
 Reducer<bool> enableTooltipsReducer = combineReducers([
   TypedReducer<bool, UpdateUserPreferences>((enableTooltips, action) {
     return action.enableTooltips ?? enableTooltips;
@@ -373,6 +373,23 @@ Reducer<bool> isPreviewVisibleReducer = combineReducers([
   TypedReducer<bool, UpdateUserPreferences>((isPreviewEnabled, action) {
     return action.isPreviewVisible ?? isPreviewEnabled;
   }),
+  TypedReducer<bool, StartClientMultiselect>((value, action) => false),
+  TypedReducer<bool, StartProductMultiselect>((value, action) => false),
+  TypedReducer<bool, StartInvoiceMultiselect>((value, action) => false),
+  TypedReducer<bool, StartRecurringInvoiceMultiselect>(
+      (value, action) => false),
+  TypedReducer<bool, StartPaymentMultiselect>((value, action) => false),
+  TypedReducer<bool, StartQuoteMultiselect>((value, action) => false),
+  TypedReducer<bool, StartCreditMultiselect>((value, action) => false),
+  TypedReducer<bool, StartProjectMultiselect>((value, action) => false),
+  TypedReducer<bool, StartTaskMultiselect>((value, action) => false),
+  TypedReducer<bool, StartVendorMultiselect>((value, action) => false),
+  TypedReducer<bool, StartPurchaseOrderMultiselect>((value, action) => false),
+  TypedReducer<bool, StartExpenseMultiselect>((value, action) => false),
+  TypedReducer<bool, StartRecurringExpenseMultiselect>(
+      (value, action) => false),
+  TypedReducer<bool, StartTransactionMultiselect>((value, action) => true),
+  // TODO add to starter.sh
 ]);
 
 Reducer<bool> requireAuthenticationReducer = combineReducers([
@@ -390,6 +407,12 @@ Reducer<String> colorThemeReducer = combineReducers([
 Reducer<bool> showPdfPreviewReducer = combineReducers([
   TypedReducer<bool, UpdateUserPreferences>((value, action) {
     return action.showPdfPreview ?? value;
+  }),
+]);
+
+Reducer<bool> showPdfPreviewSideBySideReducer = combineReducers([
+  TypedReducer<bool, UpdateUserPreferences>((value, action) {
+    return action.showPdfPreviewSideBySide ?? value;
   }),
 ]);
 
@@ -552,6 +575,46 @@ Reducer<BuiltList<HistoryRecord>> historyReducer = combineReducers([
       _addToHistory(historyList,
           HistoryRecord(id: action.group.id, entityType: EntityType.group))),
   // STARTER: history - do not remove comment
+  TypedReducer<BuiltList<HistoryRecord>, ViewSchedule>((historyList, action) =>
+      _addToHistory(
+          historyList,
+          HistoryRecord(
+              id: action.scheduleId, entityType: EntityType.schedule))),
+  TypedReducer<BuiltList<HistoryRecord>, EditSchedule>((historyList, action) =>
+      _addToHistory(
+          historyList,
+          HistoryRecord(
+              id: action.schedule.id, entityType: EntityType.schedule))),
+
+  TypedReducer<BuiltList<HistoryRecord>, ViewTransactionRule>(
+      (historyList, action) => _addToHistory(
+          historyList,
+          HistoryRecord(
+              id: action.transactionRuleId,
+              entityType: EntityType.transactionRule))),
+  TypedReducer<BuiltList<HistoryRecord>, EditTransactionRule>(
+      (historyList, action) => _addToHistory(
+          historyList,
+          HistoryRecord(
+              id: action.transactionRule.id,
+              entityType: EntityType.transactionRule))),
+
+  TypedReducer<BuiltList<HistoryRecord>, ViewTransaction>(
+      (historyList, action) => _addToHistory(
+          historyList,
+          HistoryRecord(
+              id: action.transactionId, entityType: EntityType.transaction))),
+  TypedReducer<BuiltList<HistoryRecord>, EditTransaction>(
+      (historyList, action) => _addToHistory(
+          historyList,
+          HistoryRecord(
+              id: action.transaction.id, entityType: EntityType.transaction))),
+
+  TypedReducer<BuiltList<HistoryRecord>, ViewBankAccount>(
+      (historyList, action) => _addToHistory(
+          historyList,
+          HistoryRecord(
+              id: action.bankAccountId, entityType: EntityType.bankAccount))),
   TypedReducer<BuiltList<HistoryRecord>, ViewPurchaseOrder>(
       (historyList, action) => _addToHistory(
           historyList,

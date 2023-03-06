@@ -1,5 +1,6 @@
 // Dart imports:
 import 'dart:async';
+import 'dart:convert';
 
 // Flutter imports:
 import 'package:flutter/material.dart';
@@ -528,7 +529,8 @@ Future handleQuoteAction(
     case EntityAction.approve:
       final message = quoteIds.length > 1
           ? localization.approvedQuotes
-              .replaceFirst(':value', quoteIds.length.toString())
+              .replaceFirst(':value', ':count')
+              .replaceFirst(':count', quoteIds.length.toString())
           : localization.approveQuote;
       store.dispatch(
           ApproveQuotes(snackBarCompleter<Null>(context, message), quoteIds));
@@ -649,7 +651,8 @@ Future handleQuoteAction(
     case EntityAction.restore:
       final message = quoteIds.length > 1
           ? localization.restoredQuotes
-              .replaceFirst(':value', quoteIds.length.toString())
+              .replaceFirst(':value', ':count')
+              .replaceFirst(':count', quoteIds.length.toString())
           : localization.restoredQuote;
       store.dispatch(RestoreQuotesRequest(
           snackBarCompleter<Null>(context, message), quoteIds));
@@ -657,7 +660,8 @@ Future handleQuoteAction(
     case EntityAction.archive:
       final message = quoteIds.length > 1
           ? localization.archivedQuotes
-              .replaceFirst(':value', quoteIds.length.toString())
+              .replaceFirst(':value', ':count')
+              .replaceFirst(':count', quoteIds.length.toString())
           : localization.archivedQuote;
       store.dispatch(ArchiveQuotesRequest(
           snackBarCompleter<Null>(context, message), quoteIds));
@@ -665,7 +669,8 @@ Future handleQuoteAction(
     case EntityAction.delete:
       final message = quoteIds.length > 1
           ? localization.deletedQuotes
-              .replaceFirst(':value', quoteIds.length.toString())
+              .replaceFirst(':value', ':count')
+              .replaceFirst(':count', quoteIds.length.toString())
           : localization.deletedQuote;
       store.dispatch(DeleteQuotesRequest(
           snackBarCompleter<Null>(context, message), quoteIds));
@@ -691,6 +696,16 @@ Future handleQuoteAction(
       store.dispatch(StopSaving());
       await Printing.layoutPdf(onLayout: (_) => response.bodyBytes);
       break;
+    case EntityAction.bulkPrint:
+      store.dispatch(StartSaving());
+      final url = state.credentials.url + '/quotes/bulk';
+      final data = json.encode(
+          {'ids': quoteIds, 'action': EntityAction.bulkPrint.toApiParam()});
+      final http.Response response = await WebClient()
+          .post(url, state.credentials.token, data: data, rawResponse: true);
+      store.dispatch(StopSaving());
+      await Printing.layoutPdf(onLayout: (_) => response.bodyBytes);
+      break;
     case EntityAction.more:
       showEntityActionsDialog(
         entities: [quote],
@@ -703,15 +718,20 @@ Future handleQuoteAction(
           documentIds.add(document.id);
         }
       }
-      store.dispatch(
-        DownloadDocumentsRequest(
-          documentIds: documentIds,
-          completer: snackBarCompleter<Null>(
-            context,
-            localization.exportedData,
+      if (documentIds.isEmpty) {
+        showMessageDialog(
+            context: context, message: localization.noDocumentsToDownload);
+      } else {
+        store.dispatch(
+          DownloadDocumentsRequest(
+            documentIds: documentIds,
+            completer: snackBarCompleter<Null>(
+              context,
+              localization.exportedData,
+            ),
           ),
-        ),
-      );
+        );
+      }
       break;
     default:
       print('## ERROR: unhandled action $action in quote_actions');

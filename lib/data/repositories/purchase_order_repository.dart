@@ -31,10 +31,9 @@ class PurchaseOrderRepository {
     int page,
     int createdAt,
     //bool filterDeleted,
-    int recordsPerPage,
   ) async {
     final url = credentials.url +
-        '/purchase_orders?per_page=$recordsPerPage&page=$page&created_at=$createdAt';
+        '/purchase_orders?per_page=$kMaxRecordsPerPage&page=$page&created_at=$createdAt';
 
     /*
     if (filterDeleted) {
@@ -92,6 +91,13 @@ class PurchaseOrderRepository {
       url += '&mark_sent=true';
     } else if (action == EntityAction.accept) {
       url += '&accept=true';
+    }
+
+    if (purchaseOrder.saveDefaultTerms) {
+      url += '&save_default_terms=true';
+    }
+    if (purchaseOrder.saveDefaultFooter) {
+      url += '&save_default_footer=true';
     }
 
     if (purchaseOrder.isNew) {

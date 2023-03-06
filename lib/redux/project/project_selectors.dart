@@ -66,7 +66,13 @@ List<InvoiceItemEntity> convertProjectToInvoiceItem({
     var item = convertExpenseToInvoiceItem(expense: expense, context: context);
 
     if (i == 0) {
-      String notes = '## ${project.name}\n';
+      var notes = '';
+      if (state.company.markdownEnabled) {
+        notes = '## ${project.name}\n';
+      } else {
+        notes = '<div class="project-header">${project.name}</div>\n';
+      }
+
       if (project.publicNotes.isNotEmpty) {
         notes += '${project.publicNotes}\n';
         hasShownNotes = true;
@@ -83,7 +89,13 @@ List<InvoiceItemEntity> convertProjectToInvoiceItem({
     var item = convertTaskToInvoiceItem(task: task, context: context);
 
     if (i == 0) {
-      String notes = '## ${project.name}\n';
+      var notes = '';
+      if (state.company.markdownEnabled) {
+        notes = '## ${project.name}\n';
+      } else {
+        notes = '<div class="project-header">${project.name}</div>\n';
+      }
+
       if (project.publicNotes.isNotEmpty && !hasShownNotes) {
         notes += '${project.publicNotes}\n';
       }
@@ -273,7 +285,3 @@ EntityStats projectStatsForUser(
 
   return EntityStats(countActive: countActive, countArchived: countArchived);
 }
-
-bool hasProjectChanges(
-        ProjectEntity project, BuiltMap<String, ProjectEntity> projectMap) =>
-    project.isNew ? project.isChanged : project != projectMap[project.id];

@@ -4,7 +4,6 @@ import 'package:built_value/serializer.dart';
 
 // Project imports:
 import 'package:invoiceninja_flutter/constants.dart';
-import 'package:invoiceninja_flutter/data/models/group_model.dart';
 import 'package:invoiceninja_flutter/data/models/models.dart';
 import 'package:invoiceninja_flutter/redux/client/client_state.dart';
 import 'package:invoiceninja_flutter/redux/company_gateway/company_gateway_state.dart';
@@ -33,6 +32,11 @@ import 'package:invoiceninja_flutter/redux/vendor/vendor_state.dart';
 import 'package:invoiceninja_flutter/redux/webhook/webhook_state.dart';
 
 // STARTER: import - do not remove comment
+import 'package:invoiceninja_flutter/redux/schedule/schedule_state.dart';
+
+import 'package:invoiceninja_flutter/redux/transaction_rule/transaction_rule_state.dart';
+import 'package:invoiceninja_flutter/redux/transaction/transaction_state.dart';
+import 'package:invoiceninja_flutter/redux/bank_account/bank_account_state.dart';
 import 'package:invoiceninja_flutter/redux/purchase_order/purchase_order_state.dart';
 import 'package:invoiceninja_flutter/redux/category/category_state.dart';
 
@@ -57,12 +61,16 @@ abstract class UserCompanyState
       paymentState: PaymentState(),
       quoteState: QuoteState(),
       // STARTER: constructor - do not remove comment
-      purchaseOrderState: PurchaseOrderState(),
       categoryState: CategoryState(),
 
       contactState: ContactState(),
       serviceReportsState: ServiceReportsState(),
+      scheduleState: ScheduleState(),
 
+      transactionRuleState: TransactionRuleState(),
+      transactionState: TransactionState(),
+      bankAccountState: BankAccountState(),
+      purchaseOrderState: PurchaseOrderState(),
       recurringExpenseState: RecurringExpenseState(),
       subscriptionState: SubscriptionState(),
       taskStatusState: TaskStatusState(),
@@ -112,6 +120,14 @@ abstract class UserCompanyState
   QuoteState get quoteState;
 
   // STARTER: fields - do not remove comment
+  ScheduleState get scheduleState;
+
+  TransactionRuleState get transactionRuleState;
+
+  TransactionState get transactionState;
+
+  BankAccountState get bankAccountState;
+
   PurchaseOrderState get purchaseOrderState;
   CategoryState get categoryState;
 
@@ -165,98 +181,4 @@ abstract class UserCompanyState
 
   static Serializer<UserCompanyState> get serializer =>
       _$userCompanyStateSerializer;
-}
-
-abstract class SettingsUIState extends Object
-    implements Built<SettingsUIState, SettingsUIStateBuilder> {
-  factory SettingsUIState(
-      {CompanyEntity company,
-      ClientEntity client,
-      GroupEntity group,
-      UserEntity user,
-      CompanyEntity origCompany,
-      ClientEntity origClient,
-      GroupEntity origGroup,
-      UserEntity origUser,
-      String section}) {
-    return _$SettingsUIState._(
-      company: company ?? CompanyEntity(),
-      client: client ?? ClientEntity(),
-      group: group ?? GroupEntity(),
-      user: user ?? UserEntity(),
-      entityType: client != null
-          ? EntityType.client
-          : group != null
-              ? EntityType.group
-              : EntityType.company,
-      origClient: origClient ?? ClientEntity(),
-      origGroup: origGroup ?? GroupEntity(),
-      origCompany: origCompany ?? CompanyEntity(),
-      origUser: origUser ?? UserEntity(),
-      isChanged: false,
-      updatedAt: 0,
-      filterClearedAt: 0,
-      tabIndex: 0,
-      selectedTemplate: EmailTemplate.invoice,
-      section: section ?? kSettingsCompanyDetails,
-    );
-  }
-
-  SettingsUIState._();
-
-  @override
-  @memoized
-  int get hashCode;
-
-  CompanyEntity get company;
-
-  CompanyEntity get origCompany;
-
-  ClientEntity get client;
-
-  ClientEntity get origClient;
-
-  GroupEntity get group;
-
-  GroupEntity get origGroup;
-
-  UserEntity get user;
-
-  UserEntity get origUser;
-
-  EntityType get entityType;
-
-  bool get isChanged;
-
-  int get updatedAt;
-
-  String get section;
-
-  int get tabIndex;
-
-  EmailTemplate get selectedTemplate;
-
-  @nullable
-  String get filter;
-
-  int get filterClearedAt;
-
-  bool get isFiltered => entityType != EntityType.company;
-
-  SettingsEntity get settings {
-    if (entityType == EntityType.client && client != null) {
-      return client.settings;
-    } else if (entityType == EntityType.group && group != null) {
-      return group.settings;
-    } else {
-      return company.settings;
-    }
-  }
-
-  // ignore: unused_element
-  static void _initializeBuilder(SettingsUIStateBuilder builder) =>
-      builder..selectedTemplate = EmailTemplate.invoice;
-
-  static Serializer<SettingsUIState> get serializer =>
-      _$settingsUIStateSerializer;
 }

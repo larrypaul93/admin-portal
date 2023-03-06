@@ -22,10 +22,6 @@ const EntityAction _$cloneToRecurring =
     const EntityAction._('cloneToRecurring');
 const EntityAction _$cloneToPurchaseOrder =
     const EntityAction._('cloneToPurchaseOrder');
-const EntityAction _$convertToInvoice =
-    const EntityAction._('convertToInvoice');
-const EntityAction _$convertToProject =
-    const EntityAction._('convertToProject');
 const EntityAction _$approve = const EntityAction._('approve');
 const EntityAction _$applyCredit = const EntityAction._('applyCredit');
 const EntityAction _$applyPayment = const EntityAction._('applyPayment');
@@ -53,6 +49,7 @@ const EntityAction _$newTask = const EntityAction._('newTask');
 const EntityAction _$newVendor = const EntityAction._('newVendor');
 const EntityAction _$newPurchaseOrder =
     const EntityAction._('newPurchaseOrder');
+const EntityAction _$newTransaction = const EntityAction._('newTransaction');
 const EntityAction _$clientPortal = const EntityAction._('clientPortal');
 const EntityAction _$vendorPortal = const EntityAction._('vendorPortal');
 const EntityAction _$newPayment = const EntityAction._('newPayment');
@@ -79,13 +76,23 @@ const EntityAction _$viewInvoice = const EntityAction._('viewInvoice');
 const EntityAction _$viewExpense = const EntityAction._('viewExpense');
 const EntityAction _$changeStatus = const EntityAction._('changeStatus');
 const EntityAction _$addToInvoice = const EntityAction._('addToInvoice');
-const EntityAction _$cancel = const EntityAction._('cancel');
+const EntityAction _$back = const EntityAction._('back');
 const EntityAction _$save = const EntityAction._('save');
 const EntityAction _$accept = const EntityAction._('accept');
 const EntityAction _$addToInventory = const EntityAction._('addToInventory');
+const EntityAction _$convert = const EntityAction._('convert');
+const EntityAction _$convertMatched = const EntityAction._('convertMatched');
 const EntityAction _$convertToExpense =
     const EntityAction._('convertToExpense');
+const EntityAction _$convertToPayment =
+    const EntityAction._('convertToPayment');
+const EntityAction _$convertToInvoice =
+    const EntityAction._('convertToInvoice');
+const EntityAction _$convertToProject =
+    const EntityAction._('convertToProject');
 const EntityAction _$merge = const EntityAction._('merge');
+const EntityAction _$bulkPrint = const EntityAction._('bulkPrint');
+const EntityAction _$autoBill = const EntityAction._('autoBill');
 
 EntityAction _$valueOf(String name) {
   switch (name) {
@@ -117,10 +124,6 @@ EntityAction _$valueOf(String name) {
       return _$cloneToRecurring;
     case 'cloneToPurchaseOrder':
       return _$cloneToPurchaseOrder;
-    case 'convertToInvoice':
-      return _$convertToInvoice;
-    case 'convertToProject':
-      return _$convertToProject;
     case 'approve':
       return _$approve;
     case 'applyCredit':
@@ -167,6 +170,8 @@ EntityAction _$valueOf(String name) {
       return _$newVendor;
     case 'newPurchaseOrder':
       return _$newPurchaseOrder;
+    case 'newTransaction':
+      return _$newTransaction;
     case 'clientPortal':
       return _$clientPortal;
     case 'vendorPortal':
@@ -217,18 +222,32 @@ EntityAction _$valueOf(String name) {
       return _$changeStatus;
     case 'addToInvoice':
       return _$addToInvoice;
-    case 'cancel':
-      return _$cancel;
+    case 'back':
+      return _$back;
     case 'save':
       return _$save;
     case 'accept':
       return _$accept;
     case 'addToInventory':
       return _$addToInventory;
+    case 'convert':
+      return _$convert;
+    case 'convertMatched':
+      return _$convertMatched;
     case 'convertToExpense':
       return _$convertToExpense;
+    case 'convertToPayment':
+      return _$convertToPayment;
+    case 'convertToInvoice':
+      return _$convertToInvoice;
+    case 'convertToProject':
+      return _$convertToProject;
     case 'merge':
       return _$merge;
+    case 'bulkPrint':
+      return _$bulkPrint;
+    case 'autoBill':
+      return _$autoBill;
     default:
       throw new ArgumentError(name);
   }
@@ -250,8 +269,6 @@ final BuiltSet<EntityAction> _$values =
   _$cloneToExpense,
   _$cloneToRecurring,
   _$cloneToPurchaseOrder,
-  _$convertToInvoice,
-  _$convertToProject,
   _$approve,
   _$applyCredit,
   _$applyPayment,
@@ -275,6 +292,7 @@ final BuiltSet<EntityAction> _$values =
   _$newTask,
   _$newVendor,
   _$newPurchaseOrder,
+  _$newTransaction,
   _$clientPortal,
   _$vendorPortal,
   _$newPayment,
@@ -300,12 +318,19 @@ final BuiltSet<EntityAction> _$values =
   _$viewExpense,
   _$changeStatus,
   _$addToInvoice,
-  _$cancel,
+  _$back,
   _$save,
   _$accept,
   _$addToInventory,
+  _$convert,
+  _$convertMatched,
   _$convertToExpense,
+  _$convertToPayment,
+  _$convertToInvoice,
+  _$convertToProject,
   _$merge,
+  _$bulkPrint,
+  _$autoBill,
 ]);
 
 Serializer<EntityAction> _$entityActionSerializer =
@@ -328,4 +353,4 @@ class _$EntityActionSerializer implements PrimitiveSerializer<EntityAction> {
       EntityAction.valueOf(serialized as String);
 }
 
-// ignore_for_file: always_put_control_body_on_new_line,always_specify_types,annotate_overrides,avoid_annotating_with_dynamic,avoid_as,avoid_catches_without_on_clauses,avoid_returning_this,deprecated_member_use_from_same_package,lines_longer_than_80_chars,no_leading_underscores_for_local_identifiers,omit_local_variable_types,prefer_expression_function_bodies,sort_constructors_first,test_types_in_equals,unnecessary_const,unnecessary_new,unnecessary_lambdas
+// ignore_for_file: deprecated_member_use_from_same_package,type=lint

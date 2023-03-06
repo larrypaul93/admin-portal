@@ -8,6 +8,8 @@ part of 'settings_model.dart';
 
 Serializer<SettingsEntity> _$settingsEntitySerializer =
     new _$SettingsEntitySerializer();
+Serializer<PdfPreviewRequest> _$pdfPreviewRequestSerializer =
+    new _$PdfPreviewRequestSerializer();
 
 class _$SettingsEntitySerializer
     implements StructuredSerializer<SettingsEntity> {
@@ -1184,6 +1186,13 @@ class _$SettingsEntitySerializer
         ..add(
             serializers.serialize(value, specifiedType: const FullType(bool)));
     }
+    value = object.clientMarkPaidPaymentNotification;
+    if (value != null) {
+      result
+        ..add('send_email_on_mark_paid')
+        ..add(
+            serializers.serialize(value, specifiedType: const FullType(bool)));
+    }
     value = object.counterNumberApplied;
     if (value != null) {
       result
@@ -1232,6 +1241,13 @@ class _$SettingsEntitySerializer
         ..add('auto_bill')
         ..add(serializers.serialize(value,
             specifiedType: const FullType(String)));
+    }
+    value = object.autoBillStandardInvoices;
+    if (value != null) {
+      result
+        ..add('auto_bill_standard_invoices')
+        ..add(
+            serializers.serialize(value, specifiedType: const FullType(bool)));
     }
     value = object.clientPortalAllowUnderPayment;
     if (value != null) {
@@ -1384,6 +1400,76 @@ class _$SettingsEntitySerializer
         ..add('besr_id')
         ..add(serializers.serialize(value,
             specifiedType: const FullType(String)));
+    }
+    value = object.postmarkSecret;
+    if (value != null) {
+      result
+        ..add('postmark_secret')
+        ..add(serializers.serialize(value,
+            specifiedType: const FullType(String)));
+    }
+    value = object.mailgunSecret;
+    if (value != null) {
+      result
+        ..add('mailgun_secret')
+        ..add(serializers.serialize(value,
+            specifiedType: const FullType(String)));
+    }
+    value = object.mailgunDomain;
+    if (value != null) {
+      result
+        ..add('mailgun_domain')
+        ..add(serializers.serialize(value,
+            specifiedType: const FullType(String)));
+    }
+    value = object.emailAlignment;
+    if (value != null) {
+      result
+        ..add('email_alignment')
+        ..add(serializers.serialize(value,
+            specifiedType: const FullType(String)));
+    }
+    value = object.showEmailFooter;
+    if (value != null) {
+      result
+        ..add('show_email_footer')
+        ..add(
+            serializers.serialize(value, specifiedType: const FullType(bool)));
+    }
+    value = object.companyLogoSize;
+    if (value != null) {
+      result
+        ..add('company_logo_size')
+        ..add(serializers.serialize(value,
+            specifiedType: const FullType(String)));
+    }
+    value = object.showPaidStamp;
+    if (value != null) {
+      result
+        ..add('show_paid_stamp')
+        ..add(
+            serializers.serialize(value, specifiedType: const FullType(bool)));
+    }
+    value = object.showShippingAddress;
+    if (value != null) {
+      result
+        ..add('show_shipping_address')
+        ..add(
+            serializers.serialize(value, specifiedType: const FullType(bool)));
+    }
+    value = object.customSendingEmail;
+    if (value != null) {
+      result
+        ..add('custom_sending_email')
+        ..add(serializers.serialize(value,
+            specifiedType: const FullType(String)));
+    }
+    value = object.acceptPurchaseOrderNumber;
+    if (value != null) {
+      result
+        ..add('accept_client_input_quote_approval')
+        ..add(
+            serializers.serialize(value, specifiedType: const FullType(bool)));
     }
     return result;
   }
@@ -2076,6 +2162,10 @@ class _$SettingsEntitySerializer
           result.clientManualPaymentNotification = serializers
               .deserialize(value, specifiedType: const FullType(bool)) as bool;
           break;
+        case 'send_email_on_mark_paid':
+          result.clientMarkPaidPaymentNotification = serializers
+              .deserialize(value, specifiedType: const FullType(bool)) as bool;
+          break;
         case 'counter_number_applied':
           result.counterNumberApplied = serializers.deserialize(value,
               specifiedType: const FullType(String)) as String;
@@ -2103,6 +2193,10 @@ class _$SettingsEntitySerializer
         case 'auto_bill':
           result.autoBill = serializers.deserialize(value,
               specifiedType: const FullType(String)) as String;
+          break;
+        case 'auto_bill_standard_invoices':
+          result.autoBillStandardInvoices = serializers.deserialize(value,
+              specifiedType: const FullType(bool)) as bool;
           break;
         case 'client_portal_allow_under_payment':
           result.clientPortalAllowUnderPayment = serializers.deserialize(value,
@@ -2191,6 +2285,116 @@ class _$SettingsEntitySerializer
           break;
         case 'besr_id':
           result.besrId = serializers.deserialize(value,
+              specifiedType: const FullType(String)) as String;
+          break;
+        case 'postmark_secret':
+          result.postmarkSecret = serializers.deserialize(value,
+              specifiedType: const FullType(String)) as String;
+          break;
+        case 'mailgun_secret':
+          result.mailgunSecret = serializers.deserialize(value,
+              specifiedType: const FullType(String)) as String;
+          break;
+        case 'mailgun_domain':
+          result.mailgunDomain = serializers.deserialize(value,
+              specifiedType: const FullType(String)) as String;
+          break;
+        case 'email_alignment':
+          result.emailAlignment = serializers.deserialize(value,
+              specifiedType: const FullType(String)) as String;
+          break;
+        case 'show_email_footer':
+          result.showEmailFooter = serializers.deserialize(value,
+              specifiedType: const FullType(bool)) as bool;
+          break;
+        case 'company_logo_size':
+          result.companyLogoSize = serializers.deserialize(value,
+              specifiedType: const FullType(String)) as String;
+          break;
+        case 'show_paid_stamp':
+          result.showPaidStamp = serializers.deserialize(value,
+              specifiedType: const FullType(bool)) as bool;
+          break;
+        case 'show_shipping_address':
+          result.showShippingAddress = serializers.deserialize(value,
+              specifiedType: const FullType(bool)) as bool;
+          break;
+        case 'custom_sending_email':
+          result.customSendingEmail = serializers.deserialize(value,
+              specifiedType: const FullType(String)) as String;
+          break;
+        case 'accept_client_input_quote_approval':
+          result.acceptPurchaseOrderNumber = serializers.deserialize(value,
+              specifiedType: const FullType(bool)) as bool;
+          break;
+      }
+    }
+
+    return result.build();
+  }
+}
+
+class _$PdfPreviewRequestSerializer
+    implements StructuredSerializer<PdfPreviewRequest> {
+  @override
+  final Iterable<Type> types = const [PdfPreviewRequest, _$PdfPreviewRequest];
+  @override
+  final String wireName = 'PdfPreviewRequest';
+
+  @override
+  Iterable<Object> serialize(Serializers serializers, PdfPreviewRequest object,
+      {FullType specifiedType = FullType.unspecified}) {
+    final result = <Object>[
+      'entity_type',
+      serializers.serialize(object.entityType,
+          specifiedType: const FullType(String)),
+      'settings_type',
+      serializers.serialize(object.settingsType,
+          specifiedType: const FullType(String)),
+      'settings',
+      serializers.serialize(object.settings,
+          specifiedType: const FullType(SettingsEntity)),
+      'group_id',
+      serializers.serialize(object.groupId,
+          specifiedType: const FullType(String)),
+      'client_id',
+      serializers.serialize(object.clientId,
+          specifiedType: const FullType(String)),
+    ];
+
+    return result;
+  }
+
+  @override
+  PdfPreviewRequest deserialize(
+      Serializers serializers, Iterable<Object> serialized,
+      {FullType specifiedType = FullType.unspecified}) {
+    final result = new PdfPreviewRequestBuilder();
+
+    final iterator = serialized.iterator;
+    while (iterator.moveNext()) {
+      final key = iterator.current as String;
+      iterator.moveNext();
+      final Object value = iterator.current;
+      switch (key) {
+        case 'entity_type':
+          result.entityType = serializers.deserialize(value,
+              specifiedType: const FullType(String)) as String;
+          break;
+        case 'settings_type':
+          result.settingsType = serializers.deserialize(value,
+              specifiedType: const FullType(String)) as String;
+          break;
+        case 'settings':
+          result.settings.replace(serializers.deserialize(value,
+              specifiedType: const FullType(SettingsEntity)) as SettingsEntity);
+          break;
+        case 'group_id':
+          result.groupId = serializers.deserialize(value,
+              specifiedType: const FullType(String)) as String;
+          break;
+        case 'client_id':
+          result.clientId = serializers.deserialize(value,
               specifiedType: const FullType(String)) as String;
           break;
       }
@@ -2538,6 +2742,8 @@ class _$SettingsEntity extends SettingsEntity {
   @override
   final bool clientManualPaymentNotification;
   @override
+  final bool clientMarkPaidPaymentNotification;
+  @override
   final String counterNumberApplied;
   @override
   final String emailSendingMethod;
@@ -2551,6 +2757,8 @@ class _$SettingsEntity extends SettingsEntity {
   final String lockInvoices;
   @override
   final String autoBill;
+  @override
+  final bool autoBillStandardInvoices;
   @override
   final bool clientPortalAllowUnderPayment;
   @override
@@ -2595,6 +2803,26 @@ class _$SettingsEntity extends SettingsEntity {
   final String qrIban;
   @override
   final String besrId;
+  @override
+  final String postmarkSecret;
+  @override
+  final String mailgunSecret;
+  @override
+  final String mailgunDomain;
+  @override
+  final String emailAlignment;
+  @override
+  final bool showEmailFooter;
+  @override
+  final String companyLogoSize;
+  @override
+  final bool showPaidStamp;
+  @override
+  final bool showShippingAddress;
+  @override
+  final String customSendingEmail;
+  @override
+  final bool acceptPurchaseOrderNumber;
 
   factory _$SettingsEntity([void Function(SettingsEntityBuilder) updates]) =>
       (new SettingsEntityBuilder()..update(updates))._build();
@@ -2768,6 +2996,7 @@ class _$SettingsEntity extends SettingsEntity {
       this.emailBodyReminderEndless,
       this.clientOnlinePaymentNotification,
       this.clientManualPaymentNotification,
+      this.clientMarkPaidPaymentNotification,
       this.counterNumberApplied,
       this.emailSendingMethod,
       this.gmailSendingUserId,
@@ -2775,6 +3004,7 @@ class _$SettingsEntity extends SettingsEntity {
       this.clientPortalPrivacy,
       this.lockInvoices,
       this.autoBill,
+      this.autoBillStandardInvoices,
       this.clientPortalAllowUnderPayment,
       this.clientPortalAllowOverPayment,
       this.autoBillDate,
@@ -2796,7 +3026,17 @@ class _$SettingsEntity extends SettingsEntity {
       this.purchaseOrderNumberPattern,
       this.purchaseOrderNumberCounter,
       this.qrIban,
-      this.besrId})
+      this.besrId,
+      this.postmarkSecret,
+      this.mailgunSecret,
+      this.mailgunDomain,
+      this.emailAlignment,
+      this.showEmailFooter,
+      this.companyLogoSize,
+      this.showPaidStamp,
+      this.showShippingAddress,
+      this.customSendingEmail,
+      this.acceptPurchaseOrderNumber})
       : super._();
 
   @override
@@ -2981,6 +3221,8 @@ class _$SettingsEntity extends SettingsEntity {
             other.clientOnlinePaymentNotification &&
         clientManualPaymentNotification ==
             other.clientManualPaymentNotification &&
+        clientMarkPaidPaymentNotification ==
+            other.clientMarkPaidPaymentNotification &&
         counterNumberApplied == other.counterNumberApplied &&
         emailSendingMethod == other.emailSendingMethod &&
         gmailSendingUserId == other.gmailSendingUserId &&
@@ -2988,6 +3230,7 @@ class _$SettingsEntity extends SettingsEntity {
         clientPortalPrivacy == other.clientPortalPrivacy &&
         lockInvoices == other.lockInvoices &&
         autoBill == other.autoBill &&
+        autoBillStandardInvoices == other.autoBillStandardInvoices &&
         clientPortalAllowUnderPayment == other.clientPortalAllowUnderPayment &&
         clientPortalAllowOverPayment == other.clientPortalAllowOverPayment &&
         autoBillDate == other.autoBillDate &&
@@ -3010,50 +3253,235 @@ class _$SettingsEntity extends SettingsEntity {
         purchaseOrderNumberPattern == other.purchaseOrderNumberPattern &&
         purchaseOrderNumberCounter == other.purchaseOrderNumberCounter &&
         qrIban == other.qrIban &&
-        besrId == other.besrId;
+        besrId == other.besrId &&
+        postmarkSecret == other.postmarkSecret &&
+        mailgunSecret == other.mailgunSecret &&
+        mailgunDomain == other.mailgunDomain &&
+        emailAlignment == other.emailAlignment &&
+        showEmailFooter == other.showEmailFooter &&
+        companyLogoSize == other.companyLogoSize &&
+        showPaidStamp == other.showPaidStamp &&
+        showShippingAddress == other.showShippingAddress &&
+        customSendingEmail == other.customSendingEmail &&
+        acceptPurchaseOrderNumber == other.acceptPurchaseOrderNumber;
   }
 
   int __hashCode;
   @override
   int get hashCode {
-    return __hashCode ??= $jf($jc(
-        $jc(
-            $jc(
-                $jc(
-                    $jc(
-                        $jc(
-                            $jc(
-                                $jc(
-                                    $jc(
-                                        $jc(
-                                            $jc(
-                                                $jc(
-                                                    $jc(
-                                                        $jc(
-                                                            $jc(
-                                                                $jc(
-                                                                    $jc(
-                                                                        $jc(
-                                                                            $jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc(0, timezoneId.hashCode), dateFormatId.hashCode), enableMilitaryTime.hashCode), languageId.hashCode), showCurrencyCode.hashCode), currencyId.hashCode), customValue1.hashCode), customValue2.hashCode), customValue3.hashCode), customValue4.hashCode), defaultPaymentTerms.hashCode), defaultValidUntil.hashCode), companyGatewayIds.hashCode), defaultTaskRate.hashCode), sendReminders.hashCode), enablePortal.hashCode), enablePortalDashboard.hashCode), enablePortalTasks.hashCode), enableClientPortalUploads.hashCode), enableVendorPortalUploads.hashCode), emailStyle.hashCode), replyToEmail.hashCode), replyToName.hashCode), emailFromName.hashCode), bccEmail.hashCode), pdfEmailAttachment.hashCode), ublEmailAttachment.hashCode), documentEmailAttachment.hashCode), emailStyleCustom.hashCode), customMessageDashboard.hashCode), customMessageUnpaidInvoice.hashCode), customMessagePaidInvoice.hashCode), customMessageUnapprovedQuote.hashCode), autoArchiveInvoice.hashCode), autoArchiveInvoiceCancelled.hashCode), autoArchiveQuote.hashCode), autoEmailInvoice.hashCode), autoConvertQuote.hashCode), enableInclusiveTaxes.hashCode), translations.hashCode), taskNumberPattern.hashCode), taskNumberCounter.hashCode), expenseNumberPattern.hashCode), expenseNumberCounter.hashCode), recurringExpenseNumberPattern.hashCode), recurringExpenseNumberCounter.hashCode), vendorNumberPattern.hashCode), vendorNumberCounter.hashCode), ticketNumberPattern.hashCode), ticketNumberCounter.hashCode), paymentNumberPattern.hashCode), paymentNumberCounter.hashCode), projectNumberPattern.hashCode), projectNumberCounter.hashCode), invoiceNumberPattern.hashCode), invoiceNumberCounter.hashCode), recurringInvoiceNumberPattern.hashCode), recurringInvoiceNumberCounter.hashCode), quoteNumberPattern.hashCode), quoteNumberCounter.hashCode), clientNumberPattern.hashCode), clientNumberCounter.hashCode), creditNumberPattern.hashCode), creditNumberCounter.hashCode), recurringNumberPrefix.hashCode), resetCounterFrequencyId.hashCode), resetCounterDate.hashCode), counterPadding.hashCode), sharedInvoiceQuoteCounter.hashCode), sharedInvoiceCreditCounter.hashCode), defaultInvoiceTerms.hashCode), defaultQuoteTerms.hashCode), defaultQuoteFooter.hashCode), defaultCreditTerms.hashCode), defaultCreditFooter.hashCode), defaultInvoiceDesignId.hashCode), defaultQuoteDesignId.hashCode), defaultCreditDesignId.hashCode), defaultInvoiceFooter.hashCode), defaultTaxName1.hashCode), defaultTaxRate1.hashCode), defaultTaxName2.hashCode), defaultTaxRate2.hashCode), defaultTaxName3.hashCode), defaultTaxRate3.hashCode), defaultPaymentTypeId.hashCode), pdfVariables.hashCode), emailSignature.hashCode), emailSubjectInvoice.hashCode), emailSubjectQuote.hashCode), emailSubjectCredit.hashCode), emailSubjectPayment.hashCode), emailSubjectPaymentPartial.hashCode), emailBodyInvoice.hashCode), emailBodyQuote.hashCode), emailBodyCredit.hashCode), emailBodyPayment.hashCode), emailBodyPaymentPartial.hashCode), emailSubjectReminder1.hashCode), emailSubjectReminder2.hashCode), emailSubjectReminder3.hashCode), emailBodyReminder1.hashCode), emailBodyReminder2.hashCode), emailBodyReminder3.hashCode), emailSubjectCustom1.hashCode), emailBodyCustom1.hashCode), emailSubjectCustom2.hashCode), emailBodyCustom2.hashCode), emailSubjectCustom3.hashCode), emailBodyCustom3.hashCode), emailSubjectStatement.hashCode), emailBodyStatement.hashCode), emailSubjectPurchaseOrder.hashCode), emailBodyPurchaseOrder.hashCode), enablePortalPassword.hashCode), signatureOnPdf.hashCode), enableEmailMarkup.hashCode), showAcceptInvoiceTerms.hashCode), showAcceptQuoteTerms.hashCode), requireInvoiceSignature.hashCode), requireQuoteSignature.hashCode), name.hashCode), companyLogo.hashCode), website.hashCode), address1.hashCode), address2.hashCode), city.hashCode), state.hashCode), postalCode.hashCode), phone.hashCode), email.hashCode), countryId.hashCode), vatNumber.hashCode), idNumber.hashCode), pageSize.hashCode), pageLayout.hashCode), fontSize.hashCode), primaryColor.hashCode), secondaryColor.hashCode), primaryFont.hashCode), secondaryFont.hashCode), hidePaidToDate.hashCode), embedDocuments.hashCode), allPagesHeader.hashCode), allPagesFooter.hashCode), enableReminder1.hashCode), enableReminder2.hashCode), enableReminder3.hashCode), enableReminderEndless.hashCode), numDaysReminder1.hashCode), numDaysReminder2.hashCode), numDaysReminder3.hashCode), scheduleReminder1.hashCode), scheduleReminder2.hashCode), scheduleReminder3.hashCode), endlessReminderFrequencyId.hashCode), lateFeeAmount1.hashCode), lateFeeAmount2.hashCode), lateFeeAmount3.hashCode), lateFeeAmountEndless.hashCode), lateFeePercent1.hashCode), lateFeePercent2.hashCode), lateFeePercent3.hashCode), lateFeePercentEndless.hashCode), emailSubjectReminderEndless.hashCode), emailBodyReminderEndless.hashCode), clientOnlinePaymentNotification.hashCode), clientManualPaymentNotification.hashCode), counterNumberApplied.hashCode), emailSendingMethod.hashCode), gmailSendingUserId.hashCode), clientPortalTerms.hashCode), clientPortalPrivacy.hashCode), lockInvoices.hashCode), autoBill.hashCode), clientPortalAllowUnderPayment.hashCode), clientPortalAllowOverPayment.hashCode), autoBillDate.hashCode),
-                                                                                clientPortalUnderPaymentMinimum.hashCode),
-                                                                            useCreditsPayment.hashCode),
-                                                                        clientPortalCustomHeader.hashCode),
-                                                                    clientPortalCustomCss.hashCode),
-                                                                clientPortalCustomFooter.hashCode),
-                                                            clientPortalCustomJs.hashCode),
-                                                        hideEmptyColumnsOnPdf.hashCode),
-                                                    entitySendTime.hashCode),
-                                                clientPortalTasks.hashCode),
-                                            pageNumbering.hashCode),
-                                        pageNumberingAlignment.hashCode),
-                                    requirePurchaseOrderSignature.hashCode),
-                                defaultPurchaseOrderTerms.hashCode),
-                            defaultPurchaseOrderDesignId.hashCode),
-                        defaultPurchaseOrderFooter.hashCode),
-                    purchaseOrderNumberPattern.hashCode),
-                purchaseOrderNumberCounter.hashCode),
-            qrIban.hashCode),
-        besrId.hashCode));
+    if (__hashCode != null) return __hashCode;
+    var _$hash = 0;
+    _$hash = $jc(_$hash, timezoneId.hashCode);
+    _$hash = $jc(_$hash, dateFormatId.hashCode);
+    _$hash = $jc(_$hash, enableMilitaryTime.hashCode);
+    _$hash = $jc(_$hash, languageId.hashCode);
+    _$hash = $jc(_$hash, showCurrencyCode.hashCode);
+    _$hash = $jc(_$hash, currencyId.hashCode);
+    _$hash = $jc(_$hash, customValue1.hashCode);
+    _$hash = $jc(_$hash, customValue2.hashCode);
+    _$hash = $jc(_$hash, customValue3.hashCode);
+    _$hash = $jc(_$hash, customValue4.hashCode);
+    _$hash = $jc(_$hash, defaultPaymentTerms.hashCode);
+    _$hash = $jc(_$hash, defaultValidUntil.hashCode);
+    _$hash = $jc(_$hash, companyGatewayIds.hashCode);
+    _$hash = $jc(_$hash, defaultTaskRate.hashCode);
+    _$hash = $jc(_$hash, sendReminders.hashCode);
+    _$hash = $jc(_$hash, enablePortal.hashCode);
+    _$hash = $jc(_$hash, enablePortalDashboard.hashCode);
+    _$hash = $jc(_$hash, enablePortalTasks.hashCode);
+    _$hash = $jc(_$hash, enableClientPortalUploads.hashCode);
+    _$hash = $jc(_$hash, enableVendorPortalUploads.hashCode);
+    _$hash = $jc(_$hash, emailStyle.hashCode);
+    _$hash = $jc(_$hash, replyToEmail.hashCode);
+    _$hash = $jc(_$hash, replyToName.hashCode);
+    _$hash = $jc(_$hash, emailFromName.hashCode);
+    _$hash = $jc(_$hash, bccEmail.hashCode);
+    _$hash = $jc(_$hash, pdfEmailAttachment.hashCode);
+    _$hash = $jc(_$hash, ublEmailAttachment.hashCode);
+    _$hash = $jc(_$hash, documentEmailAttachment.hashCode);
+    _$hash = $jc(_$hash, emailStyleCustom.hashCode);
+    _$hash = $jc(_$hash, customMessageDashboard.hashCode);
+    _$hash = $jc(_$hash, customMessageUnpaidInvoice.hashCode);
+    _$hash = $jc(_$hash, customMessagePaidInvoice.hashCode);
+    _$hash = $jc(_$hash, customMessageUnapprovedQuote.hashCode);
+    _$hash = $jc(_$hash, autoArchiveInvoice.hashCode);
+    _$hash = $jc(_$hash, autoArchiveInvoiceCancelled.hashCode);
+    _$hash = $jc(_$hash, autoArchiveQuote.hashCode);
+    _$hash = $jc(_$hash, autoEmailInvoice.hashCode);
+    _$hash = $jc(_$hash, autoConvertQuote.hashCode);
+    _$hash = $jc(_$hash, enableInclusiveTaxes.hashCode);
+    _$hash = $jc(_$hash, translations.hashCode);
+    _$hash = $jc(_$hash, taskNumberPattern.hashCode);
+    _$hash = $jc(_$hash, taskNumberCounter.hashCode);
+    _$hash = $jc(_$hash, expenseNumberPattern.hashCode);
+    _$hash = $jc(_$hash, expenseNumberCounter.hashCode);
+    _$hash = $jc(_$hash, recurringExpenseNumberPattern.hashCode);
+    _$hash = $jc(_$hash, recurringExpenseNumberCounter.hashCode);
+    _$hash = $jc(_$hash, vendorNumberPattern.hashCode);
+    _$hash = $jc(_$hash, vendorNumberCounter.hashCode);
+    _$hash = $jc(_$hash, ticketNumberPattern.hashCode);
+    _$hash = $jc(_$hash, ticketNumberCounter.hashCode);
+    _$hash = $jc(_$hash, paymentNumberPattern.hashCode);
+    _$hash = $jc(_$hash, paymentNumberCounter.hashCode);
+    _$hash = $jc(_$hash, projectNumberPattern.hashCode);
+    _$hash = $jc(_$hash, projectNumberCounter.hashCode);
+    _$hash = $jc(_$hash, invoiceNumberPattern.hashCode);
+    _$hash = $jc(_$hash, invoiceNumberCounter.hashCode);
+    _$hash = $jc(_$hash, recurringInvoiceNumberPattern.hashCode);
+    _$hash = $jc(_$hash, recurringInvoiceNumberCounter.hashCode);
+    _$hash = $jc(_$hash, quoteNumberPattern.hashCode);
+    _$hash = $jc(_$hash, quoteNumberCounter.hashCode);
+    _$hash = $jc(_$hash, clientNumberPattern.hashCode);
+    _$hash = $jc(_$hash, clientNumberCounter.hashCode);
+    _$hash = $jc(_$hash, creditNumberPattern.hashCode);
+    _$hash = $jc(_$hash, creditNumberCounter.hashCode);
+    _$hash = $jc(_$hash, recurringNumberPrefix.hashCode);
+    _$hash = $jc(_$hash, resetCounterFrequencyId.hashCode);
+    _$hash = $jc(_$hash, resetCounterDate.hashCode);
+    _$hash = $jc(_$hash, counterPadding.hashCode);
+    _$hash = $jc(_$hash, sharedInvoiceQuoteCounter.hashCode);
+    _$hash = $jc(_$hash, sharedInvoiceCreditCounter.hashCode);
+    _$hash = $jc(_$hash, defaultInvoiceTerms.hashCode);
+    _$hash = $jc(_$hash, defaultQuoteTerms.hashCode);
+    _$hash = $jc(_$hash, defaultQuoteFooter.hashCode);
+    _$hash = $jc(_$hash, defaultCreditTerms.hashCode);
+    _$hash = $jc(_$hash, defaultCreditFooter.hashCode);
+    _$hash = $jc(_$hash, defaultInvoiceDesignId.hashCode);
+    _$hash = $jc(_$hash, defaultQuoteDesignId.hashCode);
+    _$hash = $jc(_$hash, defaultCreditDesignId.hashCode);
+    _$hash = $jc(_$hash, defaultInvoiceFooter.hashCode);
+    _$hash = $jc(_$hash, defaultTaxName1.hashCode);
+    _$hash = $jc(_$hash, defaultTaxRate1.hashCode);
+    _$hash = $jc(_$hash, defaultTaxName2.hashCode);
+    _$hash = $jc(_$hash, defaultTaxRate2.hashCode);
+    _$hash = $jc(_$hash, defaultTaxName3.hashCode);
+    _$hash = $jc(_$hash, defaultTaxRate3.hashCode);
+    _$hash = $jc(_$hash, defaultPaymentTypeId.hashCode);
+    _$hash = $jc(_$hash, pdfVariables.hashCode);
+    _$hash = $jc(_$hash, emailSignature.hashCode);
+    _$hash = $jc(_$hash, emailSubjectInvoice.hashCode);
+    _$hash = $jc(_$hash, emailSubjectQuote.hashCode);
+    _$hash = $jc(_$hash, emailSubjectCredit.hashCode);
+    _$hash = $jc(_$hash, emailSubjectPayment.hashCode);
+    _$hash = $jc(_$hash, emailSubjectPaymentPartial.hashCode);
+    _$hash = $jc(_$hash, emailBodyInvoice.hashCode);
+    _$hash = $jc(_$hash, emailBodyQuote.hashCode);
+    _$hash = $jc(_$hash, emailBodyCredit.hashCode);
+    _$hash = $jc(_$hash, emailBodyPayment.hashCode);
+    _$hash = $jc(_$hash, emailBodyPaymentPartial.hashCode);
+    _$hash = $jc(_$hash, emailSubjectReminder1.hashCode);
+    _$hash = $jc(_$hash, emailSubjectReminder2.hashCode);
+    _$hash = $jc(_$hash, emailSubjectReminder3.hashCode);
+    _$hash = $jc(_$hash, emailBodyReminder1.hashCode);
+    _$hash = $jc(_$hash, emailBodyReminder2.hashCode);
+    _$hash = $jc(_$hash, emailBodyReminder3.hashCode);
+    _$hash = $jc(_$hash, emailSubjectCustom1.hashCode);
+    _$hash = $jc(_$hash, emailBodyCustom1.hashCode);
+    _$hash = $jc(_$hash, emailSubjectCustom2.hashCode);
+    _$hash = $jc(_$hash, emailBodyCustom2.hashCode);
+    _$hash = $jc(_$hash, emailSubjectCustom3.hashCode);
+    _$hash = $jc(_$hash, emailBodyCustom3.hashCode);
+    _$hash = $jc(_$hash, emailSubjectStatement.hashCode);
+    _$hash = $jc(_$hash, emailBodyStatement.hashCode);
+    _$hash = $jc(_$hash, emailSubjectPurchaseOrder.hashCode);
+    _$hash = $jc(_$hash, emailBodyPurchaseOrder.hashCode);
+    _$hash = $jc(_$hash, enablePortalPassword.hashCode);
+    _$hash = $jc(_$hash, signatureOnPdf.hashCode);
+    _$hash = $jc(_$hash, enableEmailMarkup.hashCode);
+    _$hash = $jc(_$hash, showAcceptInvoiceTerms.hashCode);
+    _$hash = $jc(_$hash, showAcceptQuoteTerms.hashCode);
+    _$hash = $jc(_$hash, requireInvoiceSignature.hashCode);
+    _$hash = $jc(_$hash, requireQuoteSignature.hashCode);
+    _$hash = $jc(_$hash, name.hashCode);
+    _$hash = $jc(_$hash, companyLogo.hashCode);
+    _$hash = $jc(_$hash, website.hashCode);
+    _$hash = $jc(_$hash, address1.hashCode);
+    _$hash = $jc(_$hash, address2.hashCode);
+    _$hash = $jc(_$hash, city.hashCode);
+    _$hash = $jc(_$hash, state.hashCode);
+    _$hash = $jc(_$hash, postalCode.hashCode);
+    _$hash = $jc(_$hash, phone.hashCode);
+    _$hash = $jc(_$hash, email.hashCode);
+    _$hash = $jc(_$hash, countryId.hashCode);
+    _$hash = $jc(_$hash, vatNumber.hashCode);
+    _$hash = $jc(_$hash, idNumber.hashCode);
+    _$hash = $jc(_$hash, pageSize.hashCode);
+    _$hash = $jc(_$hash, pageLayout.hashCode);
+    _$hash = $jc(_$hash, fontSize.hashCode);
+    _$hash = $jc(_$hash, primaryColor.hashCode);
+    _$hash = $jc(_$hash, secondaryColor.hashCode);
+    _$hash = $jc(_$hash, primaryFont.hashCode);
+    _$hash = $jc(_$hash, secondaryFont.hashCode);
+    _$hash = $jc(_$hash, hidePaidToDate.hashCode);
+    _$hash = $jc(_$hash, embedDocuments.hashCode);
+    _$hash = $jc(_$hash, allPagesHeader.hashCode);
+    _$hash = $jc(_$hash, allPagesFooter.hashCode);
+    _$hash = $jc(_$hash, enableReminder1.hashCode);
+    _$hash = $jc(_$hash, enableReminder2.hashCode);
+    _$hash = $jc(_$hash, enableReminder3.hashCode);
+    _$hash = $jc(_$hash, enableReminderEndless.hashCode);
+    _$hash = $jc(_$hash, numDaysReminder1.hashCode);
+    _$hash = $jc(_$hash, numDaysReminder2.hashCode);
+    _$hash = $jc(_$hash, numDaysReminder3.hashCode);
+    _$hash = $jc(_$hash, scheduleReminder1.hashCode);
+    _$hash = $jc(_$hash, scheduleReminder2.hashCode);
+    _$hash = $jc(_$hash, scheduleReminder3.hashCode);
+    _$hash = $jc(_$hash, endlessReminderFrequencyId.hashCode);
+    _$hash = $jc(_$hash, lateFeeAmount1.hashCode);
+    _$hash = $jc(_$hash, lateFeeAmount2.hashCode);
+    _$hash = $jc(_$hash, lateFeeAmount3.hashCode);
+    _$hash = $jc(_$hash, lateFeeAmountEndless.hashCode);
+    _$hash = $jc(_$hash, lateFeePercent1.hashCode);
+    _$hash = $jc(_$hash, lateFeePercent2.hashCode);
+    _$hash = $jc(_$hash, lateFeePercent3.hashCode);
+    _$hash = $jc(_$hash, lateFeePercentEndless.hashCode);
+    _$hash = $jc(_$hash, emailSubjectReminderEndless.hashCode);
+    _$hash = $jc(_$hash, emailBodyReminderEndless.hashCode);
+    _$hash = $jc(_$hash, clientOnlinePaymentNotification.hashCode);
+    _$hash = $jc(_$hash, clientManualPaymentNotification.hashCode);
+    _$hash = $jc(_$hash, clientMarkPaidPaymentNotification.hashCode);
+    _$hash = $jc(_$hash, counterNumberApplied.hashCode);
+    _$hash = $jc(_$hash, emailSendingMethod.hashCode);
+    _$hash = $jc(_$hash, gmailSendingUserId.hashCode);
+    _$hash = $jc(_$hash, clientPortalTerms.hashCode);
+    _$hash = $jc(_$hash, clientPortalPrivacy.hashCode);
+    _$hash = $jc(_$hash, lockInvoices.hashCode);
+    _$hash = $jc(_$hash, autoBill.hashCode);
+    _$hash = $jc(_$hash, autoBillStandardInvoices.hashCode);
+    _$hash = $jc(_$hash, clientPortalAllowUnderPayment.hashCode);
+    _$hash = $jc(_$hash, clientPortalAllowOverPayment.hashCode);
+    _$hash = $jc(_$hash, autoBillDate.hashCode);
+    _$hash = $jc(_$hash, clientPortalUnderPaymentMinimum.hashCode);
+    _$hash = $jc(_$hash, useCreditsPayment.hashCode);
+    _$hash = $jc(_$hash, clientPortalCustomHeader.hashCode);
+    _$hash = $jc(_$hash, clientPortalCustomCss.hashCode);
+    _$hash = $jc(_$hash, clientPortalCustomFooter.hashCode);
+    _$hash = $jc(_$hash, clientPortalCustomJs.hashCode);
+    _$hash = $jc(_$hash, hideEmptyColumnsOnPdf.hashCode);
+    _$hash = $jc(_$hash, entitySendTime.hashCode);
+    _$hash = $jc(_$hash, clientPortalTasks.hashCode);
+    _$hash = $jc(_$hash, pageNumbering.hashCode);
+    _$hash = $jc(_$hash, pageNumberingAlignment.hashCode);
+    _$hash = $jc(_$hash, requirePurchaseOrderSignature.hashCode);
+    _$hash = $jc(_$hash, defaultPurchaseOrderTerms.hashCode);
+    _$hash = $jc(_$hash, defaultPurchaseOrderDesignId.hashCode);
+    _$hash = $jc(_$hash, defaultPurchaseOrderFooter.hashCode);
+    _$hash = $jc(_$hash, purchaseOrderNumberPattern.hashCode);
+    _$hash = $jc(_$hash, purchaseOrderNumberCounter.hashCode);
+    _$hash = $jc(_$hash, qrIban.hashCode);
+    _$hash = $jc(_$hash, besrId.hashCode);
+    _$hash = $jc(_$hash, postmarkSecret.hashCode);
+    _$hash = $jc(_$hash, mailgunSecret.hashCode);
+    _$hash = $jc(_$hash, mailgunDomain.hashCode);
+    _$hash = $jc(_$hash, emailAlignment.hashCode);
+    _$hash = $jc(_$hash, showEmailFooter.hashCode);
+    _$hash = $jc(_$hash, companyLogoSize.hashCode);
+    _$hash = $jc(_$hash, showPaidStamp.hashCode);
+    _$hash = $jc(_$hash, showShippingAddress.hashCode);
+    _$hash = $jc(_$hash, customSendingEmail.hashCode);
+    _$hash = $jc(_$hash, acceptPurchaseOrderNumber.hashCode);
+    _$hash = $jf(_$hash);
+    return __hashCode ??= _$hash;
   }
 
   @override
@@ -3229,6 +3657,8 @@ class _$SettingsEntity extends SettingsEntity {
               clientOnlinePaymentNotification)
           ..add('clientManualPaymentNotification',
               clientManualPaymentNotification)
+          ..add('clientMarkPaidPaymentNotification',
+              clientMarkPaidPaymentNotification)
           ..add('counterNumberApplied', counterNumberApplied)
           ..add('emailSendingMethod', emailSendingMethod)
           ..add('gmailSendingUserId', gmailSendingUserId)
@@ -3236,6 +3666,7 @@ class _$SettingsEntity extends SettingsEntity {
           ..add('clientPortalPrivacy', clientPortalPrivacy)
           ..add('lockInvoices', lockInvoices)
           ..add('autoBill', autoBill)
+          ..add('autoBillStandardInvoices', autoBillStandardInvoices)
           ..add('clientPortalAllowUnderPayment', clientPortalAllowUnderPayment)
           ..add('clientPortalAllowOverPayment', clientPortalAllowOverPayment)
           ..add('autoBillDate', autoBillDate)
@@ -3258,7 +3689,17 @@ class _$SettingsEntity extends SettingsEntity {
           ..add('purchaseOrderNumberPattern', purchaseOrderNumberPattern)
           ..add('purchaseOrderNumberCounter', purchaseOrderNumberCounter)
           ..add('qrIban', qrIban)
-          ..add('besrId', besrId))
+          ..add('besrId', besrId)
+          ..add('postmarkSecret', postmarkSecret)
+          ..add('mailgunSecret', mailgunSecret)
+          ..add('mailgunDomain', mailgunDomain)
+          ..add('emailAlignment', emailAlignment)
+          ..add('showEmailFooter', showEmailFooter)
+          ..add('companyLogoSize', companyLogoSize)
+          ..add('showPaidStamp', showPaidStamp)
+          ..add('showShippingAddress', showShippingAddress)
+          ..add('customSendingEmail', customSendingEmail)
+          ..add('acceptPurchaseOrderNumber', acceptPurchaseOrderNumber))
         .toString();
   }
 }
@@ -4085,6 +4526,14 @@ class SettingsEntityBuilder
   set clientManualPaymentNotification(bool clientManualPaymentNotification) =>
       _$this._clientManualPaymentNotification = clientManualPaymentNotification;
 
+  bool _clientMarkPaidPaymentNotification;
+  bool get clientMarkPaidPaymentNotification =>
+      _$this._clientMarkPaidPaymentNotification;
+  set clientMarkPaidPaymentNotification(
+          bool clientMarkPaidPaymentNotification) =>
+      _$this._clientMarkPaidPaymentNotification =
+          clientMarkPaidPaymentNotification;
+
   String _counterNumberApplied;
   String get counterNumberApplied => _$this._counterNumberApplied;
   set counterNumberApplied(String counterNumberApplied) =>
@@ -4117,6 +4566,11 @@ class SettingsEntityBuilder
   String _autoBill;
   String get autoBill => _$this._autoBill;
   set autoBill(String autoBill) => _$this._autoBill = autoBill;
+
+  bool _autoBillStandardInvoices;
+  bool get autoBillStandardInvoices => _$this._autoBillStandardInvoices;
+  set autoBillStandardInvoices(bool autoBillStandardInvoices) =>
+      _$this._autoBillStandardInvoices = autoBillStandardInvoices;
 
   bool _clientPortalAllowUnderPayment;
   bool get clientPortalAllowUnderPayment =>
@@ -4228,6 +4682,56 @@ class SettingsEntityBuilder
   String _besrId;
   String get besrId => _$this._besrId;
   set besrId(String besrId) => _$this._besrId = besrId;
+
+  String _postmarkSecret;
+  String get postmarkSecret => _$this._postmarkSecret;
+  set postmarkSecret(String postmarkSecret) =>
+      _$this._postmarkSecret = postmarkSecret;
+
+  String _mailgunSecret;
+  String get mailgunSecret => _$this._mailgunSecret;
+  set mailgunSecret(String mailgunSecret) =>
+      _$this._mailgunSecret = mailgunSecret;
+
+  String _mailgunDomain;
+  String get mailgunDomain => _$this._mailgunDomain;
+  set mailgunDomain(String mailgunDomain) =>
+      _$this._mailgunDomain = mailgunDomain;
+
+  String _emailAlignment;
+  String get emailAlignment => _$this._emailAlignment;
+  set emailAlignment(String emailAlignment) =>
+      _$this._emailAlignment = emailAlignment;
+
+  bool _showEmailFooter;
+  bool get showEmailFooter => _$this._showEmailFooter;
+  set showEmailFooter(bool showEmailFooter) =>
+      _$this._showEmailFooter = showEmailFooter;
+
+  String _companyLogoSize;
+  String get companyLogoSize => _$this._companyLogoSize;
+  set companyLogoSize(String companyLogoSize) =>
+      _$this._companyLogoSize = companyLogoSize;
+
+  bool _showPaidStamp;
+  bool get showPaidStamp => _$this._showPaidStamp;
+  set showPaidStamp(bool showPaidStamp) =>
+      _$this._showPaidStamp = showPaidStamp;
+
+  bool _showShippingAddress;
+  bool get showShippingAddress => _$this._showShippingAddress;
+  set showShippingAddress(bool showShippingAddress) =>
+      _$this._showShippingAddress = showShippingAddress;
+
+  String _customSendingEmail;
+  String get customSendingEmail => _$this._customSendingEmail;
+  set customSendingEmail(String customSendingEmail) =>
+      _$this._customSendingEmail = customSendingEmail;
+
+  bool _acceptPurchaseOrderNumber;
+  bool get acceptPurchaseOrderNumber => _$this._acceptPurchaseOrderNumber;
+  set acceptPurchaseOrderNumber(bool acceptPurchaseOrderNumber) =>
+      _$this._acceptPurchaseOrderNumber = acceptPurchaseOrderNumber;
 
   SettingsEntityBuilder();
 
@@ -4402,6 +4906,7 @@ class SettingsEntityBuilder
       _emailBodyReminderEndless = $v.emailBodyReminderEndless;
       _clientOnlinePaymentNotification = $v.clientOnlinePaymentNotification;
       _clientManualPaymentNotification = $v.clientManualPaymentNotification;
+      _clientMarkPaidPaymentNotification = $v.clientMarkPaidPaymentNotification;
       _counterNumberApplied = $v.counterNumberApplied;
       _emailSendingMethod = $v.emailSendingMethod;
       _gmailSendingUserId = $v.gmailSendingUserId;
@@ -4409,6 +4914,7 @@ class SettingsEntityBuilder
       _clientPortalPrivacy = $v.clientPortalPrivacy;
       _lockInvoices = $v.lockInvoices;
       _autoBill = $v.autoBill;
+      _autoBillStandardInvoices = $v.autoBillStandardInvoices;
       _clientPortalAllowUnderPayment = $v.clientPortalAllowUnderPayment;
       _clientPortalAllowOverPayment = $v.clientPortalAllowOverPayment;
       _autoBillDate = $v.autoBillDate;
@@ -4431,6 +4937,16 @@ class SettingsEntityBuilder
       _purchaseOrderNumberCounter = $v.purchaseOrderNumberCounter;
       _qrIban = $v.qrIban;
       _besrId = $v.besrId;
+      _postmarkSecret = $v.postmarkSecret;
+      _mailgunSecret = $v.mailgunSecret;
+      _mailgunDomain = $v.mailgunDomain;
+      _emailAlignment = $v.emailAlignment;
+      _showEmailFooter = $v.showEmailFooter;
+      _companyLogoSize = $v.companyLogoSize;
+      _showPaidStamp = $v.showPaidStamp;
+      _showShippingAddress = $v.showShippingAddress;
+      _customSendingEmail = $v.customSendingEmail;
+      _acceptPurchaseOrderNumber = $v.acceptPurchaseOrderNumber;
       _$v = null;
     }
     return this;
@@ -4623,6 +5139,8 @@ class SettingsEntityBuilder
               emailBodyReminderEndless: emailBodyReminderEndless,
               clientOnlinePaymentNotification: clientOnlinePaymentNotification,
               clientManualPaymentNotification: clientManualPaymentNotification,
+              clientMarkPaidPaymentNotification:
+                  clientMarkPaidPaymentNotification,
               counterNumberApplied: counterNumberApplied,
               emailSendingMethod: emailSendingMethod,
               gmailSendingUserId: gmailSendingUserId,
@@ -4630,6 +5148,7 @@ class SettingsEntityBuilder
               clientPortalPrivacy: clientPortalPrivacy,
               lockInvoices: lockInvoices,
               autoBill: autoBill,
+              autoBillStandardInvoices: autoBillStandardInvoices,
               clientPortalAllowUnderPayment: clientPortalAllowUnderPayment,
               clientPortalAllowOverPayment: clientPortalAllowOverPayment,
               autoBillDate: autoBillDate,
@@ -4651,7 +5170,17 @@ class SettingsEntityBuilder
               purchaseOrderNumberPattern: purchaseOrderNumberPattern,
               purchaseOrderNumberCounter: purchaseOrderNumberCounter,
               qrIban: qrIban,
-              besrId: besrId);
+              besrId: besrId,
+              postmarkSecret: postmarkSecret,
+              mailgunSecret: mailgunSecret,
+              mailgunDomain: mailgunDomain,
+              emailAlignment: emailAlignment,
+              showEmailFooter: showEmailFooter,
+              companyLogoSize: companyLogoSize,
+              showPaidStamp: showPaidStamp,
+              showShippingAddress: showShippingAddress,
+              customSendingEmail: customSendingEmail,
+              acceptPurchaseOrderNumber: acceptPurchaseOrderNumber);
     } catch (_) {
       String _$failedField;
       try {
@@ -4671,4 +5200,168 @@ class SettingsEntityBuilder
   }
 }
 
-// ignore_for_file: always_put_control_body_on_new_line,always_specify_types,annotate_overrides,avoid_annotating_with_dynamic,avoid_as,avoid_catches_without_on_clauses,avoid_returning_this,deprecated_member_use_from_same_package,lines_longer_than_80_chars,no_leading_underscores_for_local_identifiers,omit_local_variable_types,prefer_expression_function_bodies,sort_constructors_first,test_types_in_equals,unnecessary_const,unnecessary_new,unnecessary_lambdas
+class _$PdfPreviewRequest extends PdfPreviewRequest {
+  @override
+  final String entityType;
+  @override
+  final String settingsType;
+  @override
+  final SettingsEntity settings;
+  @override
+  final String groupId;
+  @override
+  final String clientId;
+
+  factory _$PdfPreviewRequest(
+          [void Function(PdfPreviewRequestBuilder) updates]) =>
+      (new PdfPreviewRequestBuilder()..update(updates))._build();
+
+  _$PdfPreviewRequest._(
+      {this.entityType,
+      this.settingsType,
+      this.settings,
+      this.groupId,
+      this.clientId})
+      : super._() {
+    BuiltValueNullFieldError.checkNotNull(
+        entityType, r'PdfPreviewRequest', 'entityType');
+    BuiltValueNullFieldError.checkNotNull(
+        settingsType, r'PdfPreviewRequest', 'settingsType');
+    BuiltValueNullFieldError.checkNotNull(
+        settings, r'PdfPreviewRequest', 'settings');
+    BuiltValueNullFieldError.checkNotNull(
+        groupId, r'PdfPreviewRequest', 'groupId');
+    BuiltValueNullFieldError.checkNotNull(
+        clientId, r'PdfPreviewRequest', 'clientId');
+  }
+
+  @override
+  PdfPreviewRequest rebuild(void Function(PdfPreviewRequestBuilder) updates) =>
+      (toBuilder()..update(updates)).build();
+
+  @override
+  PdfPreviewRequestBuilder toBuilder() =>
+      new PdfPreviewRequestBuilder()..replace(this);
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(other, this)) return true;
+    return other is PdfPreviewRequest &&
+        entityType == other.entityType &&
+        settingsType == other.settingsType &&
+        settings == other.settings &&
+        groupId == other.groupId &&
+        clientId == other.clientId;
+  }
+
+  int __hashCode;
+  @override
+  int get hashCode {
+    if (__hashCode != null) return __hashCode;
+    var _$hash = 0;
+    _$hash = $jc(_$hash, entityType.hashCode);
+    _$hash = $jc(_$hash, settingsType.hashCode);
+    _$hash = $jc(_$hash, settings.hashCode);
+    _$hash = $jc(_$hash, groupId.hashCode);
+    _$hash = $jc(_$hash, clientId.hashCode);
+    _$hash = $jf(_$hash);
+    return __hashCode ??= _$hash;
+  }
+
+  @override
+  String toString() {
+    return (newBuiltValueToStringHelper(r'PdfPreviewRequest')
+          ..add('entityType', entityType)
+          ..add('settingsType', settingsType)
+          ..add('settings', settings)
+          ..add('groupId', groupId)
+          ..add('clientId', clientId))
+        .toString();
+  }
+}
+
+class PdfPreviewRequestBuilder
+    implements Builder<PdfPreviewRequest, PdfPreviewRequestBuilder> {
+  _$PdfPreviewRequest _$v;
+
+  String _entityType;
+  String get entityType => _$this._entityType;
+  set entityType(String entityType) => _$this._entityType = entityType;
+
+  String _settingsType;
+  String get settingsType => _$this._settingsType;
+  set settingsType(String settingsType) => _$this._settingsType = settingsType;
+
+  SettingsEntityBuilder _settings;
+  SettingsEntityBuilder get settings =>
+      _$this._settings ??= new SettingsEntityBuilder();
+  set settings(SettingsEntityBuilder settings) => _$this._settings = settings;
+
+  String _groupId;
+  String get groupId => _$this._groupId;
+  set groupId(String groupId) => _$this._groupId = groupId;
+
+  String _clientId;
+  String get clientId => _$this._clientId;
+  set clientId(String clientId) => _$this._clientId = clientId;
+
+  PdfPreviewRequestBuilder();
+
+  PdfPreviewRequestBuilder get _$this {
+    final $v = _$v;
+    if ($v != null) {
+      _entityType = $v.entityType;
+      _settingsType = $v.settingsType;
+      _settings = $v.settings.toBuilder();
+      _groupId = $v.groupId;
+      _clientId = $v.clientId;
+      _$v = null;
+    }
+    return this;
+  }
+
+  @override
+  void replace(PdfPreviewRequest other) {
+    ArgumentError.checkNotNull(other, 'other');
+    _$v = other as _$PdfPreviewRequest;
+  }
+
+  @override
+  void update(void Function(PdfPreviewRequestBuilder) updates) {
+    if (updates != null) updates(this);
+  }
+
+  @override
+  PdfPreviewRequest build() => _build();
+
+  _$PdfPreviewRequest _build() {
+    _$PdfPreviewRequest _$result;
+    try {
+      _$result = _$v ??
+          new _$PdfPreviewRequest._(
+              entityType: BuiltValueNullFieldError.checkNotNull(
+                  entityType, r'PdfPreviewRequest', 'entityType'),
+              settingsType: BuiltValueNullFieldError.checkNotNull(
+                  settingsType, r'PdfPreviewRequest', 'settingsType'),
+              settings: settings.build(),
+              groupId: BuiltValueNullFieldError.checkNotNull(
+                  groupId, r'PdfPreviewRequest', 'groupId'),
+              clientId: BuiltValueNullFieldError.checkNotNull(
+                  clientId, r'PdfPreviewRequest', 'clientId'));
+    } catch (_) {
+      String _$failedField;
+      try {
+        _$failedField = 'settings';
+        settings.build();
+      } catch (e) {
+        throw new BuiltValueNestedFieldError(
+            r'PdfPreviewRequest', _$failedField, e.toString());
+      }
+      rethrow;
+    }
+    replace(_$result);
+    return _$result;
+  }
+}
+
+// ignore_for_file: deprecated_member_use_from_same_package,type=lint

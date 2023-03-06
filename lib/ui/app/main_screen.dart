@@ -4,13 +4,18 @@ import 'package:flutter/material.dart';
 // Package imports:
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:invoiceninja_flutter/ui/app/app_title_bar.dart';
-import 'package:invoiceninja_flutter/ui/app/window_manager.dart';
+import 'package:invoiceninja_flutter/ui/bank_account/bank_account_screen_vm.dart';
+import 'package:invoiceninja_flutter/ui/bank_account/edit/bank_account_edit_vm.dart';
+import 'package:invoiceninja_flutter/ui/bank_account/view/bank_account_view_vm.dart';
 import 'package:invoiceninja_flutter/ui/purchase_order/edit/purchase_order_edit_vm.dart';
 import 'package:invoiceninja_flutter/ui/purchase_order/purchase_order_email_vm.dart';
 import 'package:invoiceninja_flutter/ui/purchase_order/purchase_order_pdf_vm.dart';
 import 'package:invoiceninja_flutter/ui/purchase_order/purchase_order_screen.dart';
 import 'package:invoiceninja_flutter/ui/purchase_order/purchase_order_screen_vm.dart';
 import 'package:invoiceninja_flutter/ui/purchase_order/view/purchase_order_view_vm.dart';
+import 'package:invoiceninja_flutter/ui/schedule/edit/schedule_edit_vm.dart';
+import 'package:invoiceninja_flutter/ui/schedule/schedule_screen_vm.dart';
+import 'package:invoiceninja_flutter/ui/schedule/view/schedule_view_vm.dart';
 import 'package:invoiceninja_flutter/ui/settings/payment_settings_vm.dart';
 
 import 'package:invoiceninja_flutter/ui/category/category_screen.dart';
@@ -21,6 +26,13 @@ import 'package:invoiceninja_flutter/ui/contact/contact_screen.dart';
 import 'package:invoiceninja_flutter/ui/contact/contact_screen_vm.dart';
 import 'package:invoiceninja_flutter/ui/contact/edit/contact_edit_vm.dart';
 import 'package:invoiceninja_flutter/ui/contact/view/contact_view_vm.dart';
+import 'package:invoiceninja_flutter/ui/transaction/edit/transaction_edit_vm.dart';
+import 'package:invoiceninja_flutter/ui/transaction/transaction_screen.dart';
+import 'package:invoiceninja_flutter/ui/transaction/transaction_screen_vm.dart';
+import 'package:invoiceninja_flutter/ui/transaction/view/transaction_view_vm.dart';
+import 'package:invoiceninja_flutter/ui/transaction_rule/edit/transaction_rule_edit_vm.dart';
+import 'package:invoiceninja_flutter/ui/transaction_rule/transaction_rule_screen_vm.dart';
+import 'package:invoiceninja_flutter/ui/transaction_rule/view/transaction_rule_view_vm.dart';
 import 'package:invoiceninja_flutter/utils/platforms.dart';
 import 'package:redux/redux.dart';
 
@@ -227,6 +239,12 @@ class MainScreen extends StatelessWidget {
             editingFilterEntity: editingFilterEntity,
           );
           break;
+        case TransactionScreen.route:
+          screen = EntityScreens(
+            entityType: EntityType.transaction,
+            editingFilterEntity: editingFilterEntity,
+          );
+          break;
         case RecurringExpenseScreen.route:
           screen = EntityScreens(
             entityType: EntityType.recurringExpense,
@@ -326,31 +344,29 @@ class MainScreen extends StatelessWidget {
 
           return false;
         },
-        child: WindowManager(
-          child: DesktopSessionTimeout(
-            child: SafeArea(
-              child: FocusTraversalGroup(
-                policy: ReadingOrderTraversalPolicy(),
-                child: Column(
-                  children: [
-                    if (isWindows()) AppTitleBar(),
-                    Expanded(
-                      child: ChangeLayoutBanner(
-                        appLayout: prefState.appLayout,
-                        suggestedLayout: AppLayout.desktop,
-                        child: Row(children: <Widget>[
-                          if (prefState.showMenu) MenuDrawerBuilder(),
-                          Expanded(
-                              child: AppBorder(
-                            child: screen,
-                            isLeft: prefState.showMenu &&
-                                (!state.isFullScreen || showFilterSidebar),
-                          )),
-                        ]),
-                      ),
+        child: DesktopSessionTimeout(
+          child: SafeArea(
+            child: FocusTraversalGroup(
+              policy: ReadingOrderTraversalPolicy(),
+              child: Column(
+                children: [
+                  if (isWindows()) AppTitleBar(),
+                  Expanded(
+                    child: ChangeLayoutBanner(
+                      appLayout: prefState.appLayout,
+                      suggestedLayout: AppLayout.desktop,
+                      child: Row(children: <Widget>[
+                        if (prefState.showMenu) MenuDrawerBuilder(),
+                        Expanded(
+                            child: AppBorder(
+                          child: screen,
+                          isLeft: prefState.showMenu &&
+                              (!state.isFullScreen || showFilterSidebar),
+                        )),
+                      ]),
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
           ),
@@ -522,6 +538,9 @@ class EntityScreens extends StatelessWidget {
         case EntityType.recurringExpense:
           child = RecurringExpenseEditScreen();
           break;
+        case EntityType.transaction:
+          child = TransactionEditScreen();
+          break;
       }
     } else {
       final previewStack = uiState.previewStack;
@@ -599,6 +618,15 @@ class EntityScreens extends StatelessWidget {
           case EntityType.recurringExpense:
             child = RecurringExpenseViewScreen();
             break;
+          case EntityType.transaction:
+            child = TransactionViewScreen();
+            break;
+          case EntityType.bankAccount:
+            child = BankAccountViewScreen();
+            break;
+          case EntityType.transactionRule:
+            child = TransactionRuleViewScreen();
+            break;
           default:
             print('## View screen not defined for $previewEntityType');
         }
@@ -612,9 +640,7 @@ class EntityScreens extends StatelessWidget {
       if (prefState.isFilterVisible) {
         switch (uiState.filterEntityType) {
           case EntityType.client:
-            leftFilterChild = editingFilterEntity && !uiState.isEditing
-                ? ClientEditScreen()
-                : ClientViewScreen(isFilter: true);
+            leftFilterChild = ClientViewScreen(isFilter: true);
             break;
           case EntityType.contact:
             leftFilterChild = editingFilterEntity && !uiState.isEditing
@@ -622,77 +648,61 @@ class EntityScreens extends StatelessWidget {
                 : ContactViewScreen(isFilter: true);
             break;
           case EntityType.invoice:
-            leftFilterChild = editingFilterEntity && !uiState.isEditing
-                ? InvoiceViewScreen()
-                : InvoiceViewScreen(isFilter: true);
+            leftFilterChild = InvoiceViewScreen(isFilter: true);
             break;
           case EntityType.quote:
-            leftFilterChild = editingFilterEntity && !uiState.isEditing
-                ? QuoteViewScreen()
-                : QuoteViewScreen(isFilter: true);
+            leftFilterChild = QuoteViewScreen(isFilter: true);
             break;
           case EntityType.credit:
-            leftFilterChild = editingFilterEntity && !uiState.isEditing
-                ? CreditViewScreen()
-                : CreditViewScreen(isFilter: true);
+            leftFilterChild = CreditViewScreen(isFilter: true);
             break;
           case EntityType.purchaseOrder:
-            leftFilterChild = editingFilterEntity && !uiState.isEditing
-                ? PurchaseOrderViewScreen()
-                : PurchaseOrderViewScreen(isFilter: true);
+            leftFilterChild = PurchaseOrderViewScreen(isFilter: true);
             break;
           case EntityType.payment:
-            leftFilterChild = editingFilterEntity && !uiState.isEditing
-                ? PaymentEditScreen()
-                : PaymentViewScreen(isFilter: true);
+            leftFilterChild = PaymentViewScreen(isFilter: true);
             break;
           case EntityType.user:
-            leftFilterChild = editingFilterEntity && !uiState.isEditing
-                ? UserEditScreen()
-                : UserViewScreen(isFilter: true);
+            leftFilterChild = UserViewScreen(isFilter: true);
             break;
           case EntityType.group:
-            leftFilterChild = editingFilterEntity && !uiState.isEditing
-                ? GroupEditScreen()
-                : GroupViewScreen(isFilter: true);
+            leftFilterChild = GroupViewScreen(isFilter: true);
             break;
           case EntityType.subscription:
-            leftFilterChild = editingFilterEntity && !uiState.isEditing
-                ? SubscriptionEditScreen()
-                : SubscriptionViewScreen(isFilter: true);
+            leftFilterChild = SubscriptionViewScreen(isFilter: true);
             break;
           case EntityType.companyGateway:
-            leftFilterChild = editingFilterEntity && !uiState.isEditing
-                ? CompanyGatewayEditScreen()
-                : CompanyGatewayViewScreen(isFilter: true);
+            leftFilterChild = CompanyGatewayViewScreen(isFilter: true);
             break;
           case EntityType.recurringInvoice:
-            leftFilterChild = editingFilterEntity && !uiState.isEditing
-                ? RecurringInvoiceEditScreen()
-                : RecurringInvoiceViewScreen(isFilter: true);
+            leftFilterChild = RecurringInvoiceViewScreen(isFilter: true);
             break;
           case EntityType.expenseCategory:
-            leftFilterChild = editingFilterEntity && !uiState.isEditing
-                ? ExpenseCategoryEditScreen()
-                : ExpenseCategoryViewScreen(isFilter: true);
+            leftFilterChild = ExpenseCategoryViewScreen(isFilter: true);
             break;
           case EntityType.taskStatus:
-            leftFilterChild = editingFilterEntity && !uiState.isEditing
-                ? TaskStatusEditScreen()
-                : TaskStatusViewScreen(isFilter: true);
+            leftFilterChild = TaskStatusViewScreen(isFilter: true);
             break;
           case EntityType.vendor:
-            leftFilterChild = editingFilterEntity && !uiState.isEditing
-                ? VendorEditScreen()
-                : VendorViewScreen(isFilter: true);
+            leftFilterChild = VendorViewScreen(isFilter: true);
             break;
           case EntityType.project:
-            leftFilterChild = editingFilterEntity && !uiState.isEditing
-                ? ProjectEditScreen()
-                : ProjectViewScreen(isFilter: true);
+            leftFilterChild = ProjectViewScreen(isFilter: true);
             break;
           case EntityType.design:
             leftFilterChild = DesignViewScreen(isFilter: true);
+            break;
+          case EntityType.transaction:
+            leftFilterChild = TransactionViewScreen(isFilter: true);
+            break;
+          case EntityType.expense:
+            leftFilterChild = ExpenseViewScreen(isFilter: true);
+            break;
+          case EntityType.bankAccount:
+            leftFilterChild = BankAccountViewScreen(isFilter: true);
+            break;
+          case EntityType.transactionRule:
+            leftFilterChild = TransactionRuleViewScreen(isFilter: true);
             break;
           default:
             print(
@@ -752,6 +762,9 @@ class EntityScreens extends StatelessWidget {
           break;
         case EntityType.recurringExpense:
           listWidget = RecurringExpenseScreenBuilder();
+          break;
+        case EntityType.transaction:
+          listWidget = TransactionScreenBuilder();
           break;
         default:
           print('## ERROR: list widget not implemented for $entityType');
@@ -984,6 +997,36 @@ class SettingsScreens extends StatelessWidget {
       case kSettingsExpenseCategoryEdit:
         screen = ExpenseCategoryEditScreen();
         break;
+      case kSettingsBankAccounts:
+        screen = BankAccountScreenBuilder();
+        break;
+      case kSettingsBankAccountsView:
+        screen = BankAccountViewScreen();
+        break;
+      case kSettingsBankAccountsEdit:
+        screen = BankAccountEditScreen();
+        break;
+      case kSettingsTransactionRules:
+        screen = TransactionRuleScreenBuilder();
+        break;
+      case kSettingsTransactionRulesView:
+        screen = TransactionRuleViewScreen();
+        break;
+      case kSettingsTransactionRulesEdit:
+        screen = TransactionRuleEditScreen();
+        break;
+      case kSettingsSchedules:
+        screen = ScheduleScreenBuilder();
+        break;
+      case kSettingsSchedulesView:
+        screen = ScheduleViewScreen();
+        break;
+      case kSettingsSchedulesEdit:
+        screen = ScheduleEditScreen();
+        break;
+      default:
+        print(
+            '## Error: main screen settings route ${uiState.subRoute} not defined');
     }
 
     return Row(children: <Widget>[

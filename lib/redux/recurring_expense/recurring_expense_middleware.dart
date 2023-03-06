@@ -1,6 +1,7 @@
 // Flutter imports:
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:invoiceninja_flutter/redux/transaction/transaction_actions.dart';
 
 // Package imports:
 import 'package:redux/redux.dart';
@@ -251,7 +252,8 @@ Middleware<AppState> _loadRecurringExpenses(
       if (action.completer != null) {
         action.completer.complete(null);
       }
-      store.dispatch(PersistData());
+
+      store.dispatch(LoadTransactions());
     }).catchError((Object error) {
       print(error);
       store.dispatch(LoadRecurringExpensesFailure(error));

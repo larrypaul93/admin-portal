@@ -32,6 +32,14 @@ import 'package:invoiceninja_flutter/redux/vendor/vendor_actions.dart';
 import 'package:invoiceninja_flutter/redux/webhook/webhook_actions.dart';
 
 // STARTER: import - do not remove comment
+import 'package:invoiceninja_flutter/redux/schedule/schedule_actions.dart';
+
+import 'package:invoiceninja_flutter/redux/transaction_rule/transaction_rule_actions.dart';
+
+import 'package:invoiceninja_flutter/redux/transaction/transaction_actions.dart';
+
+import 'package:invoiceninja_flutter/redux/bank_account/bank_account_actions.dart';
+
 import 'package:invoiceninja_flutter/redux/purchase_order/purchase_order_actions.dart';
 import 'package:invoiceninja_flutter/redux/category/category_actions.dart';
 
@@ -42,6 +50,7 @@ AppState appReducer(AppState state, dynamic action) {
   if (action is UserLogout) {
     return AppState(
             prefState: state.prefState,
+            isWhiteLabeled: state.isWhiteLabeled,
             reportErrors: state.account.reportErrors)
         .rebuild((b) => b
           ..authState.replace(state.authState.rebuild((b) => b
@@ -105,6 +114,22 @@ final lastErrorReducer = combineReducers<String>([
     return '${action.error}';
   }),
   // STARTER: errors - do not remove comment
+  TypedReducer<String, LoadSchedulesFailure>((state, action) {
+    return '${action.error}';
+  }),
+
+  TypedReducer<String, LoadTransactionRulesFailure>((state, action) {
+    return '${action.error}';
+  }),
+
+  TypedReducer<String, LoadTransactionsFailure>((state, action) {
+    return '${action.error}';
+  }),
+
+  TypedReducer<String, LoadBankAccountsFailure>((state, action) {
+    return '${action.error}';
+  }),
+
   TypedReducer<String, LoadPurchaseOrdersFailure>((state, action) {
     return '${action.error}';
   }),

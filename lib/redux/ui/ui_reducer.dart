@@ -12,6 +12,7 @@ import 'package:invoiceninja_flutter/redux/quote/quote_actions.dart';
 import 'package:invoiceninja_flutter/redux/recurring_expense/recurring_expense_actions.dart';
 import 'package:invoiceninja_flutter/redux/recurring_invoice/recurring_invoice_actions.dart';
 import 'package:invoiceninja_flutter/redux/task/task_actions.dart';
+import 'package:invoiceninja_flutter/redux/transaction/transaction_actions.dart';
 import 'package:invoiceninja_flutter/redux/vendor/vendor_actions.dart';
 import 'package:redux/redux.dart';
 
@@ -51,6 +52,14 @@ import 'package:invoiceninja_flutter/redux/vendor/vendor_reducer.dart';
 import 'package:invoiceninja_flutter/redux/webhook/webhook_reducer.dart';
 
 // STARTER: import - do not remove comment
+import 'package:invoiceninja_flutter/redux/schedule/schedule_reducer.dart';
+
+import 'package:invoiceninja_flutter/redux/transaction_rule/transaction_rule_reducer.dart';
+
+import 'package:invoiceninja_flutter/redux/transaction/transaction_reducer.dart';
+
+import 'package:invoiceninja_flutter/redux/bank_account/bank_account_reducer.dart';
+
 import 'package:invoiceninja_flutter/redux/purchase_order/purchase_order_reducer.dart';
 import 'package:invoiceninja_flutter/redux/category/category_reducer.dart';
 
@@ -81,6 +90,13 @@ UIState uiReducer(UIState state, dynamic action) {
         .replace(dashboardUIReducer(state.dashboardUIState, action))
     ..reportsUIState.replace(reportsUIReducer(state.reportsUIState, action))
     // STARTER: reducer - do not remove comment
+    ..scheduleUIState.replace(scheduleUIReducer(state.scheduleUIState, action))
+    ..transactionRuleUIState
+        .replace(transactionRuleUIReducer(state.transactionRuleUIState, action))
+    ..transactionUIState
+        .replace(transactionUIReducer(state.transactionUIState, action))
+    ..bankAccountUIState
+        .replace(bankAccountUIReducer(state.bankAccountUIState, action))
     ..purchaseOrderUIState
         .replace(purchaseOrderUIReducer(state.purchaseOrderUIState, action))
     ..categoryUIState.replace(categoryUIReducer(state.categoryUIState, action))
@@ -174,6 +190,9 @@ Reducer<EntityType> loadingEntityTypeReducer = combineReducers([
   }),
   TypedReducer<EntityType, LoadRecurringExpensesRequest>((state, action) {
     return EntityType.recurringExpense;
+  }),
+  TypedReducer<EntityType, LoadTransactionsRequest>((state, action) {
+    return EntityType.transaction;
   }),
 ]);
 

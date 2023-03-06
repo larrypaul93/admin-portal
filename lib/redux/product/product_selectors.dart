@@ -30,7 +30,11 @@ InvoiceItemEntity convertProductToInvoiceItem({
   ClientEntity client,
 }) {
   if (company.fillProducts) {
-    double cost = product.price;
+    double cost = (invoice.isPurchaseOrder &&
+            company.enableProductCost &&
+            product.cost != 0)
+        ? product.cost
+        : product.price;
 
     if (company.convertProductExchangeRate &&
         (client?.currencyId ?? '').isNotEmpty) {
@@ -153,7 +157,3 @@ List<String> filteredProductsSelector(
 
   return list;
 }
-
-bool hasProductChanges(
-        ProductEntity product, BuiltMap<String, ProductEntity> productMap) =>
-    product.isNew ? product.isChanged : product != productMap[product.id];

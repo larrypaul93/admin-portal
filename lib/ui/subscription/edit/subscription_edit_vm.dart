@@ -79,6 +79,10 @@ class SubscriptionEditVM {
         }
       },
       onSavePressed: (BuildContext context) {
+        if (!state.isProPlan && !state.isTrial) {
+          return;
+        }
+
         Debouncer.runOnComplete(() {
           final subscription = store.state.subscriptionUIState.editing;
           final localization = navigatorKey.localization;

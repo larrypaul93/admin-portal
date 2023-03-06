@@ -192,6 +192,12 @@ class _$VendorEntitySerializer implements StructuredSerializer<VendorEntity> {
       serializers.serialize(object.id, specifiedType: const FullType(String)),
     ];
     Object value;
+    value = object.loadedAt;
+    if (value != null) {
+      result
+        ..add('loadedAt')
+        ..add(serializers.serialize(value, specifiedType: const FullType(int)));
+    }
     value = object.isChanged;
     if (value != null) {
       result
@@ -234,6 +240,10 @@ class _$VendorEntitySerializer implements StructuredSerializer<VendorEntity> {
       iterator.moveNext();
       final Object value = iterator.current;
       switch (key) {
+        case 'loadedAt':
+          result.loadedAt = serializers.deserialize(value,
+              specifiedType: const FullType(int)) as int;
+          break;
         case 'name':
           result.name = serializers.deserialize(value,
               specifiedType: const FullType(String)) as String;
@@ -394,6 +404,9 @@ class _$VendorContactEntitySerializer
       'is_primary',
       serializers.serialize(object.isPrimary,
           specifiedType: const FullType(bool)),
+      'send_email',
+      serializers.serialize(object.sendEmail,
+          specifiedType: const FullType(bool)),
       'phone',
       serializers.serialize(object.phone,
           specifiedType: const FullType(String)),
@@ -481,6 +494,10 @@ class _$VendorContactEntitySerializer
           break;
         case 'is_primary':
           result.isPrimary = serializers.deserialize(value,
+              specifiedType: const FullType(bool)) as bool;
+          break;
+        case 'send_email':
+          result.sendEmail = serializers.deserialize(value,
               specifiedType: const FullType(bool)) as bool;
           break;
         case 'phone':
@@ -576,7 +593,11 @@ class _$VendorListResponse extends VendorListResponse {
   int __hashCode;
   @override
   int get hashCode {
-    return __hashCode ??= $jf($jc(0, data.hashCode));
+    if (__hashCode != null) return __hashCode;
+    var _$hash = 0;
+    _$hash = $jc(_$hash, data.hashCode);
+    _$hash = $jf(_$hash);
+    return __hashCode ??= _$hash;
   }
 
   @override
@@ -671,7 +692,11 @@ class _$VendorItemResponse extends VendorItemResponse {
   int __hashCode;
   @override
   int get hashCode {
-    return __hashCode ??= $jf($jc(0, data.hashCode));
+    if (__hashCode != null) return __hashCode;
+    var _$hash = 0;
+    _$hash = $jc(_$hash, data.hashCode);
+    _$hash = $jf(_$hash);
+    return __hashCode ??= _$hash;
   }
 
   @override
@@ -737,6 +762,8 @@ class VendorItemResponseBuilder
 
 class _$VendorEntity extends VendorEntity {
   @override
+  final int loadedAt;
+  @override
   final String name;
   @override
   final String address1;
@@ -801,7 +828,8 @@ class _$VendorEntity extends VendorEntity {
       (new VendorEntityBuilder()..update(updates))._build();
 
   _$VendorEntity._(
-      {this.name,
+      {this.loadedAt,
+      this.name,
       this.address1,
       this.address2,
       this.city,
@@ -925,49 +953,46 @@ class _$VendorEntity extends VendorEntity {
   int __hashCode;
   @override
   int get hashCode {
-    return __hashCode ??= $jf($jc(
-        $jc(
-            $jc(
-                $jc(
-                    $jc(
-                        $jc(
-                            $jc(
-                                $jc(
-                                    $jc(
-                                        $jc(
-                                            $jc(
-                                                $jc(
-                                                    $jc(
-                                                        $jc(
-                                                            $jc(
-                                                                $jc(
-                                                                    $jc(
-                                                                        $jc(
-                                                                            $jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc(0, name.hashCode), address1.hashCode), address2.hashCode), city.hashCode), state.hashCode), postalCode.hashCode), countryId.hashCode), phone.hashCode), privateNotes.hashCode), publicNotes.hashCode), website.hashCode),
-                                                                                number.hashCode),
-                                                                            vatNumber.hashCode),
-                                                                        idNumber.hashCode),
-                                                                    currencyId.hashCode),
-                                                                customValue1.hashCode),
-                                                            customValue2.hashCode),
-                                                        customValue3.hashCode),
-                                                    customValue4.hashCode),
-                                                contacts.hashCode),
-                                            activities.hashCode),
-                                        documents.hashCode),
-                                    isChanged.hashCode),
-                                createdAt.hashCode),
-                            updatedAt.hashCode),
-                        archivedAt.hashCode),
-                    isDeleted.hashCode),
-                createdUserId.hashCode),
-            assignedUserId.hashCode),
-        id.hashCode));
+    if (__hashCode != null) return __hashCode;
+    var _$hash = 0;
+    _$hash = $jc(_$hash, name.hashCode);
+    _$hash = $jc(_$hash, address1.hashCode);
+    _$hash = $jc(_$hash, address2.hashCode);
+    _$hash = $jc(_$hash, city.hashCode);
+    _$hash = $jc(_$hash, state.hashCode);
+    _$hash = $jc(_$hash, postalCode.hashCode);
+    _$hash = $jc(_$hash, countryId.hashCode);
+    _$hash = $jc(_$hash, phone.hashCode);
+    _$hash = $jc(_$hash, privateNotes.hashCode);
+    _$hash = $jc(_$hash, publicNotes.hashCode);
+    _$hash = $jc(_$hash, website.hashCode);
+    _$hash = $jc(_$hash, number.hashCode);
+    _$hash = $jc(_$hash, vatNumber.hashCode);
+    _$hash = $jc(_$hash, idNumber.hashCode);
+    _$hash = $jc(_$hash, currencyId.hashCode);
+    _$hash = $jc(_$hash, customValue1.hashCode);
+    _$hash = $jc(_$hash, customValue2.hashCode);
+    _$hash = $jc(_$hash, customValue3.hashCode);
+    _$hash = $jc(_$hash, customValue4.hashCode);
+    _$hash = $jc(_$hash, contacts.hashCode);
+    _$hash = $jc(_$hash, activities.hashCode);
+    _$hash = $jc(_$hash, documents.hashCode);
+    _$hash = $jc(_$hash, isChanged.hashCode);
+    _$hash = $jc(_$hash, createdAt.hashCode);
+    _$hash = $jc(_$hash, updatedAt.hashCode);
+    _$hash = $jc(_$hash, archivedAt.hashCode);
+    _$hash = $jc(_$hash, isDeleted.hashCode);
+    _$hash = $jc(_$hash, createdUserId.hashCode);
+    _$hash = $jc(_$hash, assignedUserId.hashCode);
+    _$hash = $jc(_$hash, id.hashCode);
+    _$hash = $jf(_$hash);
+    return __hashCode ??= _$hash;
   }
 
   @override
   String toString() {
     return (newBuiltValueToStringHelper(r'VendorEntity')
+          ..add('loadedAt', loadedAt)
           ..add('name', name)
           ..add('address1', address1)
           ..add('address2', address2)
@@ -1005,6 +1030,10 @@ class _$VendorEntity extends VendorEntity {
 class VendorEntityBuilder
     implements Builder<VendorEntity, VendorEntityBuilder> {
   _$VendorEntity _$v;
+
+  int _loadedAt;
+  int get loadedAt => _$this._loadedAt;
+  set loadedAt(int loadedAt) => _$this._loadedAt = loadedAt;
 
   String _name;
   String get name => _$this._name;
@@ -1141,6 +1170,7 @@ class VendorEntityBuilder
   VendorEntityBuilder get _$this {
     final $v = _$v;
     if ($v != null) {
+      _loadedAt = $v.loadedAt;
       _name = $v.name;
       _address1 = $v.address1;
       _address2 = $v.address2;
@@ -1195,6 +1225,7 @@ class VendorEntityBuilder
     try {
       _$result = _$v ??
           new _$VendorEntity._(
+              loadedAt: loadedAt,
               name: BuiltValueNullFieldError.checkNotNull(
                   name, r'VendorEntity', 'name'),
               address1: BuiltValueNullFieldError.checkNotNull(
@@ -1265,6 +1296,8 @@ class _$VendorContactEntity extends VendorContactEntity {
   @override
   final bool isPrimary;
   @override
+  final bool sendEmail;
+  @override
   final String phone;
   @override
   final String customValue1;
@@ -1302,6 +1335,7 @@ class _$VendorContactEntity extends VendorContactEntity {
       this.lastName,
       this.email,
       this.isPrimary,
+      this.sendEmail,
       this.phone,
       this.customValue1,
       this.customValue2,
@@ -1325,6 +1359,8 @@ class _$VendorContactEntity extends VendorContactEntity {
         email, r'VendorContactEntity', 'email');
     BuiltValueNullFieldError.checkNotNull(
         isPrimary, r'VendorContactEntity', 'isPrimary');
+    BuiltValueNullFieldError.checkNotNull(
+        sendEmail, r'VendorContactEntity', 'sendEmail');
     BuiltValueNullFieldError.checkNotNull(
         phone, r'VendorContactEntity', 'phone');
     BuiltValueNullFieldError.checkNotNull(
@@ -1362,6 +1398,7 @@ class _$VendorContactEntity extends VendorContactEntity {
         lastName == other.lastName &&
         email == other.email &&
         isPrimary == other.isPrimary &&
+        sendEmail == other.sendEmail &&
         phone == other.phone &&
         customValue1 == other.customValue1 &&
         customValue2 == other.customValue2 &&
@@ -1381,47 +1418,29 @@ class _$VendorContactEntity extends VendorContactEntity {
   int __hashCode;
   @override
   int get hashCode {
-    return __hashCode ??= $jf($jc(
-        $jc(
-            $jc(
-                $jc(
-                    $jc(
-                        $jc(
-                            $jc(
-                                $jc(
-                                    $jc(
-                                        $jc(
-                                            $jc(
-                                                $jc(
-                                                    $jc(
-                                                        $jc(
-                                                            $jc(
-                                                                $jc(
-                                                                    $jc(
-                                                                        $jc(
-                                                                            0,
-                                                                            firstName
-                                                                                .hashCode),
-                                                                        lastName
-                                                                            .hashCode),
-                                                                    email
-                                                                        .hashCode),
-                                                                isPrimary
-                                                                    .hashCode),
-                                                            phone.hashCode),
-                                                        customValue1.hashCode),
-                                                    customValue2.hashCode),
-                                                customValue3.hashCode),
-                                            customValue4.hashCode),
-                                        link.hashCode),
-                                    isChanged.hashCode),
-                                createdAt.hashCode),
-                            updatedAt.hashCode),
-                        archivedAt.hashCode),
-                    isDeleted.hashCode),
-                createdUserId.hashCode),
-            assignedUserId.hashCode),
-        id.hashCode));
+    if (__hashCode != null) return __hashCode;
+    var _$hash = 0;
+    _$hash = $jc(_$hash, firstName.hashCode);
+    _$hash = $jc(_$hash, lastName.hashCode);
+    _$hash = $jc(_$hash, email.hashCode);
+    _$hash = $jc(_$hash, isPrimary.hashCode);
+    _$hash = $jc(_$hash, sendEmail.hashCode);
+    _$hash = $jc(_$hash, phone.hashCode);
+    _$hash = $jc(_$hash, customValue1.hashCode);
+    _$hash = $jc(_$hash, customValue2.hashCode);
+    _$hash = $jc(_$hash, customValue3.hashCode);
+    _$hash = $jc(_$hash, customValue4.hashCode);
+    _$hash = $jc(_$hash, link.hashCode);
+    _$hash = $jc(_$hash, isChanged.hashCode);
+    _$hash = $jc(_$hash, createdAt.hashCode);
+    _$hash = $jc(_$hash, updatedAt.hashCode);
+    _$hash = $jc(_$hash, archivedAt.hashCode);
+    _$hash = $jc(_$hash, isDeleted.hashCode);
+    _$hash = $jc(_$hash, createdUserId.hashCode);
+    _$hash = $jc(_$hash, assignedUserId.hashCode);
+    _$hash = $jc(_$hash, id.hashCode);
+    _$hash = $jf(_$hash);
+    return __hashCode ??= _$hash;
   }
 
   @override
@@ -1431,6 +1450,7 @@ class _$VendorContactEntity extends VendorContactEntity {
           ..add('lastName', lastName)
           ..add('email', email)
           ..add('isPrimary', isPrimary)
+          ..add('sendEmail', sendEmail)
           ..add('phone', phone)
           ..add('customValue1', customValue1)
           ..add('customValue2', customValue2)
@@ -1468,6 +1488,10 @@ class VendorContactEntityBuilder
   bool _isPrimary;
   bool get isPrimary => _$this._isPrimary;
   set isPrimary(bool isPrimary) => _$this._isPrimary = isPrimary;
+
+  bool _sendEmail;
+  bool get sendEmail => _$this._sendEmail;
+  set sendEmail(bool sendEmail) => _$this._sendEmail = sendEmail;
 
   String _phone;
   String get phone => _$this._phone;
@@ -1538,6 +1562,7 @@ class VendorContactEntityBuilder
       _lastName = $v.lastName;
       _email = $v.email;
       _isPrimary = $v.isPrimary;
+      _sendEmail = $v.sendEmail;
       _phone = $v.phone;
       _customValue1 = $v.customValue1;
       _customValue2 = $v.customValue2;
@@ -1582,16 +1607,17 @@ class VendorContactEntityBuilder
                 email, r'VendorContactEntity', 'email'),
             isPrimary: BuiltValueNullFieldError.checkNotNull(
                 isPrimary, r'VendorContactEntity', 'isPrimary'),
+            sendEmail: BuiltValueNullFieldError.checkNotNull(
+                sendEmail, r'VendorContactEntity', 'sendEmail'),
             phone: BuiltValueNullFieldError.checkNotNull(
                 phone, r'VendorContactEntity', 'phone'),
             customValue1: BuiltValueNullFieldError.checkNotNull(
                 customValue1, r'VendorContactEntity', 'customValue1'),
             customValue2: BuiltValueNullFieldError.checkNotNull(
                 customValue2, r'VendorContactEntity', 'customValue2'),
-            customValue3: BuiltValueNullFieldError.checkNotNull(
-                customValue3, r'VendorContactEntity', 'customValue3'),
-            customValue4:
-                BuiltValueNullFieldError.checkNotNull(customValue4, r'VendorContactEntity', 'customValue4'),
+            customValue3:
+                BuiltValueNullFieldError.checkNotNull(customValue3, r'VendorContactEntity', 'customValue3'),
+            customValue4: BuiltValueNullFieldError.checkNotNull(customValue4, r'VendorContactEntity', 'customValue4'),
             link: BuiltValueNullFieldError.checkNotNull(link, r'VendorContactEntity', 'link'),
             isChanged: isChanged,
             createdAt: BuiltValueNullFieldError.checkNotNull(createdAt, r'VendorContactEntity', 'createdAt'),
@@ -1606,4 +1632,4 @@ class VendorContactEntityBuilder
   }
 }
 
-// ignore_for_file: always_put_control_body_on_new_line,always_specify_types,annotate_overrides,avoid_annotating_with_dynamic,avoid_as,avoid_catches_without_on_clauses,avoid_returning_this,deprecated_member_use_from_same_package,lines_longer_than_80_chars,no_leading_underscores_for_local_identifiers,omit_local_variable_types,prefer_expression_function_bodies,sort_constructors_first,test_types_in_equals,unnecessary_const,unnecessary_new,unnecessary_lambdas
+// ignore_for_file: deprecated_member_use_from_same_package,type=lint

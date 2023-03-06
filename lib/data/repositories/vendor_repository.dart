@@ -27,7 +27,8 @@ class VendorRepository {
   Future<VendorEntity> loadItem(
       Credentials credentials, String entityId) async {
     final dynamic response = await webClient.get(
-        '${credentials.url}/vendors/$entityId', credentials.token);
+        '${credentials.url}/vendors/$entityId?include=activities',
+        credentials.token);
 
     final VendorItemResponse vendorResponse = await compute<dynamic, dynamic>(
         SerializationUtils.computeDecode,
@@ -36,8 +37,10 @@ class VendorRepository {
     return vendorResponse.data;
   }
 
-  Future<BuiltList<VendorEntity>> loadList(Credentials credentials) async {
-    final url = credentials.url + '/vendors?include=activities';
+  Future<BuiltList<VendorEntity>> loadList(
+      Credentials credentials, int page) async {
+    final String url =
+        credentials.url + '/vendors?per_page=$kMaxRecordsPerPage&page=$page';
 
     final dynamic response = await webClient.get(url, credentials.token);
 

@@ -68,6 +68,11 @@ class ExpenseEditSettingsState extends State<ExpenseEditSettings> {
     _showConvertCurrencyFields =
         expense.exchangeRate != 0 && expense.exchangeRate != 1;
 
+    final state = widget.viewModel.state;
+    if (state.company.convertExpenseCurrency) {
+      _showConvertCurrencyFields = true;
+    }
+
     super.didChangeDependencies();
   }
 
@@ -208,7 +213,8 @@ class ExpenseEditSettingsState extends State<ExpenseEditSettings> {
                       ),
                       DecoratedFormField(
                         controller: _transactionReferenceController,
-                        keyboardType: TextInputType.text,
+                        keyboardType: TextInputType.multiline,
+                        maxLines: 3,
                         label: localization.transactionReference,
                         onSavePressed: viewModel.onSavePressed,
                       ),

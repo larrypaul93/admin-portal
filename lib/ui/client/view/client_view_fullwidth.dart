@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:invoiceninja_flutter/constants.dart';
+import 'package:invoiceninja_flutter/data/models/company_gateway_model.dart';
+import 'package:invoiceninja_flutter/data/models/company_model.dart';
+import 'package:invoiceninja_flutter/data/models/gateway_token_model.dart';
 import 'package:invoiceninja_flutter/redux/app/app_state.dart';
 import 'package:invoiceninja_flutter/redux/client/client_selectors.dart';
 import 'package:invoiceninja_flutter/ui/app/copy_to_clipboard.dart';
@@ -12,6 +15,7 @@ import 'package:invoiceninja_flutter/ui/app/portal_links.dart';
 import 'package:invoiceninja_flutter/ui/client/view/client_view_activity.dart';
 import 'package:invoiceninja_flutter/ui/client/view/client_view_documents.dart';
 import 'package:invoiceninja_flutter/ui/client/view/client_view_ledger.dart';
+import 'package:invoiceninja_flutter/ui/client/view/client_view_payment_methods.dart';
 import 'package:invoiceninja_flutter/ui/client/view/client_view_system_logs.dart';
 import 'package:invoiceninja_flutter/ui/client/view/client_view_vm.dart';
 import 'package:invoiceninja_flutter/utils/formatting.dart';
@@ -67,6 +71,8 @@ class _ClientViewFullwidthState extends State<ClientViewFullwidth>
     final shippingAddress =
         formatAddress(state, object: client, isShipping: true);
 
+    final hasMultipleContacts = client.contacts.length > 1;
+
     final showStanding = !state.prefState.isPreviewVisible &&
         !state.uiState.isEditing &&
         state.prefState.isModuleTable;
@@ -75,6 +81,32 @@ class _ClientViewFullwidthState extends State<ClientViewFullwidth>
         memoizedGetClientAvailableCredits(client.id, state.creditState.map);
     final unappliedPayments =
         memoizedGetClientUnappliedPayments(client.id, state.paymentState.map);
+
+    // Group gateway tokens by the customerReference
+    final tokenMap = <String, List<GatewayTokenEntity>>{};
+    final gatewayMap = <String, CompanyGatewayEntity>{};
+    final linkMap = <String, String>{};
+
+    client.gatewayTokens.forEach((gatewayToken) {
+      final companyGateway =
+          state.companyGatewayState.get(gatewayToken.companyGatewayId);
+      if (companyGateway.isOld && !companyGateway.isDeleted) {
+        final customerReference = gatewayToken.customerReference;
+        gatewayMap[customerReference] = companyGateway;
+        final clientUrl = GatewayEntity.getClientUrl(
+          gatewayId: companyGateway.gatewayId,
+          customerReference: customerReference,
+        );
+        if (clientUrl != null) {
+          linkMap[customerReference] = clientUrl;
+        }
+        if (tokenMap.containsKey(customerReference)) {
+          tokenMap[customerReference].add(gatewayToken);
+        } else {
+          tokenMap[customerReference] = [gatewayToken];
+        }
+      }
+    });
 
     return LayoutBuilder(builder: (context, layout) {
       final minHeight = layout.maxHeight - (kMobileDialogPadding * 2) - 43;
@@ -135,11 +167,13 @@ class _ClientViewFullwidthState extends State<ClientViewFullwidth>
                   if (client.website.isNotEmpty)
                     Padding(
                       padding: const EdgeInsets.symmetric(vertical: 4),
-                      child: CopyToClipboard(
-                        value: client.website,
+                      child: InkWell(
+                        onTap: () =>
+                            launchUrl(Uri.parse(untrimUrl(client.website))),
                         child: IconText(
-                            icon: MdiIcons.earth,
-                            text: trimUrl(client.website)),
+                          icon: MdiIcons.earth,
+                          text: trimUrl(client.website),
+                        ),
                       ),
                     ),
                   SizedBox(height: 4),
@@ -192,6 +226,10 @@ class _ClientViewFullwidthState extends State<ClientViewFullwidth>
                 ),
                 SizedBox(height: 8),
                 if (billingAddress.isNotEmpty) ...[
+                  Text(
+                    localization.billingAddress,
+                    style: TextStyle(color: Colors.grey),
+                  ),
                   Row(
                     children: [
                       Expanded(
@@ -224,6 +262,10 @@ class _ClientViewFullwidthState extends State<ClientViewFullwidth>
                   SizedBox(height: 8),
                 ],
                 if (shippingAddress.isNotEmpty) ...[
+                  Text(
+                    localization.shippingAddress,
+                    style: TextStyle(color: Colors.grey),
+                  ),
                   Row(
                     children: [
                       Expanded(
@@ -266,52 +308,78 @@ class _ClientViewFullwidthState extends State<ClientViewFullwidth>
                 right: kMobileDialogPadding / (!showStanding ? 1 : 2),
                 bottom: kMobileDialogPadding,
                 left: kMobileDialogPadding / 2),
-            child: ListView(
+            child: Scrollbar(
+              thumbVisibility: true,
               controller: _scrollController3,
-              children: [
-                Text(
-                  localization.contacts,
-                  style: Theme.of(context).textTheme.headline6,
-                ),
-                SizedBox(height: 8),
-                ...client.contacts.map((contact) {
-                  return Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        contact.fullName,
-                        style: Theme.of(context).textTheme.subtitle1,
-                      ),
-                      if (contact.email.isNotEmpty)
-                        Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 4),
-                          child: CopyToClipboard(
-                            value: contact.email,
-                            child: IconText(
-                                icon: Icons.email, text: contact.email),
+              child: ListView(
+                controller: _scrollController3,
+                children: [
+                  Text(
+                    localization.contacts +
+                        (hasMultipleContacts
+                            ? ' (${client.contacts.length})'
+                            : ''),
+                    style: Theme.of(context).textTheme.headline6,
+                  ),
+                  SizedBox(height: 8),
+                  ...client.contacts.map((contact) {
+                    return Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                contact.fullName,
+                                style: Theme.of(context).textTheme.subtitle1,
+                              ),
+                              if (contact.email.isNotEmpty)
+                                Padding(
+                                  padding:
+                                      const EdgeInsets.symmetric(vertical: 4),
+                                  child: CopyToClipboard(
+                                    value: contact.email,
+                                    child: IconText(
+                                        icon: Icons.email, text: contact.email),
+                                  ),
+                                ),
+                              if (contact.phone.isNotEmpty)
+                                Padding(
+                                  padding:
+                                      const EdgeInsets.symmetric(vertical: 4),
+                                  child: CopyToClipboard(
+                                    value: contact.phone,
+                                    child: IconText(
+                                        icon: Icons.phone, text: contact.phone),
+                                  ),
+                                ),
+                              SizedBox(height: 8),
+                              if (!hasMultipleContacts) ...[
+                                PortalLinks(
+                                  viewLink: contact.silentLink,
+                                  copyLink: contact.link,
+                                  client: client,
+                                  style: PortalLinkStyle.icons,
+                                ),
+                                SizedBox(height: 16),
+                              ] else
+                                SizedBox(height: 8),
+                            ],
                           ),
                         ),
-                      if (contact.phone.isNotEmpty)
-                        Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 4),
-                          child: CopyToClipboard(
-                            value: contact.phone,
-                            child: IconText(
-                                icon: Icons.phone, text: contact.phone),
-                          ),
-                        ),
-                      SizedBox(height: 8),
-                      PortalLinks(
-                        viewLink: contact.silentLink,
-                        copyLink: contact.link,
-                        client: client,
-                        useIcons: true,
-                      ),
-                      SizedBox(height: 16),
-                    ],
-                  );
-                }).toList(),
-              ],
+                        if (hasMultipleContacts)
+                          PortalLinks(
+                            client: client,
+                            viewLink: contact.silentLink,
+                            copyLink: contact.link,
+                            style: PortalLinkStyle.dropdown,
+                          )
+                      ],
+                    );
+                  }).toList(),
+                ],
+              ),
             ),
           )),
           if (showStanding)
@@ -340,6 +408,11 @@ class _ClientViewFullwidthState extends State<ClientViewFullwidth>
                             Tab(
                               child: Text(localization.standing),
                             ),
+                            if (tokenMap.keys.isNotEmpty)
+                              Tab(
+                                text:
+                                    '${localization.paymentMethods} (${tokenMap.keys.length})',
+                              ),
                             Tab(
                               text: documents.isEmpty
                                   ? localization.documents
@@ -380,6 +453,18 @@ class _ClientViewFullwidthState extends State<ClientViewFullwidth>
                                     )
                                 ],
                               ),
+                              if (tokenMap.keys.isNotEmpty)
+                                RefreshIndicator(
+                                  onRefresh: () =>
+                                      viewModel.onRefreshed(context),
+                                  child: ClientViewPaymentMethods(
+                                    viewModel: viewModel,
+                                    key: ValueKey(viewModel.client.id),
+                                    gatewayMap: gatewayMap,
+                                    linkMap: linkMap,
+                                    tokenMap: tokenMap,
+                                  ),
+                                ),
                               RefreshIndicator(
                                 onRefresh: () => viewModel.onRefreshed(context),
                                 child: ClientViewDocuments(

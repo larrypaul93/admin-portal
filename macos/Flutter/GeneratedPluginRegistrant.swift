@@ -7,11 +7,11 @@ import Foundation
 
 import package_info
 import package_info_plus_macos
-import path_provider_macos
+import path_provider_foundation
 import printing
 import screen_retriever
 import sentry_flutter
-import shared_preferences_macos
+import shared_preferences_foundation
 import sign_in_with_apple
 import sqflite
 import url_launcher_macos

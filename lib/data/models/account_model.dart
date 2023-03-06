@@ -14,6 +14,7 @@ abstract class AccountEntity
   factory AccountEntity(bool reportErrors, {String id, AppState state}) {
     return _$AccountEntity._(
       id: '',
+      key: '',
       defaultUrl: '',
       plan: '',
       planExpires: '',
@@ -43,6 +44,8 @@ abstract class AccountEntity
   int get hashCode;
 
   String get id;
+
+  String get key;
 
   @BuiltValueField(wireName: 'trial_started')
   String get trialStarted;
@@ -112,12 +115,15 @@ abstract class AccountEntity
     return Version.parse(currentVersion) < Version.parse(latestVersion);
   }
 
+  bool get isOld => id.isNotEmpty;
+
   bool get isTrial => trialDaysLeft > 0;
 
   bool get isEligibleForTrial => trialStarted.isEmpty && plan == kPlanFree;
 
   // ignore: unused_element
   static void _initializeBuilder(AccountEntityBuilder builder) => builder
+    ..key = ''
     ..debugEnabled = false
     ..isDocker = false
     ..isSchedulerRunning = true
@@ -129,7 +135,7 @@ abstract class AccountEntity
     ..trialDaysLeft = 0
     ..hostedClientCount = 0
     ..hostedCompanyCount = 1
-    ..accountSmsVerified = false
+    ..accountSmsVerified = true
     ..setReactAsDefaultAP = false;
 
   static Serializer<AccountEntity> get serializer => _$accountEntitySerializer;

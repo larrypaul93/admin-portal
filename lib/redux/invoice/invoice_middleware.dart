@@ -1,5 +1,6 @@
 // Flutter imports:
 import 'package:flutter/material.dart';
+import 'package:invoiceninja_flutter/constants.dart';
 import 'package:invoiceninja_flutter/redux/recurring_invoice/recurring_invoice_actions.dart';
 
 // Package imports:
@@ -34,6 +35,7 @@ List<Middleware<AppState>> createStoreInvoicesMiddleware([
   final deleteInvoice = _deleteInvoice(repository);
   final restoreInvoice = _restoreInvoice(repository);
   final emailInvoice = _emailInvoice(repository);
+  final autoBillInvoices = _autoBillInvoices(repository);
   final bulkEmailInvoices = _bulkEmailInvoices(repository);
   final markInvoiceSent = _markInvoiceSent(repository);
   final markInvoicePaid = _markInvoicePaid(repository);
@@ -55,6 +57,7 @@ List<Middleware<AppState>> createStoreInvoicesMiddleware([
     TypedMiddleware<AppState, RestoreInvoicesRequest>(restoreInvoice),
     TypedMiddleware<AppState, EmailInvoiceRequest>(emailInvoice),
     TypedMiddleware<AppState, BulkEmailInvoicesRequest>(bulkEmailInvoices),
+    TypedMiddleware<AppState, AutoBillInvoicesRequest>(autoBillInvoices),
     TypedMiddleware<AppState, MarkInvoicesSentRequest>(markInvoiceSent),
     TypedMiddleware<AppState, MarkInvoicesPaidRequest>(markInvoicePaid),
     TypedMiddleware<AppState, CancelInvoicesRequest>(cancelInvoices),
@@ -274,6 +277,30 @@ Middleware<AppState> _markInvoiceSent(InvoiceRepository repository) {
   };
 }
 
+Middleware<AppState> _autoBillInvoices(InvoiceRepository repository) {
+  return (Store<AppState> store, dynamic dynamicAction, NextDispatcher next) {
+    final action = dynamicAction as AutoBillInvoicesRequest;
+    repository
+        .bulkAction(
+            store.state.credentials, action.invoiceIds, EntityAction.autoBill)
+        .then((invoices) {
+      store.dispatch(AutoBillInvoicesSuccess(invoices));
+      store.dispatch(RefreshData());
+      if (action.completer != null) {
+        action.completer.complete(null);
+      }
+    }).catchError((Object error) {
+      print(error);
+      store.dispatch(AutoBillInvoicesFailure(error));
+      if (action.completer != null) {
+        action.completer.completeError(error);
+      }
+    });
+
+    next(action);
+  };
+}
+
 Middleware<AppState> _markInvoicePaid(InvoiceRepository repository) {
   return (Store<AppState> store, dynamic dynamicAction, NextDispatcher next) {
     final action = dynamicAction as MarkInvoicesPaidRequest;
@@ -441,12 +468,11 @@ Middleware<AppState> _loadInvoices(InvoiceRepository repository) {
       action.page,
       state.createdAtLimit,
       state.filterDeletedClients,
-      state.recordsPerPage,
     )
         .then((data) {
       store.dispatch(LoadInvoicesSuccess(data));
 
-      if (data.length == state.recordsPerPage) {
+      if (data.length == kMaxRecordsPerPage) {
         store.dispatch(LoadInvoices(
           completer: action.completer,
           page: action.page + 1,

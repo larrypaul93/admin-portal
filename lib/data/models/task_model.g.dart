@@ -170,9 +170,6 @@ class _$TaskEntitySerializer implements StructuredSerializer<TaskEntity> {
       'number',
       serializers.serialize(object.number,
           specifiedType: const FullType(String)),
-      'duration',
-      serializers.serialize(object.duration,
-          specifiedType: const FullType(int)),
       'invoice_id',
       serializers.serialize(object.invoiceId,
           specifiedType: const FullType(String)),
@@ -274,10 +271,6 @@ class _$TaskEntitySerializer implements StructuredSerializer<TaskEntity> {
         case 'number':
           result.number = serializers.deserialize(value,
               specifiedType: const FullType(String)) as String;
-          break;
-        case 'duration':
-          result.duration = serializers.deserialize(value,
-              specifiedType: const FullType(int)) as int;
           break;
         case 'invoice_id':
           result.invoiceId = serializers.deserialize(value,
@@ -397,7 +390,11 @@ class _$TaskListResponse extends TaskListResponse {
   int __hashCode;
   @override
   int get hashCode {
-    return __hashCode ??= $jf($jc(0, data.hashCode));
+    if (__hashCode != null) return __hashCode;
+    var _$hash = 0;
+    _$hash = $jc(_$hash, data.hashCode);
+    _$hash = $jf(_$hash);
+    return __hashCode ??= _$hash;
   }
 
   @override
@@ -490,7 +487,11 @@ class _$TaskItemResponse extends TaskItemResponse {
   int __hashCode;
   @override
   int get hashCode {
-    return __hashCode ??= $jf($jc(0, data.hashCode));
+    if (__hashCode != null) return __hashCode;
+    var _$hash = 0;
+    _$hash = $jc(_$hash, data.hashCode);
+    _$hash = $jf(_$hash);
+    return __hashCode ??= _$hash;
   }
 
   @override
@@ -582,8 +583,12 @@ class _$TaskTime extends TaskTime {
   int __hashCode;
   @override
   int get hashCode {
-    return __hashCode ??=
-        $jf($jc($jc(0, startDate.hashCode), endDate.hashCode));
+    if (__hashCode != null) return __hashCode;
+    var _$hash = 0;
+    _$hash = $jc(_$hash, startDate.hashCode);
+    _$hash = $jc(_$hash, endDate.hashCode);
+    _$hash = $jf(_$hash);
+    return __hashCode ??= _$hash;
   }
 
   @override
@@ -646,8 +651,6 @@ class _$TaskEntity extends TaskEntity {
   @override
   final String number;
   @override
-  final int duration;
-  @override
   final String invoiceId;
   @override
   final String clientId;
@@ -694,7 +697,6 @@ class _$TaskEntity extends TaskEntity {
   _$TaskEntity._(
       {this.description,
       this.number,
-      this.duration,
       this.invoiceId,
       this.clientId,
       this.rate,
@@ -719,7 +721,6 @@ class _$TaskEntity extends TaskEntity {
     BuiltValueNullFieldError.checkNotNull(
         description, r'TaskEntity', 'description');
     BuiltValueNullFieldError.checkNotNull(number, r'TaskEntity', 'number');
-    BuiltValueNullFieldError.checkNotNull(duration, r'TaskEntity', 'duration');
     BuiltValueNullFieldError.checkNotNull(
         invoiceId, r'TaskEntity', 'invoiceId');
     BuiltValueNullFieldError.checkNotNull(clientId, r'TaskEntity', 'clientId');
@@ -760,7 +761,6 @@ class _$TaskEntity extends TaskEntity {
     return other is TaskEntity &&
         description == other.description &&
         number == other.number &&
-        duration == other.duration &&
         invoiceId == other.invoiceId &&
         clientId == other.clientId &&
         rate == other.rate &&
@@ -786,44 +786,32 @@ class _$TaskEntity extends TaskEntity {
   int __hashCode;
   @override
   int get hashCode {
-    return __hashCode ??= $jf($jc(
-        $jc(
-            $jc(
-                $jc(
-                    $jc(
-                        $jc(
-                            $jc(
-                                $jc(
-                                    $jc(
-                                        $jc(
-                                            $jc(
-                                                $jc(
-                                                    $jc(
-                                                        $jc(
-                                                            $jc(
-                                                                $jc(
-                                                                    $jc(
-                                                                        $jc(
-                                                                            $jc($jc($jc($jc($jc(0, description.hashCode), number.hashCode), duration.hashCode), invoiceId.hashCode),
-                                                                                clientId.hashCode),
-                                                                            rate.hashCode),
-                                                                        projectId.hashCode),
-                                                                    timeLog.hashCode),
-                                                                customValue1.hashCode),
-                                                            customValue2.hashCode),
-                                                        customValue3.hashCode),
-                                                    customValue4.hashCode),
-                                                statusId.hashCode),
-                                            statusOrder.hashCode),
-                                        documents.hashCode),
-                                    isChanged.hashCode),
-                                createdAt.hashCode),
-                            updatedAt.hashCode),
-                        archivedAt.hashCode),
-                    isDeleted.hashCode),
-                createdUserId.hashCode),
-            assignedUserId.hashCode),
-        id.hashCode));
+    if (__hashCode != null) return __hashCode;
+    var _$hash = 0;
+    _$hash = $jc(_$hash, description.hashCode);
+    _$hash = $jc(_$hash, number.hashCode);
+    _$hash = $jc(_$hash, invoiceId.hashCode);
+    _$hash = $jc(_$hash, clientId.hashCode);
+    _$hash = $jc(_$hash, rate.hashCode);
+    _$hash = $jc(_$hash, projectId.hashCode);
+    _$hash = $jc(_$hash, timeLog.hashCode);
+    _$hash = $jc(_$hash, customValue1.hashCode);
+    _$hash = $jc(_$hash, customValue2.hashCode);
+    _$hash = $jc(_$hash, customValue3.hashCode);
+    _$hash = $jc(_$hash, customValue4.hashCode);
+    _$hash = $jc(_$hash, statusId.hashCode);
+    _$hash = $jc(_$hash, statusOrder.hashCode);
+    _$hash = $jc(_$hash, documents.hashCode);
+    _$hash = $jc(_$hash, isChanged.hashCode);
+    _$hash = $jc(_$hash, createdAt.hashCode);
+    _$hash = $jc(_$hash, updatedAt.hashCode);
+    _$hash = $jc(_$hash, archivedAt.hashCode);
+    _$hash = $jc(_$hash, isDeleted.hashCode);
+    _$hash = $jc(_$hash, createdUserId.hashCode);
+    _$hash = $jc(_$hash, assignedUserId.hashCode);
+    _$hash = $jc(_$hash, id.hashCode);
+    _$hash = $jf(_$hash);
+    return __hashCode ??= _$hash;
   }
 
   @override
@@ -831,7 +819,6 @@ class _$TaskEntity extends TaskEntity {
     return (newBuiltValueToStringHelper(r'TaskEntity')
           ..add('description', description)
           ..add('number', number)
-          ..add('duration', duration)
           ..add('invoiceId', invoiceId)
           ..add('clientId', clientId)
           ..add('rate', rate)
@@ -866,10 +853,6 @@ class TaskEntityBuilder implements Builder<TaskEntity, TaskEntityBuilder> {
   String _number;
   String get number => _$this._number;
   set number(String number) => _$this._number = number;
-
-  int _duration;
-  int get duration => _$this._duration;
-  set duration(int duration) => _$this._duration = duration;
 
   String _invoiceId;
   String get invoiceId => _$this._invoiceId;
@@ -962,7 +945,6 @@ class TaskEntityBuilder implements Builder<TaskEntity, TaskEntityBuilder> {
     if ($v != null) {
       _description = $v.description;
       _number = $v.number;
-      _duration = $v.duration;
       _invoiceId = $v.invoiceId;
       _clientId = $v.clientId;
       _rate = $v.rate;
@@ -1011,8 +993,6 @@ class TaskEntityBuilder implements Builder<TaskEntity, TaskEntityBuilder> {
                   description, r'TaskEntity', 'description'),
               number: BuiltValueNullFieldError.checkNotNull(
                   number, r'TaskEntity', 'number'),
-              duration: BuiltValueNullFieldError.checkNotNull(
-                  duration, r'TaskEntity', 'duration'),
               invoiceId: BuiltValueNullFieldError.checkNotNull(
                   invoiceId, r'TaskEntity', 'invoiceId'),
               clientId: BuiltValueNullFieldError.checkNotNull(
@@ -1023,9 +1003,10 @@ class TaskEntityBuilder implements Builder<TaskEntity, TaskEntityBuilder> {
                   projectId, r'TaskEntity', 'projectId'),
               timeLog: BuiltValueNullFieldError.checkNotNull(
                   timeLog, r'TaskEntity', 'timeLog'),
-              customValue1:
-                  BuiltValueNullFieldError.checkNotNull(customValue1, r'TaskEntity', 'customValue1'),
-              customValue2: BuiltValueNullFieldError.checkNotNull(customValue2, r'TaskEntity', 'customValue2'),
+              customValue1: BuiltValueNullFieldError.checkNotNull(
+                  customValue1, r'TaskEntity', 'customValue1'),
+              customValue2:
+                  BuiltValueNullFieldError.checkNotNull(customValue2, r'TaskEntity', 'customValue2'),
               customValue3: BuiltValueNullFieldError.checkNotNull(customValue3, r'TaskEntity', 'customValue3'),
               customValue4: BuiltValueNullFieldError.checkNotNull(customValue4, r'TaskEntity', 'customValue4'),
               statusId: BuiltValueNullFieldError.checkNotNull(statusId, r'TaskEntity', 'statusId'),
@@ -1055,4 +1036,4 @@ class TaskEntityBuilder implements Builder<TaskEntity, TaskEntityBuilder> {
   }
 }
 
-// ignore_for_file: always_put_control_body_on_new_line,always_specify_types,annotate_overrides,avoid_annotating_with_dynamic,avoid_as,avoid_catches_without_on_clauses,avoid_returning_this,deprecated_member_use_from_same_package,lines_longer_than_80_chars,no_leading_underscores_for_local_identifiers,omit_local_variable_types,prefer_expression_function_bodies,sort_constructors_first,test_types_in_equals,unnecessary_const,unnecessary_new,unnecessary_lambdas
+// ignore_for_file: deprecated_member_use_from_same_package,type=lint

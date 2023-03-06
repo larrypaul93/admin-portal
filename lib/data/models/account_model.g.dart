@@ -21,6 +21,8 @@ class _$AccountEntitySerializer implements StructuredSerializer<AccountEntity> {
     final result = <Object>[
       'id',
       serializers.serialize(object.id, specifiedType: const FullType(String)),
+      'key',
+      serializers.serialize(object.key, specifiedType: const FullType(String)),
       'trial_started',
       serializers.serialize(object.trialStarted,
           specifiedType: const FullType(String)),
@@ -96,6 +98,10 @@ class _$AccountEntitySerializer implements StructuredSerializer<AccountEntity> {
       switch (key) {
         case 'id':
           result.id = serializers.deserialize(value,
+              specifiedType: const FullType(String)) as String;
+          break;
+        case 'key':
+          result.key = serializers.deserialize(value,
               specifiedType: const FullType(String)) as String;
           break;
         case 'trial_started':
@@ -185,6 +191,8 @@ class _$AccountEntity extends AccountEntity {
   @override
   final String id;
   @override
+  final String key;
+  @override
   final String trialStarted;
   @override
   final String defaultUrl;
@@ -228,6 +236,7 @@ class _$AccountEntity extends AccountEntity {
 
   _$AccountEntity._(
       {this.id,
+      this.key,
       this.trialStarted,
       this.defaultUrl,
       this.reportErrors,
@@ -249,6 +258,7 @@ class _$AccountEntity extends AccountEntity {
       this.trialDaysLeft})
       : super._() {
     BuiltValueNullFieldError.checkNotNull(id, r'AccountEntity', 'id');
+    BuiltValueNullFieldError.checkNotNull(key, r'AccountEntity', 'key');
     BuiltValueNullFieldError.checkNotNull(
         trialStarted, r'AccountEntity', 'trialStarted');
     BuiltValueNullFieldError.checkNotNull(
@@ -300,6 +310,7 @@ class _$AccountEntity extends AccountEntity {
     if (identical(other, this)) return true;
     return other is AccountEntity &&
         id == other.id &&
+        key == other.key &&
         trialStarted == other.trialStarted &&
         defaultUrl == other.defaultUrl &&
         reportErrors == other.reportErrors &&
@@ -324,50 +335,38 @@ class _$AccountEntity extends AccountEntity {
   int __hashCode;
   @override
   int get hashCode {
-    return __hashCode ??= $jf($jc(
-        $jc(
-            $jc(
-                $jc(
-                    $jc(
-                        $jc(
-                            $jc(
-                                $jc(
-                                    $jc(
-                                        $jc(
-                                            $jc(
-                                                $jc(
-                                                    $jc(
-                                                        $jc(
-                                                            $jc(
-                                                                $jc(
-                                                                    $jc(
-                                                                        $jc(
-                                                                            $jc($jc(0, id.hashCode),
-                                                                                trialStarted.hashCode),
-                                                                            defaultUrl.hashCode),
-                                                                        reportErrors.hashCode),
-                                                                    plan.hashCode),
-                                                                planExpires.hashCode),
-                                                            latestVersion.hashCode),
-                                                        currentVersion.hashCode),
-                                                    debugEnabled.hashCode),
-                                                isDocker.hashCode),
-                                            isMigrated.hashCode),
-                                        isHosted.hashCode),
-                                    isSchedulerRunning.hashCode),
-                                disableAutoUpdate.hashCode),
-                            defaultCompanyId.hashCode),
-                        hostedClientCount.hashCode),
-                    hostedCompanyCount.hashCode),
-                setReactAsDefaultAP.hashCode),
-            accountSmsVerified.hashCode),
-        trialDaysLeft.hashCode));
+    if (__hashCode != null) return __hashCode;
+    var _$hash = 0;
+    _$hash = $jc(_$hash, id.hashCode);
+    _$hash = $jc(_$hash, key.hashCode);
+    _$hash = $jc(_$hash, trialStarted.hashCode);
+    _$hash = $jc(_$hash, defaultUrl.hashCode);
+    _$hash = $jc(_$hash, reportErrors.hashCode);
+    _$hash = $jc(_$hash, plan.hashCode);
+    _$hash = $jc(_$hash, planExpires.hashCode);
+    _$hash = $jc(_$hash, latestVersion.hashCode);
+    _$hash = $jc(_$hash, currentVersion.hashCode);
+    _$hash = $jc(_$hash, debugEnabled.hashCode);
+    _$hash = $jc(_$hash, isDocker.hashCode);
+    _$hash = $jc(_$hash, isMigrated.hashCode);
+    _$hash = $jc(_$hash, isHosted.hashCode);
+    _$hash = $jc(_$hash, isSchedulerRunning.hashCode);
+    _$hash = $jc(_$hash, disableAutoUpdate.hashCode);
+    _$hash = $jc(_$hash, defaultCompanyId.hashCode);
+    _$hash = $jc(_$hash, hostedClientCount.hashCode);
+    _$hash = $jc(_$hash, hostedCompanyCount.hashCode);
+    _$hash = $jc(_$hash, setReactAsDefaultAP.hashCode);
+    _$hash = $jc(_$hash, accountSmsVerified.hashCode);
+    _$hash = $jc(_$hash, trialDaysLeft.hashCode);
+    _$hash = $jf(_$hash);
+    return __hashCode ??= _$hash;
   }
 
   @override
   String toString() {
     return (newBuiltValueToStringHelper(r'AccountEntity')
           ..add('id', id)
+          ..add('key', key)
           ..add('trialStarted', trialStarted)
           ..add('defaultUrl', defaultUrl)
           ..add('reportErrors', reportErrors)
@@ -398,6 +397,10 @@ class AccountEntityBuilder
   String _id;
   String get id => _$this._id;
   set id(String id) => _$this._id = id;
+
+  String _key;
+  String get key => _$this._key;
+  set key(String key) => _$this._key = key;
 
   String _trialStarted;
   String get trialStarted => _$this._trialStarted;
@@ -492,6 +495,7 @@ class AccountEntityBuilder
     final $v = _$v;
     if ($v != null) {
       _id = $v.id;
+      _key = $v.key;
       _trialStarted = $v.trialStarted;
       _defaultUrl = $v.defaultUrl;
       _reportErrors = $v.reportErrors;
@@ -535,6 +539,8 @@ class AccountEntityBuilder
         new _$AccountEntity._(
             id: BuiltValueNullFieldError.checkNotNull(
                 id, r'AccountEntity', 'id'),
+            key: BuiltValueNullFieldError.checkNotNull(
+                key, r'AccountEntity', 'key'),
             trialStarted: BuiltValueNullFieldError.checkNotNull(
                 trialStarted, r'AccountEntity', 'trialStarted'),
             defaultUrl: BuiltValueNullFieldError.checkNotNull(
@@ -549,8 +555,8 @@ class AccountEntityBuilder
                 latestVersion, r'AccountEntity', 'latestVersion'),
             currentVersion: BuiltValueNullFieldError.checkNotNull(
                 currentVersion, r'AccountEntity', 'currentVersion'),
-            debugEnabled: BuiltValueNullFieldError.checkNotNull(
-                debugEnabled, r'AccountEntity', 'debugEnabled'),
+            debugEnabled:
+                BuiltValueNullFieldError.checkNotNull(debugEnabled, r'AccountEntity', 'debugEnabled'),
             isDocker: BuiltValueNullFieldError.checkNotNull(isDocker, r'AccountEntity', 'isDocker'),
             isMigrated: BuiltValueNullFieldError.checkNotNull(isMigrated, r'AccountEntity', 'isMigrated'),
             isHosted: BuiltValueNullFieldError.checkNotNull(isHosted, r'AccountEntity', 'isHosted'),
@@ -567,4 +573,4 @@ class AccountEntityBuilder
   }
 }
 
-// ignore_for_file: always_put_control_body_on_new_line,always_specify_types,annotate_overrides,avoid_annotating_with_dynamic,avoid_as,avoid_catches_without_on_clauses,avoid_returning_this,deprecated_member_use_from_same_package,lines_longer_than_80_chars,no_leading_underscores_for_local_identifiers,omit_local_variable_types,prefer_expression_function_bodies,sort_constructors_first,test_types_in_equals,unnecessary_const,unnecessary_new,unnecessary_lambdas
+// ignore_for_file: deprecated_member_use_from_same_package,type=lint

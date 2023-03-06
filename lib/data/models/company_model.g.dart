@@ -146,6 +146,9 @@ class _$CompanyEntitySerializer implements StructuredSerializer<CompanyEntity> {
       'report_include_drafts',
       serializers.serialize(object.reportIncludeDrafts,
           specifiedType: const FullType(bool)),
+      'report_include_deleted',
+      serializers.serialize(object.reportIncludeDeleted,
+          specifiedType: const FullType(bool)),
       'use_quote_terms_on_conversion',
       serializers.serialize(object.useQuoteTermsOnConversion,
           specifiedType: const FullType(bool)),
@@ -160,6 +163,18 @@ class _$CompanyEntitySerializer implements StructuredSerializer<CompanyEntity> {
           specifiedType: const FullType(int)),
       'stock_notification',
       serializers.serialize(object.stockNotification,
+          specifiedType: const FullType(bool)),
+      'invoice_task_lock',
+      serializers.serialize(object.invoiceTaskLock,
+          specifiedType: const FullType(bool)),
+      'convert_payment_currency',
+      serializers.serialize(object.convertPaymentCurrency,
+          specifiedType: const FullType(bool)),
+      'convert_expense_currency',
+      serializers.serialize(object.convertExpenseCurrency,
+          specifiedType: const FullType(bool)),
+      'notify_vendor_when_paid',
+      serializers.serialize(object.notifyVendorWhenPaid,
           specifiedType: const FullType(bool)),
       'groups',
       serializers.serialize(object.groups,
@@ -249,6 +264,18 @@ class _$CompanyEntitySerializer implements StructuredSerializer<CompanyEntity> {
       serializers.serialize(object.purchaseOrders,
           specifiedType:
               const FullType(BuiltList, const [const FullType(InvoiceEntity)])),
+      'bank_integrations',
+      serializers.serialize(object.bankAccounts,
+          specifiedType: const FullType(
+              BuiltList, const [const FullType(BankAccountEntity)])),
+      'bank_transactions',
+      serializers.serialize(object.transactions,
+          specifiedType: const FullType(
+              BuiltList, const [const FullType(TransactionEntity)])),
+      'bank_transaction_rules',
+      serializers.serialize(object.transactionRules,
+          specifiedType: const FullType(
+              BuiltList, const [const FullType(TransactionRuleEntity)])),
       'tasks',
       serializers.serialize(object.tasks,
           specifiedType:
@@ -273,6 +300,10 @@ class _$CompanyEntitySerializer implements StructuredSerializer<CompanyEntity> {
       serializers.serialize(object.documents,
           specifiedType: const FullType(
               BuiltList, const [const FullType(DocumentEntity)])),
+      'task_schedulers',
+      serializers.serialize(object.schedules,
+          specifiedType: const FullType(
+              BuiltList, const [const FullType(ScheduleEntity)])),
       'tokens_hashed',
       serializers.serialize(object.tokens,
           specifiedType:
@@ -307,6 +338,12 @@ class _$CompanyEntitySerializer implements StructuredSerializer<CompanyEntity> {
       'google_analytics_key',
       serializers.serialize(object.googleAnalyticsKey,
           specifiedType: const FullType(String)),
+      'matomo_url',
+      serializers.serialize(object.matomoUrl,
+          specifiedType: const FullType(String)),
+      'matomo_id',
+      serializers.serialize(object.matomoId,
+          specifiedType: const FullType(String)),
       'mark_expenses_invoiceable',
       serializers.serialize(object.markExpensesInvoiceable,
           specifiedType: const FullType(bool)),
@@ -327,6 +364,9 @@ class _$CompanyEntitySerializer implements StructuredSerializer<CompanyEntity> {
           specifiedType: const FullType(bool)),
       'invoice_task_project',
       serializers.serialize(object.invoiceTaskProject,
+          specifiedType: const FullType(bool)),
+      'invoice_task_hours',
+      serializers.serialize(object.invoiceTaskHours,
           specifiedType: const FullType(bool)),
       'auto_start_tasks',
       serializers.serialize(object.autoStartTasks,
@@ -560,6 +600,10 @@ class _$CompanyEntitySerializer implements StructuredSerializer<CompanyEntity> {
           result.reportIncludeDrafts = serializers.deserialize(value,
               specifiedType: const FullType(bool)) as bool;
           break;
+        case 'report_include_deleted':
+          result.reportIncludeDeleted = serializers.deserialize(value,
+              specifiedType: const FullType(bool)) as bool;
+          break;
         case 'use_quote_terms_on_conversion':
           result.useQuoteTermsOnConversion = serializers.deserialize(value,
               specifiedType: const FullType(bool)) as bool;
@@ -578,6 +622,22 @@ class _$CompanyEntitySerializer implements StructuredSerializer<CompanyEntity> {
           break;
         case 'stock_notification':
           result.stockNotification = serializers.deserialize(value,
+              specifiedType: const FullType(bool)) as bool;
+          break;
+        case 'invoice_task_lock':
+          result.invoiceTaskLock = serializers.deserialize(value,
+              specifiedType: const FullType(bool)) as bool;
+          break;
+        case 'convert_payment_currency':
+          result.convertPaymentCurrency = serializers.deserialize(value,
+              specifiedType: const FullType(bool)) as bool;
+          break;
+        case 'convert_expense_currency':
+          result.convertExpenseCurrency = serializers.deserialize(value,
+              specifiedType: const FullType(bool)) as bool;
+          break;
+        case 'notify_vendor_when_paid':
+          result.notifyVendorWhenPaid = serializers.deserialize(value,
               specifiedType: const FullType(bool)) as bool;
           break;
         case 'groups':
@@ -708,6 +768,24 @@ class _$CompanyEntitySerializer implements StructuredSerializer<CompanyEntity> {
                       BuiltList, const [const FullType(InvoiceEntity)]))
               as BuiltList<Object>);
           break;
+        case 'bank_integrations':
+          result.bankAccounts.replace(serializers.deserialize(value,
+                  specifiedType: const FullType(
+                      BuiltList, const [const FullType(BankAccountEntity)]))
+              as BuiltList<Object>);
+          break;
+        case 'bank_transactions':
+          result.transactions.replace(serializers.deserialize(value,
+                  specifiedType: const FullType(
+                      BuiltList, const [const FullType(TransactionEntity)]))
+              as BuiltList<Object>);
+          break;
+        case 'bank_transaction_rules':
+          result.transactionRules.replace(serializers.deserialize(value,
+                  specifiedType: const FullType(
+                      BuiltList, const [const FullType(TransactionRuleEntity)]))
+              as BuiltList<Object>);
+          break;
         case 'tasks':
           result.tasks.replace(serializers.deserialize(value,
                   specifiedType: const FullType(
@@ -742,6 +820,12 @@ class _$CompanyEntitySerializer implements StructuredSerializer<CompanyEntity> {
           result.documents.replace(serializers.deserialize(value,
                   specifiedType: const FullType(
                       BuiltList, const [const FullType(DocumentEntity)]))
+              as BuiltList<Object>);
+          break;
+        case 'task_schedulers':
+          result.schedules.replace(serializers.deserialize(value,
+                  specifiedType: const FullType(
+                      BuiltList, const [const FullType(ScheduleEntity)]))
               as BuiltList<Object>);
           break;
         case 'tokens_hashed':
@@ -793,6 +877,14 @@ class _$CompanyEntitySerializer implements StructuredSerializer<CompanyEntity> {
           result.googleAnalyticsKey = serializers.deserialize(value,
               specifiedType: const FullType(String)) as String;
           break;
+        case 'matomo_url':
+          result.matomoUrl = serializers.deserialize(value,
+              specifiedType: const FullType(String)) as String;
+          break;
+        case 'matomo_id':
+          result.matomoId = serializers.deserialize(value,
+              specifiedType: const FullType(String)) as String;
+          break;
         case 'mark_expenses_invoiceable':
           result.markExpensesInvoiceable = serializers.deserialize(value,
               specifiedType: const FullType(bool)) as bool;
@@ -819,6 +911,10 @@ class _$CompanyEntitySerializer implements StructuredSerializer<CompanyEntity> {
           break;
         case 'invoice_task_project':
           result.invoiceTaskProject = serializers.deserialize(value,
+              specifiedType: const FullType(bool)) as bool;
+          break;
+        case 'invoice_task_hours':
+          result.invoiceTaskHours = serializers.deserialize(value,
               specifiedType: const FullType(bool)) as bool;
           break;
         case 'auto_start_tasks':
@@ -1220,6 +1316,12 @@ class _$UserSettingsEntitySerializer
             const FullType(String),
             const FullType(BuiltList, const [const FullType(String)])
           ])),
+      'react_table_column',
+      serializers.serialize(object.reactTableColumns,
+          specifiedType: const FullType(BuiltMap, const [
+            const FullType(String),
+            const FullType(BuiltList, const [const FullType(String)])
+          ])),
       'report_settings',
       serializers.serialize(object.reportSettings,
           specifiedType: const FullType(BuiltMap, const [
@@ -1272,6 +1374,13 @@ class _$UserSettingsEntitySerializer
           break;
         case 'table_columns':
           result.tableColumns.replace(serializers.deserialize(value,
+              specifiedType: const FullType(BuiltMap, const [
+                const FullType(String),
+                const FullType(BuiltList, const [const FullType(String)])
+              ])));
+          break;
+        case 'react_table_column':
+          result.reactTableColumns.replace(serializers.deserialize(value,
               specifiedType: const FullType(BuiltMap, const [
                 const FullType(String),
                 const FullType(BuiltList, const [const FullType(String)])
@@ -1619,6 +1728,8 @@ class _$CompanyEntity extends CompanyEntity {
   @override
   final bool reportIncludeDrafts;
   @override
+  final bool reportIncludeDeleted;
+  @override
   final bool useQuoteTermsOnConversion;
   @override
   final bool enableApplyingPayments;
@@ -1628,6 +1739,14 @@ class _$CompanyEntity extends CompanyEntity {
   final int stockNotificationThreshold;
   @override
   final bool stockNotification;
+  @override
+  final bool invoiceTaskLock;
+  @override
+  final bool convertPaymentCurrency;
+  @override
+  final bool convertExpenseCurrency;
+  @override
+  final bool notifyVendorWhenPaid;
   @override
   final BuiltList<GroupEntity> groups;
   @override
@@ -1671,6 +1790,12 @@ class _$CompanyEntity extends CompanyEntity {
   @override
   final BuiltList<InvoiceEntity> purchaseOrders;
   @override
+  final BuiltList<BankAccountEntity> bankAccounts;
+  @override
+  final BuiltList<TransactionEntity> transactions;
+  @override
+  final BuiltList<TransactionRuleEntity> transactionRules;
+  @override
   final BuiltList<TaskEntity> tasks;
   @override
   final BuiltList<ProjectEntity> projects;
@@ -1682,6 +1807,8 @@ class _$CompanyEntity extends CompanyEntity {
   final BuiltList<DesignEntity> designs;
   @override
   final BuiltList<DocumentEntity> documents;
+  @override
+  final BuiltList<ScheduleEntity> schedules;
   @override
   final BuiltList<TokenEntity> tokens;
   @override
@@ -1701,6 +1828,10 @@ class _$CompanyEntity extends CompanyEntity {
   @override
   final String googleAnalyticsKey;
   @override
+  final String matomoUrl;
+  @override
+  final String matomoId;
+  @override
   final bool markExpensesInvoiceable;
   @override
   final bool markExpensesPaid;
@@ -1714,6 +1845,8 @@ class _$CompanyEntity extends CompanyEntity {
   final bool invoiceTaskDatelog;
   @override
   final bool invoiceTaskProject;
+  @override
+  final bool invoiceTaskHours;
   @override
   final bool autoStartTasks;
   @override
@@ -1788,11 +1921,16 @@ class _$CompanyEntity extends CompanyEntity {
       this.markdownEmailEnabled,
       this.useCommaAsDecimalPlace,
       this.reportIncludeDrafts,
+      this.reportIncludeDeleted,
       this.useQuoteTermsOnConversion,
       this.enableApplyingPayments,
       this.trackInventory,
       this.stockNotificationThreshold,
       this.stockNotification,
+      this.invoiceTaskLock,
+      this.convertPaymentCurrency,
+      this.convertExpenseCurrency,
+      this.notifyVendorWhenPaid,
       this.groups,
       this.activities,
       this.taxRates,
@@ -1814,12 +1952,16 @@ class _$CompanyEntity extends CompanyEntity {
       this.quotes,
       this.credits,
       this.purchaseOrders,
+      this.bankAccounts,
+      this.transactions,
+      this.transactionRules,
       this.tasks,
       this.projects,
       this.expenses,
       this.vendors,
       this.designs,
       this.documents,
+      this.schedules,
       this.tokens,
       this.webhooks,
       this.subscriptions,
@@ -1829,6 +1971,8 @@ class _$CompanyEntity extends CompanyEntity {
       this.customFields,
       this.slackWebhookUrl,
       this.googleAnalyticsKey,
+      this.matomoUrl,
+      this.matomoId,
       this.markExpensesInvoiceable,
       this.markExpensesPaid,
       this.invoiceExpenseDocuments,
@@ -1836,6 +1980,7 @@ class _$CompanyEntity extends CompanyEntity {
       this.invoiceTaskTimelog,
       this.invoiceTaskDatelog,
       this.invoiceTaskProject,
+      this.invoiceTaskHours,
       this.autoStartTasks,
       this.showTasksTable,
       this.showTaskEndDate,
@@ -1925,6 +2070,8 @@ class _$CompanyEntity extends CompanyEntity {
         useCommaAsDecimalPlace, r'CompanyEntity', 'useCommaAsDecimalPlace');
     BuiltValueNullFieldError.checkNotNull(
         reportIncludeDrafts, r'CompanyEntity', 'reportIncludeDrafts');
+    BuiltValueNullFieldError.checkNotNull(
+        reportIncludeDeleted, r'CompanyEntity', 'reportIncludeDeleted');
     BuiltValueNullFieldError.checkNotNull(useQuoteTermsOnConversion,
         r'CompanyEntity', 'useQuoteTermsOnConversion');
     BuiltValueNullFieldError.checkNotNull(
@@ -1935,6 +2082,14 @@ class _$CompanyEntity extends CompanyEntity {
         r'CompanyEntity', 'stockNotificationThreshold');
     BuiltValueNullFieldError.checkNotNull(
         stockNotification, r'CompanyEntity', 'stockNotification');
+    BuiltValueNullFieldError.checkNotNull(
+        invoiceTaskLock, r'CompanyEntity', 'invoiceTaskLock');
+    BuiltValueNullFieldError.checkNotNull(
+        convertPaymentCurrency, r'CompanyEntity', 'convertPaymentCurrency');
+    BuiltValueNullFieldError.checkNotNull(
+        convertExpenseCurrency, r'CompanyEntity', 'convertExpenseCurrency');
+    BuiltValueNullFieldError.checkNotNull(
+        notifyVendorWhenPaid, r'CompanyEntity', 'notifyVendorWhenPaid');
     BuiltValueNullFieldError.checkNotNull(groups, r'CompanyEntity', 'groups');
     BuiltValueNullFieldError.checkNotNull(
         activities, r'CompanyEntity', 'activities');
@@ -1972,6 +2127,12 @@ class _$CompanyEntity extends CompanyEntity {
     BuiltValueNullFieldError.checkNotNull(credits, r'CompanyEntity', 'credits');
     BuiltValueNullFieldError.checkNotNull(
         purchaseOrders, r'CompanyEntity', 'purchaseOrders');
+    BuiltValueNullFieldError.checkNotNull(
+        bankAccounts, r'CompanyEntity', 'bankAccounts');
+    BuiltValueNullFieldError.checkNotNull(
+        transactions, r'CompanyEntity', 'transactions');
+    BuiltValueNullFieldError.checkNotNull(
+        transactionRules, r'CompanyEntity', 'transactionRules');
     BuiltValueNullFieldError.checkNotNull(tasks, r'CompanyEntity', 'tasks');
     BuiltValueNullFieldError.checkNotNull(
         projects, r'CompanyEntity', 'projects');
@@ -1981,6 +2142,8 @@ class _$CompanyEntity extends CompanyEntity {
     BuiltValueNullFieldError.checkNotNull(designs, r'CompanyEntity', 'designs');
     BuiltValueNullFieldError.checkNotNull(
         documents, r'CompanyEntity', 'documents');
+    BuiltValueNullFieldError.checkNotNull(
+        schedules, r'CompanyEntity', 'schedules');
     BuiltValueNullFieldError.checkNotNull(tokens, r'CompanyEntity', 'tokens');
     BuiltValueNullFieldError.checkNotNull(
         webhooks, r'CompanyEntity', 'webhooks');
@@ -1999,6 +2162,10 @@ class _$CompanyEntity extends CompanyEntity {
     BuiltValueNullFieldError.checkNotNull(
         googleAnalyticsKey, r'CompanyEntity', 'googleAnalyticsKey');
     BuiltValueNullFieldError.checkNotNull(
+        matomoUrl, r'CompanyEntity', 'matomoUrl');
+    BuiltValueNullFieldError.checkNotNull(
+        matomoId, r'CompanyEntity', 'matomoId');
+    BuiltValueNullFieldError.checkNotNull(
         markExpensesInvoiceable, r'CompanyEntity', 'markExpensesInvoiceable');
     BuiltValueNullFieldError.checkNotNull(
         markExpensesPaid, r'CompanyEntity', 'markExpensesPaid');
@@ -2012,6 +2179,8 @@ class _$CompanyEntity extends CompanyEntity {
         invoiceTaskDatelog, r'CompanyEntity', 'invoiceTaskDatelog');
     BuiltValueNullFieldError.checkNotNull(
         invoiceTaskProject, r'CompanyEntity', 'invoiceTaskProject');
+    BuiltValueNullFieldError.checkNotNull(
+        invoiceTaskHours, r'CompanyEntity', 'invoiceTaskHours');
     BuiltValueNullFieldError.checkNotNull(
         autoStartTasks, r'CompanyEntity', 'autoStartTasks');
     BuiltValueNullFieldError.checkNotNull(
@@ -2083,11 +2252,16 @@ class _$CompanyEntity extends CompanyEntity {
         markdownEmailEnabled == other.markdownEmailEnabled &&
         useCommaAsDecimalPlace == other.useCommaAsDecimalPlace &&
         reportIncludeDrafts == other.reportIncludeDrafts &&
+        reportIncludeDeleted == other.reportIncludeDeleted &&
         useQuoteTermsOnConversion == other.useQuoteTermsOnConversion &&
         enableApplyingPayments == other.enableApplyingPayments &&
         trackInventory == other.trackInventory &&
         stockNotificationThreshold == other.stockNotificationThreshold &&
         stockNotification == other.stockNotification &&
+        invoiceTaskLock == other.invoiceTaskLock &&
+        convertPaymentCurrency == other.convertPaymentCurrency &&
+        convertExpenseCurrency == other.convertExpenseCurrency &&
+        notifyVendorWhenPaid == other.notifyVendorWhenPaid &&
         groups == other.groups &&
         activities == other.activities &&
         taxRates == other.taxRates &&
@@ -2109,12 +2283,16 @@ class _$CompanyEntity extends CompanyEntity {
         quotes == other.quotes &&
         credits == other.credits &&
         purchaseOrders == other.purchaseOrders &&
+        bankAccounts == other.bankAccounts &&
+        transactions == other.transactions &&
+        transactionRules == other.transactionRules &&
         tasks == other.tasks &&
         projects == other.projects &&
         expenses == other.expenses &&
         vendors == other.vendors &&
         designs == other.designs &&
         documents == other.documents &&
+        schedules == other.schedules &&
         tokens == other.tokens &&
         webhooks == other.webhooks &&
         subscriptions == other.subscriptions &&
@@ -2124,6 +2302,8 @@ class _$CompanyEntity extends CompanyEntity {
         customFields == other.customFields &&
         slackWebhookUrl == other.slackWebhookUrl &&
         googleAnalyticsKey == other.googleAnalyticsKey &&
+        matomoUrl == other.matomoUrl &&
+        matomoId == other.matomoId &&
         markExpensesInvoiceable == other.markExpensesInvoiceable &&
         markExpensesPaid == other.markExpensesPaid &&
         invoiceExpenseDocuments == other.invoiceExpenseDocuments &&
@@ -2131,6 +2311,7 @@ class _$CompanyEntity extends CompanyEntity {
         invoiceTaskTimelog == other.invoiceTaskTimelog &&
         invoiceTaskDatelog == other.invoiceTaskDatelog &&
         invoiceTaskProject == other.invoiceTaskProject &&
+        invoiceTaskHours == other.invoiceTaskHours &&
         autoStartTasks == other.autoStartTasks &&
         showTasksTable == other.showTasksTable &&
         showTaskEndDate == other.showTaskEndDate &&
@@ -2152,44 +2333,123 @@ class _$CompanyEntity extends CompanyEntity {
   int __hashCode;
   @override
   int get hashCode {
-    return __hashCode ??= $jf($jc(
-        $jc(
-            $jc(
-                $jc(
-                    $jc(
-                        $jc(
-                            $jc(
-                                $jc(
-                                    $jc(
-                                        $jc(
-                                            $jc(
-                                                $jc(
-                                                    $jc(
-                                                        $jc(
-                                                            $jc(
-                                                                $jc(
-                                                                    $jc(
-                                                                        $jc(
-                                                                            $jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc(0, enableCustomSurchargeTaxes1.hashCode), enableCustomSurchargeTaxes2.hashCode), enableCustomSurchargeTaxes3.hashCode), enableCustomSurchargeTaxes4.hashCode), sizeId.hashCode), industryId.hashCode), subdomain.hashCode), portalMode.hashCode), portalDomain.hashCode), updateProducts.hashCode), convertProductExchangeRate.hashCode), convertRateToClient.hashCode), fillProducts.hashCode), enableProductCost.hashCode), enableProductQuantity.hashCode), enableProductDiscount.hashCode), defaultTaskIsDateBased.hashCode), defaultQuantity.hashCode), showProductDetails.hashCode), clientCanRegister.hashCode), isLarge.hashCode), isDisabled.hashCode), enableShopApi.hashCode), companyKey.hashCode), firstDayOfWeek.hashCode), firstMonthOfYear.hashCode), numberOfInvoiceTaxRates.hashCode), numberOfItemTaxRates.hashCode), numberOfExpenseTaxRates.hashCode), expenseInclusiveTaxes.hashCode), sessionTimeout.hashCode), passwordTimeout.hashCode), oauthPasswordRequired.hashCode), markdownEnabled.hashCode), markdownEmailEnabled.hashCode), useCommaAsDecimalPlace.hashCode), reportIncludeDrafts.hashCode), useQuoteTermsOnConversion.hashCode), enableApplyingPayments.hashCode), trackInventory.hashCode), stockNotificationThreshold.hashCode), stockNotification.hashCode), groups.hashCode), activities.hashCode), taxRates.hashCode), taskStatuses.hashCode), taskStatusMap.hashCode), companyGateways.hashCode), expenseCategories.hashCode), users.hashCode), clients.hashCode), contacts.hashCode), products.hashCode), categories.hashCode), serviceReports.hashCode), serviceReportsMap.hashCode), invoices.hashCode), recurringInvoices.hashCode), recurringExpenses.hashCode), payments.hashCode), quotes.hashCode), credits.hashCode), purchaseOrders.hashCode), tasks.hashCode), projects.hashCode), expenses.hashCode), vendors.hashCode), designs.hashCode), documents.hashCode), tokens.hashCode), webhooks.hashCode), subscriptions.hashCode), paymentTerms.hashCode), systemLogs.hashCode), clientRegistrationFields.hashCode), customFields.hashCode), slackWebhookUrl.hashCode), googleAnalyticsKey.hashCode), markExpensesInvoiceable.hashCode), markExpensesPaid.hashCode), invoiceExpenseDocuments.hashCode), invoiceTaskDocuments.hashCode),
-                                                                                invoiceTaskTimelog.hashCode),
-                                                                            invoiceTaskDatelog.hashCode),
-                                                                        invoiceTaskProject.hashCode),
-                                                                    autoStartTasks.hashCode),
-                                                                showTasksTable.hashCode),
-                                                            showTaskEndDate.hashCode),
-                                                        settings.hashCode),
-                                                    enabledModules.hashCode),
-                                                calculateExpenseTaxByAmount.hashCode),
-                                            stopOnUnpaidRecurring.hashCode),
-                                        isChanged.hashCode),
-                                    createdAt.hashCode),
-                                updatedAt.hashCode),
-                            archivedAt.hashCode),
-                        isDeleted.hashCode),
-                    createdUserId.hashCode),
-                assignedUserId.hashCode),
-            entityType.hashCode),
-        id.hashCode));
+    if (__hashCode != null) return __hashCode;
+    var _$hash = 0;
+    _$hash = $jc(_$hash, enableCustomSurchargeTaxes1.hashCode);
+    _$hash = $jc(_$hash, enableCustomSurchargeTaxes2.hashCode);
+    _$hash = $jc(_$hash, enableCustomSurchargeTaxes3.hashCode);
+    _$hash = $jc(_$hash, enableCustomSurchargeTaxes4.hashCode);
+    _$hash = $jc(_$hash, sizeId.hashCode);
+    _$hash = $jc(_$hash, industryId.hashCode);
+    _$hash = $jc(_$hash, subdomain.hashCode);
+    _$hash = $jc(_$hash, portalMode.hashCode);
+    _$hash = $jc(_$hash, portalDomain.hashCode);
+    _$hash = $jc(_$hash, updateProducts.hashCode);
+    _$hash = $jc(_$hash, convertProductExchangeRate.hashCode);
+    _$hash = $jc(_$hash, convertRateToClient.hashCode);
+    _$hash = $jc(_$hash, fillProducts.hashCode);
+    _$hash = $jc(_$hash, enableProductCost.hashCode);
+    _$hash = $jc(_$hash, enableProductQuantity.hashCode);
+    _$hash = $jc(_$hash, enableProductDiscount.hashCode);
+    _$hash = $jc(_$hash, defaultTaskIsDateBased.hashCode);
+    _$hash = $jc(_$hash, defaultQuantity.hashCode);
+    _$hash = $jc(_$hash, showProductDetails.hashCode);
+    _$hash = $jc(_$hash, clientCanRegister.hashCode);
+    _$hash = $jc(_$hash, isLarge.hashCode);
+    _$hash = $jc(_$hash, isDisabled.hashCode);
+    _$hash = $jc(_$hash, enableShopApi.hashCode);
+    _$hash = $jc(_$hash, companyKey.hashCode);
+    _$hash = $jc(_$hash, firstDayOfWeek.hashCode);
+    _$hash = $jc(_$hash, firstMonthOfYear.hashCode);
+    _$hash = $jc(_$hash, numberOfInvoiceTaxRates.hashCode);
+    _$hash = $jc(_$hash, numberOfItemTaxRates.hashCode);
+    _$hash = $jc(_$hash, numberOfExpenseTaxRates.hashCode);
+    _$hash = $jc(_$hash, expenseInclusiveTaxes.hashCode);
+    _$hash = $jc(_$hash, sessionTimeout.hashCode);
+    _$hash = $jc(_$hash, passwordTimeout.hashCode);
+    _$hash = $jc(_$hash, oauthPasswordRequired.hashCode);
+    _$hash = $jc(_$hash, markdownEnabled.hashCode);
+    _$hash = $jc(_$hash, markdownEmailEnabled.hashCode);
+    _$hash = $jc(_$hash, useCommaAsDecimalPlace.hashCode);
+    _$hash = $jc(_$hash, reportIncludeDrafts.hashCode);
+    _$hash = $jc(_$hash, reportIncludeDeleted.hashCode);
+    _$hash = $jc(_$hash, useQuoteTermsOnConversion.hashCode);
+    _$hash = $jc(_$hash, enableApplyingPayments.hashCode);
+    _$hash = $jc(_$hash, trackInventory.hashCode);
+    _$hash = $jc(_$hash, stockNotificationThreshold.hashCode);
+    _$hash = $jc(_$hash, stockNotification.hashCode);
+    _$hash = $jc(_$hash, invoiceTaskLock.hashCode);
+    _$hash = $jc(_$hash, convertPaymentCurrency.hashCode);
+    _$hash = $jc(_$hash, convertExpenseCurrency.hashCode);
+    _$hash = $jc(_$hash, notifyVendorWhenPaid.hashCode);
+    _$hash = $jc(_$hash, groups.hashCode);
+    _$hash = $jc(_$hash, activities.hashCode);
+    _$hash = $jc(_$hash, taxRates.hashCode);
+    _$hash = $jc(_$hash, taskStatuses.hashCode);
+    _$hash = $jc(_$hash, taskStatusMap.hashCode);
+    _$hash = $jc(_$hash, companyGateways.hashCode);
+    _$hash = $jc(_$hash, expenseCategories.hashCode);
+    _$hash = $jc(_$hash, users.hashCode);
+    _$hash = $jc(_$hash, clients.hashCode);
+    _$hash = $jc(_$hash, contacts.hashCode);
+    _$hash = $jc(_$hash, products.hashCode);
+    _$hash = $jc(_$hash, categories.hashCode);
+    _$hash = $jc(_$hash, serviceReports.hashCode);
+    _$hash = $jc(_$hash, serviceReportsMap.hashCode);
+    _$hash = $jc(_$hash, invoices.hashCode);
+    _$hash = $jc(_$hash, recurringInvoices.hashCode);
+    _$hash = $jc(_$hash, recurringExpenses.hashCode);
+    _$hash = $jc(_$hash, payments.hashCode);
+    _$hash = $jc(_$hash, quotes.hashCode);
+    _$hash = $jc(_$hash, credits.hashCode);
+    _$hash = $jc(_$hash, purchaseOrders.hashCode);
+    _$hash = $jc(_$hash, bankAccounts.hashCode);
+    _$hash = $jc(_$hash, transactions.hashCode);
+    _$hash = $jc(_$hash, transactionRules.hashCode);
+    _$hash = $jc(_$hash, tasks.hashCode);
+    _$hash = $jc(_$hash, projects.hashCode);
+    _$hash = $jc(_$hash, expenses.hashCode);
+    _$hash = $jc(_$hash, vendors.hashCode);
+    _$hash = $jc(_$hash, designs.hashCode);
+    _$hash = $jc(_$hash, documents.hashCode);
+    _$hash = $jc(_$hash, schedules.hashCode);
+    _$hash = $jc(_$hash, tokens.hashCode);
+    _$hash = $jc(_$hash, webhooks.hashCode);
+    _$hash = $jc(_$hash, subscriptions.hashCode);
+    _$hash = $jc(_$hash, paymentTerms.hashCode);
+    _$hash = $jc(_$hash, systemLogs.hashCode);
+    _$hash = $jc(_$hash, clientRegistrationFields.hashCode);
+    _$hash = $jc(_$hash, customFields.hashCode);
+    _$hash = $jc(_$hash, slackWebhookUrl.hashCode);
+    _$hash = $jc(_$hash, googleAnalyticsKey.hashCode);
+    _$hash = $jc(_$hash, matomoUrl.hashCode);
+    _$hash = $jc(_$hash, matomoId.hashCode);
+    _$hash = $jc(_$hash, markExpensesInvoiceable.hashCode);
+    _$hash = $jc(_$hash, markExpensesPaid.hashCode);
+    _$hash = $jc(_$hash, invoiceExpenseDocuments.hashCode);
+    _$hash = $jc(_$hash, invoiceTaskDocuments.hashCode);
+    _$hash = $jc(_$hash, invoiceTaskTimelog.hashCode);
+    _$hash = $jc(_$hash, invoiceTaskDatelog.hashCode);
+    _$hash = $jc(_$hash, invoiceTaskProject.hashCode);
+    _$hash = $jc(_$hash, invoiceTaskHours.hashCode);
+    _$hash = $jc(_$hash, autoStartTasks.hashCode);
+    _$hash = $jc(_$hash, showTasksTable.hashCode);
+    _$hash = $jc(_$hash, showTaskEndDate.hashCode);
+    _$hash = $jc(_$hash, settings.hashCode);
+    _$hash = $jc(_$hash, enabledModules.hashCode);
+    _$hash = $jc(_$hash, calculateExpenseTaxByAmount.hashCode);
+    _$hash = $jc(_$hash, stopOnUnpaidRecurring.hashCode);
+    _$hash = $jc(_$hash, isChanged.hashCode);
+    _$hash = $jc(_$hash, createdAt.hashCode);
+    _$hash = $jc(_$hash, updatedAt.hashCode);
+    _$hash = $jc(_$hash, archivedAt.hashCode);
+    _$hash = $jc(_$hash, isDeleted.hashCode);
+    _$hash = $jc(_$hash, createdUserId.hashCode);
+    _$hash = $jc(_$hash, assignedUserId.hashCode);
+    _$hash = $jc(_$hash, entityType.hashCode);
+    _$hash = $jc(_$hash, id.hashCode);
+    _$hash = $jf(_$hash);
+    return __hashCode ??= _$hash;
   }
 
   @override
@@ -2232,11 +2492,16 @@ class _$CompanyEntity extends CompanyEntity {
           ..add('markdownEmailEnabled', markdownEmailEnabled)
           ..add('useCommaAsDecimalPlace', useCommaAsDecimalPlace)
           ..add('reportIncludeDrafts', reportIncludeDrafts)
+          ..add('reportIncludeDeleted', reportIncludeDeleted)
           ..add('useQuoteTermsOnConversion', useQuoteTermsOnConversion)
           ..add('enableApplyingPayments', enableApplyingPayments)
           ..add('trackInventory', trackInventory)
           ..add('stockNotificationThreshold', stockNotificationThreshold)
           ..add('stockNotification', stockNotification)
+          ..add('invoiceTaskLock', invoiceTaskLock)
+          ..add('convertPaymentCurrency', convertPaymentCurrency)
+          ..add('convertExpenseCurrency', convertExpenseCurrency)
+          ..add('notifyVendorWhenPaid', notifyVendorWhenPaid)
           ..add('groups', groups)
           ..add('activities', activities)
           ..add('taxRates', taxRates)
@@ -2258,12 +2523,16 @@ class _$CompanyEntity extends CompanyEntity {
           ..add('quotes', quotes)
           ..add('credits', credits)
           ..add('purchaseOrders', purchaseOrders)
+          ..add('bankAccounts', bankAccounts)
+          ..add('transactions', transactions)
+          ..add('transactionRules', transactionRules)
           ..add('tasks', tasks)
           ..add('projects', projects)
           ..add('expenses', expenses)
           ..add('vendors', vendors)
           ..add('designs', designs)
           ..add('documents', documents)
+          ..add('schedules', schedules)
           ..add('tokens', tokens)
           ..add('webhooks', webhooks)
           ..add('subscriptions', subscriptions)
@@ -2273,6 +2542,8 @@ class _$CompanyEntity extends CompanyEntity {
           ..add('customFields', customFields)
           ..add('slackWebhookUrl', slackWebhookUrl)
           ..add('googleAnalyticsKey', googleAnalyticsKey)
+          ..add('matomoUrl', matomoUrl)
+          ..add('matomoId', matomoId)
           ..add('markExpensesInvoiceable', markExpensesInvoiceable)
           ..add('markExpensesPaid', markExpensesPaid)
           ..add('invoiceExpenseDocuments', invoiceExpenseDocuments)
@@ -2280,6 +2551,7 @@ class _$CompanyEntity extends CompanyEntity {
           ..add('invoiceTaskTimelog', invoiceTaskTimelog)
           ..add('invoiceTaskDatelog', invoiceTaskDatelog)
           ..add('invoiceTaskProject', invoiceTaskProject)
+          ..add('invoiceTaskHours', invoiceTaskHours)
           ..add('autoStartTasks', autoStartTasks)
           ..add('showTasksTable', showTasksTable)
           ..add('showTaskEndDate', showTaskEndDate)
@@ -2480,6 +2752,11 @@ class CompanyEntityBuilder
   set reportIncludeDrafts(bool reportIncludeDrafts) =>
       _$this._reportIncludeDrafts = reportIncludeDrafts;
 
+  bool _reportIncludeDeleted;
+  bool get reportIncludeDeleted => _$this._reportIncludeDeleted;
+  set reportIncludeDeleted(bool reportIncludeDeleted) =>
+      _$this._reportIncludeDeleted = reportIncludeDeleted;
+
   bool _useQuoteTermsOnConversion;
   bool get useQuoteTermsOnConversion => _$this._useQuoteTermsOnConversion;
   set useQuoteTermsOnConversion(bool useQuoteTermsOnConversion) =>
@@ -2504,6 +2781,26 @@ class CompanyEntityBuilder
   bool get stockNotification => _$this._stockNotification;
   set stockNotification(bool stockNotification) =>
       _$this._stockNotification = stockNotification;
+
+  bool _invoiceTaskLock;
+  bool get invoiceTaskLock => _$this._invoiceTaskLock;
+  set invoiceTaskLock(bool invoiceTaskLock) =>
+      _$this._invoiceTaskLock = invoiceTaskLock;
+
+  bool _convertPaymentCurrency;
+  bool get convertPaymentCurrency => _$this._convertPaymentCurrency;
+  set convertPaymentCurrency(bool convertPaymentCurrency) =>
+      _$this._convertPaymentCurrency = convertPaymentCurrency;
+
+  bool _convertExpenseCurrency;
+  bool get convertExpenseCurrency => _$this._convertExpenseCurrency;
+  set convertExpenseCurrency(bool convertExpenseCurrency) =>
+      _$this._convertExpenseCurrency = convertExpenseCurrency;
+
+  bool _notifyVendorWhenPaid;
+  bool get notifyVendorWhenPaid => _$this._notifyVendorWhenPaid;
+  set notifyVendorWhenPaid(bool notifyVendorWhenPaid) =>
+      _$this._notifyVendorWhenPaid = notifyVendorWhenPaid;
 
   ListBuilder<GroupEntity> _groups;
   ListBuilder<GroupEntity> get groups =>
@@ -2628,6 +2925,24 @@ class CompanyEntityBuilder
   set purchaseOrders(ListBuilder<InvoiceEntity> purchaseOrders) =>
       _$this._purchaseOrders = purchaseOrders;
 
+  ListBuilder<BankAccountEntity> _bankAccounts;
+  ListBuilder<BankAccountEntity> get bankAccounts =>
+      _$this._bankAccounts ??= new ListBuilder<BankAccountEntity>();
+  set bankAccounts(ListBuilder<BankAccountEntity> bankAccounts) =>
+      _$this._bankAccounts = bankAccounts;
+
+  ListBuilder<TransactionEntity> _transactions;
+  ListBuilder<TransactionEntity> get transactions =>
+      _$this._transactions ??= new ListBuilder<TransactionEntity>();
+  set transactions(ListBuilder<TransactionEntity> transactions) =>
+      _$this._transactions = transactions;
+
+  ListBuilder<TransactionRuleEntity> _transactionRules;
+  ListBuilder<TransactionRuleEntity> get transactionRules =>
+      _$this._transactionRules ??= new ListBuilder<TransactionRuleEntity>();
+  set transactionRules(ListBuilder<TransactionRuleEntity> transactionRules) =>
+      _$this._transactionRules = transactionRules;
+
   ListBuilder<TaskEntity> _tasks;
   ListBuilder<TaskEntity> get tasks =>
       _$this._tasks ??= new ListBuilder<TaskEntity>();
@@ -2660,6 +2975,12 @@ class CompanyEntityBuilder
       _$this._documents ??= new ListBuilder<DocumentEntity>();
   set documents(ListBuilder<DocumentEntity> documents) =>
       _$this._documents = documents;
+
+  ListBuilder<ScheduleEntity> _schedules;
+  ListBuilder<ScheduleEntity> get schedules =>
+      _$this._schedules ??= new ListBuilder<ScheduleEntity>();
+  set schedules(ListBuilder<ScheduleEntity> schedules) =>
+      _$this._schedules = schedules;
 
   ListBuilder<TokenEntity> _tokens;
   ListBuilder<TokenEntity> get tokens =>
@@ -2714,6 +3035,14 @@ class CompanyEntityBuilder
   set googleAnalyticsKey(String googleAnalyticsKey) =>
       _$this._googleAnalyticsKey = googleAnalyticsKey;
 
+  String _matomoUrl;
+  String get matomoUrl => _$this._matomoUrl;
+  set matomoUrl(String matomoUrl) => _$this._matomoUrl = matomoUrl;
+
+  String _matomoId;
+  String get matomoId => _$this._matomoId;
+  set matomoId(String matomoId) => _$this._matomoId = matomoId;
+
   bool _markExpensesInvoiceable;
   bool get markExpensesInvoiceable => _$this._markExpensesInvoiceable;
   set markExpensesInvoiceable(bool markExpensesInvoiceable) =>
@@ -2748,6 +3077,11 @@ class CompanyEntityBuilder
   bool get invoiceTaskProject => _$this._invoiceTaskProject;
   set invoiceTaskProject(bool invoiceTaskProject) =>
       _$this._invoiceTaskProject = invoiceTaskProject;
+
+  bool _invoiceTaskHours;
+  bool get invoiceTaskHours => _$this._invoiceTaskHours;
+  set invoiceTaskHours(bool invoiceTaskHours) =>
+      _$this._invoiceTaskHours = invoiceTaskHours;
 
   bool _autoStartTasks;
   bool get autoStartTasks => _$this._autoStartTasks;
@@ -2866,11 +3200,16 @@ class CompanyEntityBuilder
       _markdownEmailEnabled = $v.markdownEmailEnabled;
       _useCommaAsDecimalPlace = $v.useCommaAsDecimalPlace;
       _reportIncludeDrafts = $v.reportIncludeDrafts;
+      _reportIncludeDeleted = $v.reportIncludeDeleted;
       _useQuoteTermsOnConversion = $v.useQuoteTermsOnConversion;
       _enableApplyingPayments = $v.enableApplyingPayments;
       _trackInventory = $v.trackInventory;
       _stockNotificationThreshold = $v.stockNotificationThreshold;
       _stockNotification = $v.stockNotification;
+      _invoiceTaskLock = $v.invoiceTaskLock;
+      _convertPaymentCurrency = $v.convertPaymentCurrency;
+      _convertExpenseCurrency = $v.convertExpenseCurrency;
+      _notifyVendorWhenPaid = $v.notifyVendorWhenPaid;
       _groups = $v.groups.toBuilder();
       _activities = $v.activities.toBuilder();
       _taxRates = $v.taxRates.toBuilder();
@@ -2892,12 +3231,16 @@ class CompanyEntityBuilder
       _quotes = $v.quotes.toBuilder();
       _credits = $v.credits.toBuilder();
       _purchaseOrders = $v.purchaseOrders.toBuilder();
+      _bankAccounts = $v.bankAccounts.toBuilder();
+      _transactions = $v.transactions.toBuilder();
+      _transactionRules = $v.transactionRules.toBuilder();
       _tasks = $v.tasks.toBuilder();
       _projects = $v.projects.toBuilder();
       _expenses = $v.expenses.toBuilder();
       _vendors = $v.vendors.toBuilder();
       _designs = $v.designs.toBuilder();
       _documents = $v.documents.toBuilder();
+      _schedules = $v.schedules.toBuilder();
       _tokens = $v.tokens.toBuilder();
       _webhooks = $v.webhooks.toBuilder();
       _subscriptions = $v.subscriptions.toBuilder();
@@ -2907,6 +3250,8 @@ class CompanyEntityBuilder
       _customFields = $v.customFields.toBuilder();
       _slackWebhookUrl = $v.slackWebhookUrl;
       _googleAnalyticsKey = $v.googleAnalyticsKey;
+      _matomoUrl = $v.matomoUrl;
+      _matomoId = $v.matomoId;
       _markExpensesInvoiceable = $v.markExpensesInvoiceable;
       _markExpensesPaid = $v.markExpensesPaid;
       _invoiceExpenseDocuments = $v.invoiceExpenseDocuments;
@@ -2914,6 +3259,7 @@ class CompanyEntityBuilder
       _invoiceTaskTimelog = $v.invoiceTaskTimelog;
       _invoiceTaskDatelog = $v.invoiceTaskDatelog;
       _invoiceTaskProject = $v.invoiceTaskProject;
+      _invoiceTaskHours = $v.invoiceTaskHours;
       _autoStartTasks = $v.autoStartTasks;
       _showTasksTable = $v.showTasksTable;
       _showTaskEndDate = $v.showTaskEndDate;
@@ -3005,11 +3351,16 @@ class CompanyEntityBuilder
               markdownEmailEnabled: BuiltValueNullFieldError.checkNotNull(markdownEmailEnabled, r'CompanyEntity', 'markdownEmailEnabled'),
               useCommaAsDecimalPlace: BuiltValueNullFieldError.checkNotNull(useCommaAsDecimalPlace, r'CompanyEntity', 'useCommaAsDecimalPlace'),
               reportIncludeDrafts: BuiltValueNullFieldError.checkNotNull(reportIncludeDrafts, r'CompanyEntity', 'reportIncludeDrafts'),
+              reportIncludeDeleted: BuiltValueNullFieldError.checkNotNull(reportIncludeDeleted, r'CompanyEntity', 'reportIncludeDeleted'),
               useQuoteTermsOnConversion: BuiltValueNullFieldError.checkNotNull(useQuoteTermsOnConversion, r'CompanyEntity', 'useQuoteTermsOnConversion'),
               enableApplyingPayments: BuiltValueNullFieldError.checkNotNull(enableApplyingPayments, r'CompanyEntity', 'enableApplyingPayments'),
               trackInventory: BuiltValueNullFieldError.checkNotNull(trackInventory, r'CompanyEntity', 'trackInventory'),
               stockNotificationThreshold: BuiltValueNullFieldError.checkNotNull(stockNotificationThreshold, r'CompanyEntity', 'stockNotificationThreshold'),
               stockNotification: BuiltValueNullFieldError.checkNotNull(stockNotification, r'CompanyEntity', 'stockNotification'),
+              invoiceTaskLock: BuiltValueNullFieldError.checkNotNull(invoiceTaskLock, r'CompanyEntity', 'invoiceTaskLock'),
+              convertPaymentCurrency: BuiltValueNullFieldError.checkNotNull(convertPaymentCurrency, r'CompanyEntity', 'convertPaymentCurrency'),
+              convertExpenseCurrency: BuiltValueNullFieldError.checkNotNull(convertExpenseCurrency, r'CompanyEntity', 'convertExpenseCurrency'),
+              notifyVendorWhenPaid: BuiltValueNullFieldError.checkNotNull(notifyVendorWhenPaid, r'CompanyEntity', 'notifyVendorWhenPaid'),
               groups: groups.build(),
               activities: activities.build(),
               taxRates: taxRates.build(),
@@ -3031,12 +3382,16 @@ class CompanyEntityBuilder
               quotes: quotes.build(),
               credits: credits.build(),
               purchaseOrders: purchaseOrders.build(),
+              bankAccounts: bankAccounts.build(),
+              transactions: transactions.build(),
+              transactionRules: transactionRules.build(),
               tasks: tasks.build(),
               projects: projects.build(),
               expenses: expenses.build(),
               vendors: vendors.build(),
               designs: designs.build(),
               documents: documents.build(),
+              schedules: schedules.build(),
               tokens: tokens.build(),
               webhooks: webhooks.build(),
               subscriptions: subscriptions.build(),
@@ -3046,6 +3401,8 @@ class CompanyEntityBuilder
               customFields: customFields.build(),
               slackWebhookUrl: BuiltValueNullFieldError.checkNotNull(slackWebhookUrl, r'CompanyEntity', 'slackWebhookUrl'),
               googleAnalyticsKey: BuiltValueNullFieldError.checkNotNull(googleAnalyticsKey, r'CompanyEntity', 'googleAnalyticsKey'),
+              matomoUrl: BuiltValueNullFieldError.checkNotNull(matomoUrl, r'CompanyEntity', 'matomoUrl'),
+              matomoId: BuiltValueNullFieldError.checkNotNull(matomoId, r'CompanyEntity', 'matomoId'),
               markExpensesInvoiceable: BuiltValueNullFieldError.checkNotNull(markExpensesInvoiceable, r'CompanyEntity', 'markExpensesInvoiceable'),
               markExpensesPaid: BuiltValueNullFieldError.checkNotNull(markExpensesPaid, r'CompanyEntity', 'markExpensesPaid'),
               invoiceExpenseDocuments: BuiltValueNullFieldError.checkNotNull(invoiceExpenseDocuments, r'CompanyEntity', 'invoiceExpenseDocuments'),
@@ -3053,6 +3410,7 @@ class CompanyEntityBuilder
               invoiceTaskTimelog: BuiltValueNullFieldError.checkNotNull(invoiceTaskTimelog, r'CompanyEntity', 'invoiceTaskTimelog'),
               invoiceTaskDatelog: BuiltValueNullFieldError.checkNotNull(invoiceTaskDatelog, r'CompanyEntity', 'invoiceTaskDatelog'),
               invoiceTaskProject: BuiltValueNullFieldError.checkNotNull(invoiceTaskProject, r'CompanyEntity', 'invoiceTaskProject'),
+              invoiceTaskHours: BuiltValueNullFieldError.checkNotNull(invoiceTaskHours, r'CompanyEntity', 'invoiceTaskHours'),
               autoStartTasks: BuiltValueNullFieldError.checkNotNull(autoStartTasks, r'CompanyEntity', 'autoStartTasks'),
               showTasksTable: BuiltValueNullFieldError.checkNotNull(showTasksTable, r'CompanyEntity', 'showTasksTable'),
               showTaskEndDate: BuiltValueNullFieldError.checkNotNull(showTaskEndDate, r'CompanyEntity', 'showTaskEndDate'),
@@ -3114,6 +3472,12 @@ class CompanyEntityBuilder
         credits.build();
         _$failedField = 'purchaseOrders';
         purchaseOrders.build();
+        _$failedField = 'bankAccounts';
+        bankAccounts.build();
+        _$failedField = 'transactions';
+        transactions.build();
+        _$failedField = 'transactionRules';
+        transactionRules.build();
         _$failedField = 'tasks';
         tasks.build();
         _$failedField = 'projects';
@@ -3126,6 +3490,8 @@ class CompanyEntityBuilder
         designs.build();
         _$failedField = 'documents';
         documents.build();
+        _$failedField = 'schedules';
+        schedules.build();
         _$failedField = 'tokens';
         tokens.build();
         _$failedField = 'webhooks';
@@ -3228,20 +3594,19 @@ class _$GatewayEntity extends GatewayEntity {
   int __hashCode;
   @override
   int get hashCode {
-    return __hashCode ??= $jf($jc(
-        $jc(
-            $jc(
-                $jc(
-                    $jc(
-                        $jc(
-                            $jc($jc($jc(0, id.hashCode), name.hashCode),
-                                isOffsite.hashCode),
-                            isVisible.hashCode),
-                        sortOrder.hashCode),
-                    defaultGatewayTypeId.hashCode),
-                siteUrl.hashCode),
-            options.hashCode),
-        fields.hashCode));
+    if (__hashCode != null) return __hashCode;
+    var _$hash = 0;
+    _$hash = $jc(_$hash, id.hashCode);
+    _$hash = $jc(_$hash, name.hashCode);
+    _$hash = $jc(_$hash, isOffsite.hashCode);
+    _$hash = $jc(_$hash, isVisible.hashCode);
+    _$hash = $jc(_$hash, sortOrder.hashCode);
+    _$hash = $jc(_$hash, defaultGatewayTypeId.hashCode);
+    _$hash = $jc(_$hash, siteUrl.hashCode);
+    _$hash = $jc(_$hash, options.hashCode);
+    _$hash = $jc(_$hash, fields.hashCode);
+    _$hash = $jf(_$hash);
+    return __hashCode ??= _$hash;
   }
 
   @override
@@ -3420,9 +3785,13 @@ class _$GatewayOptionsEntity extends GatewayOptionsEntity {
   int __hashCode;
   @override
   int get hashCode {
-    return __hashCode ??= $jf($jc(
-        $jc($jc(0, supportRefunds.hashCode), supportTokenBilling.hashCode),
-        webhooks.hashCode));
+    if (__hashCode != null) return __hashCode;
+    var _$hash = 0;
+    _$hash = $jc(_$hash, supportRefunds.hashCode);
+    _$hash = $jc(_$hash, supportTokenBilling.hashCode);
+    _$hash = $jc(_$hash, webhooks.hashCode);
+    _$hash = $jf(_$hash);
+    return __hashCode ??= _$hash;
   }
 
   @override
@@ -3590,26 +3959,21 @@ class _$UserCompanyEntity extends UserCompanyEntity {
   int __hashCode;
   @override
   int get hashCode {
-    return __hashCode ??= $jf($jc(
-        $jc(
-            $jc(
-                $jc(
-                    $jc(
-                        $jc(
-                            $jc(
-                                $jc(
-                                    $jc(
-                                        $jc($jc(0, isAdmin.hashCode),
-                                            isOwner.hashCode),
-                                        permissionsUpdatedAt.hashCode),
-                                    permissions.hashCode),
-                                notifications.hashCode),
-                            company.hashCode),
-                        user.hashCode),
-                    token.hashCode),
-                account.hashCode),
-            settings.hashCode),
-        ninjaPortalUrl.hashCode));
+    if (__hashCode != null) return __hashCode;
+    var _$hash = 0;
+    _$hash = $jc(_$hash, isAdmin.hashCode);
+    _$hash = $jc(_$hash, isOwner.hashCode);
+    _$hash = $jc(_$hash, permissionsUpdatedAt.hashCode);
+    _$hash = $jc(_$hash, permissions.hashCode);
+    _$hash = $jc(_$hash, notifications.hashCode);
+    _$hash = $jc(_$hash, company.hashCode);
+    _$hash = $jc(_$hash, user.hashCode);
+    _$hash = $jc(_$hash, token.hashCode);
+    _$hash = $jc(_$hash, account.hashCode);
+    _$hash = $jc(_$hash, settings.hashCode);
+    _$hash = $jc(_$hash, ninjaPortalUrl.hashCode);
+    _$hash = $jf(_$hash);
+    return __hashCode ??= _$hash;
   }
 
   @override
@@ -3778,6 +4142,8 @@ class _$UserSettingsEntity extends UserSettingsEntity {
   @override
   final BuiltMap<String, BuiltList<String>> tableColumns;
   @override
+  final BuiltMap<String, BuiltList<String>> reactTableColumns;
+  @override
   final BuiltMap<String, ReportSettingsEntity> reportSettings;
   @override
   final int numberYearsActive;
@@ -3797,6 +4163,7 @@ class _$UserSettingsEntity extends UserSettingsEntity {
   _$UserSettingsEntity._(
       {this.accentColor,
       this.tableColumns,
+      this.reactTableColumns,
       this.reportSettings,
       this.numberYearsActive,
       this.includeDeletedClients,
@@ -3806,6 +4173,8 @@ class _$UserSettingsEntity extends UserSettingsEntity {
       : super._() {
     BuiltValueNullFieldError.checkNotNull(
         tableColumns, r'UserSettingsEntity', 'tableColumns');
+    BuiltValueNullFieldError.checkNotNull(
+        reactTableColumns, r'UserSettingsEntity', 'reactTableColumns');
     BuiltValueNullFieldError.checkNotNull(
         reportSettings, r'UserSettingsEntity', 'reportSettings');
     BuiltValueNullFieldError.checkNotNull(
@@ -3835,6 +4204,7 @@ class _$UserSettingsEntity extends UserSettingsEntity {
     return other is UserSettingsEntity &&
         accentColor == other.accentColor &&
         tableColumns == other.tableColumns &&
+        reactTableColumns == other.reactTableColumns &&
         reportSettings == other.reportSettings &&
         numberYearsActive == other.numberYearsActive &&
         includeDeletedClients == other.includeDeletedClients &&
@@ -3846,20 +4216,19 @@ class _$UserSettingsEntity extends UserSettingsEntity {
   int __hashCode;
   @override
   int get hashCode {
-    return __hashCode ??= $jf($jc(
-        $jc(
-            $jc(
-                $jc(
-                    $jc(
-                        $jc(
-                            $jc($jc(0, accentColor.hashCode),
-                                tableColumns.hashCode),
-                            reportSettings.hashCode),
-                        numberYearsActive.hashCode),
-                    includeDeletedClients.hashCode),
-                dashboardFields.hashCode),
-            dashboardFieldsPerRowMobile.hashCode),
-        dashboardFieldsPerRowDesktop.hashCode));
+    if (__hashCode != null) return __hashCode;
+    var _$hash = 0;
+    _$hash = $jc(_$hash, accentColor.hashCode);
+    _$hash = $jc(_$hash, tableColumns.hashCode);
+    _$hash = $jc(_$hash, reactTableColumns.hashCode);
+    _$hash = $jc(_$hash, reportSettings.hashCode);
+    _$hash = $jc(_$hash, numberYearsActive.hashCode);
+    _$hash = $jc(_$hash, includeDeletedClients.hashCode);
+    _$hash = $jc(_$hash, dashboardFields.hashCode);
+    _$hash = $jc(_$hash, dashboardFieldsPerRowMobile.hashCode);
+    _$hash = $jc(_$hash, dashboardFieldsPerRowDesktop.hashCode);
+    _$hash = $jf(_$hash);
+    return __hashCode ??= _$hash;
   }
 
   @override
@@ -3867,6 +4236,7 @@ class _$UserSettingsEntity extends UserSettingsEntity {
     return (newBuiltValueToStringHelper(r'UserSettingsEntity')
           ..add('accentColor', accentColor)
           ..add('tableColumns', tableColumns)
+          ..add('reactTableColumns', reactTableColumns)
           ..add('reportSettings', reportSettings)
           ..add('numberYearsActive', numberYearsActive)
           ..add('includeDeletedClients', includeDeletedClients)
@@ -3890,6 +4260,13 @@ class UserSettingsEntityBuilder
       _$this._tableColumns ??= new MapBuilder<String, BuiltList<String>>();
   set tableColumns(MapBuilder<String, BuiltList<String>> tableColumns) =>
       _$this._tableColumns = tableColumns;
+
+  MapBuilder<String, BuiltList<String>> _reactTableColumns;
+  MapBuilder<String, BuiltList<String>> get reactTableColumns =>
+      _$this._reactTableColumns ??= new MapBuilder<String, BuiltList<String>>();
+  set reactTableColumns(
+          MapBuilder<String, BuiltList<String>> reactTableColumns) =>
+      _$this._reactTableColumns = reactTableColumns;
 
   MapBuilder<String, ReportSettingsEntity> _reportSettings;
   MapBuilder<String, ReportSettingsEntity> get reportSettings =>
@@ -3932,6 +4309,7 @@ class UserSettingsEntityBuilder
     if ($v != null) {
       _accentColor = $v.accentColor;
       _tableColumns = $v.tableColumns.toBuilder();
+      _reactTableColumns = $v.reactTableColumns.toBuilder();
       _reportSettings = $v.reportSettings.toBuilder();
       _numberYearsActive = $v.numberYearsActive;
       _includeDeletedClients = $v.includeDeletedClients;
@@ -3964,6 +4342,7 @@ class UserSettingsEntityBuilder
           new _$UserSettingsEntity._(
               accentColor: accentColor,
               tableColumns: tableColumns.build(),
+              reactTableColumns: reactTableColumns.build(),
               reportSettings: reportSettings.build(),
               numberYearsActive: BuiltValueNullFieldError.checkNotNull(
                   numberYearsActive,
@@ -3989,6 +4368,8 @@ class UserSettingsEntityBuilder
       try {
         _$failedField = 'tableColumns';
         tableColumns.build();
+        _$failedField = 'reactTableColumns';
+        reactTableColumns.build();
         _$failedField = 'reportSettings';
         reportSettings.build();
 
@@ -4063,12 +4444,15 @@ class _$ReportSettingsEntity extends ReportSettingsEntity {
   int __hashCode;
   @override
   int get hashCode {
-    return __hashCode ??= $jf($jc(
-        $jc(
-            $jc($jc($jc(0, sortColumn.hashCode), sortAscending.hashCode),
-                sortTotalsIndex.hashCode),
-            sortTotalsAscending.hashCode),
-        columns.hashCode));
+    if (__hashCode != null) return __hashCode;
+    var _$hash = 0;
+    _$hash = $jc(_$hash, sortColumn.hashCode);
+    _$hash = $jc(_$hash, sortAscending.hashCode);
+    _$hash = $jc(_$hash, sortTotalsIndex.hashCode);
+    _$hash = $jc(_$hash, sortTotalsAscending.hashCode);
+    _$hash = $jc(_$hash, columns.hashCode);
+    _$hash = $jf(_$hash);
+    return __hashCode ??= _$hash;
   }
 
   @override
@@ -4204,7 +4588,11 @@ class _$CompanyItemResponse extends CompanyItemResponse {
   int __hashCode;
   @override
   int get hashCode {
-    return __hashCode ??= $jf($jc(0, data.hashCode));
+    if (__hashCode != null) return __hashCode;
+    var _$hash = 0;
+    _$hash = $jc(_$hash, data.hashCode);
+    _$hash = $jf(_$hash);
+    return __hashCode ??= _$hash;
   }
 
   @override
@@ -4305,7 +4693,12 @@ class _$RegistrationFieldEntity extends RegistrationFieldEntity {
   int __hashCode;
   @override
   int get hashCode {
-    return __hashCode ??= $jf($jc($jc(0, key.hashCode), required.hashCode));
+    if (__hashCode != null) return __hashCode;
+    var _$hash = 0;
+    _$hash = $jc(_$hash, key.hashCode);
+    _$hash = $jc(_$hash, required.hashCode);
+    _$hash = $jf(_$hash);
+    return __hashCode ??= _$hash;
   }
 
   @override
@@ -4405,8 +4798,13 @@ class _$DashboardField extends DashboardField {
   int __hashCode;
   @override
   int get hashCode {
-    return __hashCode ??=
-        $jf($jc($jc($jc(0, field.hashCode), period.hashCode), type.hashCode));
+    if (__hashCode != null) return __hashCode;
+    var _$hash = 0;
+    _$hash = $jc(_$hash, field.hashCode);
+    _$hash = $jc(_$hash, period.hashCode);
+    _$hash = $jc(_$hash, type.hashCode);
+    _$hash = $jf(_$hash);
+    return __hashCode ??= _$hash;
   }
 
   @override
@@ -4478,4 +4876,4 @@ class DashboardFieldBuilder
   }
 }
 
-// ignore_for_file: always_put_control_body_on_new_line,always_specify_types,annotate_overrides,avoid_annotating_with_dynamic,avoid_as,avoid_catches_without_on_clauses,avoid_returning_this,deprecated_member_use_from_same_package,lines_longer_than_80_chars,no_leading_underscores_for_local_identifiers,omit_local_variable_types,prefer_expression_function_bodies,sort_constructors_first,test_types_in_equals,unnecessary_const,unnecessary_new,unnecessary_lambdas
+// ignore_for_file: deprecated_member_use_from_same_package,type=lint

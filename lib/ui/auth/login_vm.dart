@@ -2,7 +2,6 @@
 import 'dart:async';
 
 // Flutter imports:
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 // Package imports:
@@ -292,10 +291,8 @@ class LoginVM {
               AppleIDAuthorizationScopes.fullName,
             ],
             webAuthenticationOptions: WebAuthenticationOptions(
-              clientId: 'com.invoiceninja.client',
-              redirectUri: kIsWeb
-                  ? Uri.parse(WebUtils.browserUrl)
-                  : Uri.parse('https://invoicing.co/auth/apple'),
+              clientId: kAppleOAuthClientId,
+              redirectUri: Uri.parse(kAppleOAuthRedirectUrl),
             ),
           );
 
@@ -325,10 +322,8 @@ class LoginVM {
               AppleIDAuthorizationScopes.fullName,
             ],
             webAuthenticationOptions: WebAuthenticationOptions(
-              clientId: 'com.invoiceninja.client',
-              redirectUri: kIsWeb
-                  ? Uri.parse(WebUtils.apiUrl)
-                  : Uri.parse('https://invoicing.co/auth/apple'),
+              clientId: kAppleOAuthClientId,
+              redirectUri: Uri.parse(kAppleOAuthRedirectUrl),
             ),
           );
 
@@ -337,6 +332,8 @@ class LoginVM {
             completer: completer,
             provider: UserEntity.OAUTH_PROVIDER_APPLE,
             idToken: credentials.identityToken,
+            firstName: credentials.givenName,
+            lastName: credentials.familyName,
           ));
           completer.future
               .then((_) => _handleLogin(context: context, isSignUp: true));

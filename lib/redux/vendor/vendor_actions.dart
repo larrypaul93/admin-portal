@@ -16,6 +16,7 @@ import 'package:invoiceninja_flutter/redux/app/app_state.dart';
 import 'package:invoiceninja_flutter/redux/document/document_actions.dart';
 import 'package:invoiceninja_flutter/ui/app/entities/entity_actions_dialog.dart';
 import 'package:invoiceninja_flutter/utils/completers.dart';
+import 'package:invoiceninja_flutter/utils/dialogs.dart';
 import 'package:invoiceninja_flutter/utils/localization.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -71,9 +72,10 @@ class LoadVendorActivity {
 }
 
 class LoadVendors {
-  LoadVendors({this.completer});
+  LoadVendors({this.completer, this.page = 1});
 
   final Completer completer;
+  final int page;
 }
 
 class LoadVendorRequest implements StartLoading {}
@@ -325,7 +327,8 @@ void handleVendorAction(
     case EntityAction.restore:
       final message = vendorIds.length > 1
           ? localization.restoredVendors
-              .replaceFirst(':value', vendorIds.length.toString())
+              .replaceFirst(':value', ':count')
+              .replaceFirst(':count', vendorIds.length.toString())
           : localization.restoredVendor;
       store.dispatch(RestoreVendorRequest(
           snackBarCompleter<Null>(context, message), vendorIds));
@@ -333,7 +336,8 @@ void handleVendorAction(
     case EntityAction.archive:
       final message = vendorIds.length > 1
           ? localization.archivedVendors
-              .replaceFirst(':value', vendorIds.length.toString())
+              .replaceFirst(':value', ':count')
+              .replaceFirst(':count', vendorIds.length.toString())
           : localization.archivedVendor;
       store.dispatch(ArchiveVendorRequest(
           snackBarCompleter<Null>(context, message), vendorIds));
@@ -341,7 +345,8 @@ void handleVendorAction(
     case EntityAction.delete:
       final message = vendorIds.length > 1
           ? localization.deletedVendors
-              .replaceFirst(':value', vendorIds.length.toString())
+              .replaceFirst(':value', ':count')
+              .replaceFirst(':count', vendorIds.length.toString())
           : localization.deletedVendor;
       store.dispatch(DeleteVendorRequest(
           snackBarCompleter<Null>(context, message), vendorIds));
@@ -375,15 +380,20 @@ void handleVendorAction(
           documentIds.add(document.id);
         }
       }
-      store.dispatch(
-        DownloadDocumentsRequest(
-          documentIds: documentIds,
-          completer: snackBarCompleter<Null>(
-            context,
-            localization.exportedData,
+      if (documentIds.isEmpty) {
+        showMessageDialog(
+            context: context, message: localization.noDocumentsToDownload);
+      } else {
+        store.dispatch(
+          DownloadDocumentsRequest(
+            documentIds: documentIds,
+            completer: snackBarCompleter<Null>(
+              context,
+              localization.exportedData,
+            ),
           ),
-        ),
-      );
+        );
+      }
       break;
     default:
       print('## ERROR: unhandled action $action in vendor_actions');

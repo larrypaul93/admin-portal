@@ -80,14 +80,12 @@ abstract class PaymentEntity extends Object
 
     return _$PaymentEntity._(
       id: id ?? BaseEntity.nextId,
+      idempotencyKey: BaseEntity.nextIdempotencyKey,
       isChanged: false,
       amount: 0.0,
       transactionReference: '',
       date: convertDateTimeToSqlDate(),
-      typeId: state?.company != null &&
-              (state.company.settings.defaultPaymentTypeId ?? '').isNotEmpty
-          ? state.company.settings.defaultPaymentTypeId
-          : '',
+      typeId: settings.defaultPaymentTypeId ?? '',
       clientId: client?.id ?? '',
       privateNotes: '',
       exchangeRate: 1,
@@ -116,6 +114,7 @@ abstract class PaymentEntity extends Object
       companyGatewayId: '',
       clientContactId: '',
       currencyId: '',
+      transactionId: '',
       invitationId: '',
       isApplying: false,
     );
@@ -139,6 +138,10 @@ abstract class PaymentEntity extends Object
   double get refunded;
 
   String get number;
+
+  @nullable
+  @BuiltValueField(wireName: 'idempotency_key')
+  String get idempotencyKey;
 
   @override
   @BuiltValueField(wireName: 'client_id')
@@ -187,6 +190,9 @@ abstract class PaymentEntity extends Object
 
   @BuiltValueField(wireName: 'invitation_id')
   String get invitationId;
+
+  @BuiltValueField(wireName: 'transaction_id')
+  String get transactionId;
 
   @BuiltValueField(wireName: 'client_contact_id')
   String get clientContactId;
@@ -353,6 +359,21 @@ abstract class PaymentEntity extends Object
   }
 
   @override
+  bool matchesStatuses(BuiltList<EntityStatus> statuses) {
+    if (statuses.isEmpty) {
+      return true;
+    }
+
+    for (final status in statuses) {
+      if (status.id == statusId || status.id == calculatedStatusId) {
+        return true;
+      }
+    }
+
+    return false;
+  }
+
+  @override
   bool matchesFilter(String filter) {
     return matchesStrings(
       haystacks: [
@@ -488,6 +509,10 @@ abstract class PaymentEntity extends Object
 
     return amount - (refunded ?? 0);
   }
+
+  // ignore: unused_element
+  static void _initializeBuilder(PaymentEntityBuilder builder) =>
+      builder..transactionId = '';
 
   static Serializer<PaymentEntity> get serializer => _$paymentEntitySerializer;
 }

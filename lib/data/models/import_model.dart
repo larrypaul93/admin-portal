@@ -64,6 +64,7 @@ abstract class ImportRequest
     @required String hash,
     @required String importType,
     @required bool skipHeader,
+    @required String bankAccountId,
     @required BuiltMap<String, ImportRequestMapping> columnMap,
   }) {
     return _$ImportRequest._(
@@ -71,6 +72,7 @@ abstract class ImportRequest
       importType: importType,
       skipHeader: skipHeader,
       columnMap: columnMap,
+      bankAccountId: bankAccountId,
     );
   }
 
@@ -84,6 +86,9 @@ abstract class ImportRequest
 
   @BuiltValueField(wireName: 'import_type')
   String get importType;
+
+  @BuiltValueField(wireName: 'bank_integration_id')
+  String get bankAccountId;
 
   @BuiltValueField(wireName: 'skip_header')
   bool get skipHeader;
@@ -142,6 +147,7 @@ class ImportType extends EnumClass {
           EntityType.product.toString(): 'products',
           EntityType.vendor.toString(): 'vendors',
           EntityType.expense.toString(): 'expenses',
+          'bank_transaction': 'transactions',
         };
       case ImportType.freshbooks:
       case ImportType.invoicely:
@@ -177,7 +183,7 @@ class ExportType extends EnumClass {
   static Serializer<ExportType> get serializer => _$exportTypeSerializer;
 
   static const ExportType clients = _$clients;
-  static const ExportType contacts = _$contacts;
+  static const ExportType client_contacts = _$client_contacts;
   static const ExportType credits = _$credits;
   static const ExportType documents = _$documents;
   static const ExportType expenses = _$expenses;

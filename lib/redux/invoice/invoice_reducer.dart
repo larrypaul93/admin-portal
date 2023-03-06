@@ -1,6 +1,7 @@
 // Package imports:
 import 'package:built_collection/built_collection.dart';
 import 'package:invoiceninja_flutter/data/models/contact_model.dart';
+import 'package:invoiceninja_flutter/redux/client/client_actions.dart';
 import 'package:redux/redux.dart';
 
 // Project imports:
@@ -155,7 +156,8 @@ InvoiceEntity _clearEditing(InvoiceEntity invoice, dynamic action) {
 }
 
 InvoiceEntity _updateEditing(InvoiceEntity invoice, dynamic action) {
-  return action.invoice;
+  return (action.invoice as InvoiceEntity)
+      .rebuild((b) => b..idempotencyKey = BaseEntity.nextIdempotencyKey);
 }
 
 InvoiceEntity _addInvoiceItem(InvoiceEntity invoice, AddInvoiceItem action) {
@@ -199,6 +201,10 @@ final invoiceListReducer = combineReducers<ListUIState>([
       _removeFromListMultiselect),
   TypedReducer<ListUIState, ClearInvoiceMultiselect>(_clearListMultiselect),
   TypedReducer<ListUIState, ViewInvoiceList>(_viewInvoiceList),
+  TypedReducer<ListUIState, FilterByEntity>(
+      (state, action) => state.rebuild((b) => b
+        ..filter = null
+        ..filterClearedAt = DateTime.now().millisecondsSinceEpoch)),
 ]);
 
 ListUIState _viewInvoiceList(
@@ -318,7 +324,20 @@ final invoicesReducer = combineReducers<InvoiceState>([
   TypedReducer<InvoiceState, ArchiveInvoicesSuccess>(_archiveInvoiceSuccess),
   TypedReducer<InvoiceState, DeleteInvoicesSuccess>(_deleteInvoiceSuccess),
   TypedReducer<InvoiceState, RestoreInvoicesSuccess>(_restoreInvoiceSuccess),
+  TypedReducer<InvoiceState, PurgeClientSuccess>(_purgeClientSuccess),
 ]);
+
+InvoiceState _purgeClientSuccess(
+    InvoiceState invoiceState, PurgeClientSuccess action) {
+  final ids = invoiceState.map.values
+      .where((each) => each.clientId == action.clientId)
+      .map((each) => each.id)
+      .toList();
+
+  return invoiceState.rebuild((b) => b
+    ..map.removeWhere((p0, p1) => ids.contains(p0))
+    ..list.removeWhere((p0) => ids.contains(p0)));
+}
 
 InvoiceState _markInvoicesSentSuccess(
     InvoiceState invoiceState, MarkInvoicesSentSuccess action) {

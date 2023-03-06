@@ -37,6 +37,14 @@ import 'package:invoiceninja_flutter/redux/vendor/vendor_reducer.dart';
 import 'package:invoiceninja_flutter/redux/webhook/webhook_reducer.dart';
 
 // STARTER: import - do not remove comment
+import 'package:invoiceninja_flutter/redux/schedule/schedule_reducer.dart';
+
+import 'package:invoiceninja_flutter/redux/transaction_rule/transaction_rule_reducer.dart';
+
+import 'package:invoiceninja_flutter/redux/transaction/transaction_reducer.dart';
+
+import 'package:invoiceninja_flutter/redux/bank_account/bank_account_reducer.dart';
+
 import 'package:invoiceninja_flutter/redux/purchase_order/purchase_order_reducer.dart';
 import 'package:invoiceninja_flutter/redux/category/category_reducer.dart';
 
@@ -58,6 +66,13 @@ UserCompanyState companyReducer(UserCompanyState state, dynamic action) {
     ..vendorState.replace(vendorsReducer(state.vendorState, action))
     ..taskState.replace(tasksReducer(state.taskState, action))
     // STARTER: reducer - do not remove comment
+    ..scheduleState.replace(schedulesReducer(state.scheduleState, action))
+    ..transactionRuleState
+        .replace(transactionRulesReducer(state.transactionRuleState, action))
+    ..transactionState
+        .replace(transactionsReducer(state.transactionState, action))
+    ..bankAccountState
+        .replace(bankAccountsReducer(state.bankAccountState, action))
     ..purchaseOrderState
         .replace(purchaseOrdersReducer(state.purchaseOrderState, action))
     ..categoryState.replace(categoriesReducer(state.categoryState, action))
@@ -157,7 +172,7 @@ Reducer<UserCompanyEntity> userCompanyEntityReducer = combineReducers([
         return userCompany.rebuild((b) => b
           ..settings.dashboardFieldsPerRowDesktop =
               action.numberFieldsPerRowDesktop);
-      } else if (action.numberFieldsPerRowDesktop != null) {
+      } else if (action.numberFieldsPerRowMobile != null) {
         return userCompany.rebuild((b) => b
           ..settings.dashboardFieldsPerRowMobile =
               action.numberFieldsPerRowMobile);

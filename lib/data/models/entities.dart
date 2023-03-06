@@ -46,6 +46,10 @@ class EntityType extends EnumClass {
   static const EntityType category = _$category;
   static const EntityType serviceReport = _$serviceReport;
 
+  static const EntityType schedule = _$schedule;
+  static const EntityType transactionRule = _$transactionRule;
+  static const EntityType transaction = _$transaction;
+  static const EntityType bankAccount = _$bankAccount;
   static const EntityType recurringExpense = _$recurringExpense;
   static const EntityType recurringQuote = _$recurringQuote;
   static const EntityType subscription = _$subscription;
@@ -89,6 +93,9 @@ class EntityType extends EnumClass {
         EntityType.expenseCategory,
         EntityType.taskStatus,
         EntityType.subscription,
+        EntityType.bankAccount,
+        EntityType.transactionRule,
+        EntityType.schedule,
       ].contains(this);
 
   List<EntityType> get relatedTypes {
@@ -108,6 +115,7 @@ class EntityType extends EnumClass {
       case EntityType.invoice:
         return [
           EntityType.payment,
+          EntityType.transaction,
         ];
       case EntityType.quote:
         return [
@@ -161,6 +169,7 @@ class EntityType extends EnumClass {
           EntityType.purchaseOrder,
           EntityType.expense,
           EntityType.recurringExpense,
+          EntityType.transaction,
         ];
       case EntityType.task:
         return [
@@ -171,10 +180,12 @@ class EntityType extends EnumClass {
           EntityType.vendor,
           EntityType.project,
           EntityType.expenseCategory,
+          EntityType.transaction,
         ];
       case EntityType.expenseCategory:
         return [
           EntityType.expense,
+          EntityType.transaction,
         ];
       case EntityType.recurringExpense:
         return [
@@ -186,6 +197,21 @@ class EntityType extends EnumClass {
           EntityType.quote,
           EntityType.credit,
           EntityType.recurringInvoice,
+        ];
+      case EntityType.bankAccount:
+        return [
+          EntityType.transaction,
+        ];
+      case EntityType.transaction:
+        return [
+          EntityType.invoice,
+          EntityType.expense,
+          EntityType.vendor,
+          EntityType.expenseCategory,
+        ];
+      case EntityType.transactionRule:
+        return [
+          EntityType.transaction,
         ];
       default:
         return [];
@@ -207,6 +233,14 @@ class EntityType extends EnumClass {
   }
 
   String get snakeCase => toSnakeCase(toString());
+
+  String get apiValue {
+    if (this == EntityType.transaction) {
+      return 'bank_transaction';
+    }
+
+    return snakeCase;
+  }
 
   bool get hasFullWidthViewer => [
         EntityType.client,
@@ -279,11 +313,20 @@ abstract class EntityStatus {
 }
 
 class EntityStats {
-  const EntityStats({this.countActive, this.countArchived});
+  const EntityStats({
+    this.countActive,
+    this.countArchived,
+    this.total,
+    this.currencyId,
+  });
 
   final int countActive;
 
   final int countArchived;
+
+  final double total;
+
+  final String currencyId;
 
   String present(String activeLabel, String archivedLabel) {
     String str = '';
@@ -328,6 +371,8 @@ abstract class BaseEntity implements SelectableEntity {
   static int counter = 0;
 
   static String get nextId => '${--counter}';
+
+  static String get nextIdempotencyKey => getRandomString();
 
   @nullable
   bool get isChanged;
@@ -702,6 +747,10 @@ abstract class ActivityEntity
   String get vendorId;
 
   @nullable
+  @BuiltValueField(wireName: 'vendor_contact_id')
+  String get vendorContactId;
+
+  @nullable
   @BuiltValueField(wireName: 'token_id')
   String get tokenId;
 
@@ -857,9 +906,16 @@ abstract class ActivityEntity
     ExpenseEntity recurringExpense,
     InvoiceEntity purchaseOrder,
   }) {
-    ContactEntity contact;
+    ContactEntity clientContact;
+    // ClientContactEntity clientContact;
+    VendorContactEntity vendorContact;
     if (client != null && contactId != null && contactId.isNotEmpty) {
-      contact = client.getContact(contactId);
+      clientContact = client.getContact(contactId);
+    }
+    if (vendor != null &&
+        vendorContactId != null &&
+        vendorContactId.isNotEmpty) {
+      vendorContact = vendor.getContact(vendorContactId);
     }
 
     activity =
@@ -871,8 +927,26 @@ abstract class ActivityEntity
     activity = activity.replaceFirst(
         ':recurring_expense', recurringExpense?.number ?? '');
     activity = activity.replaceFirst(':quote', quote?.number ?? '');
-    activity = activity.replaceFirst(':contact',
-        contact?.fullName ?? client?.displayName ?? user?.fullName ?? '');
+    if ([
+      kActivityViewPurchaseOrder,
+      kActivityAcceptPurchaseOrder,
+    ].contains(activityTypeId)) {
+      activity = activity.replaceFirst(
+          ':contact',
+          (vendorContact?.fullName ?? '').isNotEmpty
+              ? vendorContact.fullName
+              : (vendor?.name ?? '').isNotEmpty
+                  ? vendor.name
+                  : user?.fullName ?? '');
+    } else {
+      activity = activity.replaceFirst(
+          ':contact',
+          (clientContact?.fullName ?? '').isNotEmpty
+              ? clientContact.fullName
+              : (client?.displayName ?? '').isNotEmpty
+                  ? client.displayName
+                  : user?.fullName ?? '');
+    }
     activity = activity.replaceFirst(
         ':payment', payment?.transactionReferenceOrNumber ?? '');
     activity = activity.replaceFirst(':credit', credit?.number ?? '');

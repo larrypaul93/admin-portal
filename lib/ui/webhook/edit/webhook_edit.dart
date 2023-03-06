@@ -8,6 +8,7 @@ import 'package:invoiceninja_flutter/ui/app/edit_scaffold.dart';
 import 'package:invoiceninja_flutter/ui/app/form_card.dart';
 import 'package:invoiceninja_flutter/ui/app/forms/app_dropdown_button.dart';
 import 'package:invoiceninja_flutter/ui/app/forms/decorated_form_field.dart';
+import 'package:invoiceninja_flutter/ui/app/forms/learn_more.dart';
 import 'package:invoiceninja_flutter/ui/app/help_text.dart';
 import 'package:invoiceninja_flutter/ui/app/scrollable_listview.dart';
 import 'package:invoiceninja_flutter/ui/webhook/edit/webhook_edit_vm.dart';
@@ -75,6 +76,16 @@ class _WebhookEditState extends State<WebhookEdit> {
     }
   }
 
+  void _onSavePressed(BuildContext context) {
+    final bool isValid = _formKey.currentState.validate();
+
+    if (!isValid) {
+      return;
+    }
+
+    widget.viewModel.onSavePressed(context);
+  }
+
   @override
   Widget build(BuildContext context) {
     final viewModel = widget.viewModel;
@@ -88,21 +99,7 @@ class _WebhookEditState extends State<WebhookEdit> {
       entity: webhook,
       title: webhook.isNew ? localization.newWebhook : localization.editWebhook,
       onCancelPressed: (context) => viewModel.onCancelPressed(context),
-      onSavePressed: (context) {
-        final bool isValid = _formKey.currentState.validate();
-
-        /*
-          setState(() {
-            _autoValidate = !isValid;
-          });
-            */
-
-        if (!isValid) {
-          return;
-        }
-
-        viewModel.onSavePressed(context);
-      },
+      onSavePressed: _onSavePressed,
       body: Form(
           key: _formKey,
           child: Builder(builder: (BuildContext context) {
@@ -110,22 +107,26 @@ class _WebhookEditState extends State<WebhookEdit> {
               children: <Widget>[
                 FormCard(
                   children: <Widget>[
-                    DecoratedFormField(
-                      autofocus: true,
-                      controller: _targetUrlController,
-                      label: localization.targetUrl,
-                      keyboardType: TextInputType.url,
-                      validator: (value) =>
-                          value.isEmpty || value.trim().isEmpty
-                              ? localization.pleaseEnterAValue
-                              : null,
+                    LearnMoreUrl(
+                      url: kWebhookSiteURL,
+                      label: localization.testUrl,
+                      child: DecoratedFormField(
+                        autofocus: true,
+                        controller: _targetUrlController,
+                        label: localization.targetUrl,
+                        keyboardType: TextInputType.url,
+                        validator: (value) =>
+                            value.isEmpty || value.trim().isEmpty
+                                ? localization.pleaseEnterAValue
+                                : null,
+                      ),
                     ),
                     AppDropdownButton<String>(
                       labelText: localization.eventType,
                       value: webhook.eventId,
                       onChanged: (dynamic value) => viewModel.onChanged(
                           webhook.rebuild((b) => b..eventId = value)),
-                      items: WebhookEntity.EVENTS
+                      items: WebhookEntity.EVENT_MAP.keys
                           .map((eventId) => DropdownMenuItem(
                                 child: Text(localization
                                     .lookup(WebhookEntity.EVENT_MAP[eventId])),
@@ -156,7 +157,7 @@ class _WebhookEditState extends State<WebhookEdit> {
                           child: DecoratedFormField(
                             label: localization.headerKey,
                             controller: _headerKeyController,
-                            onSavePressed: viewModel.onSavePressed,
+                            onSavePressed: _onSavePressed,
                             onChanged: (value) => setState(() {}),
                             keyboardType: TextInputType.text,
                           ),
@@ -168,7 +169,7 @@ class _WebhookEditState extends State<WebhookEdit> {
                           child: DecoratedFormField(
                             label: localization.headerValue,
                             controller: _headerValueController,
-                            onSavePressed: viewModel.onSavePressed,
+                            onSavePressed: _onSavePressed,
                             onChanged: (value) => setState(() {}),
                             keyboardType: TextInputType.text,
                           ),

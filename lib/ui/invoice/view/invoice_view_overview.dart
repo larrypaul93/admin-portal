@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 // Project imports:
 import 'package:invoiceninja_flutter/colors.dart';
 import 'package:invoiceninja_flutter/constants.dart';
-import 'package:invoiceninja_flutter/data/models/company_gateway_model.dart';
 import 'package:invoiceninja_flutter/data/models/models.dart';
 import 'package:invoiceninja_flutter/data/models/purchase_order_model.dart';
 import 'package:invoiceninja_flutter/data/models/quote_model.dart';
@@ -102,8 +101,12 @@ class InvoiceOverview extends StatelessWidget {
                 : invoice.isQuote
                     ? localization.quoteAmount
                     : localization.invoiceAmount,
-        value:
-            formatNumber(invoice.amount, context, clientId: invoice.clientId),
+        value: formatNumber(
+          invoice.amount,
+          context,
+          clientId: invoice.isPurchaseOrder ? null : invoice.clientId,
+          vendorId: invoice.isPurchaseOrder ? invoice.vendorId : null,
+        ),
         secondLabel: invoice.isCredit
             ? localization.creditRemaining
             : (invoice.isQuote || invoice.isRecurringInvoice)
@@ -111,8 +114,12 @@ class InvoiceOverview extends StatelessWidget {
                 : localization.balanceDue,
         secondValue:
             [EntityType.invoice, EntityType.credit].contains(invoice.entityType)
-                ? formatNumber(invoice.balanceOrAmount, context,
-                    clientId: invoice.clientId)
+                ? formatNumber(
+                    invoice.balanceOrAmount,
+                    context,
+                    clientId: invoice.isPurchaseOrder ? null : invoice.clientId,
+                    vendorId: invoice.isPurchaseOrder ? invoice.vendorId : null,
+                  )
                 : null,
       ),
       ListDivider(),
@@ -158,11 +165,14 @@ class InvoiceOverview extends StatelessWidget {
       if (invoice.isInvoice && !invoice.isPaid)
         InvoiceFields.nextSendDate: formatDate(invoice.nextSendDate, context),
       InvoiceFields.partial: formatNumber(invoice.partial, context,
-          clientId: invoice.clientId, zeroIsNull: true),
+          clientId: invoice.isPurchaseOrder ? null : invoice.clientId,
+          vendorId: invoice.isPurchaseOrder ? invoice.vendorId : null,
+          zeroIsNull: true),
       InvoiceFields.partialDueDate: formatDate(invoice.partialDueDate, context),
       InvoiceFields.poNumber: invoice.poNumber,
       InvoiceFields.discount: formatNumber(invoice.discount, context,
-          clientId: invoice.clientId,
+          clientId: invoice.isPurchaseOrder ? null : invoice.clientId,
+          vendorId: invoice.isPurchaseOrder ? invoice.vendorId : null,
           zeroIsNull: true,
           formatNumberType: invoice.isAmountDiscount
               ? FormatNumberType.money
@@ -178,10 +188,8 @@ class InvoiceOverview extends StatelessWidget {
             ? localization.endless
             : '${invoice.remainingCycles}',
         RecurringInvoiceFields.autoBill: localization.lookup(invoice.autoBill) +
-            ([
-              CompanyGatewayEntity.TOKEN_BILLING_OPT_IN,
-              CompanyGatewayEntity.TOKEN_BILLING_OPT_OUT
-            ].contains(invoice.autoBill)
+            ([SettingsEntity.AUTO_BILL_OPT_IN, SettingsEntity.AUTO_BILL_OPT_OUT]
+                    .contains(invoice.autoBill)
                 ? (' - ' +
                     (invoice.autoBillEnabled
                         ? localization.yes
@@ -192,11 +200,11 @@ class InvoiceOverview extends StatelessWidget {
             : invoice.dueDateDays == 'on_receipt'
                 ? localization.dueOnReceipt
                 : invoice.dueDateDays == '1'
-            ? localization.firstDayOfTheMonth
-            : invoice.dueDateDays == '31'
-                ? localization.lastDayOfTheMonth
-                : localization.dayCount
-                    .replaceFirst(':count', '${invoice.dueDateDays}'),
+                    ? localization.firstDayOfTheMonth
+                    : invoice.dueDateDays == '31'
+                        ? localization.lastDayOfTheMonth
+                        : localization.dayCount
+                            .replaceFirst(':count', '${invoice.dueDateDays}'),
       }
     };
 
@@ -306,11 +314,20 @@ class InvoiceOverview extends StatelessWidget {
       paymentMap.entries.forEach((entry) {
         final payment = entry.value;
         final paymentable = entry.key;
-        String amount =
-            formatNumber(paymentable.amount, context, clientId: client.id);
+        String amount = formatNumber(
+          paymentable.amount,
+          context,
+          clientId: invoice.isPurchaseOrder ? null : client.id,
+          vendorId: invoice.isPurchaseOrder ? invoice.vendorId : null,
+        );
         if (paymentable.amount != payment.amount) {
-          amount +=
-              '/' + formatNumber(payment.amount, context, clientId: client.id);
+          amount += '/' +
+              formatNumber(
+                payment.amount,
+                context,
+                clientId: invoice.isPurchaseOrder ? null : client.id,
+                vendorId: invoice.isPurchaseOrder ? invoice.vendorId : null,
+              );
         }
 
         widgets.add(
@@ -327,11 +344,20 @@ class InvoiceOverview extends StatelessWidget {
       creditMap.entries.forEach((entry) {
         final credit = entry.value;
         final paymentable = entry.key;
-        String amount =
-            formatNumber(paymentable.amount, context, clientId: client.id);
+        String amount = formatNumber(
+          paymentable.amount,
+          context,
+          clientId: invoice.isPurchaseOrder ? null : client.id,
+          vendorId: invoice.isPurchaseOrder ? invoice.vendorId : null,
+        );
         if (paymentable.amount != credit.amount) {
-          amount +=
-              '/' + formatNumber(credit.amount, context, clientId: client.id);
+          amount += '/' +
+              formatNumber(
+                credit.amount,
+                context,
+                clientId: invoice.isPurchaseOrder ? null : client.id,
+                vendorId: invoice.isPurchaseOrder ? invoice.vendorId : null,
+              );
         }
 
         widgets.add(
@@ -389,7 +415,14 @@ class InvoiceOverview extends StatelessWidget {
                 child: Align(
                   alignment: Alignment.centerRight,
                   child: Text(
-                    formatNumber(amount, context, clientId: invoice.clientId),
+                    formatNumber(
+                      amount,
+                      context,
+                      clientId:
+                          invoice.isPurchaseOrder ? null : invoice.clientId,
+                      vendorId:
+                          invoice.isPurchaseOrder ? invoice.vendorId : null,
+                    ),
                     style: Theme.of(context).textTheme.subtitle1,
                   ),
                 ),

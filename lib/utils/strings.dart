@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:invoiceninja_flutter/main_app.dart';
 import 'package:invoiceninja_flutter/redux/app/app_state.dart';
@@ -49,11 +51,15 @@ String toTitleCase(String text) {
     return text.toUpperCase();
   }
 
-  text = toSpaceCase(text);
+  text = toSpaceCase(text.toLowerCase());
   final words = text.split(' ');
   final capitalized = words.map((word) {
     if (word == 'url') {
       return 'URL';
+    }
+
+    if (word.length <= 1) {
+      return word;
     }
 
     final first = word.substring(0, 1).toUpperCase();
@@ -211,6 +217,14 @@ int secondToLastIndexOf(String string, String pattern) {
   return string.lastIndexOf(pattern);
 }
 
+String untrimUrl(String url) {
+  if (url.startsWith('http://') || url.startsWith('https://')) {
+    return url;
+  }
+
+  return 'https://$url';
+}
+
 String trimUrl(String url) {
   url = url.replaceFirst('http://', '').replaceFirst('https://', '');
 
@@ -219,4 +233,12 @@ String trimUrl(String url) {
   }
 
   return url;
+}
+
+// https://stackoverflow.com/a/61929967/497368
+String getRandomString([int length = 32]) {
+  const _chars =
+      'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz1234567890';
+  return String.fromCharCodes(Iterable.generate(
+      length, (_) => _chars.codeUnitAt(Random().nextInt(_chars.length))));
 }

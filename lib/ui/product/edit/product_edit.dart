@@ -35,7 +35,6 @@ class _ProductEditState extends State<ProductEdit> {
   static final GlobalKey<FormState> _formKey =
       GlobalKey<FormState>(debugLabel: '_productEdit');
   final FocusScopeNode _focusNode = FocusScopeNode();
-  bool _autoValidate = false;
 
   final _productKeyController = TextEditingController();
   final _notesController = TextEditingController();
@@ -48,6 +47,8 @@ class _ProductEditState extends State<ProductEdit> {
   final _custom4Controller = TextEditingController();
   final _stockQuantityController = TextEditingController();
   final _notificationThresholdController = TextEditingController();
+  final _imageUrlController = TextEditingController();
+  final _maxQuantityController = TextEditingController();
 
   final _skuController = TextEditingController();
   final _partNoController = TextEditingController();
@@ -75,6 +76,8 @@ class _ProductEditState extends State<ProductEdit> {
       _upcController,
       _stockQuantityController,
       _notificationThresholdController,
+      _imageUrlController,
+      _maxQuantityController,
     ];
 
     _controllers
@@ -98,6 +101,12 @@ class _ProductEditState extends State<ProductEdit> {
       context,
       formatNumberType: FormatNumberType.int,
     );
+    _maxQuantityController.text = formatNumber(
+      product.maxQuantity.toDouble(),
+      context,
+      formatNumberType: FormatNumberType.int,
+    );
+    _imageUrlController.text = product.imageUrl;
     _notificationThresholdController.text =
         product.stockNotificationThreshold == 0
             ? ''
@@ -146,12 +155,24 @@ class _ProductEditState extends State<ProductEdit> {
       ..onHand = _onHandController.text.trim()
       ..stockQuantity = parseInt(_stockQuantityController.text.trim())
       ..stockNotificationThreshold =
-          parseInt(_notificationThresholdController.text.trim()));
+          parseInt(_notificationThresholdController.text.trim())
+      ..maxQuantity = parseInt(_stockQuantityController.text.trim())
+      ..imageUrl = _imageUrlController.text.trim());
     if (product != widget.viewModel.product) {
       _debouncer.run(() {
         widget.viewModel.onChanged(product);
       });
     }
+  }
+
+  void _onSavePressed(BuildContext context) {
+    final bool isValid = _formKey.currentState.validate();
+
+    if (!isValid) {
+      return;
+    }
+
+    widget.viewModel.onSavePressed(context);
   }
 
   @override
@@ -168,19 +189,7 @@ class _ProductEditState extends State<ProductEdit> {
           ? localization.newProduct
           : localization.editProduct,
       onCancelPressed: (context) => viewModel.onCancelPressed(context),
-      onSavePressed: (context) {
-        final bool isValid = _formKey.currentState.validate();
-
-        setState(() {
-          _autoValidate = !isValid;
-        });
-
-        if (!isValid) {
-          return;
-        }
-
-        viewModel.onSavePressed(context);
-      },
+      onSavePressed: _onSavePressed,
       body: AppForm(
         formKey: _formKey,
         focusNode: _focusNode,
@@ -188,7 +197,6 @@ class _ProductEditState extends State<ProductEdit> {
           key: ValueKey('__product_${product.id}_${product.updatedAt}__'),
           children: <Widget>[
             FormCard(
-              isLast: true,
               children: <Widget>[
                 DecoratedFormField(
                   autofocus: true,
@@ -197,8 +205,7 @@ class _ProductEditState extends State<ProductEdit> {
                   validator: (val) => val.isEmpty || val.trim().isEmpty
                       ? localization.pleaseEnterAProductKey
                       : null,
-                  autovalidate: _autoValidate,
-                  onSavePressed: viewModel.onSavePressed,
+                  onSavePressed: _onSavePressed,
                   keyboardType: TextInputType.text,
                 ),
                 DecoratedFormField(
@@ -212,7 +219,7 @@ class _ProductEditState extends State<ProductEdit> {
                   controller: _priceController,
                   keyboardType: TextInputType.numberWithOptions(
                       decimal: true, signed: true),
-                  onSavePressed: viewModel.onSavePressed,
+                  onSavePressed: _onSavePressed,
                 ),
                 if (company.enableProductQuantity)
                   DecoratedFormField(
@@ -220,7 +227,7 @@ class _ProductEditState extends State<ProductEdit> {
                     controller: _quantityController,
                     keyboardType: TextInputType.numberWithOptions(
                         decimal: true, signed: true),
-                    onSavePressed: viewModel.onSavePressed,
+                    onSavePressed: _onSavePressed,
                   ),
                 if (company.enableProductCost)
                   DecoratedFormField(
@@ -228,7 +235,7 @@ class _ProductEditState extends State<ProductEdit> {
                     controller: _costController,
                     keyboardType: TextInputType.numberWithOptions(
                         decimal: true, signed: true),
-                    onSavePressed: viewModel.onSavePressed,
+                    onSavePressed: _onSavePressed,
                   ),
                 if (company.enableFirstItemTaxRate ||
                     product.taxName1.isNotEmpty)
@@ -331,32 +338,36 @@ class _ProductEditState extends State<ProductEdit> {
                   controller: _custom1Controller,
                   field: CustomFieldType.product1,
                   value: product.customValue1,
-                  onSavePressed: viewModel.onSavePressed,
+                  onSavePressed: _onSavePressed,
                 ),
                 CustomField(
                   controller: _custom2Controller,
                   field: CustomFieldType.product2,
                   value: product.customValue2,
-                  onSavePressed: viewModel.onSavePressed,
+                  onSavePressed: _onSavePressed,
                 ),
                 CustomField(
                   controller: _custom3Controller,
                   field: CustomFieldType.product3,
                   value: product.customValue3,
-                  onSavePressed: viewModel.onSavePressed,
+                  onSavePressed: _onSavePressed,
                 ),
                 CustomField(
                   controller: _custom4Controller,
                   field: CustomFieldType.product4,
                   value: product.customValue4,
-                  onSavePressed: viewModel.onSavePressed,
+                  onSavePressed: _onSavePressed,
                 ),
-                if (company.trackInventory) ...[
+              ],
+            ),
+            if (company.trackInventory)
+              FormCard(
+                children: [
                   DecoratedFormField(
                     keyboardType: TextInputType.number,
                     controller: _stockQuantityController,
                     label: localization.stockQuantity,
-                    onSavePressed: viewModel.onSavePressed,
+                    onSavePressed: _onSavePressed,
                   ),
                   if (company.stockNotification) ...[
                     SizedBox(height: 16),
@@ -376,12 +387,28 @@ class _ProductEditState extends State<ProductEdit> {
                                     company.stockNotificationThreshold != 0)
                                 ? ' • ${localization.defaultWord} ${company.stockNotificationThreshold}'
                                 : ''),
-                        onSavePressed: viewModel.onSavePressed,
+                        onSavePressed: _onSavePressed,
                       ),
                   ],
                 ],
+              ),
+            FormCard(
+              isLast: true,
+              children: [
+                DecoratedFormField(
+                  keyboardType: TextInputType.number,
+                  controller: _maxQuantityController,
+                  label: localization.maxQuantity,
+                  onSavePressed: _onSavePressed,
+                ),
+                DecoratedFormField(
+                  keyboardType: TextInputType.url,
+                  controller: _imageUrlController,
+                  label: localization.imageUrl,
+                  onSavePressed: _onSavePressed,
+                ),
               ],
-            ),
+            )
           ],
         ),
       ),

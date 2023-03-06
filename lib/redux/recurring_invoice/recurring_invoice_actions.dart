@@ -544,7 +544,8 @@ void handleRecurringInvoiceAction(BuildContext context,
     case EntityAction.restore:
       final message = recurringInvoiceIds.length > 1
           ? localization.restoredRecurringInvoices
-              .replaceFirst(':value', recurringInvoiceIds.length.toString())
+              .replaceFirst(':value', ':count')
+              .replaceFirst(':count', recurringInvoiceIds.length.toString())
           : localization.restoredRecurringInvoice;
       store.dispatch(RestoreRecurringInvoicesRequest(
           snackBarCompleter<Null>(context, message), recurringInvoiceIds));
@@ -552,7 +553,8 @@ void handleRecurringInvoiceAction(BuildContext context,
     case EntityAction.archive:
       final message = recurringInvoiceIds.length > 1
           ? localization.archivedRecurringInvoices
-              .replaceFirst(':value', recurringInvoiceIds.length.toString())
+              .replaceFirst(':value', ':count')
+              .replaceFirst(':count', recurringInvoiceIds.length.toString())
           : localization.archivedRecurringInvoice;
       store.dispatch(ArchiveRecurringInvoicesRequest(
           snackBarCompleter<Null>(context, message), recurringInvoiceIds));
@@ -560,7 +562,8 @@ void handleRecurringInvoiceAction(BuildContext context,
     case EntityAction.delete:
       final message = recurringInvoiceIds.length > 1
           ? localization.deletedRecurringInvoices
-              .replaceFirst(':value', recurringInvoiceIds.length.toString())
+              .replaceFirst(':value', ':count')
+              .replaceFirst(':count', recurringInvoiceIds.length.toString())
           : localization.deletedRecurringInvoice;
       store.dispatch(DeleteRecurringInvoicesRequest(
           snackBarCompleter<Null>(context, message), recurringInvoiceIds));
@@ -597,15 +600,20 @@ void handleRecurringInvoiceAction(BuildContext context,
           documentIds.add(document.id);
         }
       }
-      store.dispatch(
-        DownloadDocumentsRequest(
-          documentIds: documentIds,
-          completer: snackBarCompleter<Null>(
-            context,
-            localization.exportedData,
+      if (documentIds.isEmpty) {
+        showMessageDialog(
+            context: context, message: localization.noDocumentsToDownload);
+      } else {
+        store.dispatch(
+          DownloadDocumentsRequest(
+            documentIds: documentIds,
+            completer: snackBarCompleter<Null>(
+              context,
+              localization.exportedData,
+            ),
           ),
-        ),
-      );
+        );
+      }
       break;
     case EntityAction.sendNow:
       store.dispatch(SendNowRecurringInvoicesRequest(

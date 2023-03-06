@@ -7,7 +7,6 @@ import 'package:built_value/serializer.dart';
 import 'package:invoiceninja_flutter/constants.dart';
 import 'package:invoiceninja_flutter/data/models/entities.dart';
 import 'package:invoiceninja_flutter/redux/client/client_state.dart';
-import 'package:invoiceninja_flutter/redux/company/company_state.dart';
 import 'package:invoiceninja_flutter/redux/company_gateway/company_gateway_state.dart';
 import 'package:invoiceninja_flutter/redux/credit/credit_state.dart';
 import 'package:invoiceninja_flutter/redux/dashboard/dashboard_state.dart';
@@ -25,6 +24,7 @@ import 'package:invoiceninja_flutter/redux/quote/quote_state.dart';
 import 'package:invoiceninja_flutter/redux/recurring_expense/recurring_expense_state.dart';
 import 'package:invoiceninja_flutter/redux/recurring_invoice/recurring_invoice_state.dart';
 import 'package:invoiceninja_flutter/redux/reports/reports_state.dart';
+import 'package:invoiceninja_flutter/redux/settings/settings_state.dart';
 import 'package:invoiceninja_flutter/redux/subscription/subscription_state.dart';
 import 'package:invoiceninja_flutter/redux/task/task_state.dart';
 import 'package:invoiceninja_flutter/redux/task_status/task_status_state.dart';
@@ -38,6 +38,14 @@ import 'package:invoiceninja_flutter/ui/auth/login_vm.dart';
 import 'package:invoiceninja_flutter/utils/strings.dart';
 
 // STARTER: import - do not remove comment
+import 'package:invoiceninja_flutter/redux/schedule/schedule_state.dart';
+
+import 'package:invoiceninja_flutter/redux/transaction_rule/transaction_rule_state.dart';
+
+import 'package:invoiceninja_flutter/redux/transaction/transaction_state.dart';
+
+import 'package:invoiceninja_flutter/redux/bank_account/bank_account_state.dart';
+
 import 'package:invoiceninja_flutter/redux/purchase_order/purchase_order_state.dart';
 import 'package:invoiceninja_flutter/redux/category/category_state.dart';
 
@@ -90,6 +98,17 @@ abstract class UIState implements Built<UIState, UIStateBuilder> {
       paymentUIState: PaymentUIState(sortFields[EntityType.payment]),
       quoteUIState: QuoteUIState(sortFields[EntityType.quote]),
       // STARTER: constructor - do not remove comment
+      scheduleUIState: ScheduleUIState(sortFields[EntityType.schedule]),
+
+      transactionRuleUIState:
+          TransactionRuleUIState(sortFields[EntityType.transactionRule]),
+
+      transactionUIState:
+          TransactionUIState(sortFields[EntityType.transaction]),
+
+      bankAccountUIState:
+          BankAccountUIState(sortFields[EntityType.bankAccount]),
+
       purchaseOrderUIState:
           PurchaseOrderUIState(sortFields[EntityType.purchaseOrder]),
       categoryUIState: CategoryUIState(sortFields[EntityType.category]),
@@ -143,6 +162,14 @@ abstract class UIState implements Built<UIState, UIStateBuilder> {
   InvoiceUIState get invoiceUIState;
 
   // STARTER: properties - do not remove comment
+  ScheduleUIState get scheduleUIState;
+
+  TransactionRuleUIState get transactionRuleUIState;
+
+  TransactionUIState get transactionUIState;
+
+  BankAccountUIState get bankAccountUIState;
+
   PurchaseOrderUIState get purchaseOrderUIState;
   CategoryUIState get categoryUIState;
 

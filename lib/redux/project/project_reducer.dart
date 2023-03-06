@@ -3,6 +3,7 @@ import 'dart:async';
 
 // Package imports:
 import 'package:built_collection/built_collection.dart';
+import 'package:invoiceninja_flutter/redux/client/client_actions.dart';
 import 'package:redux/redux.dart';
 
 // Project imports:
@@ -124,6 +125,10 @@ final projectListReducer = combineReducers<ListUIState>([
       _removeFromListMultiselect),
   TypedReducer<ListUIState, ClearProjectMultiselect>(_clearListMultiselect),
   TypedReducer<ListUIState, ViewProjectList>(_viewProjectList),
+  TypedReducer<ListUIState, FilterByEntity>(
+      (state, action) => state.rebuild((b) => b
+        ..filter = null
+        ..filterClearedAt = DateTime.now().millisecondsSinceEpoch)),
 ]);
 
 ListUIState _viewProjectList(
@@ -229,7 +234,20 @@ final projectsReducer = combineReducers<ProjectState>([
   TypedReducer<ProjectState, ArchiveProjectSuccess>(_archiveProjectSuccess),
   TypedReducer<ProjectState, DeleteProjectSuccess>(_deleteProjectSuccess),
   TypedReducer<ProjectState, RestoreProjectSuccess>(_restoreProjectSuccess),
+  TypedReducer<ProjectState, PurgeClientSuccess>(_purgeClientSuccess),
 ]);
+
+ProjectState _purgeClientSuccess(
+    ProjectState projectState, PurgeClientSuccess action) {
+  final ids = projectState.map.values
+      .where((each) => each.clientId == action.clientId)
+      .map((each) => each.id)
+      .toList();
+
+  return projectState.rebuild((b) => b
+    ..map.removeWhere((p0, p1) => ids.contains(p0))
+    ..list.removeWhere((p0) => ids.contains(p0)));
+}
 
 ProjectState _archiveProjectSuccess(
     ProjectState projectState, ArchiveProjectSuccess action) {

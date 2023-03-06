@@ -179,6 +179,9 @@ class _$PaymentEntitySerializer implements StructuredSerializer<PaymentEntity> {
       'invitation_id',
       serializers.serialize(object.invitationId,
           specifiedType: const FullType(String)),
+      'transaction_id',
+      serializers.serialize(object.transactionId,
+          specifiedType: const FullType(String)),
       'client_contact_id',
       serializers.serialize(object.clientContactId,
           specifiedType: const FullType(String)),
@@ -213,6 +216,13 @@ class _$PaymentEntitySerializer implements StructuredSerializer<PaymentEntity> {
       serializers.serialize(object.id, specifiedType: const FullType(String)),
     ];
     Object value;
+    value = object.idempotencyKey;
+    if (value != null) {
+      result
+        ..add('idempotency_key')
+        ..add(serializers.serialize(value,
+            specifiedType: const FullType(String)));
+    }
     value = object.isApplying;
     if (value != null) {
       result
@@ -293,6 +303,10 @@ class _$PaymentEntitySerializer implements StructuredSerializer<PaymentEntity> {
           result.number = serializers.deserialize(value,
               specifiedType: const FullType(String)) as String;
           break;
+        case 'idempotency_key':
+          result.idempotencyKey = serializers.deserialize(value,
+              specifiedType: const FullType(String)) as String;
+          break;
         case 'client_id':
           result.clientId = serializers.deserialize(value,
               specifiedType: const FullType(String)) as String;
@@ -355,6 +369,10 @@ class _$PaymentEntitySerializer implements StructuredSerializer<PaymentEntity> {
           break;
         case 'invitation_id':
           result.invitationId = serializers.deserialize(value,
+              specifiedType: const FullType(String)) as String;
+          break;
+        case 'transaction_id':
+          result.transactionId = serializers.deserialize(value,
               specifiedType: const FullType(String)) as String;
           break;
         case 'client_contact_id':
@@ -558,7 +576,11 @@ class _$PaymentListResponse extends PaymentListResponse {
   int __hashCode;
   @override
   int get hashCode {
-    return __hashCode ??= $jf($jc(0, data.hashCode));
+    if (__hashCode != null) return __hashCode;
+    var _$hash = 0;
+    _$hash = $jc(_$hash, data.hashCode);
+    _$hash = $jf(_$hash);
+    return __hashCode ??= _$hash;
   }
 
   @override
@@ -653,7 +675,11 @@ class _$PaymentItemResponse extends PaymentItemResponse {
   int __hashCode;
   @override
   int get hashCode {
-    return __hashCode ??= $jf($jc(0, data.hashCode));
+    if (__hashCode != null) return __hashCode;
+    var _$hash = 0;
+    _$hash = $jc(_$hash, data.hashCode);
+    _$hash = $jf(_$hash);
+    return __hashCode ??= _$hash;
   }
 
   @override
@@ -727,6 +753,8 @@ class _$PaymentEntity extends PaymentEntity {
   @override
   final String number;
   @override
+  final String idempotencyKey;
+  @override
   final String clientId;
   @override
   final String statusId;
@@ -758,6 +786,8 @@ class _$PaymentEntity extends PaymentEntity {
   final String vendorId;
   @override
   final String invitationId;
+  @override
+  final String transactionId;
   @override
   final String clientContactId;
   @override
@@ -801,6 +831,7 @@ class _$PaymentEntity extends PaymentEntity {
       this.applied,
       this.refunded,
       this.number,
+      this.idempotencyKey,
       this.clientId,
       this.statusId,
       this.transactionReference,
@@ -817,6 +848,7 @@ class _$PaymentEntity extends PaymentEntity {
       this.projectId,
       this.vendorId,
       this.invitationId,
+      this.transactionId,
       this.clientContactId,
       this.companyGatewayId,
       this.currencyId,
@@ -871,6 +903,8 @@ class _$PaymentEntity extends PaymentEntity {
     BuiltValueNullFieldError.checkNotNull(
         invitationId, r'PaymentEntity', 'invitationId');
     BuiltValueNullFieldError.checkNotNull(
+        transactionId, r'PaymentEntity', 'transactionId');
+    BuiltValueNullFieldError.checkNotNull(
         clientContactId, r'PaymentEntity', 'clientContactId');
     BuiltValueNullFieldError.checkNotNull(
         companyGatewayId, r'PaymentEntity', 'companyGatewayId');
@@ -905,6 +939,7 @@ class _$PaymentEntity extends PaymentEntity {
         applied == other.applied &&
         refunded == other.refunded &&
         number == other.number &&
+        idempotencyKey == other.idempotencyKey &&
         clientId == other.clientId &&
         statusId == other.statusId &&
         transactionReference == other.transactionReference &&
@@ -921,6 +956,7 @@ class _$PaymentEntity extends PaymentEntity {
         projectId == other.projectId &&
         vendorId == other.vendorId &&
         invitationId == other.invitationId &&
+        transactionId == other.transactionId &&
         clientContactId == other.clientContactId &&
         companyGatewayId == other.companyGatewayId &&
         currencyId == other.currencyId &&
@@ -943,44 +979,49 @@ class _$PaymentEntity extends PaymentEntity {
   int __hashCode;
   @override
   int get hashCode {
-    return __hashCode ??= $jf($jc(
-        $jc(
-            $jc(
-                $jc(
-                    $jc(
-                        $jc(
-                            $jc(
-                                $jc(
-                                    $jc(
-                                        $jc(
-                                            $jc(
-                                                $jc(
-                                                    $jc(
-                                                        $jc(
-                                                            $jc(
-                                                                $jc(
-                                                                    $jc(
-                                                                        $jc(
-                                                                            $jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc(0, amount.hashCode), applied.hashCode), refunded.hashCode), number.hashCode), clientId.hashCode), statusId.hashCode), transactionReference.hashCode), date.hashCode), typeId.hashCode), privateNotes.hashCode), customValue1.hashCode), customValue2.hashCode), customValue3.hashCode), customValue4.hashCode), exchangeRate.hashCode), exchangeCurrencyId.hashCode), isManual.hashCode), projectId.hashCode),
-                                                                                vendorId.hashCode),
-                                                                            invitationId.hashCode),
-                                                                        clientContactId.hashCode),
-                                                                    companyGatewayId.hashCode),
-                                                                currencyId.hashCode),
-                                                            isApplying.hashCode),
-                                                        sendEmail.hashCode),
-                                                    gatewayRefund.hashCode),
-                                                paymentables.hashCode),
-                                            invoices.hashCode),
-                                        credits.hashCode),
-                                    isChanged.hashCode),
-                                createdAt.hashCode),
-                            updatedAt.hashCode),
-                        archivedAt.hashCode),
-                    isDeleted.hashCode),
-                createdUserId.hashCode),
-            assignedUserId.hashCode),
-        id.hashCode));
+    if (__hashCode != null) return __hashCode;
+    var _$hash = 0;
+    _$hash = $jc(_$hash, amount.hashCode);
+    _$hash = $jc(_$hash, applied.hashCode);
+    _$hash = $jc(_$hash, refunded.hashCode);
+    _$hash = $jc(_$hash, number.hashCode);
+    _$hash = $jc(_$hash, idempotencyKey.hashCode);
+    _$hash = $jc(_$hash, clientId.hashCode);
+    _$hash = $jc(_$hash, statusId.hashCode);
+    _$hash = $jc(_$hash, transactionReference.hashCode);
+    _$hash = $jc(_$hash, date.hashCode);
+    _$hash = $jc(_$hash, typeId.hashCode);
+    _$hash = $jc(_$hash, privateNotes.hashCode);
+    _$hash = $jc(_$hash, customValue1.hashCode);
+    _$hash = $jc(_$hash, customValue2.hashCode);
+    _$hash = $jc(_$hash, customValue3.hashCode);
+    _$hash = $jc(_$hash, customValue4.hashCode);
+    _$hash = $jc(_$hash, exchangeRate.hashCode);
+    _$hash = $jc(_$hash, exchangeCurrencyId.hashCode);
+    _$hash = $jc(_$hash, isManual.hashCode);
+    _$hash = $jc(_$hash, projectId.hashCode);
+    _$hash = $jc(_$hash, vendorId.hashCode);
+    _$hash = $jc(_$hash, invitationId.hashCode);
+    _$hash = $jc(_$hash, transactionId.hashCode);
+    _$hash = $jc(_$hash, clientContactId.hashCode);
+    _$hash = $jc(_$hash, companyGatewayId.hashCode);
+    _$hash = $jc(_$hash, currencyId.hashCode);
+    _$hash = $jc(_$hash, isApplying.hashCode);
+    _$hash = $jc(_$hash, sendEmail.hashCode);
+    _$hash = $jc(_$hash, gatewayRefund.hashCode);
+    _$hash = $jc(_$hash, paymentables.hashCode);
+    _$hash = $jc(_$hash, invoices.hashCode);
+    _$hash = $jc(_$hash, credits.hashCode);
+    _$hash = $jc(_$hash, isChanged.hashCode);
+    _$hash = $jc(_$hash, createdAt.hashCode);
+    _$hash = $jc(_$hash, updatedAt.hashCode);
+    _$hash = $jc(_$hash, archivedAt.hashCode);
+    _$hash = $jc(_$hash, isDeleted.hashCode);
+    _$hash = $jc(_$hash, createdUserId.hashCode);
+    _$hash = $jc(_$hash, assignedUserId.hashCode);
+    _$hash = $jc(_$hash, id.hashCode);
+    _$hash = $jf(_$hash);
+    return __hashCode ??= _$hash;
   }
 
   @override
@@ -990,6 +1031,7 @@ class _$PaymentEntity extends PaymentEntity {
           ..add('applied', applied)
           ..add('refunded', refunded)
           ..add('number', number)
+          ..add('idempotencyKey', idempotencyKey)
           ..add('clientId', clientId)
           ..add('statusId', statusId)
           ..add('transactionReference', transactionReference)
@@ -1006,6 +1048,7 @@ class _$PaymentEntity extends PaymentEntity {
           ..add('projectId', projectId)
           ..add('vendorId', vendorId)
           ..add('invitationId', invitationId)
+          ..add('transactionId', transactionId)
           ..add('clientContactId', clientContactId)
           ..add('companyGatewayId', companyGatewayId)
           ..add('currencyId', currencyId)
@@ -1046,6 +1089,11 @@ class PaymentEntityBuilder
   String _number;
   String get number => _$this._number;
   set number(String number) => _$this._number = number;
+
+  String _idempotencyKey;
+  String get idempotencyKey => _$this._idempotencyKey;
+  set idempotencyKey(String idempotencyKey) =>
+      _$this._idempotencyKey = idempotencyKey;
 
   String _clientId;
   String get clientId => _$this._clientId;
@@ -1112,6 +1160,11 @@ class PaymentEntityBuilder
   String _invitationId;
   String get invitationId => _$this._invitationId;
   set invitationId(String invitationId) => _$this._invitationId = invitationId;
+
+  String _transactionId;
+  String get transactionId => _$this._transactionId;
+  set transactionId(String transactionId) =>
+      _$this._transactionId = transactionId;
 
   String _clientContactId;
   String get clientContactId => _$this._clientContactId;
@@ -1192,7 +1245,9 @@ class PaymentEntityBuilder
   String get id => _$this._id;
   set id(String id) => _$this._id = id;
 
-  PaymentEntityBuilder();
+  PaymentEntityBuilder() {
+    PaymentEntity._initializeBuilder(this);
+  }
 
   PaymentEntityBuilder get _$this {
     final $v = _$v;
@@ -1201,6 +1256,7 @@ class PaymentEntityBuilder
       _applied = $v.applied;
       _refunded = $v.refunded;
       _number = $v.number;
+      _idempotencyKey = $v.idempotencyKey;
       _clientId = $v.clientId;
       _statusId = $v.statusId;
       _transactionReference = $v.transactionReference;
@@ -1217,6 +1273,7 @@ class PaymentEntityBuilder
       _projectId = $v.projectId;
       _vendorId = $v.vendorId;
       _invitationId = $v.invitationId;
+      _transactionId = $v.transactionId;
       _clientContactId = $v.clientContactId;
       _companyGatewayId = $v.companyGatewayId;
       _currencyId = $v.currencyId;
@@ -1266,6 +1323,7 @@ class PaymentEntityBuilder
                   refunded, r'PaymentEntity', 'refunded'),
               number: BuiltValueNullFieldError.checkNotNull(
                   number, r'PaymentEntity', 'number'),
+              idempotencyKey: idempotencyKey,
               clientId: BuiltValueNullFieldError.checkNotNull(
                   clientId, r'PaymentEntity', 'clientId'),
               statusId: BuiltValueNullFieldError.checkNotNull(
@@ -1287,6 +1345,7 @@ class PaymentEntityBuilder
               projectId: BuiltValueNullFieldError.checkNotNull(projectId, r'PaymentEntity', 'projectId'),
               vendorId: BuiltValueNullFieldError.checkNotNull(vendorId, r'PaymentEntity', 'vendorId'),
               invitationId: BuiltValueNullFieldError.checkNotNull(invitationId, r'PaymentEntity', 'invitationId'),
+              transactionId: BuiltValueNullFieldError.checkNotNull(transactionId, r'PaymentEntity', 'transactionId'),
               clientContactId: BuiltValueNullFieldError.checkNotNull(clientContactId, r'PaymentEntity', 'clientContactId'),
               companyGatewayId: BuiltValueNullFieldError.checkNotNull(companyGatewayId, r'PaymentEntity', 'companyGatewayId'),
               currencyId: BuiltValueNullFieldError.checkNotNull(currencyId, r'PaymentEntity', 'currencyId'),
@@ -1378,14 +1437,16 @@ class _$PaymentableEntity extends PaymentableEntity {
   int __hashCode;
   @override
   int get hashCode {
-    return __hashCode ??= $jf($jc(
-        $jc(
-            $jc(
-                $jc($jc($jc(0, createdAt.hashCode), updatedAt.hashCode),
-                    invoiceId.hashCode),
-                creditId.hashCode),
-            amount.hashCode),
-        id.hashCode));
+    if (__hashCode != null) return __hashCode;
+    var _$hash = 0;
+    _$hash = $jc(_$hash, createdAt.hashCode);
+    _$hash = $jc(_$hash, updatedAt.hashCode);
+    _$hash = $jc(_$hash, invoiceId.hashCode);
+    _$hash = $jc(_$hash, creditId.hashCode);
+    _$hash = $jc(_$hash, amount.hashCode);
+    _$hash = $jc(_$hash, id.hashCode);
+    _$hash = $jf(_$hash);
+    return __hashCode ??= _$hash;
   }
 
   @override
@@ -1475,4 +1536,4 @@ class PaymentableEntityBuilder
   }
 }
 
-// ignore_for_file: always_put_control_body_on_new_line,always_specify_types,annotate_overrides,avoid_annotating_with_dynamic,avoid_as,avoid_catches_without_on_clauses,avoid_returning_this,deprecated_member_use_from_same_package,lines_longer_than_80_chars,no_leading_underscores_for_local_identifiers,omit_local_variable_types,prefer_expression_function_bodies,sort_constructors_first,test_types_in_equals,unnecessary_const,unnecessary_new,unnecessary_lambdas
+// ignore_for_file: deprecated_member_use_from_same_package,type=lint

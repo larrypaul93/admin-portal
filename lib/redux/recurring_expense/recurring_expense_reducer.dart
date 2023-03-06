@@ -1,5 +1,6 @@
 // Package imports:
 import 'package:built_collection/built_collection.dart';
+import 'package:invoiceninja_flutter/redux/client/client_actions.dart';
 import 'package:redux/redux.dart';
 
 // Project imports:
@@ -134,6 +135,10 @@ final recurringExpenseListReducer = combineReducers<ListUIState>([
       _clearListMultiselect),
   TypedReducer<ListUIState, ViewRecurringExpenseList>(
       _viewRecurringExpenseList),
+  TypedReducer<ListUIState, FilterByEntity>(
+      (state, action) => state.rebuild((b) => b
+        ..filter = null
+        ..filterClearedAt = DateTime.now().millisecondsSinceEpoch)),
 ]);
 
 ListUIState _viewRecurringExpenseList(
@@ -237,7 +242,20 @@ final recurringExpensesReducer = combineReducers<RecurringExpenseState>([
       _deleteRecurringExpenseSuccess),
   TypedReducer<RecurringExpenseState, RestoreRecurringExpensesSuccess>(
       _restoreRecurringExpenseSuccess),
+  TypedReducer<RecurringExpenseState, PurgeClientSuccess>(_purgeClientSuccess),
 ]);
+
+RecurringExpenseState _purgeClientSuccess(
+    RecurringExpenseState expenseState, PurgeClientSuccess action) {
+  final ids = expenseState.map.values
+      .where((each) => each.clientId == action.clientId)
+      .map((each) => each.id)
+      .toList();
+
+  return expenseState.rebuild((b) => b
+    ..map.removeWhere((p0, p1) => ids.contains(p0))
+    ..list.removeWhere((p0) => ids.contains(p0)));
+}
 
 RecurringExpenseState _archiveRecurringExpenseSuccess(
     RecurringExpenseState recurringExpenseState,

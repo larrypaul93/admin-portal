@@ -265,6 +265,12 @@ class FilterPaymentsByState implements PersistUI {
   final EntityState state;
 }
 
+class FilterPaymentsByStatus implements PersistUI {
+  FilterPaymentsByStatus(this.status);
+
+  final EntityStatus status;
+}
+
 class FilterPaymentsByCustom1 implements PersistUI {
   FilterPaymentsByCustom1(this.value);
 
@@ -356,7 +362,8 @@ void handlePaymentAction(
     case EntityAction.restore:
       final message = paymentIds.length > 1
           ? localization.restoredPayments
-              .replaceFirst(':value', paymentIds.length.toString())
+              .replaceFirst(':value', ':count')
+              .replaceFirst(':count', paymentIds.length.toString())
           : localization.restoredPayment;
       store.dispatch(RestorePaymentsRequest(
           snackBarCompleter<Null>(context, message), paymentIds));
@@ -364,7 +371,8 @@ void handlePaymentAction(
     case EntityAction.archive:
       final message = paymentIds.length > 1
           ? localization.archivedPayments
-              .replaceFirst(':value', paymentIds.length.toString())
+              .replaceFirst(':value', ':count')
+              .replaceFirst(':count', paymentIds.length.toString())
           : localization.archivedPayment;
       store.dispatch(ArchivePaymentsRequest(
           snackBarCompleter<Null>(context, message), paymentIds));
@@ -372,7 +380,8 @@ void handlePaymentAction(
     case EntityAction.delete:
       final message = paymentIds.length > 1
           ? localization.deletedPayments
-              .replaceFirst(':value', paymentIds.length.toString())
+              .replaceFirst(':value', ':count')
+              .replaceFirst(':count', paymentIds.length.toString())
           : localization.deletedPayment;
       store.dispatch(DeletePaymentsRequest(
           snackBarCompleter<Null>(context, message), paymentIds));

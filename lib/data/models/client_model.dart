@@ -93,6 +93,7 @@ class ClientFields {
   static const String createdById = 'created_by_id';
   static const String cityStatePostal = 'city_state_postal';
   static const String postalCityState = 'postal_city_state';
+  static const String postalCity = 'postal_city';
   static const String documents = 'documents';
   static const String postalCode = 'postal_code';
   static const String city = 'city';
@@ -805,6 +806,10 @@ abstract class ClientEntity extends Object
         actions.add(EntityAction.newInvoice);
       }
 
+      if (userCompany.canCreate(EntityType.quote)) {
+        actions.add(EntityAction.newQuote);
+      }
+
       if (userCompany.canCreate(EntityType.payment)) {
         actions.add(EntityAction.newPayment);
       }
@@ -1033,41 +1038,26 @@ abstract class ClientContactEntity extends Object
 
   @override
   bool matchesFilter(String filter) {
-    if (filter == null || filter.isEmpty) {
-      return true;
-    }
-    filter = filter.toLowerCase();
-    if (firstName.toLowerCase().contains(filter)) {
-      return true;
-    }
-    if (lastName.toLowerCase().contains(filter)) {
-      return true;
-    }
-    if (phone.toLowerCase().contains(filter)) {
-      return true;
-    }
-    if (email.toLowerCase().contains(filter)) {
-      return true;
-    }
-    return false;
+    return matchesStrings(
+      haystacks: [
+        '$firstName $lastName',
+        email,
+        phone,
+      ],
+      needle: filter,
+    );
   }
 
   @override
   String matchesFilterValue(String filter) {
-    if (filter == null || filter.isEmpty) {
-      return null;
-    }
-
-    filter = filter.toLowerCase();
-    if (fullName.toLowerCase().contains(filter)) {
-      return fullName;
-    } else if (email.toLowerCase().contains(filter)) {
-      return email;
-    } else if (phone.toLowerCase().contains(filter)) {
-      return phone;
-    }
-
-    return null;
+    return matchesStringsValue(
+      haystacks: [
+        '$firstName $lastName',
+        email,
+        phone,
+      ],
+      needle: filter,
+    );
   }
 
   @override

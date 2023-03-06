@@ -273,6 +273,9 @@ class _$UserEntitySerializer implements StructuredSerializer<UserEntity> {
       'password',
       serializers.serialize(object.password,
           specifiedType: const FullType(String)),
+      'verified_phone_number',
+      serializers.serialize(object.phoneVerified,
+          specifiedType: const FullType(bool)),
       'custom_value1',
       serializers.serialize(object.customValue1,
           specifiedType: const FullType(String)),
@@ -392,6 +395,10 @@ class _$UserEntitySerializer implements StructuredSerializer<UserEntity> {
           result.emailVerifiedAt = serializers.deserialize(value,
               specifiedType: const FullType(int)) as int;
           break;
+        case 'verified_phone_number':
+          result.phoneVerified = serializers.deserialize(value,
+              specifiedType: const FullType(bool)) as bool;
+          break;
         case 'custom_value1':
           result.customValue1 = serializers.deserialize(value,
               specifiedType: const FullType(String)) as String;
@@ -501,7 +508,11 @@ class _$UserListResponse extends UserListResponse {
   int __hashCode;
   @override
   int get hashCode {
-    return __hashCode ??= $jf($jc(0, data.hashCode));
+    if (__hashCode != null) return __hashCode;
+    var _$hash = 0;
+    _$hash = $jc(_$hash, data.hashCode);
+    _$hash = $jf(_$hash);
+    return __hashCode ??= _$hash;
   }
 
   @override
@@ -594,7 +605,11 @@ class _$UserItemResponse extends UserItemResponse {
   int __hashCode;
   @override
   int get hashCode {
-    return __hashCode ??= $jf($jc(0, data.hashCode));
+    if (__hashCode != null) return __hashCode;
+    var _$hash = 0;
+    _$hash = $jc(_$hash, data.hashCode);
+    _$hash = $jf(_$hash);
+    return __hashCode ??= _$hash;
   }
 
   @override
@@ -688,7 +703,11 @@ class _$UserTwoFactorResponse extends UserTwoFactorResponse {
   int __hashCode;
   @override
   int get hashCode {
-    return __hashCode ??= $jf($jc(0, data.hashCode));
+    if (__hashCode != null) return __hashCode;
+    var _$hash = 0;
+    _$hash = $jc(_$hash, data.hashCode);
+    _$hash = $jf(_$hash);
+    return __hashCode ??= _$hash;
   }
 
   @override
@@ -789,7 +808,12 @@ class _$UserTwoFactorData extends UserTwoFactorData {
   int __hashCode;
   @override
   int get hashCode {
-    return __hashCode ??= $jf($jc($jc(0, secret.hashCode), qrCode.hashCode));
+    if (__hashCode != null) return __hashCode;
+    var _$hash = 0;
+    _$hash = $jc(_$hash, secret.hashCode);
+    _$hash = $jc(_$hash, qrCode.hashCode);
+    _$hash = $jf(_$hash);
+    return __hashCode ??= _$hash;
   }
 
   @override
@@ -882,7 +906,11 @@ class _$UserCompanyItemResponse extends UserCompanyItemResponse {
   int __hashCode;
   @override
   int get hashCode {
-    return __hashCode ??= $jf($jc(0, data.hashCode));
+    if (__hashCode != null) return __hashCode;
+    var _$hash = 0;
+    _$hash = $jc(_$hash, data.hashCode);
+    _$hash = $jf(_$hash);
+    return __hashCode ??= _$hash;
   }
 
   @override
@@ -962,6 +990,8 @@ class _$UserEntity extends UserEntity {
   @override
   final int emailVerifiedAt;
   @override
+  final bool phoneVerified;
+  @override
   final String customValue1;
   @override
   final String customValue2;
@@ -1008,6 +1038,7 @@ class _$UserEntity extends UserEntity {
       this.phone,
       this.password,
       this.emailVerifiedAt,
+      this.phoneVerified,
       this.customValue1,
       this.customValue2,
       this.customValue3,
@@ -1033,6 +1064,8 @@ class _$UserEntity extends UserEntity {
     BuiltValueNullFieldError.checkNotNull(email, r'UserEntity', 'email');
     BuiltValueNullFieldError.checkNotNull(phone, r'UserEntity', 'phone');
     BuiltValueNullFieldError.checkNotNull(password, r'UserEntity', 'password');
+    BuiltValueNullFieldError.checkNotNull(
+        phoneVerified, r'UserEntity', 'phoneVerified');
     BuiltValueNullFieldError.checkNotNull(
         customValue1, r'UserEntity', 'customValue1');
     BuiltValueNullFieldError.checkNotNull(
@@ -1077,6 +1110,7 @@ class _$UserEntity extends UserEntity {
         phone == other.phone &&
         password == other.password &&
         emailVerifiedAt == other.emailVerifiedAt &&
+        phoneVerified == other.phoneVerified &&
         customValue1 == other.customValue1 &&
         customValue2 == other.customValue2 &&
         customValue3 == other.customValue3 &&
@@ -1100,44 +1134,35 @@ class _$UserEntity extends UserEntity {
   int __hashCode;
   @override
   int get hashCode {
-    return __hashCode ??= $jf($jc(
-        $jc(
-            $jc(
-                $jc(
-                    $jc(
-                        $jc(
-                            $jc(
-                                $jc(
-                                    $jc(
-                                        $jc(
-                                            $jc(
-                                                $jc(
-                                                    $jc(
-                                                        $jc(
-                                                            $jc(
-                                                                $jc(
-                                                                    $jc(
-                                                                        $jc(
-                                                                            $jc($jc($jc($jc($jc($jc(0, firstName.hashCode), lastName.hashCode), email.hashCode), phone.hashCode), password.hashCode),
-                                                                                emailVerifiedAt.hashCode),
-                                                                            customValue1.hashCode),
-                                                                        customValue2.hashCode),
-                                                                    customValue3.hashCode),
-                                                                customValue4.hashCode),
-                                                            isTwoFactorEnabled.hashCode),
-                                                        hasPassword.hashCode),
-                                                    lastEmailAddress.hashCode),
-                                                oauthUserToken.hashCode),
-                                            userCompany.hashCode),
-                                        oauthProvider.hashCode),
-                                    isChanged.hashCode),
-                                createdAt.hashCode),
-                            updatedAt.hashCode),
-                        archivedAt.hashCode),
-                    isDeleted.hashCode),
-                createdUserId.hashCode),
-            assignedUserId.hashCode),
-        id.hashCode));
+    if (__hashCode != null) return __hashCode;
+    var _$hash = 0;
+    _$hash = $jc(_$hash, firstName.hashCode);
+    _$hash = $jc(_$hash, lastName.hashCode);
+    _$hash = $jc(_$hash, email.hashCode);
+    _$hash = $jc(_$hash, phone.hashCode);
+    _$hash = $jc(_$hash, password.hashCode);
+    _$hash = $jc(_$hash, emailVerifiedAt.hashCode);
+    _$hash = $jc(_$hash, phoneVerified.hashCode);
+    _$hash = $jc(_$hash, customValue1.hashCode);
+    _$hash = $jc(_$hash, customValue2.hashCode);
+    _$hash = $jc(_$hash, customValue3.hashCode);
+    _$hash = $jc(_$hash, customValue4.hashCode);
+    _$hash = $jc(_$hash, isTwoFactorEnabled.hashCode);
+    _$hash = $jc(_$hash, hasPassword.hashCode);
+    _$hash = $jc(_$hash, lastEmailAddress.hashCode);
+    _$hash = $jc(_$hash, oauthUserToken.hashCode);
+    _$hash = $jc(_$hash, userCompany.hashCode);
+    _$hash = $jc(_$hash, oauthProvider.hashCode);
+    _$hash = $jc(_$hash, isChanged.hashCode);
+    _$hash = $jc(_$hash, createdAt.hashCode);
+    _$hash = $jc(_$hash, updatedAt.hashCode);
+    _$hash = $jc(_$hash, archivedAt.hashCode);
+    _$hash = $jc(_$hash, isDeleted.hashCode);
+    _$hash = $jc(_$hash, createdUserId.hashCode);
+    _$hash = $jc(_$hash, assignedUserId.hashCode);
+    _$hash = $jc(_$hash, id.hashCode);
+    _$hash = $jf(_$hash);
+    return __hashCode ??= _$hash;
   }
 
   @override
@@ -1149,6 +1174,7 @@ class _$UserEntity extends UserEntity {
           ..add('phone', phone)
           ..add('password', password)
           ..add('emailVerifiedAt', emailVerifiedAt)
+          ..add('phoneVerified', phoneVerified)
           ..add('customValue1', customValue1)
           ..add('customValue2', customValue2)
           ..add('customValue3', customValue3)
@@ -1198,6 +1224,11 @@ class UserEntityBuilder implements Builder<UserEntity, UserEntityBuilder> {
   int get emailVerifiedAt => _$this._emailVerifiedAt;
   set emailVerifiedAt(int emailVerifiedAt) =>
       _$this._emailVerifiedAt = emailVerifiedAt;
+
+  bool _phoneVerified;
+  bool get phoneVerified => _$this._phoneVerified;
+  set phoneVerified(bool phoneVerified) =>
+      _$this._phoneVerified = phoneVerified;
 
   String _customValue1;
   String get customValue1 => _$this._customValue1;
@@ -1292,6 +1323,7 @@ class UserEntityBuilder implements Builder<UserEntity, UserEntityBuilder> {
       _phone = $v.phone;
       _password = $v.password;
       _emailVerifiedAt = $v.emailVerifiedAt;
+      _phoneVerified = $v.phoneVerified;
       _customValue1 = $v.customValue1;
       _customValue2 = $v.customValue2;
       _customValue3 = $v.customValue3;
@@ -1345,16 +1377,17 @@ class UserEntityBuilder implements Builder<UserEntity, UserEntityBuilder> {
               password: BuiltValueNullFieldError.checkNotNull(
                   password, r'UserEntity', 'password'),
               emailVerifiedAt: emailVerifiedAt,
+              phoneVerified: BuiltValueNullFieldError.checkNotNull(
+                  phoneVerified, r'UserEntity', 'phoneVerified'),
               customValue1: BuiltValueNullFieldError.checkNotNull(
                   customValue1, r'UserEntity', 'customValue1'),
               customValue2: BuiltValueNullFieldError.checkNotNull(
                   customValue2, r'UserEntity', 'customValue2'),
               customValue3: BuiltValueNullFieldError.checkNotNull(
                   customValue3, r'UserEntity', 'customValue3'),
-              customValue4: BuiltValueNullFieldError.checkNotNull(
-                  customValue4, r'UserEntity', 'customValue4'),
-              isTwoFactorEnabled:
-                  BuiltValueNullFieldError.checkNotNull(isTwoFactorEnabled, r'UserEntity', 'isTwoFactorEnabled'),
+              customValue4:
+                  BuiltValueNullFieldError.checkNotNull(customValue4, r'UserEntity', 'customValue4'),
+              isTwoFactorEnabled: BuiltValueNullFieldError.checkNotNull(isTwoFactorEnabled, r'UserEntity', 'isTwoFactorEnabled'),
               hasPassword: BuiltValueNullFieldError.checkNotNull(hasPassword, r'UserEntity', 'hasPassword'),
               lastEmailAddress: BuiltValueNullFieldError.checkNotNull(lastEmailAddress, r'UserEntity', 'lastEmailAddress'),
               oauthUserToken: BuiltValueNullFieldError.checkNotNull(oauthUserToken, r'UserEntity', 'oauthUserToken'),
@@ -1384,4 +1417,4 @@ class UserEntityBuilder implements Builder<UserEntity, UserEntityBuilder> {
   }
 }
 
-// ignore_for_file: always_put_control_body_on_new_line,always_specify_types,annotate_overrides,avoid_annotating_with_dynamic,avoid_as,avoid_catches_without_on_clauses,avoid_returning_this,deprecated_member_use_from_same_package,lines_longer_than_80_chars,no_leading_underscores_for_local_identifiers,omit_local_variable_types,prefer_expression_function_bodies,sort_constructors_first,test_types_in_equals,unnecessary_const,unnecessary_new,unnecessary_lambdas
+// ignore_for_file: deprecated_member_use_from_same_package,type=lint

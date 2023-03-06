@@ -12,6 +12,8 @@ import 'package:flutter_redux/flutter_redux.dart';
 import 'package:flutter_styled_toast/flutter_styled_toast.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
+import 'package:invoiceninja_flutter/main_app.dart';
+import 'package:invoiceninja_flutter/ui/app/dialogs/error_dialog.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:printing/printing.dart';
 import 'package:share/share.dart';
@@ -53,7 +55,6 @@ class _InvoicePdfViewState extends State<InvoicePdfView> {
   bool _isLoading = true;
   bool _isDeliveryNote = false;
   String _activityId;
-  String _pdfString;
   http.Response _response;
   //int _pageCount = 1;
   //int _currentPage = 1;
@@ -72,28 +73,37 @@ class _InvoicePdfViewState extends State<InvoicePdfView> {
   }
 
   void loadPdf() {
+    final viewModel = widget.viewModel;
+    final invoice = viewModel.invoice;
+
+    if (invoice.invitations.isEmpty) {
+      return;
+    }
+
     setState(() {
       _isLoading = true;
     });
 
     _loadPDF(
       context,
-      widget.viewModel.invoice,
+      invoice,
       _isDeliveryNote,
       _activityId,
     ).then((response) async {
       setState(() {
         _response = response;
         _isLoading = false;
-
-        if (kIsWeb) {
-          _pdfString =
-              'data:application/pdf;base64,' + base64Encode(response.bodyBytes);
-          WebUtils.registerWebView(_pdfString);
-        }
       });
     }).catchError((Object error) {
-      _isLoading = false;
+      setState(() {
+        _isLoading = false;
+      });
+
+      showDialog<void>(
+          context: navigatorKey.currentContext,
+          builder: (BuildContext context) {
+            return ErrorDialog(error);
+          });
     });
   }
 
@@ -291,15 +301,17 @@ class _InvoicePdfViewState extends State<InvoicePdfView> {
             : null,
         body: _isLoading || _response == null
             ? LoadingIndicator()
-            : kIsWeb
-                ? HtmlElementView(viewType: _pdfString)
-                : PdfPreview(
-                    build: (format) => _response.bodyBytes,
-                    canChangeOrientation: false,
-                    canChangePageFormat: false,
-                    canDebug: false,
-                    maxPageWidth: 800,
-                  ));
+            : PdfPreview(
+                build: (format) => _response.bodyBytes,
+                canChangeOrientation: false,
+                canChangePageFormat: false,
+                canDebug: false,
+                maxPageWidth: 800,
+                pdfFileName: localization.lookup(invoice.entityType.snakeCase) +
+                    '_' +
+                    invoice.number +
+                    '.pdf',
+              ));
   }
 }
 

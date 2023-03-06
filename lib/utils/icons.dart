@@ -17,6 +17,7 @@ IconData getEntityActionIcon(EntityAction entityAction) {
     case EntityAction.viewPdf:
     case EntityAction.bulkDownload:
       return Icons.picture_as_pdf;
+    case EntityAction.bulkPrint:
     case EntityAction.printPdf:
       return Icons.print;
     case EntityAction.download:
@@ -51,9 +52,12 @@ IconData getEntityActionIcon(EntityAction entityAction) {
       return Icons.remove_circle_outline;
     case EntityAction.restore:
       return Icons.restore;
+    case EntityAction.convert:
+    case EntityAction.convertMatched:
     case EntityAction.convertToInvoice:
     case EntityAction.convertToExpense:
     case EntityAction.convertToProject:
+    case EntityAction.convertToPayment:
       return Icons.content_copy;
     case EntityAction.approve:
     case EntityAction.accept:
@@ -97,9 +101,11 @@ IconData getEntityActionIcon(EntityAction entityAction) {
       return Icons.delete_forever;
     case EntityAction.viewInvoice:
       return MdiIcons.fileAccount;
+    case EntityAction.viewExpense:
+      return MdiIcons.fileImage;
     case EntityAction.changeStatus:
       return Icons.adjust;
-    case EntityAction.cancel:
+    case EntityAction.back:
       return Icons.cancel_outlined;
     case EntityAction.save:
       return Icons.cloud_upload;
@@ -107,6 +113,8 @@ IconData getEntityActionIcon(EntityAction entityAction) {
       return Icons.inventory;
     case EntityAction.merge:
       return MdiIcons.merge;
+    case EntityAction.autoBill:
+      return MdiIcons.contactlessPaymentCircle;
     default:
       return null;
   }
@@ -169,6 +177,14 @@ IconData getEntityIcon(EntityType entityType) {
       return MdiIcons.cubeSend;
     case EntityType.purchaseOrder:
       return MdiIcons.fileDocument;
+    case EntityType.transaction:
+      return MdiIcons.bankTransfer;
+    case EntityType.bankAccount:
+      return MdiIcons.bank;
+    case EntityType.transactionRule:
+      return Icons.rule_folder;
+    case EntityType.schedule:
+      return Icons.schedule;
     default:
       return MdiIcons.crosshairsQuestion;
   }
@@ -250,6 +266,12 @@ IconData getSettingIcon(String section) {
       return getEntityIcon(EntityType.task);
     case kSettingsSubscriptions:
       return getEntityIcon(EntityType.subscription);
+    case kSettingsSchedules:
+      return getEntityIcon(EntityType.schedule);
+    case kSettingsBankAccounts:
+      return MdiIcons.bank;
+    case kSettingsTransactionRules:
+      return Icons.rule_folder;
     default:
       return null;
   }

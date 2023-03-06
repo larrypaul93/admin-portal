@@ -9,6 +9,9 @@ import 'package:built_collection/built_collection.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:invoiceninja_flutter/data/models/category_model.dart';
 import 'package:invoiceninja_flutter/data/models/contact_model.dart';
+import 'package:invoiceninja_flutter/ui/bank_account/bank_account_screen.dart';
+import 'package:invoiceninja_flutter/ui/schedule/schedule_screen.dart';
+import 'package:invoiceninja_flutter/ui/transaction_rule/transaction_rule_screen.dart';
 import 'package:redux/redux.dart';
 
 // Project imports:
@@ -66,6 +69,14 @@ import 'package:invoiceninja_flutter/utils/localization.dart';
 import 'package:invoiceninja_flutter/utils/platforms.dart';
 
 // STARTER: import - do not remove comment
+import 'package:invoiceninja_flutter/redux/schedule/schedule_actions.dart';
+
+import 'package:invoiceninja_flutter/redux/transaction_rule/transaction_rule_actions.dart';
+
+import 'package:invoiceninja_flutter/redux/transaction/transaction_actions.dart';
+
+import 'package:invoiceninja_flutter/redux/bank_account/bank_account_actions.dart';
+
 import 'package:invoiceninja_flutter/redux/purchase_order/purchase_order_actions.dart';
 import 'package:invoiceninja_flutter/redux/category/category_actions.dart';
 
@@ -158,12 +169,12 @@ class UpdateUserPreferences implements PersistPrefs {
     this.isFilterVisible,
     this.rowsPerPage,
     this.colorTheme,
-    this.enableJSPDF,
     this.customColors,
     this.persistData,
     this.persistUi,
     this.tapSelectedToEdit,
     this.showPdfPreview,
+    this.showPdfPreviewSideBySide,
     this.editAfterSaving,
     this.enableTouchEvents,
     this.enableTooltips,
@@ -189,7 +200,7 @@ class UpdateUserPreferences implements PersistPrefs {
   final bool tapSelectedToEdit;
   final double textScaleFactor;
   final bool showPdfPreview;
-  final bool enableJSPDF;
+  final bool showPdfPreviewSideBySide;
   final BuiltMap<String, String> customColors;
   final bool editAfterSaving;
   final bool enableTouchEvents;
@@ -390,6 +401,22 @@ void viewEntitiesByType({
             action = ViewGroupList();
             break;
           // STARTER: view list - do not remove comment
+          case EntityType.schedule:
+            action = ViewScheduleList();
+            break;
+
+          case EntityType.transactionRule:
+            action = ViewTransactionRuleList();
+            break;
+
+          case EntityType.transaction:
+            action = ViewTransactionList();
+            break;
+
+          case EntityType.bankAccount:
+            action = ViewBankAccountList();
+            break;
+
           case EntityType.purchaseOrder:
             action = ViewPurchaseOrderList();
             break;
@@ -520,7 +547,7 @@ void viewEntityById({
           viewEntitiesByType(
               entityType: filterEntity.entityType.relatedTypes
                   .where((entityType) =>
-                      state.userCompany.canViewOrCreate(entityType))
+                      state.userCompany.canViewCreateOrEdit(entityType))
                   .first,
               filterEntity: filterEntity);
           return;
@@ -612,6 +639,34 @@ void viewEntityById({
             ));
             break;
           // STARTER: view - do not remove comment
+          case EntityType.schedule:
+            store.dispatch(ViewSchedule(
+              scheduleId: entityId,
+              force: force,
+            ));
+            break;
+
+          case EntityType.transactionRule:
+            store.dispatch(ViewTransactionRule(
+              transactionRuleId: entityId,
+              force: force,
+            ));
+            break;
+
+          case EntityType.transaction:
+            store.dispatch(ViewTransaction(
+              transactionId: entityId,
+              force: force,
+            ));
+            break;
+
+          case EntityType.bankAccount:
+            store.dispatch(ViewBankAccount(
+              bankAccountId: entityId,
+              force: force,
+            ));
+            break;
+
           case EntityType.purchaseOrder:
             store.dispatch(ViewPurchaseOrder(
               purchaseOrderId: entityId,
@@ -857,6 +912,27 @@ void createEntityByType({
             ));
             break;
           // STARTER: create type - do not remove comment
+          case EntityType.schedule:
+            store.dispatch(EditSchedule(
+              force: force,
+              schedule: ScheduleEntity(state: state),
+            ));
+            break;
+
+          case EntityType.transactionRule:
+            store.dispatch(EditTransactionRule(
+              force: force,
+              transactionRule: TransactionRuleEntity(state: state),
+            ));
+            break;
+
+          case EntityType.transaction:
+            store.dispatch(EditTransaction(
+              force: force,
+              transaction: TransactionEntity(state: state),
+            ));
+            break;
+
           case EntityType.purchaseOrder:
             store.dispatch(EditPurchaseOrder(
               force: force,
@@ -957,6 +1033,14 @@ void createEntityByType({
               ),
             ));
             break;
+          case EntityType.bankAccount:
+            store.dispatch(EditBankAccount(
+              force: force,
+              bankAccount: BankAccountEntity(state: state),
+            ));
+            break;
+          default:
+            print('## Create by type not handled for $entityType');
         }
       });
 }
@@ -1085,6 +1169,30 @@ void createEntity({
             ));
             break;
           // STARTER: create - do not remove comment
+          case EntityType.schedule:
+            store.dispatch(EditSchedule(
+              schedule: entity,
+              force: force,
+              completer: completer,
+            ));
+            break;
+
+          case EntityType.transactionRule:
+            store.dispatch(EditTransactionRule(
+              transactionRule: entity,
+              force: force,
+              completer: completer,
+            ));
+            break;
+
+          case EntityType.transaction:
+            store.dispatch(EditTransaction(
+              transaction: entity,
+              force: force,
+              completer: completer,
+            ));
+            break;
+
           case EntityType.purchaseOrder:
             store.dispatch(EditPurchaseOrder(
               purchaseOrder: entity,
@@ -1134,6 +1242,7 @@ void createEntity({
               expenseCategory: entity,
               force: force,
               completer: completer,
+              cancelCompleter: cancelCompleter,
             ));
             break;
           case EntityType.recurringInvoice:
@@ -1178,6 +1287,15 @@ void createEntity({
               completer: completer,
             ));
             break;
+          case EntityType.bankAccount:
+            store.dispatch(EditBankAccount(
+              bankAccount: entity,
+              force: force,
+              completer: completer,
+            ));
+            break;
+          default:
+            print('## createEntity not handled for ${entity.entityType}');
         }
       });
 }
@@ -1270,11 +1388,13 @@ void editEntity({
             store.dispatch(EditProduct(product: entity, completer: completer));
             break;
           case EntityType.task:
-            store.dispatch(EditTask(
-              task: entity,
-              taskTimeIndex: subIndex,
-              completer: completer,
-            ));
+            if (!state.company.invoiceTaskLock ||
+                !(entity as TaskEntity).isInvoiced)
+              store.dispatch(EditTask(
+                task: entity,
+                taskTimeIndex: subIndex,
+                completer: completer,
+              ));
             break;
           case EntityType.expense:
             store.dispatch(
@@ -1294,6 +1414,21 @@ void editEntity({
             ));
             break;
           // STARTER: edit - do not remove comment
+          case EntityType.schedule:
+            store
+                .dispatch(EditSchedule(schedule: entity, completer: completer));
+            break;
+
+          case EntityType.transactionRule:
+            store.dispatch(EditTransactionRule(
+                transactionRule: entity, completer: completer));
+            break;
+
+          case EntityType.transaction:
+            store.dispatch(
+                EditTransaction(transaction: entity, completer: completer));
+            break;
+
           case EntityType.purchaseOrder:
             store.dispatch(
                 EditPurchaseOrder(purchaseOrder: entity, completer: completer));
@@ -1362,6 +1497,14 @@ void editEntity({
               completer: completer,
             ));
             break;
+          case EntityType.bankAccount:
+            store.dispatch(EditBankAccount(
+              bankAccount: entity,
+              completer: completer,
+            ));
+            break;
+          default:
+            print('## Edit not handled for $entityType');
         }
       });
 }
@@ -1421,9 +1564,18 @@ void handleEntitiesActions(List<BaseEntity> entities, EntityAction action,
         case EntityType.subscription:
           store.dispatch(UpdateCurrentRoute(SubscriptionScreen.route));
           break;
+        case EntityType.bankAccount:
+          store.dispatch(UpdateCurrentRoute(BankAccountScreen.route));
+          break;
+        case EntityType.transactionRule:
+          store.dispatch(UpdateCurrentRoute(TransactionRuleScreen.route));
+          break;
+        case EntityType.schedule:
+          store.dispatch(UpdateCurrentRoute(ScheduleScreen.route));
+          break;
         default:
           print(
-              'ERROR: ${entities.first.entityType} entity type not supported');
+              '## ERROR: ${entities.first.entityType} entity type not supported');
       }
     }
   }
@@ -1473,6 +1625,22 @@ void handleEntitiesActions(List<BaseEntity> entities, EntityAction action,
       handleDocumentAction(context, entities, action);
       break;
     // STARTER: actions - do not remove comment
+    case EntityType.schedule:
+      handleScheduleAction(context, entities, action);
+      break;
+
+    case EntityType.transactionRule:
+      handleTransactionRuleAction(context, entities, action);
+      break;
+
+    case EntityType.transaction:
+      handleTransactionAction(context, entities, action);
+      break;
+
+    case EntityType.bankAccount:
+      handleBankAccountAction(context, entities, action);
+      break;
+
     case EntityType.purchaseOrder:
       handlePurchaseOrderAction(context, entities, action);
       break;
@@ -1571,12 +1739,7 @@ void selectEntity({
       store.dispatch(TogglePreviewSidebar());
     }
   } else {
-    ClientEntity client;
-    if (forceView && entity is BelongsToClient) {
-      client = state.clientState.get((entity as BelongsToClient).clientId);
-    }
-
-    viewEntity(entity: entity, filterEntity: client);
+    viewEntity(entity: entity);
   }
 }
 

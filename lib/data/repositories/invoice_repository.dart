@@ -38,9 +38,9 @@ class InvoiceRepository {
   }
 
   Future<BuiltList<InvoiceEntity>> loadList(Credentials credentials, int page,
-      int createdAt, bool filterDeleted, int recordsPerPage) async {
+      int createdAt, bool filterDeleted) async {
     String url = credentials.url +
-        '/invoices?per_page=$recordsPerPage&page=$page&created_at=$createdAt';
+        '/invoices?per_page=$kMaxRecordsPerPage&page=$page&created_at=$createdAt';
 
     if (filterDeleted) {
       url += '&filter_deleted_clients=true';
@@ -95,6 +95,15 @@ class InvoiceRepository {
       url += '&mark_sent=true';
     } else if (action == EntityAction.cancelInvoice) {
       url += '&cancel=true';
+    } else if (action == EntityAction.autoBill) {
+      url += '&auto_bill=true';
+    }
+
+    if (invoice.saveDefaultTerms) {
+      url += '&save_default_terms=true';
+    }
+    if (invoice.saveDefaultFooter) {
+      url += '&save_default_footer=true';
     }
 
     if (invoice.isNew) {

@@ -16,6 +16,7 @@ import 'package:invoiceninja_flutter/ui/app/icon_message.dart';
 import 'package:invoiceninja_flutter/ui/app/lists/activity_list_tile.dart';
 import 'package:invoiceninja_flutter/ui/app/loading_indicator.dart';
 import 'package:invoiceninja_flutter/ui/app/scrollable_listview.dart';
+import 'package:invoiceninja_flutter/ui/app/upgrade_dialog.dart';
 import 'package:invoiceninja_flutter/ui/credit/credit_pdf_vm.dart';
 import 'package:invoiceninja_flutter/ui/invoice/invoice_email_vm.dart';
 import 'package:invoiceninja_flutter/ui/invoice/invoice_pdf_vm.dart';
@@ -159,7 +160,6 @@ class _InvoiceEmailViewState extends State<InvoiceEmailView>
 
               final company = widget.viewModel.state.company;
               if (company.markdownEmailEnabled &&
-                  widget.viewModel.state.prefState.isDesktop &&
                   _rawBodyPreview.trim().startsWith('<')) {
                 _rawBodyPreview = html2md.convert(_rawBodyPreview);
               }
@@ -272,22 +272,27 @@ class _InvoiceEmailViewState extends State<InvoiceEmailView>
       return SizedBox();
     }
 
-    return Stack(
-      children: [
-        if (_isLoading) LinearProgressIndicator(),
-        if (supportsInlineBrowser())
-          EmailPreview(
-            isLoading: _isLoading,
-            subject: _subjectPreview,
-            body: _emailPreview,
-          )
-        else
-          IgnorePointer(
-            child: ExampleEditor(
-              value: html2md.convert(_bodyPreview),
-            ),
-          )
-      ],
+    return Container(
+      color: Colors.white,
+      height: double.infinity,
+      child: Stack(
+        children: [
+          if (_isLoading) LinearProgressIndicator(),
+          if (supportsInlineBrowser())
+            EmailPreview(
+              isLoading: _isLoading,
+              subject: _subjectPreview,
+              body: _emailPreview,
+            )
+          else
+            IgnorePointer(
+              child: ExampleEditor(
+                value: '### $_subjectPreview\n\n\n' +
+                    html2md.convert(_bodyPreview),
+              ),
+            )
+        ],
+      ),
     );
   }
 
@@ -307,7 +312,7 @@ class _InvoiceEmailViewState extends State<InvoiceEmailView>
             padding: const EdgeInsets.only(bottom: 10),
             child: IconMessage(
               localization.customEmailsDisabledHelp,
-              trailing: isApple()
+              trailing: (isApple() && !supportsInAppPurchase())
                   ? null
                   : TextButton(
                       child: Text(
@@ -316,15 +321,21 @@ class _InvoiceEmailViewState extends State<InvoiceEmailView>
                           color: Colors.white,
                         ),
                       ),
-                      onPressed: () => launchUrl(
-                          Uri.parse(state.userCompany.ninjaPortalUrl)),
-                    ),
+                      onPressed: () {
+                        if (supportsInAppPurchase()) {
+                          showDialog<void>(
+                            context: context,
+                            builder: (context) => UpgradeDialog(),
+                          );
+                        } else {
+                          launchUrl(
+                              Uri.parse(state.userCompany.ninjaPortalUrl));
+                        }
+                      }),
             ),
           ),
         ColoredBox(
-          color: state.company.markdownEmailEnabled &&
-                  widget.viewModel.state.prefState.isDesktop &&
-                  !isDarkMode(context)
+          color: state.company.markdownEmailEnabled && !isDarkMode(context)
               ? Colors.white
               : Theme.of(context).backgroundColor,
           child: Padding(
@@ -338,8 +349,7 @@ class _InvoiceEmailViewState extends State<InvoiceEmailView>
             ),
           ),
         ),
-        if (state.company.markdownEmailEnabled &&
-            widget.viewModel.state.prefState.isDesktop)
+        if (state.company.markdownEmailEnabled)
           Expanded(
             child: ColoredBox(
               color: Colors.white,
@@ -434,13 +444,7 @@ class _InvoiceEmailViewState extends State<InvoiceEmailView>
                     ),
                     Expanded(
                       flex: supportsInlineBrowser() ? 3 : 2,
-                      child: Container(
-                        child: _buildPreview(context),
-                        color: supportsInlineBrowser()
-                            ? Colors.white
-                            : const Color(0xFFE4E8EB),
-                        height: double.infinity,
-                      ),
+                      child: _buildPreview(context),
                     ),
                   ],
                 ],
@@ -517,11 +521,13 @@ class _InvoiceEmailViewState extends State<InvoiceEmailView>
               ],
             ),
             _buildEdit(context),
-            invoice.isCredit
-                ? CreditPdfScreen(showAppBar: false)
-                : invoice.isQuote
-                    ? QuotePdfScreen(showAppBar: false)
-                    : InvoicePdfScreen(showAppBar: false),
+            invoice.isPurchaseOrder
+                ? PurchaseOrderPdfScreen(showAppBar: false)
+                : invoice.isCredit
+                    ? CreditPdfScreen(showAppBar: false)
+                    : invoice.isQuote
+                        ? QuotePdfScreen(showAppBar: false)
+                        : InvoicePdfScreen(showAppBar: false),
             _buildHistory(context),
           ],
         ),

@@ -27,14 +27,16 @@ class InvoiceEditFooter extends StatelessWidget {
     final store = StoreProvider.of<AppState>(context);
     final state = store.state;
     final total = formatNumber(
-        invoice.calculateTotal(precision: precisionForInvoice(state, invoice)),
-        context,
-        clientId: invoice.clientId);
+      invoice.calculateTotal(precision: precisionForInvoice(state, invoice)),
+      context,
+      clientId: invoice.isPurchaseOrder ? null : invoice.clientId,
+      vendorId: invoice.isPurchaseOrder ? invoice.vendorId : null,
+    );
     final useSidebarEditor =
         state.prefState.useSidebarEditor[EntityType.invoice] ?? false;
     final showLayoutToggle = isDesktop(context);
     final title =
-        '${localization.lookup('${invoice.entityType.snakeCase}_total')}: $total';
+        '${localization.lookup('${invoice.entityType.snakeCase}_total')} $total';
 
     return BottomAppBar(
       elevation: 0,

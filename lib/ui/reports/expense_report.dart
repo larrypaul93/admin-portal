@@ -14,6 +14,7 @@ import 'package:invoiceninja_flutter/utils/enums.dart';
 
 enum ExpenseReportFields {
   id,
+  number,
   amount,
   net_amount,
   tax_amount,
@@ -50,6 +51,7 @@ enum ExpenseReportFields {
   tax_amount3,
   created_at,
   updated_at,
+  converted_amount,
 }
 
 var memoizedExpenseReport = memo10((
@@ -125,7 +127,7 @@ ReportResult expenseReport(
     final vendor = vendorMap[expense.vendorId] ?? VendorEntity();
     final project = projectMap[expense.projectId] ?? ProjectEntity();
 
-    if (expense.isDeleted) {
+    if (expense.isDeleted && !userCompany.company.reportIncludeDeleted) {
       continue;
     }
 
@@ -138,6 +140,9 @@ ReportResult expenseReport(
       switch (column) {
         case ExpenseReportFields.id:
           value = expense.id;
+          break;
+        case ExpenseReportFields.number:
+          value = expense.number;
           break;
         case ExpenseReportFields.amount:
           value = expense.grossAmount;
@@ -265,6 +270,9 @@ ReportResult expenseReport(
         case ExpenseReportFields.created_at:
           value = convertTimestampToDateString(expense.createdAt);
           break;
+        case ExpenseReportFields.converted_amount:
+          value = round(expense.convertedAmount, 2);
+          break;
       }
 
       if (!ReportResult.matchField(
@@ -278,6 +286,9 @@ ReportResult expenseReport(
 
       if (value.runtimeType == bool) {
         row.add(expense.getReportBool(value: value));
+      } else if (column == ExpenseReportFields.converted_amount) {
+        row.add(expense.getReportDouble(
+            value: value, currencyId: expense.invoiceCurrencyId));
       } else if (value.runtimeType == double || value.runtimeType == int) {
         row.add(expense.getReportDouble(
             value: value, currencyId: expense.currencyId));

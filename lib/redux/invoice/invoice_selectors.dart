@@ -9,6 +9,27 @@ import 'package:invoiceninja_flutter/data/models/models.dart';
 import 'package:invoiceninja_flutter/redux/app/app_state.dart';
 import 'package:invoiceninja_flutter/redux/ui/list_ui_state.dart';
 
+var memoizedHasActiveUnpaidInvoices = memo2(
+    (String clientId, BuiltMap<String, InvoiceEntity> invoiceMap) =>
+        hasActiveUnpaidInvoices(clientId, invoiceMap));
+
+bool hasActiveUnpaidInvoices(
+    String clientId, BuiltMap<String, InvoiceEntity> invoiceMap) {
+  bool hasUnapid = false;
+
+  final invoiceIds = invoiceMap.keys.toList();
+  for (var i = 0; i < invoiceIds.length; i++) {
+    final invoiceId = invoiceIds[i];
+    final invoice = invoiceMap[invoiceId];
+
+    if (invoice.clientId == clientId && invoice.isUnpaid) {
+      hasUnapid = true;
+    }
+  }
+
+  return hasUnapid;
+}
+
 var memoizedInvoiceQuoteSelector = memo2(
     (InvoiceEntity invoice, BuiltMap<String, InvoiceEntity> quoteMap) =>
         invoiceQuoteSelector(invoice, quoteMap));
@@ -371,7 +392,3 @@ int precisionForInvoice(AppState state, InvoiceEntity invoice) {
   final currency = state.staticState.currencyMap[client.currencyId];
   return currency?.precision ?? 2;
 }
-
-bool hasInvoiceChanges(
-        InvoiceEntity invoice, BuiltMap<String, InvoiceEntity> invoiceMap) =>
-    invoice.isNew ? invoice.isChanged : invoice != invoiceMap[invoice.id];

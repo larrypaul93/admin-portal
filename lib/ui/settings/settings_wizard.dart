@@ -48,10 +48,11 @@ class _SettingsWizardState extends State<SettingsWizard> {
   final FocusScopeNode _focusNode = FocusScopeNode();
   final _debouncer = Debouncer(milliseconds: kMillisecondsToDebounceSave);
 
-  bool _autoValidate = false;
   bool _isSaving = false;
+  bool _showLogo = false;
   bool _isSubdomainUnique = false;
   bool _isCheckingSubdomain = false;
+  bool _hasCheckedSubdomain = false;
   String _currencyId = kCurrencyUSDollar;
   String _languageId = kLanguageEnglish;
   final _nameController = TextEditingController();
@@ -66,15 +67,23 @@ class _SettingsWizardState extends State<SettingsWizard> {
   void initState() {
     super.initState();
 
-    _firstNameController.text = widget.user.firstName;
-    _lastNameController.text = widget.user.lastName;
-
     _controllers = [
       _nameController,
       _firstNameController,
       _lastNameController,
       _subdomainController,
     ];
+  }
+
+  @override
+  void didChangeDependencies() {
+    final store = StoreProvider.of<AppState>(context);
+
+    _firstNameController.text = widget.user.firstName;
+    _lastNameController.text = widget.user.lastName;
+    _subdomainController.text = store.state.company.subdomain;
+
+    super.didChangeDependencies();
   }
 
   @override
@@ -103,7 +112,10 @@ class _SettingsWizardState extends State<SettingsWizard> {
         return;
       }
 
-      setState(() => _isCheckingSubdomain = true);
+      setState(() {
+        _isCheckingSubdomain = true;
+        _hasCheckedSubdomain = true;
+      });
 
       _webClient
           .post(url, credentials.token,
@@ -127,16 +139,11 @@ class _SettingsWizardState extends State<SettingsWizard> {
   void _onSavePressed() {
     final bool isValid = _formKey.currentState.validate();
 
-    setState(() {
-      _autoValidate = !isValid;
-    });
-
     if (!isValid || _isCheckingSubdomain) {
       return;
     }
 
     final store = StoreProvider.of<AppState>(context);
-    final navigator = Navigator.of(context);
     final state = store.state;
 
     passwordCallback(
@@ -147,10 +154,15 @@ class _SettingsWizardState extends State<SettingsWizard> {
           completer.future.then((value) {
             final toastCompleter =
                 snackBarCompleter<Null>(context, localization.savedSettings);
-            toastCompleter.future
-                .then((value) => navigator.pop())
-                .catchError((Object error) {
-              setState(() => _isSaving = false);
+            toastCompleter.future.then((value) {
+              setState(() {
+                _isSaving = false;
+                _showLogo = true;
+              });
+            }).catchError((Object error) {
+              setState(() {
+                _isSaving = false;
+              });
             });
             store.dispatch(
               SaveCompanyRequest(
@@ -196,7 +208,6 @@ class _SettingsWizardState extends State<SettingsWizard> {
     final companyName = DecoratedFormField(
       autofocus: true,
       label: localization.companyName,
-      autovalidate: _autoValidate,
       controller: _nameController,
       validator: (value) =>
           value.isEmpty ? localization.pleaseEnterAValue : null,
@@ -205,7 +216,6 @@ class _SettingsWizardState extends State<SettingsWizard> {
 
     final firstName = DecoratedFormField(
       label: localization.firstName,
-      autovalidate: _autoValidate,
       controller: _firstNameController,
       keyboardType: TextInputType.name,
       autofillHints: [AutofillHints.givenName],
@@ -215,7 +225,6 @@ class _SettingsWizardState extends State<SettingsWizard> {
 
     final lastName = DecoratedFormField(
       label: localization.lastName,
-      autovalidate: _autoValidate,
       controller: _lastNameController,
       keyboardType: TextInputType.name,
       autofillHints: [AutofillHints.familyName],
@@ -278,13 +287,14 @@ class _SettingsWizardState extends State<SettingsWizard> {
 
     final subdomain = DecoratedFormField(
       label: localization.subdomain,
-      autovalidate: _autoValidate,
       controller: _subdomainController,
       keyboardType: TextInputType.text,
       validator: (value) {
         if (value.isEmpty) {
           return localization.pleaseEnterAValue;
-        } else if (!_isCheckingSubdomain && !_isSubdomainUnique) {
+        } else if (_hasCheckedSubdomain &&
+            !_isCheckingSubdomain &&
+            !_isSubdomainUnique) {
           return localization.subdomainIsNotAvailable;
         }
 
@@ -302,6 +312,14 @@ class _SettingsWizardState extends State<SettingsWizard> {
       ],
     );
 
+    var showNameFields = true;
+    if (state.companies.length > 1) {
+      showNameFields = false;
+    }
+    if (state.user.isConnectedToApple && state.user.fullName.isEmpty) {
+      showNameFields = false;
+    }
+
     return AlertDialog(
       content: AppForm(
         focusNode: _focusNode,
@@ -313,80 +331,91 @@ class _SettingsWizardState extends State<SettingsWizard> {
                 ? LoadingIndicator(
                     height: 200,
                   )
-                : Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisSize: MainAxisSize.min,
-                    children: isMobile(context)
-                        ? [
-                            Padding(
-                              padding: const EdgeInsets.only(bottom: 8),
-                              child: Text(
-                                localization.welcomeToInvoiceNinja,
-                                style: Theme.of(context).textTheme.headline6,
-                              ),
-                            ),
-                            companyName,
-                            if (state.isHosted) subdomain,
-                            if (state.companies.length == 1) ...[
-                              firstName,
-                              lastName,
-                            ],
-                            language,
-                            currency,
-                            SizedBox(height: 16),
-                            darkMode,
-                            if (state.isHosted)
-                              Padding(
-                                padding: const EdgeInsets.only(top: 32),
-                                child: Text(localization.subdomainGuide),
-                              )
-                          ]
-                        : [
-                            Row(
-                              children: [
-                                Expanded(
-                                    child: Text(
-                                  localization.welcomeToInvoiceNinja,
-                                  style: Theme.of(context).textTheme.headline6,
-                                )),
-                                if (state.isHosted) ...[
-                                  SizedBox(width: kTableColumnGap),
-                                  Flexible(child: darkMode),
-                                ]
-                              ],
-                            ),
-                            SizedBox(height: 16),
-                            Row(
-                              children: [
-                                Expanded(child: companyName),
-                                SizedBox(width: kTableColumnGap),
-                                Expanded(
-                                    child:
-                                        state.isHosted ? subdomain : darkMode),
-                              ],
-                            ),
-                            if (state.companies.length == 1)
-                              Row(
-                                children: [
-                                  Expanded(child: firstName),
-                                  SizedBox(width: kTableColumnGap),
-                                  Expanded(child: lastName),
+                : _showLogo
+                    ? Center(
+                        child: Text(
+                          localization.setupWizardLogo,
+                          textAlign: TextAlign.center,
+                          style: Theme.of(context).textTheme.headline6,
+                        ),
+                      )
+                    : Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisSize: MainAxisSize.min,
+                        children: isMobile(context)
+                            ? [
+                                Padding(
+                                  padding: const EdgeInsets.only(bottom: 8),
+                                  child: Text(
+                                    localization.welcomeToInvoiceNinja,
+                                    style:
+                                        Theme.of(context).textTheme.headline6,
+                                  ),
+                                ),
+                                companyName,
+                                if (state.isHosted) subdomain,
+                                if (showNameFields) ...[
+                                  firstName,
+                                  lastName,
                                 ],
-                              ),
-                            Row(
-                              children: [
-                                Expanded(child: language),
-                                SizedBox(width: kTableColumnGap),
-                                Expanded(child: currency),
+                                language,
+                                currency,
+                                SizedBox(height: 16),
+                                darkMode,
+                                if (state.isHosted)
+                                  Padding(
+                                    padding: const EdgeInsets.only(top: 32),
+                                    child: Text(localization.subdomainGuide),
+                                  )
+                              ]
+                            : [
+                                Row(
+                                  children: [
+                                    Expanded(
+                                        child: Text(
+                                      localization.welcomeToInvoiceNinja,
+                                      style:
+                                          Theme.of(context).textTheme.headline6,
+                                    )),
+                                    if (state.isHosted) ...[
+                                      SizedBox(width: kTableColumnGap),
+                                      Flexible(child: darkMode),
+                                    ]
+                                  ],
+                                ),
+                                SizedBox(height: 16),
+                                Row(
+                                  children: [
+                                    Expanded(child: companyName),
+                                    SizedBox(width: kTableColumnGap),
+                                    Expanded(
+                                        child: state.isHosted
+                                            ? subdomain
+                                            : darkMode),
+                                  ],
+                                ),
+                                if (showNameFields)
+                                  Row(
+                                    children: [
+                                      Expanded(child: firstName),
+                                      SizedBox(width: kTableColumnGap),
+                                      Expanded(child: lastName),
+                                    ],
+                                  ),
+                                Row(
+                                  children: [
+                                    Expanded(child: language),
+                                    SizedBox(width: kTableColumnGap),
+                                    Expanded(child: currency),
+                                  ],
+                                ),
+                                if (state.isHosted)
+                                  Padding(
+                                    padding: const EdgeInsets.only(top: 32),
+                                    child: Text(localization.subdomainGuide),
+                                  ),
                               ],
-                            ),
-                            if (state.isHosted)
-                              Padding(
-                                padding: const EdgeInsets.only(top: 32),
-                                child: Text(localization.subdomainGuide),
-                              ),
-                          ],
-                  ),
+                      ),
           ),
         ),
       ),
@@ -396,10 +425,21 @@ class _SettingsWizardState extends State<SettingsWizard> {
             onPressed: () => Navigator.of(context).pop(),
             child: Text(localization.close.toUpperCase()),
           ),
-          TextButton(
-            onPressed: _onSavePressed,
-            child: Text(localization.save.toUpperCase()),
-          ),
+          if (_showLogo)
+            TextButton(
+                onPressed: () {
+                  store.dispatch(ViewSettings(
+                    section: kSettingsCompanyDetails,
+                    tabIndex: 2,
+                  ));
+                  Navigator.of(context).pop();
+                },
+                child: Text(localization.upload.toUpperCase()))
+          else
+            TextButton(
+              onPressed: _onSavePressed,
+              child: Text(localization.save.toUpperCase()),
+            ),
         ]
       ],
     );

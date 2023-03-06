@@ -4,6 +4,7 @@ import 'package:invoiceninja_flutter/data/models/contact_model.dart';
 import 'package:invoiceninja_flutter/redux/category/category_actions.dart';
 import 'package:invoiceninja_flutter/redux/product/product_actions.dart';
 import 'package:redux/redux.dart';
+import 'package:invoiceninja_flutter/constants.dart';
 import 'package:invoiceninja_flutter/main_app.dart';
 import 'package:invoiceninja_flutter/redux/app/app_actions.dart';
 import 'package:invoiceninja_flutter/data/models/models.dart';
@@ -220,12 +221,10 @@ Middleware<AppState> _loadContacts(ContactRepository repository) {
     final AppState state = store.state;
 
     store.dispatch(LoadContactsRequest());
-    repository
-        .loadList(state.credentials, action.page, state.recordsPerPage)
-        .then((data) {
+    repository.loadList(state.credentials, action.page).then((data) {
       store.dispatch(LoadContactsSuccess(data));
 
-      if (data.length == state.recordsPerPage) {
+      if (data.length == kMaxRecordsPerPage) {
         store.dispatch(LoadContacts(
           completer: action.completer,
           page: action.page + 1,

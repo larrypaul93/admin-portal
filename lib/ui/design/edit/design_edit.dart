@@ -10,7 +10,8 @@ import 'package:flutter/services.dart';
 
 // Package imports:
 import 'package:built_collection/built_collection.dart';
-import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:flutter_styled_toast/flutter_styled_toast.dart';
+import 'package:invoiceninja_flutter/utils/dialogs.dart';
 import 'package:printing/printing.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -24,7 +25,6 @@ import 'package:invoiceninja_flutter/ui/app/forms/app_form.dart';
 import 'package:invoiceninja_flutter/ui/app/forms/app_tab_bar.dart';
 import 'package:invoiceninja_flutter/ui/app/forms/decorated_form_field.dart';
 import 'package:invoiceninja_flutter/ui/app/forms/design_picker.dart';
-import 'package:invoiceninja_flutter/ui/app/icon_text.dart';
 import 'package:invoiceninja_flutter/ui/app/scrollable_listview.dart';
 import 'package:invoiceninja_flutter/ui/app/variables.dart';
 import 'package:invoiceninja_flutter/ui/design/edit/design_edit_vm.dart';
@@ -32,8 +32,6 @@ import 'package:invoiceninja_flutter/utils/completers.dart';
 import 'package:invoiceninja_flutter/utils/designs.dart';
 import 'package:invoiceninja_flutter/utils/localization.dart';
 import 'package:invoiceninja_flutter/utils/platforms.dart';
-import 'package:invoiceninja_flutter/utils/web_stub.dart'
-    if (dart.library.html) 'package:invoiceninja_flutter/utils/web.dart';
 
 class DesignEdit extends StatefulWidget {
   const DesignEdit({
@@ -52,8 +50,8 @@ class _DesignEditState extends State<DesignEdit>
   static final GlobalKey<FormState> _formKey =
       GlobalKey<FormState>(debugLabel: '_designEdit');
 
-  final _debouncer = Debouncer(milliseconds: kMillisecondsToDebounceSave);
-  final _htmlDebouncer = Debouncer();
+  final _debouncer = Debouncer();
+  final _htmlDebouncer = SimpleDebouncer();
 
   final _nameController = TextEditingController();
   final _htmlController = TextEditingController();
@@ -251,12 +249,6 @@ class _DesignEditState extends State<DesignEdit>
             ? null
             : (context) {
                 final bool isValid = _formKey.currentState.validate();
-
-                /*
-        setState(() {
-          _autoValidate = !isValid;
-        });
-        */
 
                 if (!isValid) {
                   return;
@@ -459,6 +451,8 @@ class _DesignSettingsState extends State<DesignSettings> {
               label: localization.name,
               controller: widget.nameController,
               keyboardType: TextInputType.text,
+              validator: (value) =>
+                  value.isEmpty ? localization.pleaseEnterAName : null,
             ),
             DesignPicker(
                 label: localization.design,
@@ -482,15 +476,72 @@ class _DesignSettingsState extends State<DesignSettings> {
         ),
         Padding(
           padding: const EdgeInsets.only(left: 16, top: 16, right: 16),
-          child: OutlinedButton(
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: IconText(
-                icon: MdiIcons.openInNew,
-                text: localization.viewDocs.toUpperCase(),
+          child: Row(
+            children: [
+              Expanded(
+                child: OutlinedButton(
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text(
+                      localization.viewDocs.toUpperCase(),
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                  onPressed: () => launchUrl(Uri.parse(kDocsCustomDesignUrl)),
+                ),
               ),
-            ),
-            onPressed: () => launchUrl(Uri.parse(kDocsCustomFieldsUrl)),
+              SizedBox(width: kTableColumnGap),
+              Expanded(
+                child: OutlinedButton(
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text(
+                      localization.import.toUpperCase(),
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                  onPressed: () async {
+                    final designStr = await showDialog<String>(
+                        context: context,
+                        builder: (context) => _DesignImportDialog());
+                    final viewModel = widget.viewModel;
+                    final design = viewModel.design;
+
+                    widget.onLoadDesign(design.rebuild((b) => b
+                      ..design.replace(
+                          BuiltMap<String, String>(jsonDecode(designStr)))));
+                    showToast(localization.importedDesign);
+                  },
+                ),
+              ),
+              SizedBox(width: kTableColumnGap),
+              Expanded(
+                child: OutlinedButton(
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text(
+                      localization.export.toUpperCase(),
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                  onPressed: () {
+                    final design = widget.viewModel.design;
+                    final designMap = design.design.toMap();
+
+                    // TODO remove this code once it's supported
+                    designMap.remove(kDesignProducts);
+                    designMap.remove(kDesignTasks);
+
+                    final encoder = new JsonEncoder.withIndent('  ');
+                    final prettyprint = encoder.convert(designMap);
+
+                    Clipboard.setData(ClipboardData(text: prettyprint));
+                    showToast(localization.copiedToClipboard
+                        .replaceFirst(':value ', ''));
+                  },
+                ),
+              ),
+            ],
           ),
         ),
         if (widget.draftMode)
@@ -551,27 +602,6 @@ class PdfDesignPreview extends StatefulWidget {
 }
 
 class _PdfDesignPreviewState extends State<PdfDesignPreview> {
-  String get _pdfString {
-    if (widget.pdfBytes == null) {
-      return '';
-    }
-
-    return 'data:application/pdf;base64,' + base64Encode(widget.pdfBytes);
-  }
-
-  @override
-  void didUpdateWidget(oldWidget) {
-    super.didUpdateWidget(oldWidget);
-
-    if (oldWidget.pdfBytes == widget.pdfBytes) {
-      return;
-    }
-
-    if (kIsWeb) {
-      WebUtils.registerWebView(_pdfString);
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -582,13 +612,13 @@ class _PdfDesignPreviewState extends State<PdfDesignPreview> {
         children: <Widget>[
           if (widget.pdfBytes == null)
             SizedBox()
-          else if (kIsWeb)
-            HtmlElementView(viewType: _pdfString)
           else if (widget.pdfBytes != null)
             PdfPreview(
               build: (format) => widget.pdfBytes,
               canChangeOrientation: false,
               canChangePageFormat: false,
+              allowPrinting: false,
+              allowSharing: false,
               canDebug: false,
               maxPageWidth: 800,
             )
@@ -676,5 +706,62 @@ class InsertTabAction extends Action {
       );
     }
     return '';
+  }
+}
+
+class _DesignImportDialog extends StatefulWidget {
+  const _DesignImportDialog({Key key}) : super(key: key);
+
+  @override
+  State<_DesignImportDialog> createState() => __DesignImportDialogState();
+}
+
+class __DesignImportDialogState extends State<_DesignImportDialog> {
+  var _design = '';
+
+  @override
+  Widget build(BuildContext context) {
+    final localization = AppLocalization.of(context);
+
+    return AlertDialog(
+      title: Text(localization.importDesign),
+      content: DecoratedFormField(
+        autofocus: true,
+        autocorrect: false,
+        label: localization.design,
+        keyboardType: TextInputType.multiline,
+        maxLines: 8,
+        onChanged: (value) => _design = value,
+      ),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.of(context).pop(),
+          child: Text(localization.cancel.toUpperCase()),
+        ),
+        TextButton(
+          onPressed: () {
+            final value = _design.trim();
+            try {
+              final Map<String, dynamic> map = jsonDecode(value);
+              for (var field in [
+                kDesignBody,
+                kDesignFooter,
+                kDesignHeader,
+                kDesignIncludes
+              ]) {
+                if (!map.containsKey(field)) {
+                  throw localization.invalidDesign
+                      .replaceFirst(':value', field);
+                }
+              }
+              Navigator.of(context).pop(value);
+            } catch (error) {
+              showErrorDialog(context: context, message: '$error');
+            }
+          },
+          child: Text(localization.done.toUpperCase()),
+        ),
+      ],
+    );
   }
 }

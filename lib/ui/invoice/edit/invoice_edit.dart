@@ -80,10 +80,13 @@ class _InvoiceEditState extends State<InvoiceEdit>
       return;
     }
 
-    if (action == EntityAction.cancelInvoice) {
+    if ([
+      EntityAction.cancelInvoice,
+      EntityAction.autoBill,
+    ].contains(action)) {
       confirmCallback(
           context: context,
-          message: AppLocalization.of(context).cancelInvoice,
+          message: AppLocalization.of(context).lookup(action.toString()),
           callback: (_) {
             widget.viewModel.onSavePressed(context, action);
           });
@@ -167,6 +170,7 @@ class _InvoiceEditState extends State<InvoiceEdit>
               context: context,
               builder: (BuildContext context) {
                 return InvoiceItemSelector(
+                  invoice: invoice,
                   showTasksAndExpenses: true,
                   excluded: invoice.lineItems
                       .where((item) => item.isTask || item.isExpense)

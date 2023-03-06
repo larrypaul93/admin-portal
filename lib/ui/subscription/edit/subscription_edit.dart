@@ -12,6 +12,7 @@ import 'package:invoiceninja_flutter/redux/app/app_state.dart';
 import 'package:invoiceninja_flutter/redux/product/product_selectors.dart';
 import 'package:invoiceninja_flutter/redux/settings/settings_actions.dart';
 import 'package:invoiceninja_flutter/redux/static/static_selectors.dart';
+import 'package:invoiceninja_flutter/ui/app/autobill_dropdown_menu_item.dart';
 import 'package:invoiceninja_flutter/ui/app/edit_scaffold.dart';
 import 'package:invoiceninja_flutter/ui/app/entity_dropdown.dart';
 import 'package:invoiceninja_flutter/ui/app/form_card.dart';
@@ -138,6 +139,16 @@ class _SubscriptionEditState extends State<SubscriptionEdit>
     }
   }
 
+  void _onSavePressed(BuildContext context) {
+    final bool isValid = _formKey.currentState.validate();
+
+    if (!isValid) {
+      return;
+    }
+
+    widget.viewModel.onSavePressed(context);
+  }
+
   @override
   Widget build(BuildContext context) {
     final viewModel = widget.viewModel;
@@ -186,21 +197,7 @@ class _SubscriptionEditState extends State<SubscriptionEdit>
           ? localization.newSubscription
           : localization.editSubscription,
       onCancelPressed: (context) => viewModel.onCancelPressed(context),
-      onSavePressed: (context) {
-        final bool isValid = _formKey.currentState.validate();
-
-        /*
-          setState(() {
-            _autoValidate = !isValid;
-          });
-            */
-
-        if (!isValid) {
-          return;
-        }
-
-        viewModel.onSavePressed(context);
-      },
+      onSavePressed: _onSavePressed,
       appBarBottom: TabBar(
         key: ValueKey(state.settingsUIState.updatedAt),
         controller: _controller,
@@ -229,7 +226,7 @@ class _SubscriptionEditState extends State<SubscriptionEdit>
                   DecoratedFormField(
                     controller: _nameController,
                     label: localization.name,
-                    onSavePressed: viewModel.onSavePressed,
+                    onSavePressed: _onSavePressed,
                     keyboardType: TextInputType.text,
                   ),
                   DynamicSelector(
@@ -247,7 +244,6 @@ class _SubscriptionEditState extends State<SubscriptionEdit>
                 ],
               ),
               FormCard(
-                isLast: true,
                 children: <Widget>[
                   EntityDropdown(
                     entityType: EntityType.product,
@@ -332,6 +328,97 @@ class _SubscriptionEditState extends State<SubscriptionEdit>
                       .toList(),
                 ],
               ),
+              FormCard(
+                isLast: true,
+                children: <Widget>[
+                  EntityDropdown(
+                    entityType: EntityType.product,
+                    entityList: dropdownProductsSelector(state.productState.map,
+                        state.productState.list, state.userState.map),
+                    entityMap: state.productState.map,
+                    labelText: localization.optionalProducts,
+                    onSelected: (value) {
+                      final parts = subscription.optionalProductIds.split(',');
+                      viewModel.onChanged(subscription.rebuild((b) => b
+                        ..optionalProductIds = <String>[...parts, value.id]
+                            .where((part) => part.isNotEmpty)
+                            .join(',')));
+
+                      WidgetsBinding.instance.addPostFrameCallback((duration) {
+                        FocusScope.of(context).unfocus();
+                      });
+                    },
+                  ),
+                  SizedBox(
+                    height: 8,
+                  ),
+                  ...subscription.optionalProductIds
+                      .split(',')
+                      .where((element) => element.isNotEmpty)
+                      .map((productId) => ListTile(
+                            title: Text(
+                                state.productState.get(productId).productKey),
+                            trailing: IconButton(
+                              icon: Icon(Icons.clear),
+                              onPressed: () {
+                                final parts =
+                                    subscription.optionalProductIds.split(',');
+                                parts.remove(productId);
+                                viewModel.onChanged(subscription.rebuild((b) =>
+                                    b..optionalProductIds = parts.join(',')));
+                              },
+                            ),
+                          ))
+                      .toList(),
+                  SizedBox(
+                    height: 16,
+                  ),
+                  EntityDropdown(
+                    entityType: EntityType.product,
+                    entityList: dropdownProductsSelector(state.productState.map,
+                        state.productState.list, state.userState.map),
+                    entityMap: state.productState.map,
+                    labelText: localization.optionalRecurringProducts,
+                    onSelected: (value) {
+                      final parts =
+                          subscription.optionalRecurringProductIds.split(',');
+                      viewModel.onChanged(subscription.rebuild((b) => b
+                        ..optionalRecurringProductIds = <String>[
+                          ...parts,
+                          value.id
+                        ].where((part) => part.isNotEmpty).join(',')));
+
+                      WidgetsBinding.instance.addPostFrameCallback((duration) {
+                        FocusScope.of(context).unfocus();
+                      });
+                    },
+                  ),
+                  SizedBox(
+                    height: 8,
+                  ),
+                  ...subscription.optionalRecurringProductIds
+                      .split(',')
+                      .where((element) => element.isNotEmpty)
+                      .map((productId) => ListTile(
+                            title: Text(
+                                state.productState.get(productId).productKey),
+                            trailing: IconButton(
+                              icon: Icon(Icons.clear),
+                              onPressed: () {
+                                final parts = subscription
+                                    .optionalRecurringProductIds
+                                    .split(',');
+                                parts.remove(productId);
+                                viewModel.onChanged(subscription.rebuild((b) =>
+                                    b
+                                      ..optionalRecurringProductIds =
+                                          parts.join(',')));
+                              },
+                            ),
+                          ))
+                      .toList(),
+                ],
+              ),
             ],
           ),
           ScrollableListView(
@@ -358,6 +445,13 @@ class _SubscriptionEditState extends State<SubscriptionEdit>
                     onChanged: (dynamic value) => viewModel.onChanged(
                         subscription.rebuild((b) => b..autoBill = value)),
                     showBlank: true,
+                    selectedItemBuilder: (context) => [
+                      '',
+                      SettingsEntity.AUTO_BILL_ALWAYS,
+                      SettingsEntity.AUTO_BILL_OPT_OUT,
+                      SettingsEntity.AUTO_BILL_OPT_IN,
+                      SettingsEntity.AUTO_BILL_OFF,
+                    ].map((type) => Text(localization.lookup(type))).toList(),
                     items: [
                       SettingsEntity.AUTO_BILL_ALWAYS,
                       SettingsEntity.AUTO_BILL_OPT_OUT,
@@ -365,19 +459,15 @@ class _SubscriptionEditState extends State<SubscriptionEdit>
                       SettingsEntity.AUTO_BILL_OFF,
                     ]
                         .map((value) => DropdownMenuItem(
-                              child: Text(localization.lookup(value)),
+                              child: AutobillDropdownMenuItem(type: value),
                               value: value,
                             ))
                         .toList(),
                   ),
-                ],
-              ),
-              FormCard(
-                children: [
                   DecoratedFormField(
                     label: localization.promoCode,
                     controller: _promoCodeController,
-                    onSavePressed: viewModel.onSavePressed,
+                    onSavePressed: _onSavePressed,
                     keyboardType: TextInputType.text,
                   ),
                   DiscountField(
@@ -391,14 +481,31 @@ class _SubscriptionEditState extends State<SubscriptionEdit>
                 ],
               ),
               FormCard(
+                children: [
+                  BoolDropdownButton(
+                      label: localization.registrationRequired,
+                      helpLabel: localization.registrationRequiredHelp,
+                      value: subscription.registrationRequired,
+                      onChanged: (value) => viewModel.onChanged(subscription
+                          .rebuild((b) => b..registrationRequired = value))),
+                  BoolDropdownButton(
+                      label: localization.useInventoryManagement,
+                      helpLabel: localization.useInventoryManagementHelp,
+                      value: subscription.useInventoryManagement,
+                      onChanged: (value) => viewModel.onChanged(subscription
+                          .rebuild((b) => b..useInventoryManagement = value))),
+                ],
+              ),
+              FormCard(
                 isLast: true,
                 children: [
                   DecoratedFormField(
                     label: localization.returnUrl,
                     controller: _returnUrlController,
                     keyboardType: TextInputType.url,
-                    onSavePressed: viewModel.onSavePressed,
+                    onSavePressed: _onSavePressed,
                   ),
+                  SizedBox(height: 16),
                   BoolDropdownButton(
                       label: localization.allowQueryOverrides,
                       value: subscription.allowQueryOverrides,
@@ -453,7 +560,7 @@ class _SubscriptionEditState extends State<SubscriptionEdit>
                       inputFormatters: [
                         FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
                       ],
-                      onSavePressed: viewModel.onSavePressed,
+                      onSavePressed: _onSavePressed,
                     ),
                 ],
               )
@@ -467,7 +574,7 @@ class _SubscriptionEditState extends State<SubscriptionEdit>
                   label: localization.webhookUrl,
                   controller: _postPurchaseUrlController,
                   keyboardType: TextInputType.url,
-                  onSavePressed: viewModel.onSavePressed,
+                  onSavePressed: _onSavePressed,
                 ),
                 AppDropdownButton<String>(
                   showBlank: true,
@@ -493,7 +600,7 @@ class _SubscriptionEditState extends State<SubscriptionEdit>
                       child: DecoratedFormField(
                         label: localization.headerKey,
                         controller: _postPurchaseHeaderKeyController,
-                        onSavePressed: viewModel.onSavePressed,
+                        onSavePressed: _onSavePressed,
                         onChanged: (value) => setState(() {}),
                         keyboardType: TextInputType.text,
                       ),
@@ -505,7 +612,7 @@ class _SubscriptionEditState extends State<SubscriptionEdit>
                       child: DecoratedFormField(
                         label: localization.headerValue,
                         controller: _postPurchaseHeaderValueController,
-                        onSavePressed: viewModel.onSavePressed,
+                        onSavePressed: _onSavePressed,
                         onChanged: (value) => setState(() {}),
                         keyboardType: TextInputType.text,
                       ),

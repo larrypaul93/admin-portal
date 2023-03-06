@@ -13,9 +13,9 @@ var memoizedDropdownExpenseCategoryList = memo5(
             BuiltList<String> expenseCategoryList,
             StaticState staticState,
             BuiltMap<String, UserEntity> userMap,
-            String clientId) =>
+            String categoryId) =>
         dropdownExpenseCategoriesSelector(expenseCategoryMap,
-            expenseCategoryList, staticState, userMap, clientId));
+            expenseCategoryList, staticState, userMap, categoryId));
 
 List<String> dropdownExpenseCategoriesSelector(
     BuiltMap<String, ExpenseCategoryEntity> expenseCategoryMap,
@@ -124,8 +124,25 @@ EntityStats expenseStatsForExpenseCategory(
   return EntityStats(countActive: countActive, countArchived: countArchived);
 }
 
-bool hasExpenseCategoryChanges(ExpenseCategoryEntity expenseCategory,
-        BuiltMap<String, ExpenseCategoryEntity> expenseCategoryMap) =>
-    expenseCategory.isNew
-        ? expenseCategory.isChanged
-        : expenseCategory != expenseCategoryMap[expenseCategory.id];
+var memoizedTransactionStatsForExpenseCategory = memo2((String companyGatewayId,
+        BuiltMap<String, TransactionEntity> transactionMap) =>
+    transactionStatsForExpenseCategory(companyGatewayId, transactionMap));
+
+EntityStats transactionStatsForExpenseCategory(
+  String categoryId,
+  BuiltMap<String, TransactionEntity> transactionMap,
+) {
+  int countActive = 0;
+  int countArchived = 0;
+  transactionMap.forEach((transactionId, transaction) {
+    if (transaction.categoryId == categoryId) {
+      if (transaction.isActive) {
+        countActive++;
+      } else if (transaction.isArchived) {
+        countArchived++;
+      }
+    }
+  });
+
+  return EntityStats(countActive: countActive, countArchived: countArchived);
+}

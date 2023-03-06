@@ -81,6 +81,7 @@ enum RecurringInvoiceReportFields {
   frequency,
   start_date,
   remaining_cycles,
+  due_on,
 }
 
 var memoizedRecurringInvoiceReport = memo8((
@@ -155,7 +156,8 @@ ReportResult recurringInvoiceReport(
     final contact =
         client.getContact(invoice.invitations.first.clientContactId);
 
-    if (invoice.isDeleted || client.isDeleted) {
+    if ((invoice.isDeleted && !userCompany.company.reportIncludeDeleted) ||
+        client.isDeleted) {
       continue;
     }
 
@@ -198,7 +200,7 @@ ReportResult recurringInvoiceReport(
           value = client.shippingAddress2;
           break;
         case RecurringInvoiceReportFields.status:
-          value = kInvoiceStatuses[invoice.calculatedStatusId] ?? '';
+          value = kRecurringInvoiceStatuses[invoice.calculatedStatusId] ?? '';
           break;
         case RecurringInvoiceReportFields.number:
           value = invoice.number;
@@ -373,6 +375,20 @@ ReportResult recurringInvoiceReport(
           break;
         case RecurringInvoiceReportFields.client_number:
           value = client.number;
+          break;
+        case RecurringInvoiceReportFields.due_on:
+          if (invoice.dueDateDays == 'terms') {
+            value = localization.usePaymentTerms;
+          } else if (invoice.dueDateDays == 'on_receipt') {
+            value = localization.dueOnReceipt;
+          } else if (invoice.dueDateDays == '1') {
+            value = localization.firstDayOfTheMonth;
+          } else if (invoice.dueDateDays == '31') {
+            value = localization.lastDayOfTheMonth;
+          } else {
+            value = localization.dayCount
+                .replaceFirst(':count', '${invoice.dueDateDays}');
+          }
           break;
       }
 

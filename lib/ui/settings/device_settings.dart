@@ -109,6 +109,7 @@ class _DeviceSettingsState extends State<DeviceSettings>
         focusNode: _focusNode,
         children: [
           ScrollableListView(
+            primary: true,
             children: <Widget>[
               FormCard(
                 children: <Widget>[
@@ -183,6 +184,30 @@ class _DeviceSettingsState extends State<DeviceSettings>
                     ),
                 ],
               ),
+              if (isDesktop(context))
+                FormCard(
+                  children: [
+                    SwitchListTile(
+                      title: Text(localization.showPdfPreview),
+                      subtitle: Text(localization.showPdfPreviewHelp),
+                      value: prefState.showPdfPreview,
+                      onChanged: (value) =>
+                          viewModel.onShowPdfChanged(context, value),
+                      activeColor: Theme.of(context).colorScheme.secondary,
+                      secondary: Icon(MdiIcons.filePdfBox),
+                    ),
+                    SizedBox(height: 10),
+                    BoolDropdownButton(
+                      label: localization.previewLocation,
+                      value: prefState.showPdfPreviewSideBySide,
+                      onChanged: (value) {
+                        viewModel.onShowPdfSideBySideChanged(context, value);
+                      },
+                      disabledLabel: localization.bottom,
+                      enabledLabel: localization.side,
+                    ),
+                  ],
+                ),
               FormCard(
                 children: <Widget>[
                   Padding(
@@ -243,15 +268,6 @@ class _DeviceSettingsState extends State<DeviceSettings>
                   ),
                   if (isDesktop(context)) ...[
                     SwitchListTile(
-                      title: Text(localization.enableTooltips),
-                      subtitle: Text(localization.enableTooltipsHelp),
-                      value: prefState.enableTooltips,
-                      onChanged: (value) =>
-                          viewModel.onEnableTooltipsChanged(context, value),
-                      activeColor: Theme.of(context).colorScheme.secondary,
-                      secondary: Icon(MdiIcons.tooltip),
-                    ),
-                    SwitchListTile(
                       title: Text(localization.enableTouchEvents),
                       subtitle: Text(localization.enableTouchEventsHelp),
                       value: prefState.enableTouchEvents,
@@ -261,24 +277,14 @@ class _DeviceSettingsState extends State<DeviceSettings>
                       secondary: Icon(Icons.touch_app),
                     ),
                     SwitchListTile(
-                      title: Text(localization.showPdfPreview),
-                      subtitle: Text(localization.showPdfPreviewHelp),
-                      value: prefState.showPdfPreview,
+                      title: Text(localization.enableTooltips),
+                      subtitle: Text(localization.enableTooltipsHelp),
+                      value: prefState.enableTooltips,
                       onChanged: (value) =>
-                          viewModel.onShowPdfChanged(context, value),
+                          viewModel.onEnableTooltipsChanged(context, value),
                       activeColor: Theme.of(context).colorScheme.secondary,
-                      secondary: Icon(MdiIcons.filePdfBox),
+                      secondary: Icon(MdiIcons.tooltip),
                     ),
-                    if (kIsWeb)
-                      SwitchListTile(
-                        title: Text(localization.alternatePdfViewer),
-                        subtitle: Text(localization.alternatePdfViewerHelp),
-                        value: prefState.enableJSPDF,
-                        onChanged: (value) =>
-                            viewModel.onEnableJSPDFChanged(context, value),
-                        activeColor: Theme.of(context).colorScheme.secondary,
-                        secondary: Icon(MdiIcons.filePdfBox),
-                      ),
                   ],
                   /*
                   SwitchListTile(
@@ -349,6 +355,7 @@ class _DeviceSettingsState extends State<DeviceSettings>
             ],
           ),
           ScrollableListView(
+            primary: true,
             children: [
               FormCard(children: [
                 SwitchListTile(

@@ -22,7 +22,7 @@ jobs:
       - uses: actions/checkout@v1
       - uses: subosito/flutter-action@v1
         with:
-          flutter-version: '3.0.4'
+          flutter-version: '3.3.0'
           #channel: 'stable'
       - name: Install Sentry
         run: |
@@ -88,6 +88,7 @@ jobs:
           cp lib/utils/oauth.dart.foss lib/utils/oauth.dart
           cp lib/utils/app_review.dart.foss lib/utils/app_review.dart
           cp lib/ui/app/upgrade_dialog.dart.foss lib/ui/app/upgrade_dialog.dart
+          cp lib/ui/app/pinput.dart.foss lib/ui/app/pinput.dart
           cp pubspec.foss.yaml pubspec.yaml 
           flutter pub get
 
@@ -115,7 +116,7 @@ jobs:
 #      - uses: actions/checkout@v1
 #      - uses: subosito/flutter-action@v1
 #        with:
-#          flutter-version: '3.0.4'
+#          flutter-version: '3.3.0'
 #      - name: Setup Flutter
 #        run: |
 #          flutter doctor -v

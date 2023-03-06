@@ -137,7 +137,9 @@ ReportResult purchaseOrderReport(
         vendor.getContact(purchaseOrder.invitations.first.vendorContactId);
     //final vendor = vendorMap[purchaseOrder.vendorId];
 
-    if (purchaseOrder.isDeleted || vendor.isDeleted) {
+    if ((purchaseOrder.isDeleted &&
+            !userCompany.company.reportIncludeDeleted) ||
+        vendor.isDeleted) {
       continue;
     }
 
@@ -300,8 +302,9 @@ ReportResult purchaseOrderReport(
           value = vendor.city;
           break;
         case PurchaseOrderReportFields.currency:
-          value =
-              staticState.currencyMap[vendor.currencyId]?.listDisplayName ?? '';
+          value = staticState.currencyMap[userCompany.company.currencyId]
+                  ?.listDisplayName ??
+              '';
           break;
         case PurchaseOrderReportFields.is_viewed:
           value = purchaseOrder.isViewed;

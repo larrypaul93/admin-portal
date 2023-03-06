@@ -66,6 +66,9 @@ List<String> filteredRecurringInvoicesSelector(
     } else if (filterEntityType == EntityType.group &&
         client.groupId != filterEntityId) {
       return false;
+    } else if (filterEntityType == EntityType.project &&
+        invoice.projectId != filterEntityId) {
+      return false;
     }
 
     if (!invoice.matchesStates(invoiceListState.stateFilters)) {
@@ -215,9 +218,3 @@ EntityStats recurringInvoiceStatsForSubscription(
 
   return EntityStats(countActive: countActive, countArchived: countArchived);
 }
-
-bool hasRecurringInvoiceChanges(InvoiceEntity recurringInvoice,
-        BuiltMap<String, InvoiceEntity> recurringInvoiceMap) =>
-    recurringInvoice.isNew
-        ? recurringInvoice.isChanged
-        : recurringInvoice != recurringInvoiceMap[recurringInvoice.id];

@@ -16,6 +16,7 @@ import 'package:invoiceninja_flutter/redux/app/app_state.dart';
 import 'package:invoiceninja_flutter/redux/product/product_selectors.dart';
 import 'package:invoiceninja_flutter/ui/app/entities/entity_actions_dialog.dart';
 import 'package:invoiceninja_flutter/utils/completers.dart';
+import 'package:invoiceninja_flutter/utils/dialogs.dart';
 import 'package:invoiceninja_flutter/utils/localization.dart';
 
 import '../document/document_actions.dart';
@@ -300,7 +301,8 @@ void handleProductAction(
     case EntityAction.restore:
       final message = productIds.length > 1
           ? localization.restoredProducts
-              .replaceFirst(':value', productIds.length.toString())
+              .replaceFirst(':value', ':count')
+              .replaceFirst(':count', productIds.length.toString())
           : localization.restoredProduct;
       store.dispatch(RestoreProductsRequest(
           snackBarCompleter<Null>(context, message), productIds));
@@ -308,7 +310,8 @@ void handleProductAction(
     case EntityAction.archive:
       final message = productIds.length > 1
           ? localization.archivedProducts
-              .replaceFirst(':value', productIds.length.toString())
+              .replaceFirst(':value', ':count')
+              .replaceFirst(':count', productIds.length.toString())
           : localization.archivedProduct;
       store.dispatch(ArchiveProductsRequest(
           snackBarCompleter<Null>(context, message), productIds));
@@ -316,7 +319,8 @@ void handleProductAction(
     case EntityAction.delete:
       final message = productIds.length > 1
           ? localization.deletedProducts
-              .replaceFirst(':value', productIds.length.toString())
+              .replaceFirst(':value', ':count')
+              .replaceFirst(':count', productIds.length.toString())
           : localization.deletedProduct;
       store.dispatch(DeleteProductsRequest(
           snackBarCompleter<Null>(context, message), productIds));
@@ -350,15 +354,20 @@ void handleProductAction(
           documentIds.add(document.id);
         }
       }
-      store.dispatch(
-        DownloadDocumentsRequest(
-          documentIds: documentIds,
-          completer: snackBarCompleter<Null>(
-            context,
-            localization.exportedData,
+      if (documentIds.isEmpty) {
+        showMessageDialog(
+            context: context, message: localization.noDocumentsToDownload);
+      } else {
+        store.dispatch(
+          DownloadDocumentsRequest(
+            documentIds: documentIds,
+            completer: snackBarCompleter<Null>(
+              context,
+              localization.exportedData,
+            ),
           ),
-        ),
-      );
+        );
+      }
       break;
     default:
       print('## ERROR: unhandled action $action in product_actions');

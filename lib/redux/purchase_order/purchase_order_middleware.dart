@@ -1,5 +1,6 @@
 // Flutter imports:
 import 'package:flutter/material.dart';
+import 'package:invoiceninja_flutter/constants.dart';
 import 'package:invoiceninja_flutter/data/repositories/purchase_order_repository.dart';
 import 'package:invoiceninja_flutter/redux/expense/expense_actions.dart';
 import 'package:invoiceninja_flutter/redux/purchase_order/purchase_order_actions.dart';
@@ -365,8 +366,8 @@ Middleware<AppState> _cancelPurchaseOrders(PurchaseOrderRepository repository) {
   return (Store<AppState> store, dynamic dynamicAction, NextDispatcher next) {
     final action = dynamicAction as CancelPurchaseOrdersRequest;
     repository
-        .bulkAction(store.state.credentials, action.purchaseOrderIds,
-            EntityAction.cancel)
+        .bulkAction(
+            store.state.credentials, action.purchaseOrderIds, EntityAction.back)
         .then((purchaseOrders) {
       store.dispatch(CancelPurchaseOrderSuccess(purchaseOrders));
       if (action.completer != null) {
@@ -419,7 +420,11 @@ Middleware<AppState> _savePurchaseOrder(PurchaseOrderRepository repository) {
           action.purchaseOrder.lineItems.where((item) => !item.isEmpty)));
 
     repository
-        .saveData(store.state.credentials, updatedPurchaseOrder, action.action)
+        .saveData(
+      store.state.credentials,
+      updatedPurchaseOrder,
+      action.action,
+    )
         .then((InvoiceEntity purchaseOrder) {
       if (action.purchaseOrder.isNew) {
         store.dispatch(AddPurchaseOrderSuccess(purchaseOrder));
@@ -526,11 +531,10 @@ Middleware<AppState> _loadPurchaseOrders(PurchaseOrderRepository repository) {
       action.page,
       state.createdAtLimit,
       //state.filterDeletedClients,
-      state.recordsPerPage,
     )
         .then((data) {
       store.dispatch(LoadPurchaseOrdersSuccess(data));
-      if (data.length == state.recordsPerPage) {
+      if (data.length == kMaxRecordsPerPage) {
         store.dispatch(LoadPurchaseOrders(
           completer: action.completer,
           page: action.page + 1,

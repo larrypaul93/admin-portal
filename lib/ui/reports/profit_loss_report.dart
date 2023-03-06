@@ -32,6 +32,8 @@ enum ProfitAndLossReportFields {
   profit,
   date,
   category,
+  currency,
+  transaction_reference,
 }
 
 var memoizedProfitAndLossReport = memo9((
@@ -165,6 +167,12 @@ ReportResult profitAndLossReport(
         case ProfitAndLossReportFields.category:
           value = '';
           break;
+        case ProfitAndLossReportFields.currency:
+          value = staticState.currencyMap[client.currencyId].name;
+          break;
+        case ProfitAndLossReportFields.transaction_reference:
+          value = payment.transactionReference;
+          break;
       }
 
       if (!ReportResult.matchField(
@@ -182,7 +190,7 @@ ReportResult profitAndLossReport(
         row.add(payment.getReportBool(value: value));
       } else if (value.runtimeType == double || value.runtimeType == int) {
         row.add(payment.getReportDouble(
-            value: value, currencyId: payment.currencyId));
+            value: value, currencyId: client.currencyId));
       } else {
         row.add(payment.getReportString(value: value));
       }
@@ -261,6 +269,12 @@ ReportResult profitAndLossReport(
           break;
         case ProfitAndLossReportFields.category:
           value = expenseCategoryMap[expense.categoryId]?.name ?? '';
+          break;
+        case ProfitAndLossReportFields.currency:
+          value = staticState.currencyMap[expense.currencyId].name;
+          break;
+        case ProfitAndLossReportFields.transaction_reference:
+          value = expense.transactionReference;
           break;
       }
 

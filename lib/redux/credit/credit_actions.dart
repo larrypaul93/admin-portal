@@ -1,5 +1,6 @@
 // Dart imports:
 import 'dart:async';
+import 'dart:convert';
 
 // Flutter imports:
 import 'package:flutter/material.dart';
@@ -607,7 +608,8 @@ Future handleCreditAction(
     case EntityAction.restore:
       final message = creditIds.length > 1
           ? localization.restoredCredits
-              .replaceFirst(':value', creditIds.length.toString())
+              .replaceFirst(':value', ':count')
+              .replaceFirst(':count', creditIds.length.toString())
           : localization.restoredCredit;
       store.dispatch(RestoreCreditsRequest(
           snackBarCompleter<Null>(context, message), creditIds));
@@ -615,7 +617,8 @@ Future handleCreditAction(
     case EntityAction.archive:
       final message = creditIds.length > 1
           ? localization.archivedCredits
-              .replaceFirst(':value', creditIds.length.toString())
+              .replaceFirst(':value', ':count')
+              .replaceFirst(':count', creditIds.length.toString())
           : localization.archivedCredit;
       store.dispatch(ArchiveCreditsRequest(
           snackBarCompleter<Null>(context, message), creditIds));
@@ -623,7 +626,8 @@ Future handleCreditAction(
     case EntityAction.delete:
       final message = creditIds.length > 1
           ? localization.deletedCredits
-              .replaceFirst(':value', creditIds.length.toString())
+              .replaceFirst(':value', ':count')
+              .replaceFirst(':count', creditIds.length.toString())
           : localization.deletedCredit;
       store.dispatch(DeleteCreditsRequest(
           snackBarCompleter<Null>(context, message), creditIds));
@@ -649,6 +653,16 @@ Future handleCreditAction(
       store.dispatch(StopSaving());
       await Printing.layoutPdf(onLayout: (_) => response.bodyBytes);
       break;
+    case EntityAction.bulkPrint:
+      store.dispatch(StartSaving());
+      final url = state.credentials.url + '/credits/bulk';
+      final data = json.encode(
+          {'ids': creditIds, 'action': EntityAction.bulkPrint.toApiParam()});
+      final http.Response response = await WebClient()
+          .post(url, state.credentials.token, data: data, rawResponse: true);
+      store.dispatch(StopSaving());
+      await Printing.layoutPdf(onLayout: (_) => response.bodyBytes);
+      break;
     case EntityAction.more:
       showEntityActionsDialog(
         entities: [credit],
@@ -661,15 +675,20 @@ Future handleCreditAction(
           documentIds.add(document.id);
         }
       }
-      store.dispatch(
-        DownloadDocumentsRequest(
-          documentIds: documentIds,
-          completer: snackBarCompleter<Null>(
-            context,
-            localization.exportedData,
+      if (documentIds.isEmpty) {
+        showMessageDialog(
+            context: context, message: localization.noDocumentsToDownload);
+      } else {
+        store.dispatch(
+          DownloadDocumentsRequest(
+            documentIds: documentIds,
+            completer: snackBarCompleter<Null>(
+              context,
+              localization.exportedData,
+            ),
           ),
-        ),
-      );
+        );
+      }
       break;
     default:
       print('## ERROR: unhandled action $action in credit_actions');

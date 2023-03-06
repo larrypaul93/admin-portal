@@ -126,16 +126,21 @@ VendorEntity _updateEditing(VendorEntity vendor, dynamic action) {
 }
 
 VendorEntity _addContact(VendorEntity vendor, AddVendorContact action) {
-  return vendor
-      .rebuild((b) => b..contacts.add(action.contact ?? VendorContactEntity()));
+  return vendor.rebuild((b) => b
+    ..contacts.add(action.contact ?? VendorContactEntity())
+    ..isChanged = true);
 }
 
 VendorEntity _removeContact(VendorEntity vendor, DeleteVendorContact action) {
-  return vendor.rebuild((b) => b..contacts.removeAt(action.index));
+  return vendor.rebuild((b) => b
+    ..contacts.removeAt(action.index)
+    ..isChanged = true);
 }
 
 VendorEntity _updateContact(VendorEntity vendor, UpdateVendorContact action) {
-  return vendor.rebuild((b) => b..contacts[action.index] = action.contact);
+  return vendor.rebuild((b) => b
+    ..contacts[action.index] = action.contact
+    ..isChanged = true);
 }
 
 final vendorListReducer = combineReducers<ListUIState>([
@@ -152,6 +157,10 @@ final vendorListReducer = combineReducers<ListUIState>([
       _removeFromListMultiselect),
   TypedReducer<ListUIState, ClearVendorMultiselect>(_clearListMultiselect),
   TypedReducer<ListUIState, ViewVendorList>(_viewVendorList),
+  TypedReducer<ListUIState, FilterByEntity>(
+      (state, action) => state.rebuild((b) => b
+        ..filter = null
+        ..filterClearedAt = DateTime.now().millisecondsSinceEpoch)),
 ]);
 
 ListUIState _viewVendorList(
@@ -287,16 +296,21 @@ VendorState _restoreVendorSuccess(
 VendorState _addVendor(VendorState vendorState, AddVendorSuccess action) {
   return vendorState.rebuild((b) => b
     ..map[action.vendor.id] = action.vendor
+        .rebuild((b) => b..loadedAt = DateTime.now().millisecondsSinceEpoch)
     ..list.add(action.vendor.id));
 }
 
 VendorState _updateVendor(VendorState vendorState, SaveVendorSuccess action) {
-  return vendorState.rebuild((b) => b..map[action.vendor.id] = action.vendor);
+  return vendorState.rebuild((b) => b
+    ..map[action.vendor.id] = action.vendor
+        .rebuild((b) => b..loadedAt = DateTime.now().millisecondsSinceEpoch));
 }
 
 VendorState _setLoadedVendor(
     VendorState vendorState, LoadVendorSuccess action) {
-  return vendorState.rebuild((b) => b..map[action.vendor.id] = action.vendor);
+  return vendorState.rebuild((b) => b
+    ..map[action.vendor.id] = action.vendor
+        .rebuild((b) => b..loadedAt = DateTime.now().millisecondsSinceEpoch));
 }
 
 VendorState _setLoadedVendors(

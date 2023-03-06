@@ -197,7 +197,8 @@ abstract class CalculateInvoiceTotal {
     return map;
   }
 
-  double getTaxable() {
+  // double getTaxable() {
+  double getTaxable(int precision) {
     double total = 0;
 
     lineItems.forEach((invoiceItem) {
@@ -207,14 +208,14 @@ abstract class CalculateInvoiceTotal {
         if (isAmountDiscount) {
           lineTotal -= invoiceItem.discount;
         } else {
-          lineTotal -= lineTotal * invoiceItem.discount / 100;
+          lineTotal -= round(lineTotal * invoiceItem.discount / 100, precision);
         }
       }
 
       total += lineTotal;
     });
 
-    if (discount > 0) {
+    if (discount != 0) {
       if (isAmountDiscount) {
         total -= discount;
       } else {
@@ -282,6 +283,16 @@ abstract class CalculateInvoiceTotal {
       final double taxRate3 = round(item.taxRate3, 3);
       double lineTotal = qty * cost;
 
+      if (discount != 0) {
+        if (isAmountDiscount) {
+          if (total != 0) {
+            lineTotal -= round(lineTotal / total * discount, precision);
+          }
+        } else {
+          lineTotal -= round(lineTotal * discount / 100, precision);
+        }
+      }
+
       if (itemDiscount != 0) {
         if (isAmountDiscount) {
           lineTotal -= itemDiscount;
@@ -290,13 +301,6 @@ abstract class CalculateInvoiceTotal {
         }
       }
 
-      if (discount != 0) {
-        if (isAmountDiscount) {
-          if (total != 0) {
-            lineTotal -= round(lineTotal / total * discount, precision);
-          }
-        }
-      }
       if (taxRate1 != 0) {
         itemTax += round(lineTotal * taxRate1 / 100, precision);
       }

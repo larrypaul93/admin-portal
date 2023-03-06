@@ -123,19 +123,29 @@ class _TaskSettingsState extends State<TaskSettings> {
                 onChanged: (value) => viewModel.onCompanyChanged(
                     company.rebuild((b) => b..showTaskEndDate = value)),
               ),
+              SwitchListTile(
+                activeColor: Theme.of(context).colorScheme.secondary,
+                title: Text(localization.showTasksTable),
+                value: company.showTasksTable,
+                subtitle: Text(localization.showTasksTableHelp),
+                onChanged: (value) => viewModel.onCompanyChanged(
+                    company.rebuild((b) => b..showTasksTable = value)),
+              ),
             ]
           ]),
+          if (!viewModel.state.settingsUIState.isFiltered)
+            Padding(
+              padding:
+                  const EdgeInsets.only(top: 0, bottom: 8, right: 20, left: 20),
+              child: AppButton(
+                iconData: Icons.settings,
+                label: localization.configureStatuses.toUpperCase(),
+                onPressed: () => viewModel.onConfigureStatusesPressed(context),
+              ),
+            ),
           FormCard(
             children: <Widget>[
               if (!viewModel.state.settingsUIState.isFiltered) ...[
-                SwitchListTile(
-                  activeColor: Theme.of(context).colorScheme.secondary,
-                  title: Text(localization.showTasksTable),
-                  value: company.showTasksTable,
-                  subtitle: Text(localization.showTasksTableHelp),
-                  onChanged: (value) => viewModel.onCompanyChanged(
-                      company.rebuild((b) => b..showTasksTable = value)),
-                ),
                 SwitchListTile(
                   activeColor: Theme.of(context).colorScheme.secondary,
                   title: Text(localization.invoiceTaskDatelog),
@@ -154,24 +164,45 @@ class _TaskSettingsState extends State<TaskSettings> {
                 ),
                 SwitchListTile(
                   activeColor: Theme.of(context).colorScheme.secondary,
+                  title: Text(localization.invoiceTaskHours),
+                  value: company.invoiceTaskHours,
+                  subtitle: Text(localization.invoiceTaskHoursHelp),
+                  onChanged: (value) => viewModel.onCompanyChanged(
+                      company.rebuild((b) => b..invoiceTaskHours = value)),
+                ),
+                SwitchListTile(
+                  activeColor: Theme.of(context).colorScheme.secondary,
                   title: Text(localization.invoiceTaskProject),
                   value: company.invoiceTaskProject,
                   subtitle: Text(localization.invoiceTaskProjectHelp),
                   onChanged: (value) => viewModel.onCompanyChanged(
                       company.rebuild((b) => b..invoiceTaskProject = value)),
                 ),
-                SwitchListTile(
-                  activeColor: Theme.of(context).colorScheme.secondary,
-                  title: Text(localization.addDocumentsToInvoice),
-                  value: company.invoiceTaskDocuments ?? false,
-                  subtitle: Text(localization.addDocumentsToInvoiceHelp),
-                  onChanged: (value) => viewModel.onCompanyChanged(
-                      company.rebuild((b) => b..invoiceTaskDocuments = value)),
-                ),
               ],
             ],
           ),
           FormCard(
+            children: [
+              SwitchListTile(
+                activeColor: Theme.of(context).colorScheme.secondary,
+                title: Text(localization.lockInvoicedTasks),
+                value: company.invoiceTaskLock ?? false,
+                subtitle: Text(localization.lockInvoicedTasksHelp),
+                onChanged: (value) => viewModel.onCompanyChanged(
+                    company.rebuild((b) => b..invoiceTaskLock = value)),
+              ),
+              SwitchListTile(
+                activeColor: Theme.of(context).colorScheme.secondary,
+                title: Text(localization.addDocumentsToInvoice),
+                value: company.invoiceTaskDocuments ?? false,
+                subtitle: Text(localization.addDocumentsToInvoiceHelp),
+                onChanged: (value) => viewModel.onCompanyChanged(
+                    company.rebuild((b) => b..invoiceTaskDocuments = value)),
+              ),
+            ],
+          ),
+          FormCard(
+            isLast: true,
             children: [
               BoolDropdownButton(
                 label: localization.clientPortal,
@@ -180,6 +211,7 @@ class _TaskSettingsState extends State<TaskSettings> {
                 onChanged: (value) => viewModel.onSettingsChanged(
                     settings.rebuild((b) => b..enablePortalTasks = value)),
               ),
+              SizedBox(height: 10),
               AppDropdownButton<String>(
                 labelText: localization.tasksShownInPortal,
                 value: settings.clientPortalTasks,
@@ -202,16 +234,6 @@ class _TaskSettingsState extends State<TaskSettings> {
               ),
             ],
           ),
-          if (!viewModel.state.settingsUIState.isFiltered)
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0),
-              child: AppButton(
-                iconData: Icons.settings,
-                label: localization.configureStatuses.toUpperCase(),
-                onPressed: () => viewModel.onConfigureStatusesPressed(context),
-              ),
-            ),
-          SizedBox(height: 20),
         ],
       ),
     );

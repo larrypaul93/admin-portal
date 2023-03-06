@@ -4,6 +4,7 @@ import 'package:built_value/built_value.dart';
 import 'package:built_value/serializer.dart';
 import 'package:collection/collection.dart';
 import 'package:diacritic/diacritic.dart';
+import 'package:invoiceninja_flutter/constants.dart';
 
 // Project imports:
 import 'package:invoiceninja_flutter/data/models/models.dart';
@@ -77,6 +78,7 @@ class VendorFields {
   static const String contacts = 'contacts';
   static const String cityStatePostal = 'city_state_postal';
   static const String postalCityState = 'postal_city_state';
+  static const String postalCity = 'postal_city';
 }
 
 abstract class VendorEntity extends Object
@@ -133,6 +135,21 @@ abstract class VendorEntity extends Object
     ..documents.clear()
     ..isChanged = false
     ..isDeleted = false);
+
+  @nullable
+  @BuiltValueField(compare: false)
+  int get loadedAt;
+
+  bool get isLoaded => loadedAt != null && loadedAt > 0;
+
+  bool get isStale {
+    if (!isLoaded) {
+      return true;
+    }
+
+    return DateTime.now().millisecondsSinceEpoch - loadedAt >
+        kMillisecondsToRefreshActivities;
+  }
 
   @override
   EntityType get entityType {
@@ -450,8 +467,8 @@ abstract class VendorEntity extends Object
   }
 
   List<VendorContactEntity> get emailContacts {
-    //final list = contacts.where((contact) => contact.sendEmail).toList();
-    final list = contacts.where((contact) => true).toList();
+    final list = contacts.where((contact) => contact.sendEmail).toList();
+
     return list.isEmpty ? [primaryContact] : list;
   }
 
@@ -497,6 +514,7 @@ abstract class VendorContactEntity extends Object
       updatedAt: 0,
       archivedAt: 0,
       isDeleted: false,
+      sendEmail: true,
       createdUserId: '',
       createdAt: 0,
       assignedUserId: '',
@@ -529,6 +547,9 @@ abstract class VendorContactEntity extends Object
 
   @BuiltValueField(wireName: 'is_primary')
   bool get isPrimary;
+
+  @BuiltValueField(wireName: 'send_email')
+  bool get sendEmail;
 
   String get phone;
 
@@ -576,29 +597,26 @@ abstract class VendorContactEntity extends Object
 
   @override
   bool matchesFilter(String filter) {
-    if (filter == null || filter.isEmpty) {
-      return true;
-    }
-
-    return false;
+    return matchesStrings(
+      haystacks: [
+        '$firstName $lastName',
+        email,
+        phone,
+      ],
+      needle: filter,
+    );
   }
 
   @override
   String matchesFilterValue(String filter) {
-    if (filter == null || filter.isEmpty) {
-      return null;
-    }
-
-    filter = filter.toLowerCase();
-    if (fullName.toLowerCase().contains(filter)) {
-      return fullName;
-    } else if (email.toLowerCase().contains(filter)) {
-      return email;
-    } else if (phone.toLowerCase().contains(filter)) {
-      return phone;
-    }
-
-    return null;
+    return matchesStringsValue(
+      haystacks: [
+        '$firstName $lastName',
+        email,
+        phone,
+      ],
+      needle: filter,
+    );
   }
 
   @override
@@ -613,6 +631,7 @@ abstract class VendorContactEntity extends Object
   FormatNumberType get listDisplayAmountType => FormatNumberType.money;
 
   static void _initializeBuilder(VendorContactEntityBuilder builder) => builder
+    ..sendEmail = true
     ..link = ''
     ..customValue1 = ''
     ..customValue2 = ''

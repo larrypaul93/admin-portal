@@ -292,6 +292,13 @@ class _$InvoiceEntitySerializer implements StructuredSerializer<InvoiceEntity> {
       serializers.serialize(object.id, specifiedType: const FullType(String)),
     ];
     Object value;
+    value = object.idempotencyKey;
+    if (value != null) {
+      result
+        ..add('idempotency_key')
+        ..add(serializers.serialize(value,
+            specifiedType: const FullType(String)));
+    }
     value = object.autoBill;
     if (value != null) {
       result
@@ -467,6 +474,10 @@ class _$InvoiceEntitySerializer implements StructuredSerializer<InvoiceEntity> {
       iterator.moveNext();
       final Object value = iterator.current;
       switch (key) {
+        case 'idempotency_key':
+          result.idempotencyKey = serializers.deserialize(value,
+              specifiedType: const FullType(String)) as String;
+          break;
         case 'amount':
           result.amount = serializers.deserialize(value,
               specifiedType: const FullType(double)) as double;
@@ -1327,7 +1338,11 @@ class _$InvoiceListResponse extends InvoiceListResponse {
   int __hashCode;
   @override
   int get hashCode {
-    return __hashCode ??= $jf($jc(0, data.hashCode));
+    if (__hashCode != null) return __hashCode;
+    var _$hash = 0;
+    _$hash = $jc(_$hash, data.hashCode);
+    _$hash = $jf(_$hash);
+    return __hashCode ??= _$hash;
   }
 
   @override
@@ -1422,7 +1437,11 @@ class _$InvoiceItemResponse extends InvoiceItemResponse {
   int __hashCode;
   @override
   int get hashCode {
-    return __hashCode ??= $jf($jc(0, data.hashCode));
+    if (__hashCode != null) return __hashCode;
+    var _$hash = 0;
+    _$hash = $jc(_$hash, data.hashCode);
+    _$hash = $jf(_$hash);
+    return __hashCode ??= _$hash;
   }
 
   @override
@@ -1487,6 +1506,8 @@ class InvoiceItemResponseBuilder
 }
 
 class _$InvoiceEntity extends InvoiceEntity {
+  @override
+  final String idempotencyKey;
   @override
   final double amount;
   @override
@@ -1622,6 +1643,10 @@ class _$InvoiceEntity extends InvoiceEntity {
   @override
   final BuiltList<ActivityEntity> activities;
   @override
+  final bool saveDefaultTerms;
+  @override
+  final bool saveDefaultFooter;
+  @override
   final int loadedAt;
   @override
   final bool isChanged;
@@ -1646,7 +1671,8 @@ class _$InvoiceEntity extends InvoiceEntity {
       (new InvoiceEntityBuilder()..update(updates))._build();
 
   _$InvoiceEntity._(
-      {this.amount,
+      {this.idempotencyKey,
+      this.amount,
       this.balance,
       this.paidToDate,
       this.clientId,
@@ -1713,6 +1739,8 @@ class _$InvoiceEntity extends InvoiceEntity {
       this.invitations,
       this.documents,
       this.activities,
+      this.saveDefaultTerms,
+      this.saveDefaultFooter,
       this.loadedAt,
       this.isChanged,
       this.createdAt,
@@ -1817,6 +1845,10 @@ class _$InvoiceEntity extends InvoiceEntity {
     BuiltValueNullFieldError.checkNotNull(
         activities, r'InvoiceEntity', 'activities');
     BuiltValueNullFieldError.checkNotNull(
+        saveDefaultTerms, r'InvoiceEntity', 'saveDefaultTerms');
+    BuiltValueNullFieldError.checkNotNull(
+        saveDefaultFooter, r'InvoiceEntity', 'saveDefaultFooter');
+    BuiltValueNullFieldError.checkNotNull(
         createdAt, r'InvoiceEntity', 'createdAt');
     BuiltValueNullFieldError.checkNotNull(
         updatedAt, r'InvoiceEntity', 'updatedAt');
@@ -1836,6 +1868,7 @@ class _$InvoiceEntity extends InvoiceEntity {
   bool operator ==(Object other) {
     if (identical(other, this)) return true;
     return other is InvoiceEntity &&
+        idempotencyKey == other.idempotencyKey &&
         amount == other.amount &&
         balance == other.balance &&
         paidToDate == other.paidToDate &&
@@ -1902,6 +1935,8 @@ class _$InvoiceEntity extends InvoiceEntity {
         lineItems == other.lineItems &&
         invitations == other.invitations &&
         documents == other.documents &&
+        saveDefaultTerms == other.saveDefaultTerms &&
+        saveDefaultFooter == other.saveDefaultFooter &&
         isChanged == other.isChanged &&
         createdAt == other.createdAt &&
         updatedAt == other.updatedAt &&
@@ -1916,49 +1951,94 @@ class _$InvoiceEntity extends InvoiceEntity {
   int __hashCode;
   @override
   int get hashCode {
-    return __hashCode ??= $jf($jc(
-        $jc(
-            $jc(
-                $jc(
-                    $jc(
-                        $jc(
-                            $jc(
-                                $jc(
-                                    $jc(
-                                        $jc(
-                                            $jc(
-                                                $jc(
-                                                    $jc(
-                                                        $jc(
-                                                            $jc(
-                                                                $jc(
-                                                                    $jc(
-                                                                        $jc(
-                                                                            $jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc(0, amount.hashCode), balance.hashCode), paidToDate.hashCode), clientId.hashCode), projectId.hashCode), expenseId.hashCode), vendorId.hashCode), subscriptionId.hashCode), statusId.hashCode), number.hashCode), discount.hashCode), poNumber.hashCode), date.hashCode), dueDate.hashCode), publicNotes.hashCode), privateNotes.hashCode), terms.hashCode), footer.hashCode), designId.hashCode), usesInclusiveTaxes.hashCode), taxName1.hashCode), taxRate1.hashCode), taxName2.hashCode), taxRate2.hashCode), taxName3.hashCode), taxRate3.hashCode), isAmountDiscount.hashCode), partial.hashCode), taxAmount.hashCode), partialDueDate.hashCode), autoBill.hashCode), customValue1.hashCode), customValue2.hashCode), customValue3.hashCode), customValue4.hashCode), customSurcharge1.hashCode), customSurcharge2.hashCode), customSurcharge3.hashCode), customSurcharge4.hashCode), customTaxes1.hashCode), customTaxes2.hashCode), customTaxes3.hashCode), customTaxes4.hashCode), exchangeRate.hashCode), reminder1Sent.hashCode), reminder2Sent.hashCode), reminder3Sent.hashCode), reminderLastSent.hashCode), frequencyId.hashCode), lastSentDate.hashCode), nextSendDate.hashCode), remainingCycles.hashCode), dueDateDays.hashCode), invoiceId.hashCode), recurringId.hashCode), autoBillEnabled.hashCode),
-                                                                                serviceReportId.hashCode),
-                                                                            attachPdf.hashCode),
-                                                                        requiredSignature.hashCode),
-                                                                    interest.hashCode),
-                                                                interestPaid.hashCode),
-                                                            filename.hashCode),
-                                                        recurringDates.hashCode),
-                                                    lineItems.hashCode),
-                                                invitations.hashCode),
-                                            documents.hashCode),
-                                        isChanged.hashCode),
-                                    createdAt.hashCode),
-                                updatedAt.hashCode),
-                            archivedAt.hashCode),
-                        isDeleted.hashCode),
-                    createdUserId.hashCode),
-                assignedUserId.hashCode),
-            entityType.hashCode),
-        id.hashCode));
+    if (__hashCode != null) return __hashCode;
+    var _$hash = 0;
+    _$hash = $jc(_$hash, idempotencyKey.hashCode);
+    _$hash = $jc(_$hash, amount.hashCode);
+    _$hash = $jc(_$hash, balance.hashCode);
+    _$hash = $jc(_$hash, paidToDate.hashCode);
+    _$hash = $jc(_$hash, clientId.hashCode);
+    _$hash = $jc(_$hash, projectId.hashCode);
+    _$hash = $jc(_$hash, expenseId.hashCode);
+    _$hash = $jc(_$hash, vendorId.hashCode);
+    _$hash = $jc(_$hash, subscriptionId.hashCode);
+    _$hash = $jc(_$hash, statusId.hashCode);
+    _$hash = $jc(_$hash, number.hashCode);
+    _$hash = $jc(_$hash, discount.hashCode);
+    _$hash = $jc(_$hash, poNumber.hashCode);
+    _$hash = $jc(_$hash, date.hashCode);
+    _$hash = $jc(_$hash, dueDate.hashCode);
+    _$hash = $jc(_$hash, publicNotes.hashCode);
+    _$hash = $jc(_$hash, privateNotes.hashCode);
+    _$hash = $jc(_$hash, terms.hashCode);
+    _$hash = $jc(_$hash, footer.hashCode);
+    _$hash = $jc(_$hash, designId.hashCode);
+    _$hash = $jc(_$hash, usesInclusiveTaxes.hashCode);
+    _$hash = $jc(_$hash, taxName1.hashCode);
+    _$hash = $jc(_$hash, taxRate1.hashCode);
+    _$hash = $jc(_$hash, taxName2.hashCode);
+    _$hash = $jc(_$hash, taxRate2.hashCode);
+    _$hash = $jc(_$hash, taxName3.hashCode);
+    _$hash = $jc(_$hash, taxRate3.hashCode);
+    _$hash = $jc(_$hash, isAmountDiscount.hashCode);
+    _$hash = $jc(_$hash, partial.hashCode);
+    _$hash = $jc(_$hash, taxAmount.hashCode);
+    _$hash = $jc(_$hash, partialDueDate.hashCode);
+    _$hash = $jc(_$hash, autoBill.hashCode);
+    _$hash = $jc(_$hash, customValue1.hashCode);
+    _$hash = $jc(_$hash, customValue2.hashCode);
+    _$hash = $jc(_$hash, customValue3.hashCode);
+    _$hash = $jc(_$hash, customValue4.hashCode);
+    _$hash = $jc(_$hash, customSurcharge1.hashCode);
+    _$hash = $jc(_$hash, customSurcharge2.hashCode);
+    _$hash = $jc(_$hash, customSurcharge3.hashCode);
+    _$hash = $jc(_$hash, customSurcharge4.hashCode);
+    _$hash = $jc(_$hash, customTaxes1.hashCode);
+    _$hash = $jc(_$hash, customTaxes2.hashCode);
+    _$hash = $jc(_$hash, customTaxes3.hashCode);
+    _$hash = $jc(_$hash, customTaxes4.hashCode);
+    _$hash = $jc(_$hash, exchangeRate.hashCode);
+    _$hash = $jc(_$hash, reminder1Sent.hashCode);
+    _$hash = $jc(_$hash, reminder2Sent.hashCode);
+    _$hash = $jc(_$hash, reminder3Sent.hashCode);
+    _$hash = $jc(_$hash, reminderLastSent.hashCode);
+    _$hash = $jc(_$hash, frequencyId.hashCode);
+    _$hash = $jc(_$hash, lastSentDate.hashCode);
+    _$hash = $jc(_$hash, nextSendDate.hashCode);
+    _$hash = $jc(_$hash, remainingCycles.hashCode);
+    _$hash = $jc(_$hash, dueDateDays.hashCode);
+    _$hash = $jc(_$hash, invoiceId.hashCode);
+    _$hash = $jc(_$hash, recurringId.hashCode);
+    _$hash = $jc(_$hash, autoBillEnabled.hashCode);
+    _$hash = $jc(_$hash, serviceReportId.hashCode);
+    _$hash = $jc(_$hash, attachPdf.hashCode);
+    _$hash = $jc(_$hash, requiredSignature.hashCode);
+    _$hash = $jc(_$hash, interest.hashCode);
+    _$hash = $jc(_$hash, interestPaid.hashCode);
+    _$hash = $jc(_$hash, filename.hashCode);
+    _$hash = $jc(_$hash, recurringDates.hashCode);
+    _$hash = $jc(_$hash, lineItems.hashCode);
+    _$hash = $jc(_$hash, invitations.hashCode);
+    _$hash = $jc(_$hash, documents.hashCode);
+    _$hash = $jc(_$hash, saveDefaultTerms.hashCode);
+    _$hash = $jc(_$hash, saveDefaultFooter.hashCode);
+    _$hash = $jc(_$hash, isChanged.hashCode);
+    _$hash = $jc(_$hash, createdAt.hashCode);
+    _$hash = $jc(_$hash, updatedAt.hashCode);
+    _$hash = $jc(_$hash, archivedAt.hashCode);
+    _$hash = $jc(_$hash, isDeleted.hashCode);
+    _$hash = $jc(_$hash, createdUserId.hashCode);
+    _$hash = $jc(_$hash, assignedUserId.hashCode);
+    _$hash = $jc(_$hash, entityType.hashCode);
+    _$hash = $jc(_$hash, id.hashCode);
+    _$hash = $jf(_$hash);
+    return __hashCode ??= _$hash;
   }
 
   @override
   String toString() {
     return (newBuiltValueToStringHelper(r'InvoiceEntity')
+          ..add('idempotencyKey', idempotencyKey)
           ..add('amount', amount)
           ..add('balance', balance)
           ..add('paidToDate', paidToDate)
@@ -2026,6 +2106,8 @@ class _$InvoiceEntity extends InvoiceEntity {
           ..add('invitations', invitations)
           ..add('documents', documents)
           ..add('activities', activities)
+          ..add('saveDefaultTerms', saveDefaultTerms)
+          ..add('saveDefaultFooter', saveDefaultFooter)
           ..add('loadedAt', loadedAt)
           ..add('isChanged', isChanged)
           ..add('createdAt', createdAt)
@@ -2043,6 +2125,11 @@ class _$InvoiceEntity extends InvoiceEntity {
 class InvoiceEntityBuilder
     implements Builder<InvoiceEntity, InvoiceEntityBuilder> {
   _$InvoiceEntity _$v;
+
+  String _idempotencyKey;
+  String get idempotencyKey => _$this._idempotencyKey;
+  set idempotencyKey(String idempotencyKey) =>
+      _$this._idempotencyKey = idempotencyKey;
 
   double _amount;
   double get amount => _$this._amount;
@@ -2338,6 +2425,16 @@ class InvoiceEntityBuilder
   set activities(ListBuilder<ActivityEntity> activities) =>
       _$this._activities = activities;
 
+  bool _saveDefaultTerms;
+  bool get saveDefaultTerms => _$this._saveDefaultTerms;
+  set saveDefaultTerms(bool saveDefaultTerms) =>
+      _$this._saveDefaultTerms = saveDefaultTerms;
+
+  bool _saveDefaultFooter;
+  bool get saveDefaultFooter => _$this._saveDefaultFooter;
+  set saveDefaultFooter(bool saveDefaultFooter) =>
+      _$this._saveDefaultFooter = saveDefaultFooter;
+
   int _loadedAt;
   int get loadedAt => _$this._loadedAt;
   set loadedAt(int loadedAt) => _$this._loadedAt = loadedAt;
@@ -2387,6 +2484,7 @@ class InvoiceEntityBuilder
   InvoiceEntityBuilder get _$this {
     final $v = _$v;
     if ($v != null) {
+      _idempotencyKey = $v.idempotencyKey;
       _amount = $v.amount;
       _balance = $v.balance;
       _paidToDate = $v.paidToDate;
@@ -2454,6 +2552,8 @@ class InvoiceEntityBuilder
       _invitations = $v.invitations.toBuilder();
       _documents = $v.documents.toBuilder();
       _activities = $v.activities.toBuilder();
+      _saveDefaultTerms = $v.saveDefaultTerms;
+      _saveDefaultFooter = $v.saveDefaultFooter;
       _loadedAt = $v.loadedAt;
       _isChanged = $v.isChanged;
       _createdAt = $v.createdAt;
@@ -2488,6 +2588,7 @@ class InvoiceEntityBuilder
     try {
       _$result = _$v ??
           new _$InvoiceEntity._(
+              idempotencyKey: idempotencyKey,
               amount: BuiltValueNullFieldError.checkNotNull(
                   amount, r'InvoiceEntity', 'amount'),
               balance: BuiltValueNullFieldError.checkNotNull(
@@ -2563,6 +2664,8 @@ class InvoiceEntityBuilder
               invitations: invitations.build(),
               documents: documents.build(),
               activities: activities.build(),
+              saveDefaultTerms: BuiltValueNullFieldError.checkNotNull(saveDefaultTerms, r'InvoiceEntity', 'saveDefaultTerms'),
+              saveDefaultFooter: BuiltValueNullFieldError.checkNotNull(saveDefaultFooter, r'InvoiceEntity', 'saveDefaultFooter'),
               loadedAt: loadedAt,
               isChanged: isChanged,
               createdAt: BuiltValueNullFieldError.checkNotNull(createdAt, r'InvoiceEntity', 'createdAt'),
@@ -2742,44 +2845,32 @@ class _$InvoiceItemEntity extends InvoiceItemEntity {
   int __hashCode;
   @override
   int get hashCode {
-    return __hashCode ??= $jf($jc(
-        $jc(
-            $jc(
-                $jc(
-                    $jc(
-                        $jc(
-                            $jc(
-                                $jc(
-                                    $jc(
-                                        $jc(
-                                            $jc(
-                                                $jc(
-                                                    $jc(
-                                                        $jc(
-                                                            $jc(
-                                                                $jc(
-                                                                    $jc(
-                                                                        $jc(
-                                                                            $jc($jc($jc($jc(0, productKey.hashCode), notes.hashCode), cost.hashCode),
-                                                                                sku.hashCode),
-                                                                            serviced.hashCode),
-                                                                        productCost.hashCode),
-                                                                    quantity.hashCode),
-                                                                taxName1.hashCode),
-                                                            taxRate1.hashCode),
-                                                        taxName2.hashCode),
-                                                    taxRate2.hashCode),
-                                                taxName3.hashCode),
-                                            taxRate3.hashCode),
-                                        typeId.hashCode),
-                                    customValue1.hashCode),
-                                customValue2.hashCode),
-                            customValue3.hashCode),
-                        customValue4.hashCode),
-                    discount.hashCode),
-                taskId.hashCode),
-            expenseId.hashCode),
-        createdAt.hashCode));
+    if (__hashCode != null) return __hashCode;
+    var _$hash = 0;
+    _$hash = $jc(_$hash, productKey.hashCode);
+    _$hash = $jc(_$hash, notes.hashCode);
+    _$hash = $jc(_$hash, cost.hashCode);
+    _$hash = $jc(_$hash, sku.hashCode);
+    _$hash = $jc(_$hash, serviced.hashCode);
+    _$hash = $jc(_$hash, productCost.hashCode);
+    _$hash = $jc(_$hash, quantity.hashCode);
+    _$hash = $jc(_$hash, taxName1.hashCode);
+    _$hash = $jc(_$hash, taxRate1.hashCode);
+    _$hash = $jc(_$hash, taxName2.hashCode);
+    _$hash = $jc(_$hash, taxRate2.hashCode);
+    _$hash = $jc(_$hash, taxName3.hashCode);
+    _$hash = $jc(_$hash, taxRate3.hashCode);
+    _$hash = $jc(_$hash, typeId.hashCode);
+    _$hash = $jc(_$hash, customValue1.hashCode);
+    _$hash = $jc(_$hash, customValue2.hashCode);
+    _$hash = $jc(_$hash, customValue3.hashCode);
+    _$hash = $jc(_$hash, customValue4.hashCode);
+    _$hash = $jc(_$hash, discount.hashCode);
+    _$hash = $jc(_$hash, taskId.hashCode);
+    _$hash = $jc(_$hash, expenseId.hashCode);
+    _$hash = $jc(_$hash, createdAt.hashCode);
+    _$hash = $jf(_$hash);
+    return __hashCode ??= _$hash;
   }
 
   @override
@@ -3100,30 +3191,23 @@ class _$InvitationEntity extends InvitationEntity {
   int __hashCode;
   @override
   int get hashCode {
-    return __hashCode ??= $jf($jc(
-        $jc(
-            $jc(
-                $jc(
-                    $jc(
-                        $jc(
-                            $jc(
-                                $jc(
-                                    $jc(
-                                        $jc(
-                                            $jc(
-                                                $jc($jc(0, key.hashCode),
-                                                    link.hashCode),
-                                                clientContactId.hashCode),
-                                            vendorContactId.hashCode),
-                                        isChanged.hashCode),
-                                    createdAt.hashCode),
-                                updatedAt.hashCode),
-                            archivedAt.hashCode),
-                        isDeleted.hashCode),
-                    createdUserId.hashCode),
-                assignedUserId.hashCode),
-            entityType.hashCode),
-        id.hashCode));
+    if (__hashCode != null) return __hashCode;
+    var _$hash = 0;
+    _$hash = $jc(_$hash, key.hashCode);
+    _$hash = $jc(_$hash, link.hashCode);
+    _$hash = $jc(_$hash, clientContactId.hashCode);
+    _$hash = $jc(_$hash, vendorContactId.hashCode);
+    _$hash = $jc(_$hash, isChanged.hashCode);
+    _$hash = $jc(_$hash, createdAt.hashCode);
+    _$hash = $jc(_$hash, updatedAt.hashCode);
+    _$hash = $jc(_$hash, archivedAt.hashCode);
+    _$hash = $jc(_$hash, isDeleted.hashCode);
+    _$hash = $jc(_$hash, createdUserId.hashCode);
+    _$hash = $jc(_$hash, assignedUserId.hashCode);
+    _$hash = $jc(_$hash, entityType.hashCode);
+    _$hash = $jc(_$hash, id.hashCode);
+    _$hash = $jf(_$hash);
+    return __hashCode ??= _$hash;
   }
 
   @override
@@ -3340,7 +3424,12 @@ class _$InvoiceScheduleEntity extends InvoiceScheduleEntity {
   int __hashCode;
   @override
   int get hashCode {
-    return __hashCode ??= $jf($jc($jc(0, sendDate.hashCode), dueDate.hashCode));
+    if (__hashCode != null) return __hashCode;
+    var _$hash = 0;
+    _$hash = $jc(_$hash, sendDate.hashCode);
+    _$hash = $jc(_$hash, dueDate.hashCode);
+    _$hash = $jf(_$hash);
+    return __hashCode ??= _$hash;
   }
 
   @override
@@ -3450,9 +3539,14 @@ class _$InvoiceHistoryEntity extends InvoiceHistoryEntity {
   int __hashCode;
   @override
   int get hashCode {
-    return __hashCode ??= $jf($jc(
-        $jc($jc($jc(0, id.hashCode), activityId.hashCode), createdAt.hashCode),
-        amount.hashCode));
+    if (__hashCode != null) return __hashCode;
+    var _$hash = 0;
+    _$hash = $jc(_$hash, id.hashCode);
+    _$hash = $jc(_$hash, activityId.hashCode);
+    _$hash = $jc(_$hash, createdAt.hashCode);
+    _$hash = $jc(_$hash, amount.hashCode);
+    _$hash = $jf(_$hash);
+    return __hashCode ??= _$hash;
   }
 
   @override
@@ -3530,4 +3624,4 @@ class InvoiceHistoryEntityBuilder
   }
 }
 
-// ignore_for_file: always_put_control_body_on_new_line,always_specify_types,annotate_overrides,avoid_annotating_with_dynamic,avoid_as,avoid_catches_without_on_clauses,avoid_returning_this,deprecated_member_use_from_same_package,lines_longer_than_80_chars,no_leading_underscores_for_local_identifiers,omit_local_variable_types,prefer_expression_function_bodies,sort_constructors_first,test_types_in_equals,unnecessary_const,unnecessary_new,unnecessary_lambdas
+// ignore_for_file: deprecated_member_use_from_same_package,type=lint

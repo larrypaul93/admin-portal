@@ -65,6 +65,9 @@ class _$HealthCheckResponseSerializer
       'trailing_slash',
       serializers.serialize(object.trailingSlash,
           specifiedType: const FullType(bool)),
+      'exchange_rate_api_not_configured',
+      serializers.serialize(object.exchangeRateApiNotConfigured,
+          specifiedType: const FullType(bool)),
       'queue',
       serializers.serialize(object.queue,
           specifiedType: const FullType(String)),
@@ -136,6 +139,10 @@ class _$HealthCheckResponseSerializer
           break;
         case 'trailing_slash':
           result.trailingSlash = serializers.deserialize(value,
+              specifiedType: const FullType(bool)) as bool;
+          break;
+        case 'exchange_rate_api_not_configured':
+          result.exchangeRateApiNotConfigured = serializers.deserialize(value,
               specifiedType: const FullType(bool)) as bool;
           break;
         case 'queue':
@@ -250,6 +257,8 @@ class _$HealthCheckResponse extends HealthCheckResponse {
   @override
   final bool trailingSlash;
   @override
+  final bool exchangeRateApiNotConfigured;
+  @override
   final String queue;
 
   factory _$HealthCheckResponse(
@@ -270,6 +279,7 @@ class _$HealthCheckResponse extends HealthCheckResponse {
       this.pendingJobs,
       this.pdfEngine,
       this.trailingSlash,
+      this.exchangeRateApiNotConfigured,
       this.queue})
       : super._() {
     BuiltValueNullFieldError.checkNotNull(
@@ -298,6 +308,8 @@ class _$HealthCheckResponse extends HealthCheckResponse {
         pdfEngine, r'HealthCheckResponse', 'pdfEngine');
     BuiltValueNullFieldError.checkNotNull(
         trailingSlash, r'HealthCheckResponse', 'trailingSlash');
+    BuiltValueNullFieldError.checkNotNull(exchangeRateApiNotConfigured,
+        r'HealthCheckResponse', 'exchangeRateApiNotConfigured');
     BuiltValueNullFieldError.checkNotNull(
         queue, r'HealthCheckResponse', 'queue');
   }
@@ -328,42 +340,32 @@ class _$HealthCheckResponse extends HealthCheckResponse {
         pendingJobs == other.pendingJobs &&
         pdfEngine == other.pdfEngine &&
         trailingSlash == other.trailingSlash &&
+        exchangeRateApiNotConfigured == other.exchangeRateApiNotConfigured &&
         queue == other.queue;
   }
 
   int __hashCode;
   @override
   int get hashCode {
-    return __hashCode ??= $jf($jc(
-        $jc(
-            $jc(
-                $jc(
-                    $jc(
-                        $jc(
-                            $jc(
-                                $jc(
-                                    $jc(
-                                        $jc(
-                                            $jc(
-                                                $jc(
-                                                    $jc(
-                                                        $jc(
-                                                            0,
-                                                            systemHealth
-                                                                .hashCode),
-                                                        phpVersion.hashCode),
-                                                    envWritable.hashCode),
-                                                dbCheck.hashCode),
-                                            cacheEnabled.hashCode),
-                                        phantomEnabled.hashCode),
-                                    openBasedir.hashCode),
-                                filePermissions.hashCode),
-                            execEnabled.hashCode),
-                        emailDriver.hashCode),
-                    pendingJobs.hashCode),
-                pdfEngine.hashCode),
-            trailingSlash.hashCode),
-        queue.hashCode));
+    if (__hashCode != null) return __hashCode;
+    var _$hash = 0;
+    _$hash = $jc(_$hash, systemHealth.hashCode);
+    _$hash = $jc(_$hash, phpVersion.hashCode);
+    _$hash = $jc(_$hash, envWritable.hashCode);
+    _$hash = $jc(_$hash, dbCheck.hashCode);
+    _$hash = $jc(_$hash, cacheEnabled.hashCode);
+    _$hash = $jc(_$hash, phantomEnabled.hashCode);
+    _$hash = $jc(_$hash, openBasedir.hashCode);
+    _$hash = $jc(_$hash, filePermissions.hashCode);
+    _$hash = $jc(_$hash, execEnabled.hashCode);
+    _$hash = $jc(_$hash, emailDriver.hashCode);
+    _$hash = $jc(_$hash, pendingJobs.hashCode);
+    _$hash = $jc(_$hash, pdfEngine.hashCode);
+    _$hash = $jc(_$hash, trailingSlash.hashCode);
+    _$hash = $jc(_$hash, exchangeRateApiNotConfigured.hashCode);
+    _$hash = $jc(_$hash, queue.hashCode);
+    _$hash = $jf(_$hash);
+    return __hashCode ??= _$hash;
   }
 
   @override
@@ -382,6 +384,7 @@ class _$HealthCheckResponse extends HealthCheckResponse {
           ..add('pendingJobs', pendingJobs)
           ..add('pdfEngine', pdfEngine)
           ..add('trailingSlash', trailingSlash)
+          ..add('exchangeRateApiNotConfigured', exchangeRateApiNotConfigured)
           ..add('queue', queue))
         .toString();
   }
@@ -448,6 +451,11 @@ class HealthCheckResponseBuilder
   set trailingSlash(bool trailingSlash) =>
       _$this._trailingSlash = trailingSlash;
 
+  bool _exchangeRateApiNotConfigured;
+  bool get exchangeRateApiNotConfigured => _$this._exchangeRateApiNotConfigured;
+  set exchangeRateApiNotConfigured(bool exchangeRateApiNotConfigured) =>
+      _$this._exchangeRateApiNotConfigured = exchangeRateApiNotConfigured;
+
   String _queue;
   String get queue => _$this._queue;
   set queue(String queue) => _$this._queue = queue;
@@ -472,6 +480,7 @@ class HealthCheckResponseBuilder
       _pendingJobs = $v.pendingJobs;
       _pdfEngine = $v.pdfEngine;
       _trailingSlash = $v.trailingSlash;
+      _exchangeRateApiNotConfigured = $v.exchangeRateApiNotConfigured;
       _queue = $v.queue;
       _$v = null;
     }
@@ -518,6 +527,7 @@ class HealthCheckResponseBuilder
               pendingJobs: BuiltValueNullFieldError.checkNotNull(pendingJobs, r'HealthCheckResponse', 'pendingJobs'),
               pdfEngine: BuiltValueNullFieldError.checkNotNull(pdfEngine, r'HealthCheckResponse', 'pdfEngine'),
               trailingSlash: BuiltValueNullFieldError.checkNotNull(trailingSlash, r'HealthCheckResponse', 'trailingSlash'),
+              exchangeRateApiNotConfigured: BuiltValueNullFieldError.checkNotNull(exchangeRateApiNotConfigured, r'HealthCheckResponse', 'exchangeRateApiNotConfigured'),
               queue: BuiltValueNullFieldError.checkNotNull(queue, r'HealthCheckResponse', 'queue'));
     } catch (_) {
       String _$failedField;
@@ -593,14 +603,15 @@ class _$HealthCheckPHPResponse extends HealthCheckPHPResponse {
   int __hashCode;
   @override
   int get hashCode {
-    return __hashCode ??= $jf($jc(
-        $jc(
-            $jc(
-                $jc($jc(0, minimumPHPVersion.hashCode),
-                    currentPHPVersion.hashCode),
-                currentPHPCLIVersion.hashCode),
-            isOkay.hashCode),
-        memoryLimit.hashCode));
+    if (__hashCode != null) return __hashCode;
+    var _$hash = 0;
+    _$hash = $jc(_$hash, minimumPHPVersion.hashCode);
+    _$hash = $jc(_$hash, currentPHPVersion.hashCode);
+    _$hash = $jc(_$hash, currentPHPCLIVersion.hashCode);
+    _$hash = $jc(_$hash, isOkay.hashCode);
+    _$hash = $jc(_$hash, memoryLimit.hashCode);
+    _$hash = $jf(_$hash);
+    return __hashCode ??= _$hash;
   }
 
   @override
@@ -697,4 +708,4 @@ class HealthCheckPHPResponseBuilder
   }
 }
 
-// ignore_for_file: always_put_control_body_on_new_line,always_specify_types,annotate_overrides,avoid_annotating_with_dynamic,avoid_as,avoid_catches_without_on_clauses,avoid_returning_this,deprecated_member_use_from_same_package,lines_longer_than_80_chars,no_leading_underscores_for_local_identifiers,omit_local_variable_types,prefer_expression_function_bodies,sort_constructors_first,test_types_in_equals,unnecessary_const,unnecessary_new,unnecessary_lambdas
+// ignore_for_file: deprecated_member_use_from_same_package,type=lint

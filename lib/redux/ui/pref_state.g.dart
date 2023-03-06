@@ -149,6 +149,9 @@ class _$PrefStateSerializer implements StructuredSerializer<PrefState> {
       'showPdfPreview',
       serializers.serialize(object.showPdfPreview,
           specifiedType: const FullType(bool)),
+      'showPdfPreviewSideBySide',
+      serializers.serialize(object.showPdfPreviewSideBySide,
+          specifiedType: const FullType(bool)),
       'enableTouchEvents',
       serializers.serialize(object.enableTouchEvents,
           specifiedType: const FullType(bool)),
@@ -178,9 +181,6 @@ class _$PrefStateSerializer implements StructuredSerializer<PrefState> {
           specifiedType: const FullType(bool)),
       'tapSelectedToEdit',
       serializers.serialize(object.tapSelectedToEdit,
-          specifiedType: const FullType(bool)),
-      'enableJSPDF',
-      serializers.serialize(object.enableJSPDF,
           specifiedType: const FullType(bool)),
       'rowsPerPage',
       serializers.serialize(object.rowsPerPage,
@@ -281,6 +281,10 @@ class _$PrefStateSerializer implements StructuredSerializer<PrefState> {
           result.showPdfPreview = serializers.deserialize(value,
               specifiedType: const FullType(bool)) as bool;
           break;
+        case 'showPdfPreviewSideBySide':
+          result.showPdfPreviewSideBySide = serializers.deserialize(value,
+              specifiedType: const FullType(bool)) as bool;
+          break;
         case 'enableTouchEvents':
           result.enableTouchEvents = serializers.deserialize(value,
               specifiedType: const FullType(bool)) as bool;
@@ -319,10 +323,6 @@ class _$PrefStateSerializer implements StructuredSerializer<PrefState> {
           break;
         case 'tapSelectedToEdit':
           result.tapSelectedToEdit = serializers.deserialize(value,
-              specifiedType: const FullType(bool)) as bool;
-          break;
-        case 'enableJSPDF':
-          result.enableJSPDF = serializers.deserialize(value,
               specifiedType: const FullType(bool)) as bool;
           break;
         case 'rowsPerPage':
@@ -624,6 +624,8 @@ class _$PrefState extends PrefState {
   @override
   final bool showPdfPreview;
   @override
+  final bool showPdfPreviewSideBySide;
+  @override
   final bool enableTouchEvents;
   @override
   final bool enableFlexibleSearch;
@@ -643,8 +645,6 @@ class _$PrefState extends PrefState {
   final bool requireAuthentication;
   @override
   final bool tapSelectedToEdit;
-  @override
-  final bool enableJSPDF;
   @override
   final int rowsPerPage;
   @override
@@ -681,6 +681,7 @@ class _$PrefState extends PrefState {
       this.isMenuVisible,
       this.showKanban,
       this.showPdfPreview,
+      this.showPdfPreviewSideBySide,
       this.enableTouchEvents,
       this.enableFlexibleSearch,
       this.isHistoryVisible,
@@ -691,7 +692,6 @@ class _$PrefState extends PrefState {
       this.longPressSelectionIsDefault,
       this.requireAuthentication,
       this.tapSelectedToEdit,
-      this.enableJSPDF,
       this.rowsPerPage,
       this.enableTooltips,
       this.colorTheme,
@@ -725,6 +725,8 @@ class _$PrefState extends PrefState {
     BuiltValueNullFieldError.checkNotNull(
         showPdfPreview, r'PrefState', 'showPdfPreview');
     BuiltValueNullFieldError.checkNotNull(
+        showPdfPreviewSideBySide, r'PrefState', 'showPdfPreviewSideBySide');
+    BuiltValueNullFieldError.checkNotNull(
         enableTouchEvents, r'PrefState', 'enableTouchEvents');
     BuiltValueNullFieldError.checkNotNull(
         enableFlexibleSearch, r'PrefState', 'enableFlexibleSearch');
@@ -743,8 +745,6 @@ class _$PrefState extends PrefState {
         requireAuthentication, r'PrefState', 'requireAuthentication');
     BuiltValueNullFieldError.checkNotNull(
         tapSelectedToEdit, r'PrefState', 'tapSelectedToEdit');
-    BuiltValueNullFieldError.checkNotNull(
-        enableJSPDF, r'PrefState', 'enableJSPDF');
     BuiltValueNullFieldError.checkNotNull(
         rowsPerPage, r'PrefState', 'rowsPerPage');
     BuiltValueNullFieldError.checkNotNull(
@@ -789,6 +789,7 @@ class _$PrefState extends PrefState {
         isMenuVisible == other.isMenuVisible &&
         showKanban == other.showKanban &&
         showPdfPreview == other.showPdfPreview &&
+        showPdfPreviewSideBySide == other.showPdfPreviewSideBySide &&
         enableTouchEvents == other.enableTouchEvents &&
         enableFlexibleSearch == other.enableFlexibleSearch &&
         isHistoryVisible == other.isHistoryVisible &&
@@ -799,7 +800,6 @@ class _$PrefState extends PrefState {
         longPressSelectionIsDefault == other.longPressSelectionIsDefault &&
         requireAuthentication == other.requireAuthentication &&
         tapSelectedToEdit == other.tapSelectedToEdit &&
-        enableJSPDF == other.enableJSPDF &&
         rowsPerPage == other.rowsPerPage &&
         enableTooltips == other.enableTooltips &&
         colorTheme == other.colorTheme &&
@@ -815,44 +815,42 @@ class _$PrefState extends PrefState {
   int __hashCode;
   @override
   int get hashCode {
-    return __hashCode ??= $jf($jc(
-        $jc(
-            $jc(
-                $jc(
-                    $jc(
-                        $jc(
-                            $jc(
-                                $jc(
-                                    $jc(
-                                        $jc(
-                                            $jc(
-                                                $jc(
-                                                    $jc(
-                                                        $jc(
-                                                            $jc(
-                                                                $jc(
-                                                                    $jc(
-                                                                        $jc(
-                                                                            $jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc(0, appLayout.hashCode), moduleLayout.hashCode), menuSidebarMode.hashCode), historySidebarMode.hashCode), useSidebarEditor.hashCode), useSidebarViewer.hashCode), customColors.hashCode), isPreviewVisible.hashCode), isMenuVisible.hashCode), showKanban.hashCode), showPdfPreview.hashCode), enableTouchEvents.hashCode), enableFlexibleSearch.hashCode),
-                                                                                isHistoryVisible.hashCode),
-                                                                            enableDarkMode.hashCode),
-                                                                        isFilterVisible.hashCode),
-                                                                    persistData.hashCode),
-                                                                persistUI.hashCode),
-                                                            longPressSelectionIsDefault.hashCode),
-                                                        requireAuthentication.hashCode),
-                                                    tapSelectedToEdit.hashCode),
-                                                enableJSPDF.hashCode),
-                                            rowsPerPage.hashCode),
-                                        enableTooltips.hashCode),
-                                    colorTheme.hashCode),
-                                hideDesktopWarning.hashCode),
-                            hideGatewayWarning.hashCode),
-                        hideReviewApp.hashCode),
-                    editAfterSaving.hashCode),
-                textScaleFactor.hashCode),
-            sortFields.hashCode),
-        companyPrefs.hashCode));
+    if (__hashCode != null) return __hashCode;
+    var _$hash = 0;
+    _$hash = $jc(_$hash, appLayout.hashCode);
+    _$hash = $jc(_$hash, moduleLayout.hashCode);
+    _$hash = $jc(_$hash, menuSidebarMode.hashCode);
+    _$hash = $jc(_$hash, historySidebarMode.hashCode);
+    _$hash = $jc(_$hash, useSidebarEditor.hashCode);
+    _$hash = $jc(_$hash, useSidebarViewer.hashCode);
+    _$hash = $jc(_$hash, customColors.hashCode);
+    _$hash = $jc(_$hash, isPreviewVisible.hashCode);
+    _$hash = $jc(_$hash, isMenuVisible.hashCode);
+    _$hash = $jc(_$hash, showKanban.hashCode);
+    _$hash = $jc(_$hash, showPdfPreview.hashCode);
+    _$hash = $jc(_$hash, showPdfPreviewSideBySide.hashCode);
+    _$hash = $jc(_$hash, enableTouchEvents.hashCode);
+    _$hash = $jc(_$hash, enableFlexibleSearch.hashCode);
+    _$hash = $jc(_$hash, isHistoryVisible.hashCode);
+    _$hash = $jc(_$hash, enableDarkMode.hashCode);
+    _$hash = $jc(_$hash, isFilterVisible.hashCode);
+    _$hash = $jc(_$hash, persistData.hashCode);
+    _$hash = $jc(_$hash, persistUI.hashCode);
+    _$hash = $jc(_$hash, longPressSelectionIsDefault.hashCode);
+    _$hash = $jc(_$hash, requireAuthentication.hashCode);
+    _$hash = $jc(_$hash, tapSelectedToEdit.hashCode);
+    _$hash = $jc(_$hash, rowsPerPage.hashCode);
+    _$hash = $jc(_$hash, enableTooltips.hashCode);
+    _$hash = $jc(_$hash, colorTheme.hashCode);
+    _$hash = $jc(_$hash, hideDesktopWarning.hashCode);
+    _$hash = $jc(_$hash, hideGatewayWarning.hashCode);
+    _$hash = $jc(_$hash, hideReviewApp.hashCode);
+    _$hash = $jc(_$hash, editAfterSaving.hashCode);
+    _$hash = $jc(_$hash, textScaleFactor.hashCode);
+    _$hash = $jc(_$hash, sortFields.hashCode);
+    _$hash = $jc(_$hash, companyPrefs.hashCode);
+    _$hash = $jf(_$hash);
+    return __hashCode ??= _$hash;
   }
 
   @override
@@ -869,6 +867,7 @@ class _$PrefState extends PrefState {
           ..add('isMenuVisible', isMenuVisible)
           ..add('showKanban', showKanban)
           ..add('showPdfPreview', showPdfPreview)
+          ..add('showPdfPreviewSideBySide', showPdfPreviewSideBySide)
           ..add('enableTouchEvents', enableTouchEvents)
           ..add('enableFlexibleSearch', enableFlexibleSearch)
           ..add('isHistoryVisible', isHistoryVisible)
@@ -879,7 +878,6 @@ class _$PrefState extends PrefState {
           ..add('longPressSelectionIsDefault', longPressSelectionIsDefault)
           ..add('requireAuthentication', requireAuthentication)
           ..add('tapSelectedToEdit', tapSelectedToEdit)
-          ..add('enableJSPDF', enableJSPDF)
           ..add('rowsPerPage', rowsPerPage)
           ..add('enableTooltips', enableTooltips)
           ..add('colorTheme', colorTheme)
@@ -953,6 +951,11 @@ class PrefStateBuilder implements Builder<PrefState, PrefStateBuilder> {
   set showPdfPreview(bool showPdfPreview) =>
       _$this._showPdfPreview = showPdfPreview;
 
+  bool _showPdfPreviewSideBySide;
+  bool get showPdfPreviewSideBySide => _$this._showPdfPreviewSideBySide;
+  set showPdfPreviewSideBySide(bool showPdfPreviewSideBySide) =>
+      _$this._showPdfPreviewSideBySide = showPdfPreviewSideBySide;
+
   bool _enableTouchEvents;
   bool get enableTouchEvents => _$this._enableTouchEvents;
   set enableTouchEvents(bool enableTouchEvents) =>
@@ -1000,10 +1003,6 @@ class PrefStateBuilder implements Builder<PrefState, PrefStateBuilder> {
   bool get tapSelectedToEdit => _$this._tapSelectedToEdit;
   set tapSelectedToEdit(bool tapSelectedToEdit) =>
       _$this._tapSelectedToEdit = tapSelectedToEdit;
-
-  bool _enableJSPDF;
-  bool get enableJSPDF => _$this._enableJSPDF;
-  set enableJSPDF(bool enableJSPDF) => _$this._enableJSPDF = enableJSPDF;
 
   int _rowsPerPage;
   int get rowsPerPage => _$this._rowsPerPage;
@@ -1073,6 +1072,7 @@ class PrefStateBuilder implements Builder<PrefState, PrefStateBuilder> {
       _isMenuVisible = $v.isMenuVisible;
       _showKanban = $v.showKanban;
       _showPdfPreview = $v.showPdfPreview;
+      _showPdfPreviewSideBySide = $v.showPdfPreviewSideBySide;
       _enableTouchEvents = $v.enableTouchEvents;
       _enableFlexibleSearch = $v.enableFlexibleSearch;
       _isHistoryVisible = $v.isHistoryVisible;
@@ -1083,7 +1083,6 @@ class PrefStateBuilder implements Builder<PrefState, PrefStateBuilder> {
       _longPressSelectionIsDefault = $v.longPressSelectionIsDefault;
       _requireAuthentication = $v.requireAuthentication;
       _tapSelectedToEdit = $v.tapSelectedToEdit;
-      _enableJSPDF = $v.enableJSPDF;
       _rowsPerPage = $v.rowsPerPage;
       _enableTooltips = $v.enableTooltips;
       _colorTheme = $v.colorTheme;
@@ -1137,6 +1136,7 @@ class PrefStateBuilder implements Builder<PrefState, PrefStateBuilder> {
                   showKanban, r'PrefState', 'showKanban'),
               showPdfPreview:
                   BuiltValueNullFieldError.checkNotNull(showPdfPreview, r'PrefState', 'showPdfPreview'),
+              showPdfPreviewSideBySide: BuiltValueNullFieldError.checkNotNull(showPdfPreviewSideBySide, r'PrefState', 'showPdfPreviewSideBySide'),
               enableTouchEvents: BuiltValueNullFieldError.checkNotNull(enableTouchEvents, r'PrefState', 'enableTouchEvents'),
               enableFlexibleSearch: BuiltValueNullFieldError.checkNotNull(enableFlexibleSearch, r'PrefState', 'enableFlexibleSearch'),
               isHistoryVisible: BuiltValueNullFieldError.checkNotNull(isHistoryVisible, r'PrefState', 'isHistoryVisible'),
@@ -1147,7 +1147,6 @@ class PrefStateBuilder implements Builder<PrefState, PrefStateBuilder> {
               longPressSelectionIsDefault: BuiltValueNullFieldError.checkNotNull(longPressSelectionIsDefault, r'PrefState', 'longPressSelectionIsDefault'),
               requireAuthentication: BuiltValueNullFieldError.checkNotNull(requireAuthentication, r'PrefState', 'requireAuthentication'),
               tapSelectedToEdit: BuiltValueNullFieldError.checkNotNull(tapSelectedToEdit, r'PrefState', 'tapSelectedToEdit'),
-              enableJSPDF: BuiltValueNullFieldError.checkNotNull(enableJSPDF, r'PrefState', 'enableJSPDF'),
               rowsPerPage: BuiltValueNullFieldError.checkNotNull(rowsPerPage, r'PrefState', 'rowsPerPage'),
               enableTooltips: BuiltValueNullFieldError.checkNotNull(enableTooltips, r'PrefState', 'enableTooltips'),
               colorTheme: BuiltValueNullFieldError.checkNotNull(colorTheme, r'PrefState', 'colorTheme'),
@@ -1220,7 +1219,12 @@ class _$PrefStateSortField extends PrefStateSortField {
   int __hashCode;
   @override
   int get hashCode {
-    return __hashCode ??= $jf($jc($jc(0, field.hashCode), ascending.hashCode));
+    if (__hashCode != null) return __hashCode;
+    var _$hash = 0;
+    _$hash = $jc(_$hash, field.hashCode);
+    _$hash = $jc(_$hash, ascending.hashCode);
+    _$hash = $jf(_$hash);
+    return __hashCode ??= _$hash;
   }
 
   @override
@@ -1312,7 +1316,11 @@ class _$CompanyPrefState extends CompanyPrefState {
   int __hashCode;
   @override
   int get hashCode {
-    return __hashCode ??= $jf($jc(0, historyList.hashCode));
+    if (__hashCode != null) return __hashCode;
+    var _$hash = 0;
+    _$hash = $jc(_$hash, historyList.hashCode);
+    _$hash = $jf(_$hash);
+    return __hashCode ??= _$hash;
   }
 
   @override
@@ -1416,8 +1424,13 @@ class _$HistoryRecord extends HistoryRecord {
   int __hashCode;
   @override
   int get hashCode {
-    return __hashCode ??= $jf(
-        $jc($jc($jc(0, id.hashCode), entityType.hashCode), timestamp.hashCode));
+    if (__hashCode != null) return __hashCode;
+    var _$hash = 0;
+    _$hash = $jc(_$hash, id.hashCode);
+    _$hash = $jc(_$hash, entityType.hashCode);
+    _$hash = $jc(_$hash, timestamp.hashCode);
+    _$hash = $jf(_$hash);
+    return __hashCode ??= _$hash;
   }
 
   @override
@@ -1486,4 +1499,4 @@ class HistoryRecordBuilder
   }
 }
 
-// ignore_for_file: always_put_control_body_on_new_line,always_specify_types,annotate_overrides,avoid_annotating_with_dynamic,avoid_as,avoid_catches_without_on_clauses,avoid_returning_this,deprecated_member_use_from_same_package,lines_longer_than_80_chars,no_leading_underscores_for_local_identifiers,omit_local_variable_types,prefer_expression_function_bodies,sort_constructors_first,test_types_in_equals,unnecessary_const,unnecessary_new,unnecessary_lambdas
+// ignore_for_file: deprecated_member_use_from_same_package,type=lint

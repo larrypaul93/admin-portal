@@ -1,5 +1,6 @@
 // Dart imports:
 import 'dart:async';
+import 'dart:convert';
 
 // Flutter imports:
 import 'package:flutter/material.dart';
@@ -199,9 +200,9 @@ class DeleteInvoiceItem implements PersistUI {
 
 class SaveInvoiceRequest implements StartSaving {
   SaveInvoiceRequest({
-    this.completer,
-    this.invoice,
-    this.entityAction,
+    @required this.completer,
+    @required this.invoice,
+    @required this.entityAction,
   });
 
   final Completer completer;
@@ -303,6 +304,25 @@ class MarkInvoicesPaidSuccess implements StopSaving {
 
 class MarkInvoicesPaidFailure implements StopSaving {
   MarkInvoicesPaidFailure(this.error);
+
+  final dynamic error;
+}
+
+class AutoBillInvoicesRequest implements StartSaving {
+  AutoBillInvoicesRequest(this.completer, this.invoiceIds);
+
+  final Completer completer;
+  final List<String> invoiceIds;
+}
+
+class AutoBillInvoicesSuccess implements StopSaving {
+  AutoBillInvoicesSuccess(this.invoices);
+
+  final List<InvoiceEntity> invoices;
+}
+
+class AutoBillInvoicesFailure implements StopSaving {
+  AutoBillInvoicesFailure(this.error);
 
   final dynamic error;
 }
@@ -564,6 +584,20 @@ void handleInvoiceAction(BuildContext context, List<BaseEntity> invoices,
                   : localization.markedInvoicesAsPaid),
           invoiceIds));
       break;
+    case EntityAction.autoBill:
+      confirmCallback(
+          context: context,
+          message: localization.autoBill,
+          callback: (_) {
+            store.dispatch(AutoBillInvoicesRequest(
+                snackBarCompleter<Null>(
+                    context,
+                    invoiceIds.length == 1
+                        ? localization.autoBilledInvoice
+                        : localization.autoBilledInvoices),
+                invoiceIds));
+          });
+      break;
     case EntityAction.sendEmail:
     case EntityAction.bulkSendEmail:
       bool emailValid = true;
@@ -681,7 +715,8 @@ void handleInvoiceAction(BuildContext context, List<BaseEntity> invoices,
     case EntityAction.restore:
       final message = invoiceIds.length > 1
           ? localization.restoredInvoices
-              .replaceFirst(':value', invoiceIds.length.toString())
+              .replaceFirst(':value', ':count')
+              .replaceFirst(':count', invoiceIds.length.toString())
           : localization.restoredInvoice;
       store.dispatch(RestoreInvoicesRequest(
           snackBarCompleter<Null>(context, message), invoiceIds));
@@ -689,7 +724,8 @@ void handleInvoiceAction(BuildContext context, List<BaseEntity> invoices,
     case EntityAction.archive:
       final message = invoiceIds.length > 1
           ? localization.archivedInvoices
-              .replaceFirst(':value', invoiceIds.length.toString())
+              .replaceFirst(':value', ':count')
+              .replaceFirst(':count', invoiceIds.length.toString())
           : localization.archivedInvoice;
       store.dispatch(ArchiveInvoicesRequest(
           snackBarCompleter<Null>(context, message), invoiceIds));
@@ -697,7 +733,8 @@ void handleInvoiceAction(BuildContext context, List<BaseEntity> invoices,
     case EntityAction.delete:
       final message = invoiceIds.length > 1
           ? localization.deletedInvoices
-              .replaceFirst(':value', invoiceIds.length.toString())
+              .replaceFirst(':value', ':count')
+              .replaceFirst(':count', invoiceIds.length.toString())
           : localization.deletedInvoice;
       store.dispatch(DeleteInvoicesRequest(
           snackBarCompleter<Null>(context, message), invoiceIds));
@@ -723,6 +760,16 @@ void handleInvoiceAction(BuildContext context, List<BaseEntity> invoices,
       store.dispatch(StopSaving());
       await Printing.layoutPdf(onLayout: (_) => response.bodyBytes);
       break;
+    case EntityAction.bulkPrint:
+      store.dispatch(StartSaving());
+      final url = state.credentials.url + '/invoices/bulk';
+      final data = json.encode(
+          {'ids': invoiceIds, 'action': EntityAction.bulkPrint.toApiParam()});
+      final http.Response response = await WebClient()
+          .post(url, state.credentials.token, data: data, rawResponse: true);
+      store.dispatch(StopSaving());
+      await Printing.layoutPdf(onLayout: (_) => response.bodyBytes);
+      break;
     case EntityAction.more:
       showEntityActionsDialog(
         entities: [invoice],
@@ -735,15 +782,20 @@ void handleInvoiceAction(BuildContext context, List<BaseEntity> invoices,
           documentIds.add(document.id);
         }
       }
-      store.dispatch(
-        DownloadDocumentsRequest(
-          documentIds: documentIds,
-          completer: snackBarCompleter<Null>(
-            context,
-            localization.exportedData,
+      if (documentIds.isEmpty) {
+        showMessageDialog(
+            context: context, message: localization.noDocumentsToDownload);
+      } else {
+        store.dispatch(
+          DownloadDocumentsRequest(
+            documentIds: documentIds,
+            completer: snackBarCompleter<Null>(
+              context,
+              localization.exportedData,
+            ),
           ),
-        ),
-      );
+        );
+      }
       break;
     default:
       print('## ERROR: unhandled action $action in invoice_actions');

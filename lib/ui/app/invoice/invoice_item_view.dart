@@ -27,9 +27,13 @@ class InvoiceItemListTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final String cost = formatNumber(invoiceItem.cost, context,
-        clientId: invoice.clientId, roundToPrecision: false);
+        clientId: invoice.isPurchaseOrder ? null : invoice.clientId,
+        vendorId: invoice.isPurchaseOrder ? invoice.vendorId : null,
+        roundToPrecision: false);
     final String qty = formatNumber(invoiceItem.quantity, context,
-        clientId: invoice.clientId, formatNumberType: FormatNumberType.double);
+        clientId: invoice.isPurchaseOrder ? null : invoice.clientId,
+        vendorId: invoice.isPurchaseOrder ? invoice.vendorId : null,
+        formatNumberType: FormatNumberType.double);
     final localization = AppLocalization.of(context);
 
     final store = StoreProvider.of<AppState>(context);
@@ -43,11 +47,16 @@ class InvoiceItemListTile extends StatelessWidget {
     if (invoiceItem.discount != 0) {
       subtitle += ' • ${localization.discount} ';
       if (invoice.isAmountDiscount) {
-        subtitle += formatNumber(invoiceItem.discount, context,
-            clientId: invoice.clientId);
+        subtitle += formatNumber(
+          invoiceItem.discount,
+          context,
+          clientId: invoice.isPurchaseOrder ? null : invoice.clientId,
+          vendorId: invoice.isPurchaseOrder ? invoice.vendorId : null,
+        );
       } else {
         subtitle += formatNumber(invoiceItem.discount, context,
-            clientId: invoice.clientId,
+            clientId: invoice.isPurchaseOrder ? null : invoice.clientId,
+            vendorId: invoice.isPurchaseOrder ? invoice.vendorId : null,
             formatNumberType: FormatNumberType.percent);
       }
     }
@@ -114,8 +123,11 @@ class InvoiceItemListTile extends StatelessWidget {
                 children: <Widget>[
                   Expanded(child: Text(invoiceItem.productKey)),
                   Text(formatNumber(
-                      invoiceItem.total(invoice, precision), context,
-                      clientId: invoice.clientId)),
+                    invoiceItem.total(invoice, precision),
+                    context,
+                    clientId: invoice.isPurchaseOrder ? null : invoice.clientId,
+                    vendorId: invoice.isPurchaseOrder ? invoice.vendorId : null,
+                  )),
                 ],
               ),
               subtitle: Row(

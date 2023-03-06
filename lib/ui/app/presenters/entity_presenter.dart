@@ -30,8 +30,6 @@ class EntityPresenter {
     // TODO replace with this: https://github.com/flutter/flutter/issues/45336
     if ((name ?? '').isEmpty) {
       name = localization.pending;
-    } else if (name.length > 10) {
-      return name;
     }
 
     if ([
@@ -40,6 +38,7 @@ class EntityPresenter {
           EntityType.project,
           EntityType.user,
           EntityType.product,
+          EntityType.transaction,
         ].contains(entity.entityType) ||
         isNarrow) {
       return name;
@@ -106,7 +105,10 @@ class EntityPresenter {
       ].contains(field);
 
   static bool isFieldAmount(String field) {
-    return ['quantity'].contains(field);
+    return [
+      'quantity',
+      'stock_quantity',
+    ].contains(field);
   }
 
   static bool isFieldNumeric(String field) {
@@ -152,6 +154,8 @@ class EntityPresenter {
       'stock_quantity',
       'notification_threshold',
       'partial',
+      'withdrawal',
+      'deposit',
     ].contains(field);
 
     return value;

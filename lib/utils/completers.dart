@@ -77,11 +77,9 @@ Completer<Null> errorCompleter(BuildContext context) {
 class Debouncer {
   Debouncer({
     this.milliseconds = kMillisecondsToDebounceUpdate,
-    this.sendFirstAction = false,
   });
 
   final int milliseconds;
-  final bool sendFirstAction;
 
   static VoidCallback action;
   static Timer timer;
@@ -92,16 +90,11 @@ class Debouncer {
       return;
     }
 
-    if (timer == null) {
-      if (sendFirstAction) {
-        action();
-      } else {
-        Debouncer.action = action;
-      }
-    } else {
+    if (timer != null) {
       timer.cancel();
-      Debouncer.action = action;
     }
+
+    Debouncer.action = action;
 
     timer = Timer(Duration(milliseconds: milliseconds), () {
       if (action != null) {
@@ -125,26 +118,46 @@ class Debouncer {
   }
 }
 
-class PersistUIDebouncer {
-  PersistUIDebouncer();
+class SimpleDebouncer {
+  SimpleDebouncer({
+    this.milliseconds = kMillisecondsToDebounceWrite,
+  });
 
-  static VoidCallback action;
+  final int milliseconds;
+
   static Timer timer;
 
   void run(VoidCallback action) {
-    if (timer == null) {
-      Debouncer.action = action;
-    } else {
+    if (timer != null) {
       timer.cancel();
-      Debouncer.action = action;
     }
 
-    timer = Timer(Duration(milliseconds: kMillisecondsToDebounceWrite), () {
+    timer = Timer(Duration(milliseconds: milliseconds), () {
       if (action != null) {
         action();
       }
-      Debouncer.action = null;
-      Debouncer.timer = null;
+    });
+  }
+}
+
+class PersistDebouncer {
+  PersistDebouncer({
+    this.milliseconds = kMillisecondsToDebounceWrite,
+  });
+
+  final int milliseconds;
+
+  static Timer timer;
+
+  void run(VoidCallback action) {
+    if (timer != null) {
+      timer.cancel();
+    }
+
+    timer = Timer(Duration(milliseconds: milliseconds), () {
+      if (action != null) {
+        action();
+      }
     });
   }
 }

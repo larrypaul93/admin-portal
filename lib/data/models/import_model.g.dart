@@ -47,7 +47,7 @@ final BuiltSet<ImportType> _$typeValues =
 ]);
 
 const ExportType _$clients = const ExportType._('clients');
-const ExportType _$contacts = const ExportType._('contacts');
+const ExportType _$client_contacts = const ExportType._('client_contacts');
 const ExportType _$credits = const ExportType._('credits');
 const ExportType _$documents = const ExportType._('documents');
 const ExportType _$expenses = const ExportType._('expenses');
@@ -66,8 +66,8 @@ ExportType _$exportValueOf(String name) {
   switch (name) {
     case 'clients':
       return _$clients;
-    case 'contacts':
-      return _$contacts;
+    case 'client_contacts':
+      return _$client_contacts;
     case 'credits':
       return _$credits;
     case 'documents':
@@ -100,7 +100,7 @@ ExportType _$exportValueOf(String name) {
 final BuiltSet<ExportType> _$exportValues =
     new BuiltSet<ExportType>(const <ExportType>[
   _$clients,
-  _$contacts,
+  _$client_contacts,
   _$credits,
   _$documents,
   _$expenses,
@@ -256,6 +256,9 @@ class _$ImportRequestSerializer implements StructuredSerializer<ImportRequest> {
       'import_type',
       serializers.serialize(object.importType,
           specifiedType: const FullType(String)),
+      'bank_integration_id',
+      serializers.serialize(object.bankAccountId,
+          specifiedType: const FullType(String)),
       'skip_header',
       serializers.serialize(object.skipHeader,
           specifiedType: const FullType(bool)),
@@ -288,6 +291,10 @@ class _$ImportRequestSerializer implements StructuredSerializer<ImportRequest> {
           break;
         case 'import_type':
           result.importType = serializers.deserialize(value,
+              specifiedType: const FullType(String)) as String;
+          break;
+        case 'bank_integration_id':
+          result.bankAccountId = serializers.deserialize(value,
               specifiedType: const FullType(String)) as String;
           break;
         case 'skip_header':
@@ -425,7 +432,12 @@ class _$PreImportResponse extends PreImportResponse {
   int __hashCode;
   @override
   int get hashCode {
-    return __hashCode ??= $jf($jc($jc(0, hash.hashCode), mappings.hashCode));
+    if (__hashCode != null) return __hashCode;
+    var _$hash = 0;
+    _$hash = $jc(_$hash, hash.hashCode);
+    _$hash = $jc(_$hash, mappings.hashCode);
+    _$hash = $jf(_$hash);
+    return __hashCode ??= _$hash;
   }
 
   @override
@@ -540,8 +552,12 @@ class _$PreImportResponseEntityDetails extends PreImportResponseEntityDetails {
   int __hashCode;
   @override
   int get hashCode {
-    return __hashCode ??=
-        $jf($jc($jc(0, available.hashCode), headers.hashCode));
+    if (__hashCode != null) return __hashCode;
+    var _$hash = 0;
+    _$hash = $jc(_$hash, available.hashCode);
+    _$hash = $jc(_$hash, headers.hashCode);
+    _$hash = $jf(_$hash);
+    return __hashCode ??= _$hash;
   }
 
   @override
@@ -626,6 +642,8 @@ class _$ImportRequest extends ImportRequest {
   @override
   final String importType;
   @override
+  final String bankAccountId;
+  @override
   final bool skipHeader;
   @override
   final BuiltMap<String, ImportRequestMapping> columnMap;
@@ -634,11 +652,17 @@ class _$ImportRequest extends ImportRequest {
       (new ImportRequestBuilder()..update(updates))._build();
 
   _$ImportRequest._(
-      {this.hash, this.importType, this.skipHeader, this.columnMap})
+      {this.hash,
+      this.importType,
+      this.bankAccountId,
+      this.skipHeader,
+      this.columnMap})
       : super._() {
     BuiltValueNullFieldError.checkNotNull(hash, r'ImportRequest', 'hash');
     BuiltValueNullFieldError.checkNotNull(
         importType, r'ImportRequest', 'importType');
+    BuiltValueNullFieldError.checkNotNull(
+        bankAccountId, r'ImportRequest', 'bankAccountId');
     BuiltValueNullFieldError.checkNotNull(
         skipHeader, r'ImportRequest', 'skipHeader');
     BuiltValueNullFieldError.checkNotNull(
@@ -658,6 +682,7 @@ class _$ImportRequest extends ImportRequest {
     return other is ImportRequest &&
         hash == other.hash &&
         importType == other.importType &&
+        bankAccountId == other.bankAccountId &&
         skipHeader == other.skipHeader &&
         columnMap == other.columnMap;
   }
@@ -665,10 +690,15 @@ class _$ImportRequest extends ImportRequest {
   int __hashCode;
   @override
   int get hashCode {
-    return __hashCode ??= $jf($jc(
-        $jc($jc($jc(0, hash.hashCode), importType.hashCode),
-            skipHeader.hashCode),
-        columnMap.hashCode));
+    if (__hashCode != null) return __hashCode;
+    var _$hash = 0;
+    _$hash = $jc(_$hash, hash.hashCode);
+    _$hash = $jc(_$hash, importType.hashCode);
+    _$hash = $jc(_$hash, bankAccountId.hashCode);
+    _$hash = $jc(_$hash, skipHeader.hashCode);
+    _$hash = $jc(_$hash, columnMap.hashCode);
+    _$hash = $jf(_$hash);
+    return __hashCode ??= _$hash;
   }
 
   @override
@@ -676,6 +706,7 @@ class _$ImportRequest extends ImportRequest {
     return (newBuiltValueToStringHelper(r'ImportRequest')
           ..add('hash', hash)
           ..add('importType', importType)
+          ..add('bankAccountId', bankAccountId)
           ..add('skipHeader', skipHeader)
           ..add('columnMap', columnMap))
         .toString();
@@ -694,6 +725,11 @@ class ImportRequestBuilder
   String get importType => _$this._importType;
   set importType(String importType) => _$this._importType = importType;
 
+  String _bankAccountId;
+  String get bankAccountId => _$this._bankAccountId;
+  set bankAccountId(String bankAccountId) =>
+      _$this._bankAccountId = bankAccountId;
+
   bool _skipHeader;
   bool get skipHeader => _$this._skipHeader;
   set skipHeader(bool skipHeader) => _$this._skipHeader = skipHeader;
@@ -711,6 +747,7 @@ class ImportRequestBuilder
     if ($v != null) {
       _hash = $v.hash;
       _importType = $v.importType;
+      _bankAccountId = $v.bankAccountId;
       _skipHeader = $v.skipHeader;
       _columnMap = $v.columnMap.toBuilder();
       _$v = null;
@@ -741,6 +778,8 @@ class ImportRequestBuilder
                   hash, r'ImportRequest', 'hash'),
               importType: BuiltValueNullFieldError.checkNotNull(
                   importType, r'ImportRequest', 'importType'),
+              bankAccountId: BuiltValueNullFieldError.checkNotNull(
+                  bankAccountId, r'ImportRequest', 'bankAccountId'),
               skipHeader: BuiltValueNullFieldError.checkNotNull(
                   skipHeader, r'ImportRequest', 'skipHeader'),
               columnMap: columnMap.build());
@@ -791,7 +830,11 @@ class _$ImportRequestMapping extends ImportRequestMapping {
   int __hashCode;
   @override
   int get hashCode {
-    return __hashCode ??= $jf($jc(0, mapping.hashCode));
+    if (__hashCode != null) return __hashCode;
+    var _$hash = 0;
+    _$hash = $jc(_$hash, mapping.hashCode);
+    _$hash = $jf(_$hash);
+    return __hashCode ??= _$hash;
   }
 
   @override
@@ -856,4 +899,4 @@ class ImportRequestMappingBuilder
   }
 }
 
-// ignore_for_file: always_put_control_body_on_new_line,always_specify_types,annotate_overrides,avoid_annotating_with_dynamic,avoid_as,avoid_catches_without_on_clauses,avoid_returning_this,deprecated_member_use_from_same_package,lines_longer_than_80_chars,no_leading_underscores_for_local_identifiers,omit_local_variable_types,prefer_expression_function_bodies,sort_constructors_first,test_types_in_equals,unnecessary_const,unnecessary_new,unnecessary_lambdas
+// ignore_for_file: deprecated_member_use_from_same_package,type=lint

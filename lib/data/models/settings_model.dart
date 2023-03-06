@@ -88,6 +88,12 @@ abstract class SettingsEntity
           clientSettings?.clientManualPaymentNotification ??
               groupSettings?.clientManualPaymentNotification ??
               companySettings?.clientManualPaymentNotification,
+      defaultPaymentTypeId: clientSettings?.defaultPaymentTypeId ??
+          groupSettings?.defaultPaymentTypeId ??
+          companySettings?.defaultPaymentTypeId,
+      autoBillStandardInvoices: clientSettings?.autoBillStandardInvoices ??
+          groupSettings?.autoBillStandardInvoices ??
+          companySettings?.autoBillStandardInvoices,
     );
   }
 
@@ -104,15 +110,17 @@ abstract class SettingsEntity
   static const EMAIL_SENDING_METHOD_DEFAULT = 'default';
   static const EMAIL_SENDING_METHOD_GMAIL = 'gmail';
   static const EMAIL_SENDING_METHOD_MICROSOFT = 'office365';
+  static const EMAIL_SENDING_METHOD_POSTMARK = 'client_postmark';
+  static const EMAIL_SENDING_METHOD_MAILGUN = 'client_mailgun';
 
   static const LOCK_INVOICES_OFF = 'off';
   static const LOCK_INVOICES_SENT = 'when_sent';
   static const LOCK_INVOICES_PAID = 'when_paid';
 
-  static const AUTO_BILL_OFF = 'off';
+  static const AUTO_BILL_ALWAYS = 'always';
   static const AUTO_BILL_OPT_IN = 'optin';
   static const AUTO_BILL_OPT_OUT = 'optout';
-  static const AUTO_BILL_ALWAYS = 'always';
+  static const AUTO_BILL_OFF = 'off';
 
   static const AUTO_BILL_ON_SEND_DATE = 'on_send_date';
   static const AUTO_BILL_ON_DUE_DATE = 'on_due_date';
@@ -120,6 +128,10 @@ abstract class SettingsEntity
   static const PORTAL_TASKS_ALL = 'all';
   static const PORTAL_TASKS_INVOICED = 'invoiced';
   static const PORTAL_TASKS_UNINVOICED = 'uninvoiced';
+
+  static const EMAIL_ALIGNMENT_CENTER = 'center';
+  static const EMAIL_ALIGNMENT_LEFT = 'left';
+  static const EMAIL_ALIGNMENT_RIGHT = 'right';
 
   @nullable
   @BuiltValueField(wireName: 'timezone_id')
@@ -786,6 +798,10 @@ abstract class SettingsEntity
   bool get clientManualPaymentNotification;
 
   @nullable
+  @BuiltValueField(wireName: 'send_email_on_mark_paid')
+  bool get clientMarkPaidPaymentNotification;
+
+  @nullable
   @BuiltValueField(wireName: 'counter_number_applied')
   String get counterNumberApplied;
 
@@ -812,6 +828,10 @@ abstract class SettingsEntity
   @nullable
   @BuiltValueField(wireName: 'auto_bill')
   String get autoBill;
+
+  @nullable
+  @BuiltValueField(wireName: 'auto_bill_standard_invoices')
+  bool get autoBillStandardInvoices;
 
   @nullable
   @BuiltValueField(wireName: 'client_portal_allow_under_payment')
@@ -901,6 +921,46 @@ abstract class SettingsEntity
   @BuiltValueField(wireName: 'besr_id')
   String get besrId;
 
+  @nullable
+  @BuiltValueField(wireName: 'postmark_secret')
+  String get postmarkSecret;
+
+  @nullable
+  @BuiltValueField(wireName: 'mailgun_secret')
+  String get mailgunSecret;
+
+  @nullable
+  @BuiltValueField(wireName: 'mailgun_domain')
+  String get mailgunDomain;
+
+  @nullable
+  @BuiltValueField(wireName: 'email_alignment')
+  String get emailAlignment;
+
+  @nullable
+  @BuiltValueField(wireName: 'show_email_footer')
+  bool get showEmailFooter;
+
+  @nullable
+  @BuiltValueField(wireName: 'company_logo_size')
+  String get companyLogoSize;
+
+  @nullable
+  @BuiltValueField(wireName: 'show_paid_stamp')
+  bool get showPaidStamp;
+
+  @nullable
+  @BuiltValueField(wireName: 'show_shipping_address')
+  bool get showShippingAddress;
+
+  @nullable
+  @BuiltValueField(wireName: 'custom_sending_email')
+  String get customSendingEmail;
+
+  @nullable
+  @BuiltValueField(wireName: 'accept_client_input_quote_approval')
+  bool get acceptPurchaseOrderNumber;
+
   bool get hasAddress => address1 != null && address1.isNotEmpty;
 
   bool get hasLogo => companyLogo != null && companyLogo.isNotEmpty;
@@ -923,7 +983,8 @@ abstract class SettingsEntity
 
   SettingsEntity setFieldsForSection(String section, List<String> fields) {
     if (pdfVariables == null) {
-      return rebuild((b) => b..pdfVariables.replace({section: fields}));
+      return rebuild(
+          (b) => b..pdfVariables.replace({section: BuiltList<String>(fields)}));
     } else {
       return rebuild((b) => b..pdfVariables[section] = BuiltList(fields));
     }
@@ -1048,4 +1109,46 @@ abstract class SettingsEntity
 
   static Serializer<SettingsEntity> get serializer =>
       _$settingsEntitySerializer;
+}
+
+abstract class PdfPreviewRequest
+    implements Built<PdfPreviewRequest, PdfPreviewRequestBuilder> {
+  factory PdfPreviewRequest({
+    String entityType,
+    String settingsType,
+    SettingsEntity settings,
+    String groupId,
+    String clientId,
+  }) {
+    return _$PdfPreviewRequest._(
+      entityType: entityType,
+      settingsType: settingsType,
+      settings: settings,
+      groupId: groupId,
+      clientId: clientId,
+    );
+  }
+
+  PdfPreviewRequest._();
+
+  @override
+  @memoized
+  int get hashCode;
+
+  @BuiltValueField(wireName: 'entity_type')
+  String get entityType;
+
+  @BuiltValueField(wireName: 'settings_type')
+  String get settingsType;
+
+  SettingsEntity get settings;
+
+  @BuiltValueField(wireName: 'group_id')
+  String get groupId;
+
+  @BuiltValueField(wireName: 'client_id')
+  String get clientId;
+
+  static Serializer<PdfPreviewRequest> get serializer =>
+      _$pdfPreviewRequestSerializer;
 }

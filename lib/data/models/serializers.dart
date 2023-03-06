@@ -38,6 +38,7 @@ import 'package:invoiceninja_flutter/redux/recurring_expense/recurring_expense_s
 import 'package:invoiceninja_flutter/redux/recurring_invoice/recurring_invoice_state.dart';
 import 'package:invoiceninja_flutter/redux/reports/reports_state.dart';
 import 'package:invoiceninja_flutter/redux/service_report/service_reports_state.dart';
+import 'package:invoiceninja_flutter/redux/settings/settings_state.dart';
 import 'package:invoiceninja_flutter/redux/static/static_state.dart';
 import 'package:invoiceninja_flutter/redux/subscription/subscription_state.dart';
 import 'package:invoiceninja_flutter/redux/task/task_state.dart';
@@ -50,13 +51,17 @@ import 'package:invoiceninja_flutter/redux/ui/ui_state.dart';
 import 'package:invoiceninja_flutter/redux/user/user_state.dart';
 import 'package:invoiceninja_flutter/redux/vendor/vendor_state.dart';
 import 'package:invoiceninja_flutter/redux/webhook/webhook_state.dart';
-
+import 'package:invoiceninja_flutter/redux/transaction/transaction_state.dart';
+import 'package:invoiceninja_flutter/redux/bank_account/bank_account_state.dart';
 // STARTER: import - do not remove comment
 import 'package:invoiceninja_flutter/data/models/category_model.dart';
 import 'package:invoiceninja_flutter/redux/category/category_state.dart';
 
 import 'package:invoiceninja_flutter/data/models/contact_model.dart';
 import 'package:invoiceninja_flutter/redux/contact/contact_state.dart';
+import 'package:invoiceninja_flutter/redux/schedule/schedule_state.dart';
+
+import 'package:invoiceninja_flutter/redux/transaction_rule/transaction_rule_state.dart';
 
 part 'serializers.g.dart';
 
@@ -121,6 +126,21 @@ part 'serializers.g.dart';
   TaxRateItemResponse,
   TaxRateListResponse,
   // STARTER: serializers - do not remove comment
+  ScheduleEntity,
+  ScheduleListResponse,
+  ScheduleItemResponse,
+
+  TransactionRuleEntity,
+  TransactionRuleListResponse,
+  TransactionRuleItemResponse,
+
+  TransactionEntity,
+  TransactionListResponse,
+  TransactionItemResponse,
+  TransactionStatusEntity,
+  BankAccountEntity,
+  BankAccountListResponse,
+  BankAccountItemResponse,
   InvoiceListResponse,
   InvoiceItemResponse,
   CategoryEntity,
@@ -175,6 +195,7 @@ part 'serializers.g.dart';
   ImportRequest,
   ImportRequestMapping,
   UserTwoFactorResponse,
+  PdfPreviewRequest,
 ])
 final Serializers serializers =
     (_$serializers.toBuilder()..addPlugin(StandardJsonPlugin())).build();

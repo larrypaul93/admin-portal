@@ -7,10 +7,12 @@ import 'package:built_value/built_value.dart';
 import 'package:built_value/serializer.dart';
 import 'package:collection/collection.dart';
 import 'package:diacritic/diacritic.dart';
+import 'package:flutter_redux/flutter_redux.dart';
 
 // Project imports:
 import 'package:invoiceninja_flutter/constants.dart';
 import 'package:invoiceninja_flutter/data/models/models.dart';
+import 'package:invoiceninja_flutter/main_app.dart';
 import 'package:invoiceninja_flutter/redux/app/app_state.dart';
 import 'package:invoiceninja_flutter/redux/task_status/task_status_selectors.dart';
 import 'package:invoiceninja_flutter/utils/formatting.dart';
@@ -77,6 +79,9 @@ class TaskFields {
   static const String status = 'status';
   static const String isInvoiced = 'is_invoiced';
   static const String date = 'date';
+  static const String assignedTo = 'assigned_to';
+  static const String createdBy = 'created_by';
+  static const String amount = 'amount';
 }
 
 abstract class TaskTime implements Built<TaskTime, TaskTimeBuilder> {
@@ -104,10 +109,26 @@ abstract class TaskTime implements Built<TaskTime, TaskTimeBuilder> {
 
   Duration get duration => (endDate ?? DateTime.now()).difference(startDate);
 
-  List<dynamic> get asList => <dynamic>[
-        (startDate.millisecondsSinceEpoch / 1000).floor(),
-        endDate != null ? (endDate.millisecondsSinceEpoch / 1000).floor() : 0
-      ];
+  List<dynamic> get asList {
+    final startTime = (startDate.millisecondsSinceEpoch / 1000).floor();
+    var endTime =
+        endDate != null ? (endDate.millisecondsSinceEpoch / 1000).floor() : 0;
+
+    final store = StoreProvider.of<AppState>(navigatorKey.currentContext);
+    final company = store.state.company;
+
+    // Handle the end time being before the start time
+    if (!company.showTaskEndDate && endTime != 0) {
+      const oneDay = 24 * 60 * 60;
+      if (endTime < startTime) {
+        endTime += oneDay;
+      } else if (endTime - startTime > oneDay) {
+        endTime -= oneDay;
+      }
+    }
+
+    return <dynamic>[startTime, endTime];
+  }
 
   TaskTime get stop => rebuild((b) => b..endDate = DateTime.now().toUtc());
 
@@ -263,7 +284,6 @@ abstract class TaskEntity extends Object
       number: '',
       isChanged: false,
       description: '',
-      duration: 0,
       rate: 0,
       invoiceId: '',
       clientId: project?.clientId ?? client?.id ?? '',
@@ -299,7 +319,6 @@ abstract class TaskEntity extends Object
     ..isChanged = false
     ..isDeleted = false
     ..invoiceId = ''
-    ..duration = 0
     ..documents.clear());
 
   TaskEntity toggle() => isRunning ? stop() : start();
@@ -323,8 +342,6 @@ abstract class TaskEntity extends Object
   String get description;
 
   String get number;
-
-  int get duration;
 
   bool get areTimesValid {
     final times = getTaskTimes();
@@ -580,9 +597,12 @@ abstract class TaskEntity extends Object
       bool multiselect = false}) {
     final actions = <EntityAction>[];
 
+    final isLocked = userCompany.company.invoiceTaskLock && isInvoiced;
+
     if (!isDeleted) {
       if (includeEdit &&
           userCompany.canEditEntity(this) &&
+          !isLocked &&
           !isDeleted &&
           !multiselect) {
         actions.add(EntityAction.edit);
@@ -592,7 +612,7 @@ abstract class TaskEntity extends Object
         if (isRunning) {
           actions.add(EntityAction.stop);
         } else {
-          if (duration > 0) {
+          if (calculateDuration().inSeconds > 0) {
             actions.add(EntityAction.resume);
           } else {
             actions.add(EntityAction.start);
@@ -649,7 +669,9 @@ abstract class TaskEntity extends Object
 
     switch (sortField) {
       case TaskFields.duration:
-        response = taskA.duration.compareTo(taskB.duration);
+      case TaskFields.amount:
+        response =
+            taskA.calculateDuration().compareTo(taskB.calculateDuration());
         break;
       case TaskFields.description:
         response = taskA.description.compareTo(taskB.description);
@@ -718,6 +740,20 @@ abstract class TaskEntity extends Object
         response = compareNatural(
             taskA.number.toLowerCase(), taskB.number.toLowerCase());
         break;
+      case TaskFields.createdBy:
+        final userA = userMap[taskA.createdUserId] ?? UserEntity();
+        final userB = userMap[taskB.createdUserId] ?? UserEntity();
+        response = userA.fullName
+            .toLowerCase()
+            .compareTo(userB.fullName.toLowerCase());
+        break;
+      case TaskFields.assignedTo:
+        final userA = userMap[taskA.assignedUserId] ?? UserEntity();
+        final userB = userMap[taskB.assignedUserId] ?? UserEntity();
+        response = userA.fullName
+            .toLowerCase()
+            .compareTo(userB.fullName.toLowerCase());
+        break;
       case TaskFields.status:
         final taskAStatus = taskA.isRunning
             ? -1
@@ -772,7 +808,7 @@ abstract class TaskEntity extends Object
       } else if (status.id == kTaskStatusLogged && isStopped && !isInvoiced) {
         return true;
       } else if (status.id == statusId) {
-        return true;
+        return !isInvoiced;
       }
     }
 
@@ -815,6 +851,10 @@ abstract class TaskEntity extends Object
   }
 
   bool get isStopped => !isRunning;
+
+  // ignore: unused_element
+  //static void _initializeBuilder(TaskEntityBuilder builder) =>
+  //    builder..;
 
   static Serializer<TaskEntity> get serializer => _$taskEntitySerializer;
 }

@@ -39,6 +39,11 @@ export 'package:invoiceninja_flutter/data/models/task_model.dart';
 export 'package:invoiceninja_flutter/data/models/task_status_model.dart';
 export 'package:invoiceninja_flutter/data/models/user_model.dart';
 export 'package:invoiceninja_flutter/data/models/vendor_model.dart';
+export 'package:invoiceninja_flutter/data/models/bank_account_model.dart';
+export 'package:invoiceninja_flutter/data/models/transaction_model.dart';
+// STARTER: export - do not remove comment
+export 'package:invoiceninja_flutter/data/models/schedule_model.dart';
+export 'package:invoiceninja_flutter/data/models/transaction_rule_model.dart';
 
 part 'models.g.dart';
 
@@ -61,8 +66,6 @@ class EntityAction extends EnumClass {
   static const EntityAction cloneToExpense = _$cloneToExpense;
   static const EntityAction cloneToRecurring = _$cloneToRecurring;
   static const EntityAction cloneToPurchaseOrder = _$cloneToPurchaseOrder;
-  static const EntityAction convertToInvoice = _$convertToInvoice;
-  static const EntityAction convertToProject = _$convertToProject;
   static const EntityAction approve = _$approve;
   static const EntityAction applyCredit = _$applyCredit;
   static const EntityAction applyPayment = _$applyPayment;
@@ -86,6 +89,7 @@ class EntityAction extends EnumClass {
   static const EntityAction newTask = _$newTask;
   static const EntityAction newVendor = _$newVendor;
   static const EntityAction newPurchaseOrder = _$newPurchaseOrder;
+  static const EntityAction newTransaction = _$newTransaction;
   static const EntityAction clientPortal = _$clientPortal;
   static const EntityAction vendorPortal = _$vendorPortal;
   static const EntityAction newPayment = _$newPayment;
@@ -111,15 +115,26 @@ class EntityAction extends EnumClass {
   static const EntityAction viewExpense = _$viewExpense;
   static const EntityAction changeStatus = _$changeStatus;
   static const EntityAction addToInvoice = _$addToInvoice;
-  static const EntityAction cancel = _$cancel;
+  static const EntityAction back = _$back;
   static const EntityAction save = _$save;
   static const EntityAction accept = _$accept;
   static const EntityAction addToInventory = _$addToInventory;
+  static const EntityAction convert = _$convert;
+  static const EntityAction convertMatched = _$convertMatched;
   static const EntityAction convertToExpense = _$convertToExpense;
+  static const EntityAction convertToPayment = _$convertToPayment;
+  static const EntityAction convertToInvoice = _$convertToInvoice;
+  static const EntityAction convertToProject = _$convertToProject;
   static const EntityAction merge = _$merge;
+  static const EntityAction bulkPrint = _$bulkPrint;
+  static const EntityAction autoBill = _$autoBill;
 
   @override
   String toString() {
+    if (this == EntityAction.addToInvoice) {
+      return 'action_add_to_invoice';
+    }
+
     return toSnakeCase(super.toString());
   }
 
@@ -137,6 +152,7 @@ class EntityAction extends EnumClass {
         EntityAction.restore,
         EntityAction.purge,
         EntityAction.sendNow,
+        EntityAction.autoBill,
       ].contains(this);
 
   bool get requiresSecondRequest => [
@@ -156,6 +172,8 @@ class EntityAction extends EnumClass {
       return 'cancel';
     } else if (this == EntityAction.convertToExpense) {
       return 'expense';
+    } else if (this == EntityAction.resume) {
+      return 'start';
     }
 
     // else if (value == 'approve') {
@@ -191,6 +209,8 @@ class EntityAction extends EnumClass {
         return EntityAction.newVendor;
       case EntityType.purchaseOrder:
         return EntityAction.newPurchaseOrder;
+      case EntityType.transaction:
+        return EntityAction.newTransaction;
       default:
         print(
             '## ERROR: entityType $entityType not defined in EntityAction.newEntityType');

@@ -26,6 +26,8 @@ class ViewScaffold extends StatelessWidget {
     this.appBarBottom,
     this.isFilter = false,
     this.onBackPressed,
+    this.title,
+    this.isEditable = true,
   });
 
   final bool isFilter;
@@ -34,6 +36,8 @@ class ViewScaffold extends StatelessWidget {
   final Function onBackPressed;
   final Widget floatingActionButton;
   final Widget appBarBottom;
+  final String title;
+  final bool isEditable;
 
   @override
   Widget build(BuildContext context) {
@@ -43,12 +47,14 @@ class ViewScaffold extends StatelessWidget {
     final userCompany = state.userCompany;
     final isSettings = entity.entityType.isSetting;
 
-    String title;
-    if (entity.isNew) {
-      title = '';
+    String appBarTitle;
+    if (title != null) {
+      appBarTitle = title;
+    } else if (entity.isNew) {
+      appBarTitle = '';
     } else {
       final presenter = EntityPresenter().initialize(entity, context);
-      title = presenter.title(isNarrow: isMobile(context));
+      appBarTitle = presenter.title(isNarrow: isMobile(context));
     }
 
     Widget leading;
@@ -97,8 +103,8 @@ class ViewScaffold extends StatelessWidget {
             leading: leading,
             automaticallyImplyLeading: isMobile(context),
             title: CopyToClipboard(
-              value: title,
-              child: Text(title),
+              value: appBarTitle,
+              child: Text(appBarTitle),
             ),
             bottom: appBarBottom,
             actions: entity.isNew
@@ -116,7 +122,7 @@ class ViewScaffold extends StatelessWidget {
                             localization.back,
                             style: TextStyle(color: state.headerTextColor),
                           )),
-                    if (userCompany.canEditEntity(entity))
+                    if (isEditable && userCompany.canEditEntity(entity))
                       Builder(builder: (context) {
                         final isDisabled = state.uiState.isEditing &&
                             state.uiState.mainRoute ==

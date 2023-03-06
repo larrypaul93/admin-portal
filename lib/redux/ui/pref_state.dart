@@ -31,9 +31,8 @@ abstract class PrefState implements Built<PrefState, PrefStateBuilder> {
       editAfterSaving: true,
       requireAuthentication: false,
       colorTheme: kColorThemeLight,
-      enableTouchEvents: true,
+      enableTouchEvents: false,
       enableTooltips: true,
-      enableJSPDF: false,
       isFilterVisible: false,
       textScaleFactor: 1,
       longPressSelectionIsDefault: true,
@@ -43,6 +42,7 @@ abstract class PrefState implements Built<PrefState, PrefStateBuilder> {
       hideReviewApp: false,
       showKanban: false,
       showPdfPreview: true,
+      showPdfPreviewSideBySide: false,
       persistData: false,
       persistUI: true,
       companyPrefs: BuiltMap<String, CompanyPrefState>(),
@@ -117,6 +117,8 @@ abstract class PrefState implements Built<PrefState, PrefStateBuilder> {
 
   bool get showPdfPreview;
 
+  bool get showPdfPreviewSideBySide;
+
   bool get enableTouchEvents;
 
   bool get enableFlexibleSearch;
@@ -136,8 +138,6 @@ abstract class PrefState implements Built<PrefState, PrefStateBuilder> {
   bool get requireAuthentication;
 
   bool get tapSelectedToEdit;
-
-  bool get enableJSPDF;
 
   int get rowsPerPage;
 
@@ -238,9 +238,9 @@ abstract class PrefState implements Built<PrefState, PrefStateBuilder> {
     ..persistUI = true
     ..editAfterSaving = true
     ..showPdfPreview = true
-    ..enableTouchEvents = true
+    ..showPdfPreviewSideBySide = false
+    ..enableTouchEvents = false
     ..enableFlexibleSearch = false
-    ..enableJSPDF = false
     ..enableTooltips = true
     ..textScaleFactor = 1
     ..colorTheme =
