@@ -47,6 +47,7 @@ class ExpenseListItem extends StatelessWidget {
     final state = store.state;
     final uiState = state.uiState;
     final expenseUIState = uiState.expenseUIState;
+    final listUIState = expenseUIState.listUIState;
     final client = state.clientState.get(expense.clientId);
     final vendor = state.vendorState.get(expense.vendorId);
     final category = state.expenseCategoryState.get(expense.categoryId);
@@ -55,7 +56,7 @@ class ExpenseListItem extends StatelessWidget {
             client.matchesFilterValue(filter))
         : null;
     final textStyle = TextStyle(fontSize: 16);
-    final textColor = Theme.of(context).textTheme.bodyText1.color;
+    final textColor = Theme.of(context).textTheme.bodyLarge.color;
 
     String subtitle = '';
     if (filterMatch != null) {
@@ -111,6 +112,7 @@ class ExpenseListItem extends StatelessWidget {
                             ? Padding(
                                 padding: const EdgeInsets.only(right: 20),
                                 child: IgnorePointer(
+                                  ignoring: listUIState.isInMultiselect(),
                                   child: Checkbox(
                                     value: isChecked,
                                     materialTapTargetSize:
@@ -163,7 +165,7 @@ class ExpenseListItem extends StatelessWidget {
                                 overflow: TextOverflow.ellipsis,
                                 style: Theme.of(context)
                                     .textTheme
-                                    .subtitle2
+                                    .titleSmall
                                     .copyWith(
                                       color: textColor
                                           .withOpacity(kLighterOpacity),
@@ -192,6 +194,7 @@ class ExpenseListItem extends StatelessWidget {
                     : selectEntity(entity: expense, longPress: true),
                 leading: showCheckbox
                     ? IgnorePointer(
+                        ignoring: listUIState.isInMultiselect(),
                         child: Checkbox(
                           value: isChecked,
                           materialTapTargetSize:
@@ -211,14 +214,14 @@ class ExpenseListItem extends StatelessWidget {
                                   ? expense.number
                                   : expense.publicNotes) +
                               (expense.documents.isNotEmpty ? '  📎' : ''),
-                          style: Theme.of(context).textTheme.subtitle1,
+                          style: Theme.of(context).textTheme.titleMedium,
                           maxLines: 1,
                         ),
                       ),
                       Text(
                           formatNumber(expense.amount, context,
                               currencyId: expense.currencyId),
-                          style: Theme.of(context).textTheme.subtitle1),
+                          style: Theme.of(context).textTheme.titleMedium),
                     ],
                   ),
                 ),
@@ -233,7 +236,7 @@ class ExpenseListItem extends StatelessWidget {
                               overflow: TextOverflow.ellipsis,
                               style: Theme.of(context)
                                   .textTheme
-                                  .subtitle2
+                                  .titleSmall
                                   .copyWith(
                                     color:
                                         textColor.withOpacity(kLighterOpacity),

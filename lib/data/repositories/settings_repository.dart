@@ -25,8 +25,33 @@ class SettingsRepository {
     dynamic response;
 
     final url = credentials.url + '/companies/${company.id}';
-    response =
-        await webClient.put(url, credentials.token, data: json.encode(data));
+    response = await webClient.put(
+      url,
+      credentials.token,
+      data: json.encode(data),
+    );
+
+    final CompanyItemResponse companyResponse =
+        serializers.deserializeWith(CompanyItemResponse.serializer, response);
+
+    return companyResponse.data;
+  }
+
+  Future<CompanyEntity> saveEInvoiceCertificate(Credentials credentials,
+      CompanyEntity company, MultipartFile eInvoiceCertificate) async {
+    dynamic response;
+
+    final url = credentials.url + '/companies/${company.id}';
+    final fields = <String, String>{
+      '_method': 'put',
+    };
+
+    response = await webClient.post(
+      url,
+      credentials.token,
+      multipartFiles: [eInvoiceCertificate],
+      data: fields,
+    );
 
     final CompanyItemResponse companyResponse =
         serializers.deserializeWith(CompanyItemResponse.serializer, response);
@@ -78,6 +103,51 @@ class SettingsRepository {
           'provider': provider,
         },
       ),
+      password: password,
+    );
+
+    final UserItemResponse userResponse =
+        serializers.deserializeWith(UserItemResponse.serializer, response);
+
+    return userResponse.data;
+  }
+
+  Future<UserEntity> disconnectOAuthUser(
+    Credentials credentials,
+    UserEntity user,
+    String password,
+    String idToken,
+  ) async {
+    dynamic response;
+
+    final url = credentials.url +
+        '/users/${user.id}/disconnect_oauth?include=company_user';
+    response = await webClient.post(
+      url,
+      credentials.token,
+      password: password,
+      idToken: idToken,
+    );
+
+    final UserItemResponse userResponse =
+        serializers.deserializeWith(UserItemResponse.serializer, response);
+
+    return userResponse.data;
+  }
+
+  Future<UserEntity> disconnectOAuthMailer(
+    Credentials credentials,
+    String password,
+    String idToken,
+    String userId,
+  ) async {
+    dynamic response;
+
+    final url = credentials.url +
+        '/users/$userId/disconnect_mailer?include=company_user';
+    response = await webClient.post(
+      url,
+      credentials.token,
       password: password,
     );
 

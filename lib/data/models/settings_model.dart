@@ -133,6 +133,9 @@ abstract class SettingsEntity
   static const EMAIL_ALIGNMENT_LEFT = 'left';
   static const EMAIL_ALIGNMENT_RIGHT = 'right';
 
+  static const MAILGUN_ENDPOINT_US = 'api.mailgun.net';
+  static const MAILGUN_ENDPOINT_EU = 'api.eu.mailgun.net';
+
   @nullable
   @BuiltValueField(wireName: 'timezone_id')
   String get timezoneId;
@@ -934,6 +937,10 @@ abstract class SettingsEntity
   String get mailgunDomain;
 
   @nullable
+  @BuiltValueField(wireName: 'mailgun_endpoint')
+  String get mailgunEndpoint;
+
+  @nullable
   @BuiltValueField(wireName: 'email_alignment')
   String get emailAlignment;
 
@@ -960,6 +967,38 @@ abstract class SettingsEntity
   @nullable
   @BuiltValueField(wireName: 'accept_client_input_quote_approval')
   bool get acceptPurchaseOrderNumber;
+
+  @nullable
+  @BuiltValueField(wireName: 'client_initiated_payments')
+  bool get clientInitiatedPayments;
+
+  @nullable
+  @BuiltValueField(wireName: 'client_initiated_payments_minimum')
+  double get clientInitiatedPaymentsMinimum;
+
+  @nullable
+  @BuiltValueField(wireName: 'sync_invoice_quote_columns')
+  bool get shareInvoiceQuoteColumns;
+
+  @nullable
+  @BuiltValueField(wireName: 'allow_billable_task_items')
+  bool get allowBillableTaskItems;
+
+  @nullable
+  @BuiltValueField(wireName: 'show_task_item_description')
+  bool get showTaskItemDescription;
+
+  @nullable
+  @BuiltValueField(wireName: 'enable_e_invoice')
+  bool get enableEInvoice;
+
+  @nullable
+  @BuiltValueField(wireName: 'e_invoice_type')
+  String get eInvoiceType;
+
+  @nullable
+  @BuiltValueField(wireName: 'default_expense_payment_type_id')
+  String get defaultExpensePaymentTypeId;
 
   bool get hasAddress => address1 != null && address1.isNotEmpty;
 

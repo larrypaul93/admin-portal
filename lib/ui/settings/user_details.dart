@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:built_collection/built_collection.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:flutter_styled_toast/flutter_styled_toast.dart';
+import 'package:invoiceninja_flutter/main_app.dart';
 import 'package:invoiceninja_flutter/ui/app/sms_verification.dart';
 import 'package:invoiceninja_flutter/utils/platforms.dart';
 import 'package:qr_flutter/qr_flutter.dart';
@@ -147,8 +148,8 @@ class _UserDetailsState extends State<UserDetails>
   Widget build(BuildContext context) {
     final localization = AppLocalization.of(context);
     final viewModel = widget.viewModel;
-    final user = viewModel.user;
     final state = viewModel.state;
+    final user = viewModel.user;
 
     final googleButton = Expanded(
       child: OutlinedButton(
@@ -159,9 +160,9 @@ class _UserDetailsState extends State<UserDetails>
               .toUpperCase(),
           textAlign: TextAlign.center,
         ),
-        onPressed: user.isConnectedToEmail ||
-                user.isConnectedToApple ||
-                user.isConnectedToMicrosoft
+        onPressed: state.user.isConnectedToEmail ||
+                state.user.isConnectedToApple ||
+                state.user.isConnectedToMicrosoft
             ? null
             : () {
                 if (state.settingsUIState.isChanged) {
@@ -183,7 +184,7 @@ class _UserDetailsState extends State<UserDetails>
     final gmailButton = Expanded(
       child: OutlinedButton(
         child: Text(
-          (user.isConnectedToEmail
+          (state.user.isConnectedToEmail
                   ? localization.disconnectGmail
                   : localization.connectGmail)
               .toUpperCase(),
@@ -217,9 +218,9 @@ class _UserDetailsState extends State<UserDetails>
               .toUpperCase(),
           textAlign: TextAlign.center,
         ),
-        onPressed: user.isConnectedToEmail ||
-                user.isConnectedToGoogle ||
-                user.isConnectedToApple
+        onPressed: state.user.isConnectedToEmail ||
+                state.user.isConnectedToGoogle ||
+                state.user.isConnectedToApple
             ? null
             : () {
                 if (state.settingsUIState.isChanged) {
@@ -241,7 +242,7 @@ class _UserDetailsState extends State<UserDetails>
     final office365Button = Expanded(
       child: OutlinedButton(
         child: Text(
-          (user.isConnectedToEmail
+          (state.user.isConnectedToEmail
                   ? localization.disconnectEmail
                   : localization.connectEmail)
               .toUpperCase(),
@@ -276,22 +277,23 @@ class _UserDetailsState extends State<UserDetails>
               .toUpperCase(),
           textAlign: TextAlign.center,
         ),
-        onPressed: user.isConnectedToGoogle || user.isConnectedToMicrosoft
-            ? null
-            : () {
-                if (state.settingsUIState.isChanged) {
-                  showMessageDialog(
-                      context: context,
-                      message: localization.errorUnsavedChanges);
-                  return;
-                }
+        onPressed:
+            state.user.isConnectedToGoogle || state.user.isConnectedToMicrosoft
+                ? null
+                : () {
+                    if (state.settingsUIState.isChanged) {
+                      showMessageDialog(
+                          context: context,
+                          message: localization.errorUnsavedChanges);
+                      return;
+                    }
 
-                if (state.user.isConnectedToApple) {
-                  viewModel.onDisconnectApplePressed(context);
-                } else {
-                  // do nothing
-                }
-              },
+                    if (state.user.isConnectedToApple) {
+                      viewModel.onDisconnectApplePressed(context);
+                    } else {
+                      // do nothing
+                    }
+                  },
       ),
     );
 
@@ -361,7 +363,8 @@ class _UserDetailsState extends State<UserDetails>
                     left: 18, top: 20, right: 18, bottom: 10),
                 child: Row(
                   children: [
-                    if (state.isHosted && !isDesktopOS()) ...[
+                    if (state.isHosted &&
+                        (!kReleaseMode || !isDesktopOS())) ...[
                       if (user.isConnectedToGoogle) ...[
                         googleButton,
                         SizedBox(width: kTableColumnGap),
@@ -420,7 +423,7 @@ class _UserDetailsState extends State<UserDetails>
 
                               if (phoneVerified == true) {
                                 showDialog<void>(
-                                  context: context,
+                                  context: navigatorKey.currentContext,
                                   builder: (BuildContext context) =>
                                       _EnableTwoFactor(state: viewModel.state),
                                 );
@@ -546,7 +549,7 @@ class _EnableTwoFactorState extends State<_EnableTwoFactor> {
       });
     }).catchError((dynamic error) {
       Navigator.of(context).pop();
-      showErrorDialog(context: context, message: error);
+      showErrorDialog(message: error);
     });
   }
 
@@ -586,7 +589,7 @@ class _EnableTwoFactorState extends State<_EnableTwoFactor> {
       Navigator.of(context).pop();
     }).catchError((Object error) {
       setState(() => _isLoading = false);
-      showErrorDialog(context: context, message: '$error');
+      showErrorDialog(message: '$error');
     });
   }
 

@@ -24,9 +24,6 @@ import 'package:invoiceninja_flutter/utils/dialogs.dart';
 import 'package:invoiceninja_flutter/utils/localization.dart';
 import 'package:invoiceninja_flutter/utils/oauth.dart';
 
-import 'package:invoiceninja_flutter/utils/web_stub.dart'
-    if (dart.library.html) 'package:invoiceninja_flutter/utils/web.dart';
-
 class MenuDrawerBuilder extends StatelessWidget {
   const MenuDrawerBuilder({Key key}) : super(key: key);
 
@@ -85,8 +82,6 @@ class MenuDrawerVM {
               final user = store.state.user;
               if (user.isConnectedToGoogle) {
                 GoogleOAuth.signOut();
-              } else if (user.isConnectedToMicrosoft && kIsWeb) {
-                WebUtils.microsoftLogout();
               }
             });
       },
@@ -117,9 +112,7 @@ class MenuDrawerVM {
                   section: uiState.subRoute,
                   force: true,
                 ));
-              }
-
-              if (uiState.isEditing ||
+              } else if (uiState.isEditing ||
                   uiState.isViewing ||
                   uiState.isEmailing ||
                   uiState.isPDF) {

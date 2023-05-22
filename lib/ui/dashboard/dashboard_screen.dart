@@ -95,6 +95,7 @@ class _DashboardScreenState extends State<DashboardScreen>
 
     final companyName = state.company.settings.name ?? '';
     if (!state.isDemo &&
+        state.userCompany.isAdmin &&
         (companyName.isEmpty || companyName == 'Untitled Company') &&
         state.company.isOld) {
       WidgetsBinding.instance.addPostFrameCallback((duration) {
@@ -104,6 +105,7 @@ class _DashboardScreenState extends State<DashboardScreen>
             builder: (BuildContext context) {
               return SettingsWizard(
                 user: state.user,
+                company: state.company,
               );
             });
       });
@@ -253,7 +255,7 @@ class _DashboardScreenState extends State<DashboardScreen>
                       ? localization.upgrade
                       : null,
                   onPressed: () => launchUrl(Uri.parse(kWhiteLabelUrl)),
-                  icon: Icon(Icons.arrow_circle_up)),
+                  icon: Icon(Icons.rocket_launch)),
             ),
           if (!kReleaseMode ||
               (kIsWeb &&
@@ -284,7 +286,7 @@ class _DashboardScreenState extends State<DashboardScreen>
                     WebUtils.reloadBrowser();
                   }).catchError((Object error) {
                     store.dispatch(StopSaving());
-                    showErrorDialog(context: context, message: error);
+                    showErrorDialog(message: error);
                   });
                 },
                 icon: Icon(MdiIcons.react),

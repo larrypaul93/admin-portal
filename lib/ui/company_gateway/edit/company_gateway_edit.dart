@@ -268,8 +268,10 @@ class _CompanyGatewayEditState extends State<CompanyGatewayEdit>
                   for (var gatewayTypeId
                       in gateway?.options?.keys ?? <String>[])
                     SwitchListTile(
-                        title: Text(localization
-                            .lookup(kGatewayTypes[gatewayTypeId] ?? '')),
+                        title: Text(kGatewayTypes.containsKey(gatewayTypeId)
+                            ? localization
+                                .lookup(kGatewayTypes[gatewayTypeId] ?? '')
+                            : '$gatewayTypeId'),
                         activeColor: Theme.of(context).colorScheme.secondary,
                         value: companyGateway
                             .getSettingsForGatewayTypeId(gatewayTypeId)
@@ -290,7 +292,7 @@ class _CompanyGatewayEditState extends State<CompanyGatewayEdit>
                           const EdgeInsets.only(left: 16, top: 16, bottom: 16),
                       child: Text(
                         localization.requiredFields,
-                        style: Theme.of(context).textTheme.headline6,
+                        style: Theme.of(context).textTheme.titleLarge,
                       ),
                     ),
                     CheckboxListTile(

@@ -25,8 +25,10 @@ class TransactionRepository {
     return transactionResponse.data;
   }
 
-  Future<BuiltList<TransactionEntity>> loadList(Credentials credentials) async {
-    final String url = credentials.url + '/bank_transactions?';
+  Future<BuiltList<TransactionEntity>> loadList(
+      Credentials credentials, int page, int createdAt) async {
+    final String url = credentials.url +
+        '/bank_transactions?per_page=$kMaxRecordsPerPage&page=$page&created_at=$createdAt';
     final dynamic response = await webClient.get(url, credentials.token);
 
     final TransactionListResponse transactionResponse = serializers
@@ -37,7 +39,7 @@ class TransactionRepository {
 
   Future<List<TransactionEntity>> bulkAction(
       Credentials credentials, List<String> ids, EntityAction action) async {
-    if (ids.length > kMaxEntitiesPerBulkAction) {
+    if (ids.length > kMaxEntitiesPerBulkAction && action.applyMaxLimit) {
       ids = ids.sublist(0, kMaxEntitiesPerBulkAction);
     }
 

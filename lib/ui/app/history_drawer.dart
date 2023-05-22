@@ -110,8 +110,8 @@ class _HistoryListTileState extends State<HistoryListTile> {
 
     final history = widget.history;
 
-    Widget title;
-    Widget subtitle;
+    Widget title = SizedBox();
+    Widget subtitle = SizedBox();
     String clientId;
     BaseEntity entity;
 
@@ -122,11 +122,15 @@ class _HistoryListTileState extends State<HistoryListTile> {
     ].contains(history.entityType)) {
       title = Text(localization.lookup(history.entityType.toString()));
       if (history.entityType == EntityType.reports) {
-        subtitle =
-            Text(localization.lookup(state.uiState.reportsUIState.report));
+        subtitle = Text(
+          localization.lookup(state.uiState.reportsUIState.report),
+          style: Theme.of(context).textTheme.bodySmall,
+        );
       } else if (history.entityType == EntityType.settings) {
-        subtitle =
-            Text(localization.lookup(history.id ?? kSettingsCompanyDetails));
+        subtitle = Text(
+          localization.lookup(history.id ?? kSettingsCompanyDetails),
+          style: Theme.of(context).textTheme.bodySmall,
+        );
       }
     } else {
       entity = state.getEntityMap(history.entityType)[history.id] as BaseEntity;
@@ -145,7 +149,10 @@ class _HistoryListTileState extends State<HistoryListTile> {
               clientId: clientId)
           : entity.listDisplayName);
 
-      subtitle = Text(localization.lookup('${history.entityType}'));
+      subtitle = Text(
+        localization.lookup('${history.entityType}'),
+        style: Theme.of(context).textTheme.bodySmall,
+      );
     }
 
     return Container(
@@ -154,13 +161,26 @@ class _HistoryListTileState extends State<HistoryListTile> {
       child: ListTile(
         key: ValueKey('__${history.id}_${history.entityType}__'),
         leading: Icon(getEntityIcon(history.entityType)),
-        title: title,
-        subtitle: subtitle,
-        // TODO this needs to be localized
-        trailing: LiveText(
-          () => timeago.format(history.dateTime,
-              locale: localeSelector(state, twoLetter: true) + '_short'),
-          duration: Duration(minutes: 1),
+        title: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Expanded(
+                child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                title,
+                subtitle,
+              ],
+            )),
+            SizedBox(width: 8),
+            Flexible(
+                child: LiveText(
+              () => timeago.format(history.dateTime,
+                  locale: localeSelector(state, twoLetter: true) + '_short'),
+              duration: Duration(minutes: 1),
+              maxLines: 2,
+            ))
+          ],
         ),
         /*
         trailing: _isHovered

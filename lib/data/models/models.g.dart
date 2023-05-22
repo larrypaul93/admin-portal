@@ -93,6 +93,11 @@ const EntityAction _$convertToProject =
 const EntityAction _$merge = const EntityAction._('merge');
 const EntityAction _$bulkPrint = const EntityAction._('bulkPrint');
 const EntityAction _$autoBill = const EntityAction._('autoBill');
+const EntityAction _$schedule = const EntityAction._('schedule');
+const EntityAction _$updatePrices = const EntityAction._('updatePrices');
+const EntityAction _$increasePrices = const EntityAction._('increasePrices');
+const EntityAction _$setTaxCategory = const EntityAction._('setTaxCategory');
+const EntityAction _$eInvoice = const EntityAction._('eInvoice');
 
 EntityAction _$valueOf(String name) {
   switch (name) {
@@ -248,6 +253,16 @@ EntityAction _$valueOf(String name) {
       return _$bulkPrint;
     case 'autoBill':
       return _$autoBill;
+    case 'schedule':
+      return _$schedule;
+    case 'updatePrices':
+      return _$updatePrices;
+    case 'increasePrices':
+      return _$increasePrices;
+    case 'setTaxCategory':
+      return _$setTaxCategory;
+    case 'eInvoice':
+      return _$eInvoice;
     default:
       throw new ArgumentError(name);
   }
@@ -331,6 +346,11 @@ final BuiltSet<EntityAction> _$values =
   _$merge,
   _$bulkPrint,
   _$autoBill,
+  _$schedule,
+  _$updatePrices,
+  _$increasePrices,
+  _$setTaxCategory,
+  _$eInvoice,
 ]);
 
 Serializer<EntityAction> _$entityActionSerializer =

@@ -27,8 +27,11 @@ List<Middleware<AppState>> createStoreSettingsMiddleware([
 ]) {
   final viewSettings = _viewSettings();
   final saveCompany = _saveCompany(repository);
+  final saveEInvoiceCertificate = _saveEInvoiceCertificate(repository);
   final saveAuthUser = _saveAuthUser(repository);
   final connectOAuthUser = _connectOAuthUser(repository);
+  final disconnectOAuthUser = _disconnectOAuthUser(repository);
+  final disconnectOAuthMailer = _disconnectOAuthMailer(repository);
   final connectGmailUser = _connectGmailUser(repository);
   final saveSettings = _saveSettings(repository);
   final uploadLogo = _uploadLogo(repository);
@@ -38,8 +41,13 @@ List<Middleware<AppState>> createStoreSettingsMiddleware([
   return [
     TypedMiddleware<AppState, ViewSettings>(viewSettings),
     TypedMiddleware<AppState, SaveCompanyRequest>(saveCompany),
+    TypedMiddleware<AppState, SaveEInvoiceCertificateRequest>(
+        saveEInvoiceCertificate),
     TypedMiddleware<AppState, SaveAuthUserRequest>(saveAuthUser),
     TypedMiddleware<AppState, ConnecOAuthUserRequest>(connectOAuthUser),
+    TypedMiddleware<AppState, DisconnecOAuthUserRequest>(disconnectOAuthUser),
+    TypedMiddleware<AppState, DisconnectOAuthMailerRequest>(
+        disconnectOAuthMailer),
     TypedMiddleware<AppState, ConnecGmailUserRequest>(connectGmailUser),
     TypedMiddleware<AppState, DisableTwoFactorRequest>(disableTwoFactor),
     TypedMiddleware<AppState, SaveUserSettingsRequest>(saveSettings),
@@ -106,6 +114,30 @@ Middleware<AppState> _saveCompany(SettingsRepository settingsRepository) {
   };
 }
 
+Middleware<AppState> _saveEInvoiceCertificate(
+    SettingsRepository settingsRepository) {
+  return (Store<AppState> store, dynamic dynamicAction, NextDispatcher next) {
+    final action = dynamicAction as SaveEInvoiceCertificateRequest;
+
+    settingsRepository
+        .saveEInvoiceCertificate(
+      store.state.credentials,
+      action.company,
+      action.eInvoiceCertificate,
+    )
+        .then((company) {
+      store.dispatch(SaveEInvoiceCertificateSuccess(company));
+      action.completer.complete();
+    }).catchError((Object error) {
+      print(error);
+      store.dispatch(SaveEInvoiceCertificateFailure(error));
+      action.completer.completeError(error);
+    });
+
+    next(action);
+  };
+}
+
 Middleware<AppState> _saveAuthUser(SettingsRepository settingsRepository) {
   return (Store<AppState> store, dynamic dynamicAction, NextDispatcher next) {
     final action = dynamicAction as SaveAuthUserRequest;
@@ -146,13 +178,77 @@ Middleware<AppState> _connectOAuthUser(SettingsRepository settingsRepository) {
       action.accessToken,
     )
         .then((user) {
-      store.dispatch(ConnecOAuthUserSuccess(user));
+      store.dispatch(ConnectOAuthUserSuccess(user));
       if (action.completer != null) {
         action.completer.complete();
       }
     }).catchError((Object error) {
       print(error);
       store.dispatch(ConnecOAuthUserFailure(error));
+      if ('$error'.contains('412')) {
+        store.dispatch(UserUnverifiedPassword());
+      }
+      if (action.completer != null) {
+        action.completer.completeError(error);
+      }
+    });
+
+    next(action);
+  };
+}
+
+Middleware<AppState> _disconnectOAuthUser(
+    SettingsRepository settingsRepository) {
+  return (Store<AppState> store, dynamic dynamicAction, NextDispatcher next) {
+    final action = dynamicAction as DisconnecOAuthUserRequest;
+
+    settingsRepository
+        .disconnectOAuthUser(
+      store.state.credentials,
+      action.user,
+      action.password,
+      action.idToken,
+    )
+        .then((user) {
+      store.dispatch(DisconnectOAuthUserSuccess(user));
+      if (action.completer != null) {
+        action.completer.complete();
+      }
+    }).catchError((Object error) {
+      print(error);
+      store.dispatch(DisconnecOAuthUserFailure(error));
+      if ('$error'.contains('412')) {
+        store.dispatch(UserUnverifiedPassword());
+      }
+      if (action.completer != null) {
+        action.completer.completeError(error);
+      }
+    });
+
+    next(action);
+  };
+}
+
+Middleware<AppState> _disconnectOAuthMailer(
+    SettingsRepository settingsRepository) {
+  return (Store<AppState> store, dynamic dynamicAction, NextDispatcher next) {
+    final action = dynamicAction as DisconnectOAuthMailerRequest;
+
+    settingsRepository
+        .disconnectOAuthMailer(
+      store.state.credentials,
+      action.password,
+      action.idToken,
+      action.user.id,
+    )
+        .then((user) {
+      store.dispatch(DisconnectOAuthMailerSuccess(user));
+      if (action.completer != null) {
+        action.completer.complete();
+      }
+    }).catchError((Object error) {
+      print(error);
+      store.dispatch(DisconnectOAuthMailerFailure(error));
       if ('$error'.contains('412')) {
         store.dispatch(UserUnverifiedPassword());
       }

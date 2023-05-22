@@ -110,6 +110,10 @@ class DismissGatewayWarningPermanently implements PersistUI, PersistPrefs {}
 
 class DismissReviewAppPermanently implements PersistUI, PersistPrefs {}
 
+class DismissOneYearReviewAppPermanently implements PersistUI, PersistPrefs {}
+
+class DismissTwoYearReviewAppPermanently implements PersistUI, PersistPrefs {}
+
 class ViewMainScreen {
   ViewMainScreen({this.addDelay = false});
 
@@ -157,7 +161,8 @@ class UpdateUserPreferences implements PersistPrefs {
     this.appLayout,
     this.moduleLayout,
     this.sidebar,
-    this.enableDarkMode,
+    this.darkModeType,
+    this.enableDarkModeSystem,
     this.requireAuthentication,
     this.longPressSelectionIsDefault,
     this.textScaleFactor,
@@ -169,7 +174,9 @@ class UpdateUserPreferences implements PersistPrefs {
     this.isFilterVisible,
     this.rowsPerPage,
     this.colorTheme,
+    this.darkColorTheme,
     this.customColors,
+    this.darkCustomColors,
     this.persistData,
     this.persistUi,
     this.tapSelectedToEdit,
@@ -179,6 +186,8 @@ class UpdateUserPreferences implements PersistPrefs {
     this.enableTouchEvents,
     this.enableTooltips,
     this.flexibleSearch,
+    this.enableNativeBrowser,
+    this.statementIncludes,
   });
 
   final AppLayout appLayout;
@@ -186,7 +195,8 @@ class UpdateUserPreferences implements PersistPrefs {
   final AppSidebar sidebar;
   final AppSidebarMode menuMode;
   final AppSidebarMode historyMode;
-  final bool enableDarkMode;
+  final String darkModeType;
+  final bool enableDarkModeSystem;
   final bool longPressSelectionIsDefault;
   final bool requireAuthentication;
   final bool isPreviewVisible;
@@ -195,6 +205,7 @@ class UpdateUserPreferences implements PersistPrefs {
   final String accentColor;
   final int rowsPerPage;
   final String colorTheme;
+  final String darkColorTheme;
   final bool persistData;
   final bool persistUi;
   final bool tapSelectedToEdit;
@@ -202,10 +213,13 @@ class UpdateUserPreferences implements PersistPrefs {
   final bool showPdfPreview;
   final bool showPdfPreviewSideBySide;
   final BuiltMap<String, String> customColors;
+  final BuiltMap<String, String> darkCustomColors;
   final bool editAfterSaving;
   final bool enableTouchEvents;
   final bool enableTooltips;
   final bool flexibleSearch;
+  final bool enableNativeBrowser;
+  final BuiltList<String> statementIncludes;
 }
 
 class LoadAccountSuccess implements StopLoading {
@@ -531,9 +545,7 @@ void viewEntityById({
           if (showError) {
             final localization =
                 AppLocalization.of(navigatorKey.currentContext);
-            showErrorDialog(
-                context: navigatorKey.currentContext,
-                message: localization.failedToFindRecord);
+            showErrorDialog(message: localization.failedToFindRecord);
           }
           return;
         }
@@ -544,13 +556,13 @@ void viewEntityById({
             store.dispatch(ToggleViewerLayout(entityType));
           final filterEntity =
               store.state.getEntityMap(entityType)[entityId] as BaseEntity;
-          viewEntitiesByType(
-              entityType: filterEntity.entityType.relatedTypes
-                  .where((entityType) =>
-                      state.userCompany.canViewCreateOrEdit(entityType))
-                  .first,
-              filterEntity: filterEntity);
-          return;
+          final entityTypes = filterEntity.entityType.relatedTypes
+              .where((entityType) => state.company.isModuleEnabled(entityType));
+          if (entityTypes.isNotEmpty) {
+            viewEntitiesByType(
+                entityType: entityTypes.first, filterEntity: filterEntity);
+            return;
+          }
         }
 
         switch (entityType) {
@@ -915,17 +927,16 @@ void createEntityByType({
           case EntityType.schedule:
             store.dispatch(EditSchedule(
               force: force,
-              schedule: ScheduleEntity(state: state),
+              schedule: ScheduleEntity(ScheduleEntity.TEMPLATE_EMAIL_STATEMENT,
+                  state: state),
             ));
             break;
-
           case EntityType.transactionRule:
             store.dispatch(EditTransactionRule(
               force: force,
               transactionRule: TransactionRuleEntity(state: state),
             ));
             break;
-
           case EntityType.transaction:
             store.dispatch(EditTransaction(
               force: force,
@@ -1051,6 +1062,7 @@ void createEntity({
   bool force = false,
   Completer completer,
   Completer cancelCompleter,
+  BaseEntity filterEntity,
 }) {
   final store = StoreProvider.of<AppState>(context);
   final state = store.state;
@@ -1071,6 +1083,14 @@ void createEntity({
         if (state.prefState.isDesktop &&
             !state.prefState.isEditorFullScreen(entity.entityType)) {
           store.dispatch(ToggleEditorLayout(entity.entityType));
+        }
+
+        if (filterEntity != null) {
+          if (uiState.filterEntityType != filterEntity.entityType ||
+              uiState.filterEntityId != filterEntity.id) {
+            store.dispatch(ClearEntitySelection(entityType: entity.entityType));
+            store.dispatch(FilterByEntity(entity: filterEntity));
+          }
         }
 
         switch (entity.entityType) {

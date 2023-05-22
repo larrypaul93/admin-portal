@@ -14,6 +14,7 @@ class EditorToolbar extends StatefulWidget {
   const EditorToolbar({
     Key key,
     @required this.anchor,
+    @required this.editorFocusNode,
     @required this.editor,
     @required this.composer,
     @required this.closeToolbar,
@@ -25,6 +26,9 @@ class EditorToolbar extends StatefulWidget {
   /// [anchor] is a [ValueNotifier] so that [EditorToolbar] can
   /// reposition itself as the [Offset] value changes.
   final ValueNotifier<Offset> anchor;
+
+  /// The [FocusNode] attached to the editor to which this toolbar applies.
+  final FocusNode editorFocusNode;
 
   /// The [editor] is used to alter document content, such as
   /// when the user selects a different block format for a
@@ -49,13 +53,13 @@ class EditorToolbar extends StatefulWidget {
 class _EditorToolbarState extends State<EditorToolbar> {
   bool _showUrlField = false;
   FocusNode _urlFocusNode;
-  TextEditingController _urlController;
+  AttributedTextEditingController _urlController;
 
   @override
   void initState() {
     super.initState();
     _urlFocusNode = FocusNode();
-    _urlController = TextEditingController();
+    _urlController = SingleLineAttributedTextEditingController(_applyLink);
   }
 
   @override
@@ -65,6 +69,7 @@ class _EditorToolbarState extends State<EditorToolbar> {
     super.dispose();
   }
 
+  /*
   /// Returns true if the currently selected text node is capable of being
   /// transformed into a different type text node, returns false if
   /// multiple nodes are selected, no node is selected, or the selected
@@ -79,7 +84,7 @@ class _EditorToolbarState extends State<EditorToolbar> {
         widget.editor.document.getNodeById(selection.extent.nodeId);
     return selectedNode is ParagraphNode || selectedNode is ListItemNode;
   }
-
+  
   /// Returns the block type of the currently selected text node.
   ///
   /// Throws an exception if the currently selected node is not a text node.
@@ -109,10 +114,9 @@ class _EditorToolbarState extends State<EditorToolbar> {
     }
   }
 
-  /*
   /// Returns the text alignment of the currently selected text node.
   ///
-  /// Throws an exception if the currently selected node is not a text node.  
+  /// Throws an exception if the currently selected node is not a text node.
   TextAlign _getCurrentTextAlignment() {
     final selectedNode = widget.editor.document
         .getNodeById(widget.composer.selection.extent.nodeId);
@@ -148,7 +152,6 @@ class _EditorToolbarState extends State<EditorToolbar> {
         widget.editor.document.getNodeById(selection.extent.nodeId);
     return selectedNode is ParagraphNode;
   }
-  */
 
   /// Converts the currently selected text node into a new type of
   /// text node, represented by [newType].
@@ -199,6 +202,7 @@ class _EditorToolbarState extends State<EditorToolbar> {
           'blockType', _getBlockTypeAttribution(newType));
     }
   }
+  
 
   /// Returns true if the given [_TextType] represents an
   /// ordered or unordered list item, returns false otherwise.
@@ -224,6 +228,7 @@ class _EditorToolbarState extends State<EditorToolbar> {
         return null;
     }
   }
+  */
 
   /// Toggles bold styling for the current selected text.
   void _toggleBold() {
@@ -352,7 +357,7 @@ class _EditorToolbarState extends State<EditorToolbar> {
   /// Takes the text from the [urlController] and applies it as a link
   /// attribution to the currently selected text.
   void _applyLink() {
-    final url = _urlController.text;
+    final url = _urlController.text.text;
 
     final selection = widget.composer.selection;
     final baseOffset = (selection.base.nodePosition as TextPosition).offset;
@@ -360,7 +365,7 @@ class _EditorToolbarState extends State<EditorToolbar> {
     final selectionStart = min(baseOffset, extentOffset);
     final selectionEnd = max(baseOffset, extentOffset);
     final selectionRange =
-        SpanRange(start: selectionStart, end: selectionEnd - 1);
+        TextRange(start: selectionStart, end: selectionEnd - 1);
 
     final textNode =
         widget.editor.document.getNodeById(selection.extent.nodeId) as TextNode;
@@ -387,7 +392,7 @@ class _EditorToolbarState extends State<EditorToolbar> {
   /// Given [text] and a [range] within the [text], the [range] is
   /// shortened on both sides to remove any trailing whitespace and
   /// the new range is returned.
-  SpanRange _trimTextRangeWhitespace(AttributedText text, SpanRange range) {
+  SpanRange _trimTextRangeWhitespace(AttributedText text, TextRange range) {
     int startOffset = range.start;
     int endOffset = range.end;
 
@@ -430,7 +435,6 @@ class _EditorToolbarState extends State<EditorToolbar> {
         .getNodeById(widget.composer.selection.extent.nodeId) as ParagraphNode;
     selectedNode.putMetadataValue('textAlign', newAlignmentValue);
   }
-  */
 
   /// Returns the localized name for the given [_TextType], e.g.,
   /// "Paragraph" or "Header 1".
@@ -454,6 +458,7 @@ class _EditorToolbarState extends State<EditorToolbar> {
 
     return '';
   }
+  */
 
   @override
   Widget build(BuildContext context) {
@@ -504,6 +509,9 @@ class _EditorToolbarState extends State<EditorToolbar> {
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
+            /*
+            // https://github.com/superlistapp/super_editor/issues/689
+            // https://github.com/flutter/flutter/issues/106923            
             // Only allow the user to select a new type of text node if
             // the currently selected node can be converted.
             if (_isConvertibleNode()) ...[
@@ -512,7 +520,6 @@ class _EditorToolbarState extends State<EditorToolbar> {
                 child: DropdownButton<_TextType>(
                   value: _getCurrentTextType(),
                   items: _TextType.values
-                      .where((element) => element != _TextType.blockquote)
                       .map((textType) => DropdownMenuItem<_TextType>(
                             value: textType,
                             child: Padding(
@@ -522,8 +529,10 @@ class _EditorToolbarState extends State<EditorToolbar> {
                           ))
                       .toList(),
                   icon: const Icon(Icons.arrow_drop_down),
-                  style: const TextStyle(
-                    color: Colors.black,
+                  style: TextStyle(
+                    color: Theme.of(context).brightness == Brightness.dark
+                        ? Colors.white
+                        : Colors.black,
                     fontSize: 12,
                   ),
                   underline: const SizedBox(),
@@ -534,6 +543,7 @@ class _EditorToolbarState extends State<EditorToolbar> {
               ),
               _buildVerticalDivider(),
             ],
+            */
             Center(
               child: IconButton(
                 onPressed: _toggleBold,
@@ -604,6 +614,15 @@ class _EditorToolbarState extends State<EditorToolbar> {
                 ),
               ),
             ],
+            _buildVerticalDivider(),
+            Center(
+              child: IconButton(
+                onPressed: () {},
+                icon: const Icon(Icons.more_vert),
+                splashRadius: 16,
+                tooltip: 'More Options',
+              ),
+            ),
             */
           ],
         ),
@@ -623,14 +642,37 @@ class _EditorToolbarState extends State<EditorToolbar> {
         child: Row(
           children: [
             Expanded(
-              child: TextField(
+              child: FocusWithCustomParent(
                 focusNode: _urlFocusNode,
-                controller: _urlController,
-                decoration: const InputDecoration(
-                  hintText: 'enter url...',
-                  border: InputBorder.none,
+                parentFocusNode: widget.editorFocusNode,
+                // We use a SuperTextField instead of a TextField because TextField
+                // automatically re-parents its FocusNode, which causes #609. Flutter
+                // #106923 tracks the TextField issue.
+                child: SuperTextField(
+                  focusNode: _urlFocusNode,
+                  textController: _urlController,
+                  minLines: 1,
+                  maxLines: 1,
+                  inputSource: TextInputSource.ime,
+                  hintBehavior: HintBehavior.displayHintUntilTextEntered,
+                  hintBuilder: (context) {
+                    return Text(
+                      'Enter a url...',
+                      style: const TextStyle(
+                        color: Colors.grey,
+                        fontSize: 16,
+                      ),
+                    );
+                  },
+                  textStyleBuilder: (_) {
+                    return TextStyle(
+                      color: Theme.of(context).brightness == Brightness.dark
+                          ? Colors.white
+                          : Colors.black,
+                      fontSize: 16,
+                    );
+                  },
                 ),
-                onSubmitted: (newValue) => _applyLink(),
               ),
             ),
             IconButton(
@@ -652,6 +694,7 @@ class _EditorToolbarState extends State<EditorToolbar> {
     );
   }
 
+  /*
   Widget _buildVerticalDivider() {
     return Container(
       width: 1,
@@ -659,7 +702,7 @@ class _EditorToolbarState extends State<EditorToolbar> {
     );
   }
 
-  /*
+  
   IconData _buildTextAlignIcon(TextAlign align) {
     switch (align) {
       case TextAlign.left:
@@ -679,6 +722,7 @@ class _EditorToolbarState extends State<EditorToolbar> {
   */
 }
 
+/*
 enum _TextType {
   header1,
   header2,
@@ -688,6 +732,7 @@ enum _TextType {
   orderedListItem,
   unorderedListItem,
 }
+*/
 
 /// Small toolbar that is intended to display over an image and
 /// offer controls to expand or contract the size of the image.
@@ -838,5 +883,23 @@ class _PositionedToolbar extends StatelessWidget {
         );
       },
     );
+  }
+}
+
+class SingleLineAttributedTextEditingController
+    extends AttributedTextEditingController {
+  SingleLineAttributedTextEditingController(this.onSubmit);
+
+  final VoidCallback onSubmit;
+
+  @override
+  void insertNewline() {
+    // Don't insert newline in a single-line text field.
+
+    // Invoke callback to take action on enter.
+    onSubmit();
+
+    // TODO: this is a hack. SuperTextField shouldn't insert newlines in a single
+    // line field (#697).
   }
 }

@@ -3,15 +3,16 @@ import 'dart:async';
 import 'dart:convert';
 
 // Flutter imports:
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 // Package imports:
-import 'package:built_collection/built_collection.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 
 // Project imports:
 import 'package:invoiceninja_flutter/constants.dart';
+import 'package:invoiceninja_flutter/data/models/company_model.dart';
 import 'package:invoiceninja_flutter/data/models/entities.dart';
 import 'package:invoiceninja_flutter/data/models/user_model.dart';
 import 'package:invoiceninja_flutter/data/web_client.dart';
@@ -20,7 +21,6 @@ import 'package:invoiceninja_flutter/redux/app/app_state.dart';
 import 'package:invoiceninja_flutter/redux/company/company_actions.dart';
 import 'package:invoiceninja_flutter/redux/settings/settings_actions.dart';
 import 'package:invoiceninja_flutter/redux/static/static_selectors.dart';
-import 'package:invoiceninja_flutter/redux/ui/pref_state.dart';
 import 'package:invoiceninja_flutter/ui/app/app_builder.dart';
 import 'package:invoiceninja_flutter/ui/app/entity_dropdown.dart';
 import 'package:invoiceninja_flutter/ui/app/forms/app_form.dart';
@@ -34,9 +34,11 @@ import 'package:invoiceninja_flutter/utils/platforms.dart';
 class SettingsWizard extends StatefulWidget {
   const SettingsWizard({
     @required this.user,
+    @required this.company,
   });
 
   final UserEntity user;
+  final CompanyEntity company;
 
   @override
   _SettingsWizardState createState() => _SettingsWizardState();
@@ -73,17 +75,10 @@ class _SettingsWizardState extends State<SettingsWizard> {
       _lastNameController,
       _subdomainController,
     ];
-  }
-
-  @override
-  void didChangeDependencies() {
-    final store = StoreProvider.of<AppState>(context);
 
     _firstNameController.text = widget.user.firstName;
     _lastNameController.text = widget.user.lastName;
-    _subdomainController.text = store.state.company.subdomain;
-
-    super.didChangeDependencies();
+    _subdomainController.text = widget.company.subdomain;
   }
 
   @override
@@ -260,24 +255,25 @@ class _SettingsWizardState extends State<SettingsWizard> {
     final darkMode = LayoutBuilder(builder: (context, constraints) {
       return ToggleButtons(
         children: [
+          Text(localization.system),
           Text(localization.light),
           Text(localization.dark),
         ],
         constraints: BoxConstraints.expand(
-            width: (constraints.maxWidth / 2) - 2, height: 40),
+            width: (constraints.maxWidth / 3) - 2, height: 40),
         isSelected: [
-          !state.prefState.enableDarkMode,
-          state.prefState.enableDarkMode,
+          state.prefState.darkModeType == kBrightnessSytem,
+          state.prefState.darkModeType == kBrightnessLight,
+          state.prefState.darkModeType == kBrightnessDark,
         ],
         onPressed: (index) {
-          final isDark = index == 1;
           store.dispatch(
             UpdateUserPreferences(
-              enableDarkMode: isDark,
-              colorTheme: isDark ? kColorThemeDark : kColorThemeLight,
-              customColors: isDark
-                  ? BuiltMap<String, String>()
-                  : BuiltMap<String, String>(PrefState.CONTRAST_COLORS),
+              darkModeType: index == 0
+                  ? kBrightnessSytem
+                  : index == 1
+                      ? kBrightnessLight
+                      : kBrightnessDark,
             ),
           );
           AppBuilder.of(context).rebuild();
@@ -313,7 +309,7 @@ class _SettingsWizardState extends State<SettingsWizard> {
     );
 
     var showNameFields = true;
-    if (state.companies.length > 1) {
+    if (state.companies.length > 1 && kReleaseMode) {
       showNameFields = false;
     }
     if (state.user.isConnectedToApple && state.user.fullName.isEmpty) {
@@ -333,10 +329,13 @@ class _SettingsWizardState extends State<SettingsWizard> {
                   )
                 : _showLogo
                     ? Center(
-                        child: Text(
-                          localization.setupWizardLogo,
-                          textAlign: TextAlign.center,
-                          style: Theme.of(context).textTheme.headline6,
+                        child: Padding(
+                          padding: const EdgeInsets.only(top: 32),
+                          child: Text(
+                            localization.setupWizardLogo,
+                            textAlign: TextAlign.center,
+                            style: Theme.of(context).textTheme.titleLarge,
+                          ),
                         ),
                       )
                     : Column(
@@ -349,7 +348,7 @@ class _SettingsWizardState extends State<SettingsWizard> {
                                   child: Text(
                                     localization.welcomeToInvoiceNinja,
                                     style:
-                                        Theme.of(context).textTheme.headline6,
+                                        Theme.of(context).textTheme.titleLarge,
                                   ),
                                 ),
                                 companyName,
@@ -374,8 +373,9 @@ class _SettingsWizardState extends State<SettingsWizard> {
                                     Expanded(
                                         child: Text(
                                       localization.welcomeToInvoiceNinja,
-                                      style:
-                                          Theme.of(context).textTheme.headline6,
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .titleLarge,
                                     )),
                                     if (state.isHosted) ...[
                                       SizedBox(width: kTableColumnGap),

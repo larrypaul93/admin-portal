@@ -266,7 +266,9 @@ class _CompanyDetailsState extends State<CompanyDetails>
               FormCard(
                 children: <Widget>[
                   DecoratedFormField(
-                    label: localization.name,
+                    label: state.settingsUIState.isFiltered
+                        ? localization.companyName
+                        : localization.name,
                     controller: _nameController,
                     /*
                     validator: (val) => val.isEmpty || val.trim().isEmpty
@@ -478,7 +480,7 @@ class _CompanyDetailsState extends State<CompanyDetails>
                         Expanded(
                           child: AppButton(
                             width: double.infinity,
-                            label: localization.uploadLogo,
+                            label: localization.uploadLogo.toUpperCase(),
                             iconData: Icons.cloud_upload,
                             onPressed: () async {
                               if (state.settingsUIState.isChanged) {

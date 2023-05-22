@@ -25,6 +25,8 @@ class DatePicker extends StatefulWidget {
     this.allowClearing = false,
     this.message,
     this.firstDate,
+    this.autofocus = false,
+    this.hint,
   }) : super(key: key);
 
   final String labelText;
@@ -35,6 +37,8 @@ class DatePicker extends StatefulWidget {
   final bool allowClearing;
   final String message;
   final DateTime firstDate;
+  final bool autofocus;
+  final String hint;
 
   @override
   _DatePickerState createState() => new _DatePickerState();
@@ -119,11 +123,13 @@ class _DatePickerState extends State<DatePicker> {
     }
 
     return DecoratedFormField(
+      autofocus: widget.autofocus,
       focusNode: _focusNode,
       validator: widget.validator,
       controller: _textController,
       keyboardType: TextInputType.text,
       decoration: InputDecoration(
+        hintText: widget.hint ?? '',
         labelText: _pendingValue ?? label ?? '',
         suffixIcon:
             widget.allowClearing && (widget.selectedDate ?? '').isNotEmpty

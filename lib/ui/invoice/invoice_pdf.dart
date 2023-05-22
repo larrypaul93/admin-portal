@@ -16,7 +16,7 @@ import 'package:invoiceninja_flutter/main_app.dart';
 import 'package:invoiceninja_flutter/ui/app/dialogs/error_dialog.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:printing/printing.dart';
-import 'package:share/share.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 // Project imports:
@@ -55,6 +55,7 @@ class _InvoicePdfViewState extends State<InvoicePdfView> {
   bool _isLoading = true;
   bool _isDeliveryNote = false;
   String _activityId;
+  String _pdfString;
   http.Response _response;
   //int _pageCount = 1;
   //int _currentPage = 1;
@@ -75,6 +76,7 @@ class _InvoicePdfViewState extends State<InvoicePdfView> {
   void loadPdf() {
     final viewModel = widget.viewModel;
     final invoice = viewModel.invoice;
+    final state = viewModel.state;
 
     if (invoice.invitations.isEmpty) {
       return;
@@ -93,6 +95,12 @@ class _InvoicePdfViewState extends State<InvoicePdfView> {
       setState(() {
         _response = response;
         _isLoading = false;
+
+        if (kIsWeb && state.prefState.enableNativeBrowser) {
+          _pdfString =
+              'data:application/pdf;base64,' + base64Encode(response.bodyBytes);
+          WebUtils.registerWebView(_pdfString);
+        }
       });
     }).catchError((Object error) {
       setState(() {
@@ -282,7 +290,7 @@ class _InvoicePdfViewState extends State<InvoicePdfView> {
                                     showToast(localization
                                         .fileSavedInDownloadsFolder);
                                   } else {
-                                    await Share.shareFiles([filePath]);
+                                    await Share.shareXFiles([XFile(filePath)]);
                                   }
                                 }
                               }
@@ -301,17 +309,20 @@ class _InvoicePdfViewState extends State<InvoicePdfView> {
             : null,
         body: _isLoading || _response == null
             ? LoadingIndicator()
-            : PdfPreview(
-                build: (format) => _response.bodyBytes,
-                canChangeOrientation: false,
-                canChangePageFormat: false,
-                canDebug: false,
-                maxPageWidth: 800,
-                pdfFileName: localization.lookup(invoice.entityType.snakeCase) +
-                    '_' +
-                    invoice.number +
-                    '.pdf',
-              ));
+            : (kIsWeb && state.prefState.enableNativeBrowser)
+                ? HtmlElementView(viewType: _pdfString)
+                : PdfPreview(
+                    build: (format) => _response.bodyBytes,
+                    canChangeOrientation: false,
+                    canChangePageFormat: false,
+                    canDebug: false,
+                    maxPageWidth: 800,
+                    pdfFileName:
+                        localization.lookup(invoice.entityType.snakeCase) +
+                            '_' +
+                            invoice.number +
+                            '.pdf',
+                  ));
   }
 }
 
@@ -323,7 +334,7 @@ Future<Response> _loadPDF(
 ) async {
   http.Response response;
 
-  if (activityId != null || isDeliveryNote) {
+  if ((activityId ?? '').isNotEmpty || isDeliveryNote) {
     final store = StoreProvider.of<AppState>(context);
     final credential = store.state.credentials;
     final url = isDeliveryNote
@@ -347,7 +358,7 @@ Future<Response> _loadPDF(
       errorMessage += response.body;
     }
 
-    showErrorDialog(context: context, message: errorMessage);
+    showErrorDialog(message: errorMessage);
     throw errorMessage;
   }
 

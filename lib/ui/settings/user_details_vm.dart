@@ -112,12 +112,11 @@ class UserDetailsVM {
                     final completer = snackBarCompleter<Null>(
                         context, AppLocalization.of(context).disconnectedEmail);
                     store.dispatch(
-                      SaveAuthUserRequest(
-                        user: state.user.rebuild((b) => b..oauthUserToken = ''),
-                        password: password,
-                        idToken: idToken,
-                        completer: completer,
-                      ),
+                      DisconnectOAuthMailerRequest(
+                          user: state.user,
+                          completer: completer,
+                          password: password,
+                          idToken: idToken),
                     );
                   });
             });
@@ -132,12 +131,11 @@ class UserDetailsVM {
                     final completer = snackBarCompleter<Null>(
                         context, AppLocalization.of(context).disconnectedGmail);
                     store.dispatch(
-                      SaveAuthUserRequest(
-                        user: state.user.rebuild((b) => b..oauthUserToken = ''),
-                        password: password,
-                        idToken: idToken,
-                        completer: completer,
-                      ),
+                      DisconnectOAuthMailerRequest(
+                          user: state.user,
+                          completer: completer,
+                          password: password,
+                          idToken: idToken),
                     );
                   });
             });
@@ -165,7 +163,6 @@ class UserDetailsVM {
       onDisconnectGooglePressed: (context) {
         if (!state.user.hasPassword) {
           showErrorDialog(
-              context: context,
               message: AppLocalization.of(context).pleaseFirstSetAPassword);
           return;
         }
@@ -183,8 +180,8 @@ class UserDetailsVM {
                       GoogleOAuth.disconnect();
                     });
                     store.dispatch(
-                      SaveAuthUserRequest(
-                        user: state.user.rebuild((b) => b..oauthProvider = ''),
+                      DisconnecOAuthUserRequest(
+                        user: state.user,
                         password: password,
                         idToken: idToken,
                         completer: completer,
@@ -206,7 +203,6 @@ class UserDetailsVM {
                   if (idToken.isEmpty || accessToken.isEmpty) {
                     GoogleOAuth.signOut();
                     showErrorDialog(
-                        context: context,
                         message: AppLocalization.of(context)
                             .anErrorOccurredTryAgain);
                   } else {
@@ -223,19 +219,17 @@ class UserDetailsVM {
                 });
                 if (!signedIn) {
                   showErrorDialog(
-                      context: context,
                       message: AppLocalization.of(navigatorKey.currentContext)
                           .anErrorOccurredTryAgain);
                 }
               } catch (error) {
-                showErrorDialog(context: context, message: error);
+                showErrorDialog(message: error);
               }
             });
       },
       onDisconnectMicrosoftPressed: (context) {
         if (!state.user.hasPassword) {
           showErrorDialog(
-              context: context,
               message: AppLocalization.of(context).pleaseFirstSetAPassword);
           return;
         }
@@ -249,12 +243,9 @@ class UserDetailsVM {
                   callback: (password, idToken) {
                     final completer = snackBarCompleter<Null>(context,
                         AppLocalization.of(context).disconnectedMicrosoft);
-                    completer.future.then((value) {
-                      WebUtils.microsoftLogout();
-                    });
                     store.dispatch(
-                      SaveAuthUserRequest(
-                        user: state.user.rebuild((b) => b..oauthProvider = ''),
+                      DisconnecOAuthUserRequest(
+                        user: state.user,
                         password: password,
                         idToken: idToken,
                         completer: completer,
@@ -266,7 +257,6 @@ class UserDetailsVM {
       onDisconnectApplePressed: (context) {
         if (!state.user.hasPassword) {
           showErrorDialog(
-              context: context,
               message: AppLocalization.of(context).pleaseFirstSetAPassword);
           return;
         }
@@ -278,14 +268,11 @@ class UserDetailsVM {
                   context: context,
                   skipOAuth: true,
                   callback: (password, idToken) {
-                    final completer = snackBarCompleter<Null>(context,
-                        AppLocalization.of(context).disconnectedMicrosoft);
-                    completer.future.then((value) {
-                      WebUtils.microsoftLogout();
-                    });
+                    final completer = snackBarCompleter<Null>(
+                        context, AppLocalization.of(context).disconnectedApple);
                     store.dispatch(
-                      SaveAuthUserRequest(
-                        user: state.user.rebuild((b) => b..oauthProvider = ''),
+                      DisconnecOAuthUserRequest(
+                        user: state.user,
                         password: password,
                         idToken: idToken,
                         completer: completer,
@@ -313,10 +300,10 @@ class UserDetailsVM {
                     ),
                   );
                 }, (dynamic error) {
-                  showErrorDialog(context: context, message: error);
+                  showErrorDialog(message: error);
                 });
               } catch (error) {
-                showErrorDialog(context: context, message: error);
+                showErrorDialog(message: error);
               }
             });
       },

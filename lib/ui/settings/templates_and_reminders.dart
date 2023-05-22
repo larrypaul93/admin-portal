@@ -313,8 +313,7 @@ class _TemplatesAndRemindersState extends State<TemplatesAndReminders>
     final settings = viewModel.settings;
     final template = widget.viewModel.selectedTemplate;
     final company = state.company;
-    final enableCustomEmail =
-        state.isSelfHosted || state.isProPlan || state.isTrial;
+    final enableCustomEmail = state.isProPlan || state.isTrial;
 
     return EditScaffold(
       title: localization.templatesAndReminders,
@@ -772,7 +771,7 @@ class EmailPreview extends StatelessWidget {
                   subject,
                   style: Theme.of(context)
                       .textTheme
-                      .bodyText1
+                      .bodyLarge
                       .copyWith(color: Colors.black),
                 ),
               ),

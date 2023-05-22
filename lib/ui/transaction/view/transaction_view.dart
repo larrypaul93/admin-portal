@@ -84,7 +84,7 @@ class _TransactionViewState extends State<TransactionView> {
                 ],
                 if (transaction.isConverted) ...[
                   if (transaction.description.isNotEmpty) ...[
-                    IconMessage(transaction.description),
+                    IconMessage(transaction.description, copyToClipboard: true),
                     ListDivider(),
                   ],
                   EntityListTile(
@@ -117,10 +117,11 @@ class _TransactionViewState extends State<TransactionView> {
                           .get(transaction.categoryId),
                       isFilter: false,
                     ),
-                    EntityListTile(
-                      entity: state.expenseState.get(transaction.expenseId),
-                      isFilter: false,
-                    ),
+                    for (final expenseId in transaction.expenseId.split(','))
+                      EntityListTile(
+                        entity: state.expenseState.get(expenseId),
+                        isFilter: false,
+                      ),
                   ]
                 ] else ...[
                   if (transaction.isDeposit)
@@ -198,12 +199,19 @@ class _MatchDepositsState extends State<_MatchDeposits> {
   void updateInvoiceList() {
     final state = widget.viewModel.state;
     final invoiceState = state.invoiceState;
+    final transactions = widget.viewModel.transactions;
 
     _invoices = invoiceState.map.values.where((invoice) {
       if (_selectedInvoices.isNotEmpty) {
         if (invoice.clientId != _selectedInvoices.first.clientId) {
           return false;
         }
+      }
+
+      if (transactions.isNotEmpty &&
+          state.clientState.get(invoice.clientId).currencyId !=
+              transactions.first.currencyId) {
+        return false;
       }
 
       if (invoice.isPaid || invoice.isDeleted) {
@@ -256,6 +264,7 @@ class _MatchDepositsState extends State<_MatchDeposits> {
   void updatePaymentList() {
     final state = widget.viewModel.state;
     final paymentState = state.paymentState;
+    final transactions = widget.viewModel.transactions;
 
     _payments = paymentState.map.values.where((payment) {
       if (_selectedPayment != null) {
@@ -265,6 +274,12 @@ class _MatchDepositsState extends State<_MatchDeposits> {
       }
 
       if (payment.transactionId.isNotEmpty || payment.isDeleted) {
+        return false;
+      }
+
+      if (transactions.isNotEmpty &&
+          state.clientState.get(payment.clientId).currencyId !=
+              transactions.first.currencyId) {
         return false;
       }
 
@@ -673,7 +688,7 @@ class _MatchWithdrawalsState extends State<_MatchWithdrawals> {
   List<ExpenseEntity> _expenses;
   VendorEntity _selectedVendor;
   ExpenseCategoryEntity _selectedCategory;
-  ExpenseEntity _selectedExpense;
+  List<ExpenseEntity> _selectedExpenses;
 
   @override
   void initState() {
@@ -682,6 +697,7 @@ class _MatchWithdrawalsState extends State<_MatchWithdrawals> {
     _vendorFilterController = TextEditingController();
     _categoryFilterController = TextEditingController();
     _expenseFilterController = TextEditingController();
+    _selectedExpenses = [];
 
     _vendorFocusNode = FocusNode();
     _categoryFocusNode = FocusNode();
@@ -776,15 +792,15 @@ class _MatchWithdrawalsState extends State<_MatchWithdrawals> {
   void updateExpenseList() {
     final state = widget.viewModel.state;
     final expenseState = state.expenseState;
+    final transactions = widget.viewModel.transactions;
 
     _expenses = expenseState.map.values.where((expense) {
-      if (_selectedExpense != null) {
-        if (expense.id != _selectedExpense.id) {
-          return false;
-        }
+      if (expense.transactionId.isNotEmpty || expense.isDeleted) {
+        return false;
       }
 
-      if (expense.transactionId.isNotEmpty || expense.isDeleted) {
+      if (transactions.isNotEmpty &&
+          expense.currencyId != transactions.first.currencyId) {
         return false;
       }
 
@@ -871,6 +887,17 @@ class _MatchWithdrawalsState extends State<_MatchWithdrawals> {
     final transactions = viewModel.transactions;
     final transaction =
         transactions.isNotEmpty ? transactions.first : TransactionEntity();
+
+    String currencyId;
+    if (_selectedExpenses.isNotEmpty) {
+      currencyId =
+          state.clientState.get(_selectedExpenses.first.clientId).currencyId;
+    }
+
+    double totalSelected = 0;
+    _selectedExpenses.forEach((expense) {
+      totalSelected += expense.grossAmount;
+    });
 
     return Column(
       mainAxisSize: MainAxisSize.max,
@@ -1024,16 +1051,19 @@ class _MatchWithdrawalsState extends State<_MatchWithdrawals> {
                     expense: expense,
                     showCheckbox: true,
                     showSelected: false,
-                    isChecked: _selectedExpense?.id == expense.id,
+                    isChecked: _selectedExpenses.contains(expense),
                     onTap: () => setState(() {
-                      if (_selectedExpense?.id == expense.id) {
-                        _selectedExpense = null;
+                      if (_selectedExpenses.contains(expense)) {
+                        _selectedExpenses.remove(expense);
                       } else {
-                        _selectedExpense = expense;
+                        _selectedExpenses.add(expense);
                       }
                       updateExpenseList();
                       store.dispatch(SaveTransactionSuccess(transaction.rebuild(
-                          (b) => b..pendingExpenseId = _selectedExpense?.id)));
+                          (b) => b
+                            ..pendingExpenseId = _selectedExpenses
+                                .map((expense) => expense.id)
+                                .join(','))));
                     }),
                   );
                 },
@@ -1225,6 +1255,15 @@ class _MatchWithdrawalsState extends State<_MatchWithdrawals> {
               ],
             ),
           ),
+        if (_selectedExpenses.isNotEmpty)
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+            child: Text(
+              '${_selectedExpenses.length} ${localization.selected} • ${formatNumber(totalSelected, context, currencyId: currencyId)}',
+              textAlign: TextAlign.center,
+              style: TextStyle(color: Colors.grey),
+            ),
+          ),
         ListDivider(),
         Padding(
           padding: const EdgeInsets.only(
@@ -1234,15 +1273,19 @@ class _MatchWithdrawalsState extends State<_MatchWithdrawals> {
           ),
           child: _matchExisting
               ? AppButton(
-                  label: localization.linkExpense,
+                  label: _selectedExpenses.length > 1
+                      ? localization.linkExpenses
+                      : localization.linkExpense,
                   onPressed:
-                      _selectedExpense == null || viewModel.state.isSaving
+                      _selectedExpenses.isEmpty || viewModel.state.isSaving
                           ? null
                           : () {
                               final viewModel = widget.viewModel;
                               viewModel.onLinkToExpense(
                                 context,
-                                _selectedExpense?.id ?? '',
+                                _selectedExpenses
+                                    .map((expense) => expense.id)
+                                    .join(','),
                               );
                             },
                   iconData: Icons.link,

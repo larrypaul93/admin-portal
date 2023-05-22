@@ -126,6 +126,11 @@ abstract class CompanyEntity extends Object
       convertPaymentCurrency: false,
       convertExpenseCurrency: false,
       notifyVendorWhenPaid: false,
+      calculateTaxes: false,
+      hasEInvoiceCertificate: false,
+      hasEInvoiceCertificatePassphrase: false,
+      eInvoiceCertificatePassphrase: '',
+      taxData: TaxDataEntity(),
       groups: BuiltList<GroupEntity>(),
       taxRates: BuiltList<TaxRateEntity>(),
       taskStatuses: BuiltList<TaskStatusEntity>(),
@@ -462,8 +467,23 @@ abstract class CompanyEntity extends Object
   @BuiltValueField(wireName: 'calculate_expense_tax_by_amount')
   bool get calculateExpenseTaxByAmount;
 
-  @BuiltValueField(wireName: 'stop_on_unpaid_recurring ')
+  @BuiltValueField(wireName: 'stop_on_unpaid_recurring')
   bool get stopOnUnpaidRecurring;
+
+  @BuiltValueField(wireName: 'calculate_taxes')
+  bool get calculateTaxes;
+
+  @BuiltValueField(wireName: 'tax_data')
+  TaxDataEntity get taxData;
+
+  @BuiltValueField(wireName: 'has_e_invoice_certificate')
+  bool get hasEInvoiceCertificate;
+
+  @BuiltValueField(wireName: 'has_e_invoice_certificate_passphrase')
+  bool get hasEInvoiceCertificatePassphrase;
+
+  @BuiltValueField(wireName: 'e_invoice_certificate_passphrase')
+  String get eInvoiceCertificatePassphrase;
 
   String get displayName => settings.name ?? '';
 
@@ -621,6 +641,20 @@ abstract class CompanyEntity extends Object
     }
   }
 
+  String formatCustomFieldValue(String field, String value) {
+    final context = navigatorKey.currentContext;
+    final type = getCustomFieldType(field);
+    final localization = AppLocalization.of(context);
+
+    if (type == kFieldTypeDate) {
+      value = formatDate(value, context);
+    } else if (type == kFieldTypeSwitch) {
+      value = value == kSwitchValueYes ? localization.yes : localization.no;
+    }
+
+    return getCustomFieldLabel(field) + ': $value';
+  }
+
   List<String> getCustomFieldValues(String field, {bool excludeBlank = false}) {
     final values = customFields[field];
 
@@ -745,6 +779,11 @@ abstract class CompanyEntity extends Object
     ..convertPaymentCurrency = false
     ..convertExpenseCurrency = false
     ..notifyVendorWhenPaid = false
+    ..calculateTaxes = false
+    ..hasEInvoiceCertificate = false
+    ..hasEInvoiceCertificatePassphrase = false
+    ..eInvoiceCertificatePassphrase = ''
+    ..taxData.replace(TaxDataEntity())
     ..systemLogs.replace(BuiltList<SystemLogEntity>())
     ..subscriptions.replace(BuiltList<SubscriptionEntity>())
     ..recurringExpenses.replace(BuiltList<ExpenseEntity>())
@@ -811,8 +850,8 @@ abstract class GatewayEntity extends Object
       .where((typeId) => options[typeId].supportTokenBilling)
       .isNotEmpty;
 
-  bool get supportsRefunds =>
-      options.keys.where((typeId) => options[typeId].supportRefunds).isNotEmpty;
+  bool supportsRefunds(String gatewayTypeId) =>
+      options[gatewayTypeId]?.supportRefunds ?? false;
 
   Map<String, dynamic> get parsedFields =>
       fields.isEmpty ? <String, dynamic>{} : jsonDecode(fields);
@@ -1078,6 +1117,14 @@ abstract class UserCompanyEntity
     }
   }
 
+  bool get canViewReports {
+    if (isAdmin) {
+      return true;
+    }
+
+    return permissions.contains(kPermissionViewReports);
+  }
+
   // ignore: unused_element
   static void _initializeBuilder(UserCompanyEntityBuilder builder) => builder
     ..settings.replace(UserSettingsEntity())
@@ -1099,7 +1146,6 @@ abstract class UserSettingsEntity
       accentColor: kDefaultAccentColor,
       numberYearsActive: 3,
       tableColumns: BuiltMap<String, BuiltList<String>>(),
-      reactTableColumns: BuiltMap<String, BuiltList<String>>(),
       reportSettings: BuiltMap<String, ReportSettingsEntity>(),
       includeDeletedClients: false,
       dashboardFields: BuiltList<DashboardField>(<DashboardField>[
@@ -1134,9 +1180,6 @@ abstract class UserSettingsEntity
   @BuiltValueField(wireName: 'table_columns')
   BuiltMap<String, BuiltList<String>> get tableColumns;
 
-  @BuiltValueField(wireName: 'react_table_column')
-  BuiltMap<String, BuiltList<String>> get reactTableColumns;
-
   @BuiltValueField(wireName: 'report_settings')
   BuiltMap<String, ReportSettingsEntity> get reportSettings;
 
@@ -1168,7 +1211,6 @@ abstract class UserSettingsEntity
     ..accentColor = kDefaultAccentColor
     ..numberYearsActive = 3
     ..tableColumns.replace(BuiltMap<String, BuiltList<String>>())
-    ..reactTableColumns.replace(BuiltMap<String, BuiltList<String>>())
     ..reportSettings.replace(BuiltMap<String, ReportSettingsEntity>())
     ..dashboardFields.replace(BuiltList<DashboardField>(<DashboardField>[
       DashboardField(
@@ -1264,10 +1306,15 @@ abstract class RegistrationFieldEntity
     return _$RegistrationFieldEntity._(
       key: '',
       required: false,
+      visible: false,
     );
   }
 
   RegistrationFieldEntity._();
+
+  static const SETTING_HIDDEN = 'hidden';
+  static const SETTING_OPTIONAL = 'optional';
+  static const SETTING_REQUIRED = 'required';
 
   @override
   @memoized
@@ -1276,6 +1323,22 @@ abstract class RegistrationFieldEntity
   String get key;
 
   bool get required;
+
+  bool get visible;
+
+  String get setting {
+    if (required) {
+      return SETTING_REQUIRED;
+    } else if (visible) {
+      return SETTING_OPTIONAL;
+    } else {
+      return SETTING_HIDDEN;
+    }
+  }
+
+  // ignore: unused_element
+  static void _initializeBuilder(RegistrationFieldEntityBuilder builder) =>
+      builder..visible = false;
 
   static Serializer<RegistrationFieldEntity> get serializer =>
       _$registrationFieldEntitySerializer;
@@ -1317,4 +1380,115 @@ abstract class DashboardField
 
   static Serializer<DashboardField> get serializer =>
       _$dashboardFieldSerializer;
+}
+
+abstract class TaxDataEntity
+    implements Built<TaxDataEntity, TaxDataEntityBuilder> {
+  factory TaxDataEntity() {
+    return _$TaxDataEntity._(
+      version: '',
+      sellerSubregion: '',
+      regions: BuiltMap<String, TaxRegionDataEntity>(),
+    );
+  }
+
+  TaxDataEntity._();
+
+  @override
+  @memoized
+  int get hashCode;
+
+  String get version;
+
+  @BuiltValueField(wireName: 'seller_subregion')
+  String get sellerSubregion;
+
+  BuiltMap<String, TaxRegionDataEntity> get regions;
+
+  // ignore: unused_element
+  static void _initializeBuilder(TaxDataEntityBuilder builder) => builder
+    ..version = ''
+    ..sellerSubregion = ''
+    ..regions.replace(BuiltMap<String, TaxRegionDataEntity>());
+
+  static Serializer<TaxDataEntity> get serializer => _$taxDataEntitySerializer;
+}
+
+abstract class TaxRegionDataEntity
+    implements Built<TaxRegionDataEntity, TaxRegionDataEntityBuilder> {
+  factory TaxRegionDataEntity(bool reportErrors) {
+    return _$TaxRegionDataEntity._(
+      hasSalesAboveThreshold: false,
+      taxAll: false,
+      taxThreshold: 0,
+      subregions: BuiltMap<String, TaxSubregionDataEntity>(),
+    );
+  }
+
+  TaxRegionDataEntity._();
+
+  @override
+  @memoized
+  int get hashCode;
+
+  @BuiltValueField(wireName: 'has_sales_above_threshold')
+  bool get hasSalesAboveThreshold;
+
+  @BuiltValueField(wireName: 'tax_all_subregions')
+  bool get taxAll;
+
+  @BuiltValueField(wireName: 'tax_threshold')
+  double get taxThreshold;
+
+  BuiltMap<String, TaxSubregionDataEntity> get subregions;
+
+  // ignore: unused_element
+  static void _initializeBuilder(TaxRegionDataEntityBuilder builder) => builder
+    ..hasSalesAboveThreshold = false
+    ..taxAll = false
+    ..taxThreshold = 0;
+
+  static Serializer<TaxRegionDataEntity> get serializer =>
+      _$taxRegionDataEntitySerializer;
+}
+
+abstract class TaxSubregionDataEntity
+    implements Built<TaxSubregionDataEntity, TaxSubregionDataEntityBuilder> {
+  factory TaxSubregionDataEntity(bool reportErrors) {
+    return _$TaxSubregionDataEntity._(
+      applyTax: false,
+      taxRate: 0,
+      reducedTaxRate: 0,
+      taxName: '',
+    );
+  }
+
+  TaxSubregionDataEntity._();
+
+  @override
+  @memoized
+  int get hashCode;
+
+  @BuiltValueField(wireName: 'apply_tax')
+  bool get applyTax;
+
+  @BuiltValueField(wireName: 'tax_rate')
+  double get taxRate;
+
+  @BuiltValueField(wireName: 'tax_name')
+  String get taxName;
+
+  @BuiltValueField(wireName: 'reduced_tax_rate')
+  double get reducedTaxRate;
+
+  // ignore: unused_element
+  static void _initializeBuilder(TaxSubregionDataEntityBuilder builder) =>
+      builder
+        ..applyTax = false
+        ..taxName = ''
+        ..reducedTaxRate = 0
+        ..taxRate = 0;
+
+  static Serializer<TaxSubregionDataEntity> get serializer =>
+      _$taxSubregionDataEntitySerializer;
 }

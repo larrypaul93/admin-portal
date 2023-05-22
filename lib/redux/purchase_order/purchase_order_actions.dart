@@ -6,11 +6,13 @@ import 'package:flutter_redux/flutter_redux.dart';
 import 'package:invoiceninja_flutter/data/models/contact_model.dart';
 import 'package:http/http.dart';
 import 'package:http/http.dart' as http;
+import 'package:invoiceninja_flutter/constants.dart';
 import 'package:invoiceninja_flutter/data/models/models.dart';
 import 'package:invoiceninja_flutter/data/web_client.dart';
 import 'package:invoiceninja_flutter/redux/app/app_actions.dart';
 import 'package:invoiceninja_flutter/redux/app/app_state.dart';
 import 'package:invoiceninja_flutter/redux/design/design_selectors.dart';
+import 'package:invoiceninja_flutter/redux/settings/settings_actions.dart';
 import 'package:invoiceninja_flutter/utils/completers.dart';
 import 'package:invoiceninja_flutter/utils/dialogs.dart';
 import 'package:invoiceninja_flutter/utils/localization.dart';
@@ -337,18 +339,21 @@ class RestorePurchaseOrdersFailure implements StopSaving {
 }
 
 class EmailPurchaseOrderRequest implements StartSaving {
-  EmailPurchaseOrderRequest(
-      {this.completer,
-      this.purchaseOrderId,
-      this.template,
-      this.subject,
-      this.body});
+  EmailPurchaseOrderRequest({
+    @required this.completer,
+    @required this.purchaseOrderId,
+    @required this.template,
+    @required this.subject,
+    @required this.body,
+    @required this.ccEmail,
+  });
 
   final Completer completer;
   final String purchaseOrderId;
   final EmailTemplate template;
   final String subject;
   final String body;
+  final String ccEmail;
 }
 
 class EmailPurchaseOrderSuccess implements StopSaving, PersistData {
@@ -697,6 +702,7 @@ void handlePurchaseOrderAction(BuildContext context,
       break;
     case EntityAction.sendEmail:
     case EntityAction.bulkSendEmail:
+    case EntityAction.schedule:
       bool emailValid = true;
       purchaseOrders.forEach((purchaseOrder) {
         final vendor = state.vendorState.get(
@@ -727,6 +733,29 @@ void handlePurchaseOrderAction(BuildContext context,
                 context, localization.emailedPurchaseOrder),
             purchaseOrder: purchaseOrder,
             context: context));
+      } else if (action == EntityAction.schedule) {
+        if (!state.isProPlan) {
+          showMessageDialog(
+              context: context,
+              message: localization.upgradeToPaidPlanToSchedule,
+              secondaryActions: [
+                TextButton(
+                    onPressed: () {
+                      store.dispatch(
+                          ViewSettings(section: kSettingsAccountManagement));
+                      Navigator.of(context).pop();
+                    },
+                    child: Text(localization.upgrade.toUpperCase())),
+              ]);
+          return;
+        }
+
+        createEntity(
+            context: context,
+            entity: ScheduleEntity(ScheduleEntity.TEMPLATE_EMAIL_RECORD)
+                .rebuild((b) => b
+                  ..parameters.entityType = EntityType.purchaseOrder.apiValue
+                  ..parameters.entityId = purchaseOrder.id));
       } else {
         confirmCallback(
             context: context,

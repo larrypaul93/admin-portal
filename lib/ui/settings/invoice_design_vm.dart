@@ -62,6 +62,14 @@ class InvoiceDesignVM {
         company: state.uiState.settingsUIState.company,
         onSettingsChanged: (settings) {
           store.dispatch(UpdateSettings(settings: settings));
+          final newSetting = settings.shareInvoiceQuoteColumns ?? true;
+          final oldSetting =
+              state.uiState.settingsUIState.settings.shareInvoiceQuoteColumns ??
+                  true;
+          if (newSetting != oldSetting) {
+            // Need to force update the UI to show the new tabs
+            store.dispatch(UpdatedSettingUI());
+          }
         },
         onSavePressed: (context, entityTypes) {
           if (!state.isProPlan && !state.isTrial) {
@@ -94,9 +102,7 @@ class InvoiceDesignVM {
                             AppLocalization.of(navigatorKey.currentContext)
                                 .savedSettings);
                       }).catchError((dynamic error) {
-                        showErrorDialog(
-                            context: navigatorKey.currentContext,
-                            message: '$error');
+                        showErrorDialog(message: '$error');
                       });
                     });
                   });

@@ -194,8 +194,8 @@ class _SubscriptionEditState extends State<SubscriptionEdit>
     return EditScaffold(
       entity: subscription,
       title: subscription.isNew
-          ? localization.newSubscription
-          : localization.editSubscription,
+          ? localization.newPaymentLink
+          : localization.editPaymentLink,
       onCancelPressed: (context) => viewModel.onCancelPressed(context),
       onSavePressed: _onSavePressed,
       appBarBottom: TabBar(
@@ -250,7 +250,7 @@ class _SubscriptionEditState extends State<SubscriptionEdit>
                     entityList: dropdownProductsSelector(state.productState.map,
                         state.productState.list, state.userState.map),
                     entityMap: state.productState.map,
-                    labelText: localization.products,
+                    labelText: localization.oneTimeProducts,
                     onSelected: (value) {
                       final parts = subscription.productIds.split(',');
                       viewModel.onChanged(subscription.rebuild((b) => b
@@ -336,7 +336,7 @@ class _SubscriptionEditState extends State<SubscriptionEdit>
                     entityList: dropdownProductsSelector(state.productState.map,
                         state.productState.list, state.userState.map),
                     entityMap: state.productState.map,
-                    labelText: localization.optionalProducts,
+                    labelText: localization.optionalOneTimeProducts,
                     onSelected: (value) {
                       final parts = subscription.optionalProductIds.split(',');
                       viewModel.onChanged(subscription.rebuild((b) => b

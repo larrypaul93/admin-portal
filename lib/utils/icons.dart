@@ -44,6 +44,8 @@ IconData getEntityActionIcon(EntityAction entityAction) {
     case EntityAction.resendInvite:
     case EntityAction.sendNow:
       return Icons.send;
+    case EntityAction.schedule:
+      return Icons.schedule;
     case EntityAction.archive:
       return Icons.archive;
     case EntityAction.delete:
@@ -115,6 +117,14 @@ IconData getEntityActionIcon(EntityAction entityAction) {
       return MdiIcons.merge;
     case EntityAction.autoBill:
       return MdiIcons.contactlessPaymentCircle;
+    case EntityAction.updatePrices:
+      return MdiIcons.syncIcon;
+    case EntityAction.increasePrices:
+      return MdiIcons.arrowUpBoldBoxOutline;
+    case EntityAction.setTaxCategory:
+      return MdiIcons.tag;
+    case EntityAction.eInvoice:
+      return MdiIcons.xml;
     default:
       return null;
   }
@@ -264,7 +274,7 @@ IconData getSettingIcon(String section) {
     case kSettingsTasks:
     case kSettingsTaskStatuses:
       return getEntityIcon(EntityType.task);
-    case kSettingsSubscriptions:
+    case kSettingsPaymentLinks:
       return getEntityIcon(EntityType.subscription);
     case kSettingsSchedules:
       return getEntityIcon(EntityType.schedule);

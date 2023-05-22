@@ -71,7 +71,7 @@ class _ListFilterState extends State<ListFilter> {
     final isSingle = count == 1 || isDashboardOrSettings;
 
     final key = toSnakeCase(
-        isSingle ? widget.entityType.toString() : widget.entityType.plural);
+        isSingle ? widget.entityType.readableValue : widget.entityType.plural);
     final placeholder = localization.lookup(
         widget.entityType == EntityType.dashboard
             ? 'search_company'
@@ -166,7 +166,11 @@ class _ListFilterState extends State<ListFilter> {
                 },
                 options: EntityState.values.toList(),
                 decoration: InputDecoration(
-                  border: OutlineInputBorder(),
+                  border: OutlineInputBorder(borderSide: BorderSide()),
+                  enabledBorder: state.prefState.enableDarkMode
+                      ? null
+                      : OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.white)),
                   isDense: true,
                   contentPadding:
                       EdgeInsets.symmetric(vertical: 13, horizontal: 10),
@@ -239,6 +243,10 @@ class _ListFilterState extends State<ListFilter> {
                   },
                   decoration: InputDecoration(
                     border: OutlineInputBorder(),
+                    enabledBorder: state.prefState.enableDarkMode
+                        ? null
+                        : OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.white)),
                     isDense: true,
                     contentPadding:
                         EdgeInsets.symmetric(vertical: 13, horizontal: 10),

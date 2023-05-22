@@ -54,6 +54,7 @@ class DeviceSettingsVM {
     @required this.onPersistDataChanged,
     @required this.onPersistUiChanged,
     @required this.onShowPdfChanged,
+    @required this.onEnableNativeBrowserChanged,
     @required this.onShowPdfSideBySideChanged,
     @required this.onTapSelectedChanged,
     @required this.onTextScaleFactorChanged,
@@ -73,14 +74,8 @@ class DeviceSettingsVM {
             context, AppLocalization.of(context).endedAllSessions);
         store.dispatch(UserLogoutAll(completer: completer));
       },
-      onDarkModeChanged: (BuildContext context, bool value) async {
-        store.dispatch(UpdateUserPreferences(
-            enableDarkMode: value,
-            colorTheme: value ? kColorThemeDark : kColorThemeLight,
-            customColors: value
-                ? BuiltMap<String, String>()
-                : BuiltMap<String, String>(PrefState.CONTRAST_COLORS)));
-        store.dispatch(UpdatedSetting());
+      onDarkModeChanged: (BuildContext context, String value) async {
+        store.dispatch(UpdateUserPreferences(darkModeType: value));
         AppBuilder.of(context).rebuild();
       },
       onLongPressSelectionIsDefault: (BuildContext context, bool value) async {
@@ -112,6 +107,9 @@ class DeviceSettingsVM {
       onShowPdfChanged: (context, value) {
         store.dispatch(UpdateUserPreferences(showPdfPreview: value));
       },
+      onEnableNativeBrowserChanged: (context, value) {
+        store.dispatch(UpdateUserPreferences(enableNativeBrowser: value));
+      },
       onShowPdfSideBySideChanged: (context, value) {
         store.dispatch(UpdateUserPreferences(showPdfPreviewSideBySide: value));
       },
@@ -125,8 +123,15 @@ class DeviceSettingsVM {
         store.dispatch(UpdateUserPreferences(flexibleSearch: value));
       },
       onColorThemeChanged: (context, value) async {
-        if (store.state.prefState.colorTheme != value) {
-          store.dispatch(UpdateUserPreferences(colorTheme: value));
+        final prefState = store.state.prefState;
+        if (prefState.enableDarkMode) {
+          if (prefState.darkColorTheme != value) {
+            store.dispatch(UpdateUserPreferences(darkColorTheme: value));
+          }
+        } else {
+          if (prefState.colorTheme != value) {
+            store.dispatch(UpdateUserPreferences(colorTheme: value));
+          }
         }
       },
       onEditAfterSavingChanged: (context, value) async {
@@ -152,9 +157,10 @@ class DeviceSettingsVM {
           authenticated = await LocalAuthentication().authenticate(
               localizedReason:
                   AppLocalization.of(context).authenticateToChangeSetting,
-              biometricOnly: true,
-              useErrorDialogs: true,
-              stickyAuth: false);
+              options: const AuthenticationOptions(
+                  biometricOnly: true,
+                  useErrorDialogs: true,
+                  stickyAuth: false));
         } catch (e) {
           print(e);
         }
@@ -177,8 +183,12 @@ class DeviceSettingsVM {
         },
       ),
       onCustomColorsChanged: (context, customColors) {
-        store.dispatch(UpdateUserPreferences(customColors: customColors));
-        store.dispatch(UpdatedSetting());
+        if (store.state.prefState.enableDarkMode) {
+          store.dispatch(UpdateUserPreferences(darkCustomColors: customColors));
+        } else {
+          store.dispatch(UpdateUserPreferences(customColors: customColors));
+        }
+        store.dispatch(UpdatedSettingUI());
       },
       onPersistDataChanged: (context, value) {
         store.dispatch(UpdateUserPreferences(persistData: value));
@@ -200,7 +210,7 @@ class DeviceSettingsVM {
   final AppState state;
   final Function(BuildContext) onRefreshTap;
   final Function(BuildContext) onLogoutTap;
-  final Function(BuildContext, bool) onDarkModeChanged;
+  final Function(BuildContext, String) onDarkModeChanged;
   final Function(BuildContext, BuiltMap<String, String>) onCustomColorsChanged;
   final Function(BuildContext, AppLayout) onLayoutChanged;
   final Function(BuildContext, AppSidebarMode) onMenuModeChanged;
@@ -213,6 +223,7 @@ class DeviceSettingsVM {
   final Function(BuildContext, bool) onPersistDataChanged;
   final Function(BuildContext, bool) onPersistUiChanged;
   final Function(BuildContext, bool) onShowPdfChanged;
+  final Function(BuildContext, bool) onEnableNativeBrowserChanged;
   final Function(BuildContext, bool) onShowPdfSideBySideChanged;
   final Function(BuildContext, bool) onEnableTouchEventsChanged;
   final Function(BuildContext, bool) onEnableTooltipsChanged;

@@ -98,6 +98,24 @@ Reducer<SettingsUIState> settingsUIReducer = combineReducers([
       ..origUser.replace(action.user)
       ..isChanged = false);
   }),
+  TypedReducer<SettingsUIState, ConnectOAuthUserSuccess>((state, action) {
+    return state.rebuild((b) => b
+      ..user.replace(action.user)
+      ..origUser.replace(action.user)
+      ..isChanged = false);
+  }),
+  TypedReducer<SettingsUIState, DisconnectOAuthUserSuccess>((state, action) {
+    return state.rebuild((b) => b
+      ..user.replace(action.user)
+      ..origUser.replace(action.user)
+      ..isChanged = false);
+  }),
+  TypedReducer<SettingsUIState, DisconnectOAuthMailerSuccess>((state, action) {
+    return state.rebuild((b) => b
+      ..user.replace(action.user)
+      ..origUser.replace(action.user)
+      ..isChanged = false);
+  }),
   TypedReducer<SettingsUIState, FilterSettings>((state, action) {
     return state.rebuild((b) => b
       ..filter = action.filter
@@ -119,7 +137,7 @@ Reducer<SettingsUIState> settingsUIReducer = combineReducers([
   TypedReducer<SettingsUIState, UpdateSettingsTemplate>((state, action) {
     return state.rebuild((b) => b..selectedTemplate = action.selectedTemplate);
   }),
-  TypedReducer<SettingsUIState, UpdatedSetting>((state, action) {
+  TypedReducer<SettingsUIState, UpdatedSettingUI>((state, action) {
     return state
         .rebuild((b) => b..updatedAt = DateTime.now().millisecondsSinceEpoch);
   }),

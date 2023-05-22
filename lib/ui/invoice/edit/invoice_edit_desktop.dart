@@ -2,6 +2,7 @@
 import 'dart:convert';
 
 // Flutter imports:
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 // Package imports:
@@ -58,6 +59,9 @@ import 'package:invoiceninja_flutter/utils/icons.dart';
 import 'package:invoiceninja_flutter/utils/localization.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:printing/printing.dart';
+
+import 'package:invoiceninja_flutter/utils/web_stub.dart'
+    if (dart.library.html) 'package:invoiceninja_flutter/utils/web.dart';
 
 class InvoiceEditDesktop extends StatefulWidget {
   const InvoiceEditDesktop({
@@ -229,7 +233,8 @@ class InvoiceEditDesktopState extends State<InvoiceEditDesktop>
     final vendor = state.vendorState.get(invoice.vendorId);
     final entityType = invoice.entityType;
     final originalInvoice =
-        state.getEntity(invoice.entityType, invoice.id) as InvoiceEntity;
+        (state.getEntity(invoice.entityType, invoice.id) as InvoiceEntity) ??
+            invoice;
 
     final countProducts = invoice.lineItems
         .where((item) =>
@@ -324,7 +329,7 @@ class InvoiceEditDesktopState extends State<InvoiceEditDesktop>
                                             context)
                                         .title(),
                                     style:
-                                        Theme.of(context).textTheme.headline6,
+                                        Theme.of(context).textTheme.titleLarge,
                                     maxLines: 2,
                                     overflow: TextOverflow.ellipsis,
                                   ),
@@ -1035,9 +1040,9 @@ class InvoiceEditDesktopState extends State<InvoiceEditDesktop>
                                     ),
                                     textAlign: TextAlign.end,
                                     key: ValueKey(
-                                        '__invoice_paid_to_date_${invoice.paidToDate}_${invoice.clientId}__'),
+                                        '__invoice_paid_to_date_${originalInvoice.paidToDate}_${invoice.clientId}__'),
                                     initialValue: formatNumber(
-                                      invoice.paidToDate,
+                                      originalInvoice.paidToDate,
                                       context,
                                       clientId: invoice.isPurchaseOrder
                                           ? null
@@ -1118,12 +1123,12 @@ class InvoiceEditDesktopState extends State<InvoiceEditDesktop>
                                   ),
                                   textAlign: TextAlign.end,
                                   key: ValueKey(
-                                      '__invoice_total_${invoice.calculateTotal(precision: precisionForInvoice(state, invoice))}_${invoice.clientId}__'),
+                                      '__invoice_total_${originalInvoice.paidToDate}_${invoice.calculateTotal(precision: precisionForInvoice(state, invoice))}_${invoice.clientId}__'),
                                   initialValue: formatNumber(
                                     invoice.calculateTotal(
                                             precision: precisionForInvoice(
                                                 state, invoice)) -
-                                        invoice.paidToDate,
+                                        originalInvoice.paidToDate,
                                     context,
                                     clientId: invoice.isPurchaseOrder
                                         ? null
@@ -1200,6 +1205,7 @@ class __PdfPreviewState extends State<_PdfPreview> {
 
   int _pageCount = 1;
   int _currentPage = 1;
+  String _pdfString;
   http.Response _response;
   bool _isLoading = false;
   bool _pendingLoad = false;
@@ -1286,6 +1292,12 @@ class __PdfPreviewState extends State<_PdfPreview> {
           _currentPage = _pageCount;
         }
 
+        if (kIsWeb && state.prefState.enableNativeBrowser) {
+          _pdfString =
+              'data:application/pdf;base64,' + base64Encode(response.bodyBytes);
+          WebUtils.registerWebView(_pdfString);
+        }
+
         if (_pendingLoad) {
           _pendingLoad = false;
           _loadPdf();
@@ -1312,7 +1324,8 @@ class __PdfPreviewState extends State<_PdfPreview> {
           Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              if (_pageCount > 1)
+              if (_pageCount > 1 &&
+                  (!kIsWeb || !state.prefState.enableNativeBrowser))
                 Padding(
                   padding: const EdgeInsets.only(bottom: 16),
                   child: Row(
@@ -1349,16 +1362,18 @@ class __PdfPreviewState extends State<_PdfPreview> {
                     ? Container(
                         color: Colors.grey.shade300,
                       )
-                    : PdfPreview(
-                        build: (format) => _response.bodyBytes,
-                        canChangeOrientation: false,
-                        canChangePageFormat: false,
-                        allowPrinting: false,
-                        allowSharing: false,
-                        canDebug: false,
-                        pages: [_currentPage - 1],
-                        maxPageWidth: 800,
-                      ),
+                    : (kIsWeb && state.prefState.enableNativeBrowser)
+                        ? HtmlElementView(viewType: _pdfString)
+                        : PdfPreview(
+                            build: (format) => _response.bodyBytes,
+                            canChangeOrientation: false,
+                            canChangePageFormat: false,
+                            allowPrinting: false,
+                            allowSharing: false,
+                            canDebug: false,
+                            pages: [_currentPage - 1],
+                            maxPageWidth: 800,
+                          ),
               ),
             ],
           ),

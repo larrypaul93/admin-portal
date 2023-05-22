@@ -282,10 +282,11 @@ class ReportsScreen extends StatelessWidget {
       ]
     ];
 
-    final entities = reportResult.entities ?? [];
-    final firstEntity = entities.isNotEmpty ? entities.first : null;
-    if (entities.length > kMaxEntitiesPerBulkAction) {
-      entities.removeRange(kMaxEntitiesPerBulkAction, entities.length);
+    final cappedEntities = <BaseEntity>[...reportResult.entities ?? []];
+    final firstEntity = cappedEntities.isNotEmpty ? cappedEntities.first : null;
+    if (cappedEntities.length > kMaxEntitiesPerBulkAction) {
+      cappedEntities.removeRange(
+          kMaxEntitiesPerBulkAction, cappedEntities.length);
     }
 
     final chartChildren = [
@@ -382,16 +383,18 @@ class ReportsScreen extends StatelessWidget {
                                 multiselect: true),
                         entity: firstEntity,
                         onSelected: (context, action) {
+                          final entities = action.applyMaxLimit
+                              ? cappedEntities
+                              : reportResult.entities;
                           confirmCallback(
                               context: context,
                               message: localization.lookup(action.toString()) +
                                   ' • ' +
-                                  (reportResult.entities.length == 1
+                                  (entities.length == 1
                                       ? '1 ${localization.lookup(firstEntity.entityType.toString())}'
-                                      : '${reportResult.entities.length} ${localization.lookup(firstEntity.entityType.plural)}'),
+                                      : '${entities.length} ${localization.lookup(firstEntity.entityType.plural)}'),
                               callback: (_) {
-                                handleEntitiesActions(
-                                    reportResult.entities, action);
+                                handleEntitiesActions(entities, action);
                               });
                         }),
                   ),
@@ -422,20 +425,19 @@ class ReportsScreen extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     HelpText(localization.upgradeToViewReports),
-                    if (!isApple() || supportsInAppPurchase())
-                      AppButton(
-                          label: localization.upgrade.toUpperCase(),
-                          onPressed: () {
-                            if (supportsInAppPurchase()) {
-                              showDialog<void>(
-                                context: context,
-                                builder: (context) => UpgradeDialog(),
-                              );
-                            } else {
-                              launchUrl(
-                                  Uri.parse(state.userCompany.ninjaPortalUrl));
-                            }
-                          })
+                    AppButton(
+                        label: localization.upgrade.toUpperCase(),
+                        onPressed: () {
+                          if (supportsInAppPurchase()) {
+                            showDialog<void>(
+                              context: context,
+                              builder: (context) => UpgradeDialog(),
+                            );
+                          } else {
+                            launchUrl(
+                                Uri.parse(state.userCompany.ninjaPortalUrl));
+                          }
+                        })
                   ],
                 ),
               )
@@ -731,7 +733,7 @@ enum ReportColumnType {
 }
 
 bool canTotalColumn(String column) {
-  if (column == 'notification_threshold') {
+  if (['notification_threshold', 'age'].contains(column)) {
     return false;
   }
 
@@ -1287,7 +1289,7 @@ class ReportResult {
                                   title: Text(options.elementAt(index),
                                       style: Theme.of(context)
                                           .textTheme
-                                          .subtitle1),
+                                          .titleMedium),
                                   onTap: () => onSelected(
                                     options.elementAt(index),
                                   ),
@@ -1486,11 +1488,11 @@ class ReportResult {
       for (var j = 0; j < row.length; j++) {
         final cell = row[j];
         final column = columns[j];
-        final canTotal = (cell is ReportNumberValue ||
+        final canTotal = (cell is ReportIntValue ||
+                cell is ReportNumberValue ||
                 cell is ReportDurationValue ||
                 cell is ReportAgeValue) &&
             canTotalColumn(column);
-
         String currencyId = '';
         if (canTotal) {
           if (!allColumns.contains(column)) {

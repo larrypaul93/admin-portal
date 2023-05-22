@@ -61,6 +61,8 @@ PrefState prefReducer(
     ..appLayout = layoutReducer(state.appLayout, action)
     ..rowsPerPage = rowsPerPageReducer(state.rowsPerPage, action)
     ..moduleLayout = moduleLayoutReducer(state.moduleLayout, action)
+    ..statementIncludes
+        .replace(statementIncludesReducer(state.statementIncludes, action))
     ..isPreviewVisible = isPreviewVisibleReducer(state.isPreviewVisible, action)
     ..menuSidebarMode = manuSidebarReducer(state.menuSidebarMode, action)
     ..historySidebarMode =
@@ -70,13 +72,21 @@ PrefState prefReducer(
     ..hideGatewayWarning =
         hideGatewayWarningReducer(state.hideGatewayWarning, action)
     ..hideReviewApp = hideReviewAppReducer(state.hideReviewApp, action)
+    ..hideOneYearReviewApp =
+        hideOneYearReviewAppReducer(state.hideOneYearReviewApp, action)
+    ..hideTwoYearReviewApp =
+        hideTwoYearReviewAppReducer(state.hideTwoYearReviewApp, action)
     ..textScaleFactor = textScaleFactorReducer(state.textScaleFactor, action)
     ..isMenuVisible = menuVisibleReducer(state.isMenuVisible, action)
     ..isHistoryVisible = historyVisibleReducer(state.isHistoryVisible, action)
-    ..enableDarkMode = darkModeReducer(state.enableDarkMode, action)
+    ..darkModeType = darkModeTypeReducer(state.darkModeType, action)
+    ..enableDarkModeSystem =
+        darkModeSystemReducer(state.enableDarkModeSystem, action)
     ..enableTooltips = enableTooltipsReducer(state.enableTooltips, action)
     ..enableFlexibleSearch =
         enableFlexibleSearchReducer(state.enableFlexibleSearch, action)
+    ..enableNativeBrowser =
+        enableNativeBrowserReducer(state.enableNativeBrowser, action)
     ..persistData = persistDataReducer(state.persistData, action)
     ..persistUI = persistUIReducer(state.persistUI, action)
     ..showKanban = showKanbanReducer(state.showKanban, action)
@@ -88,7 +98,10 @@ PrefState prefReducer(
     ..requireAuthentication =
         requireAuthenticationReducer(state.requireAuthentication, action)
     ..colorTheme = colorThemeReducer(state.colorTheme, action)
+    ..darkColorTheme = darkColorThemeReducer(state.darkColorTheme, action)
     ..customColors.replace(customColorsReducer(state.customColors, action))
+    ..darkCustomColors
+        .replace(darkCustomColorsReducer(state.darkCustomColors, action))
     ..useSidebarEditor
         .replace(sidebarEditorReducer(state.useSidebarEditor, action))
     ..useSidebarViewer
@@ -256,6 +269,27 @@ Reducer<bool> hideReviewAppReducer = combineReducers([
   TypedReducer<bool, DismissReviewAppPermanently>((filter, action) {
     return true;
   }),
+  TypedReducer<bool, DismissOneYearReviewAppPermanently>((filter, action) {
+    return true;
+  }),
+  TypedReducer<bool, DismissTwoYearReviewAppPermanently>((filter, action) {
+    return true;
+  }),
+]);
+
+Reducer<bool> hideOneYearReviewAppReducer = combineReducers([
+  TypedReducer<bool, DismissOneYearReviewAppPermanently>((filter, action) {
+    return true;
+  }),
+  TypedReducer<bool, DismissTwoYearReviewAppPermanently>((filter, action) {
+    return true;
+  }),
+]);
+
+Reducer<bool> hideTwoYearReviewAppReducer = combineReducers([
+  TypedReducer<bool, DismissTwoYearReviewAppPermanently>((filter, action) {
+    return true;
+  }),
 ]);
 
 Reducer<int> filterClearedAtReducer = combineReducers([
@@ -311,9 +345,21 @@ Reducer<AppSidebarMode> historySidebarReducer = combineReducers([
   }),
 ]);
 
-Reducer<bool> darkModeReducer = combineReducers([
+Reducer<String> darkModeTypeReducer = combineReducers([
+  TypedReducer<String, UpdateUserPreferences>((enableDarkMode, action) {
+    return action.darkModeType ?? enableDarkMode;
+  }),
+]);
+
+Reducer<bool> darkModeSystemReducer = combineReducers([
   TypedReducer<bool, UpdateUserPreferences>((enableDarkMode, action) {
-    return action.enableDarkMode ?? enableDarkMode;
+    return action.enableDarkModeSystem ?? enableDarkMode;
+  }),
+]);
+
+Reducer<BuiltList<String>> statementIncludesReducer = combineReducers([
+  TypedReducer<BuiltList<String>, UpdateUserPreferences>((includes, action) {
+    return action.statementIncludes ?? includes;
   }),
 ]);
 
@@ -326,6 +372,12 @@ Reducer<bool> enableTooltipsReducer = combineReducers([
 Reducer<bool> enableFlexibleSearchReducer = combineReducers([
   TypedReducer<bool, UpdateUserPreferences>((enableFlexibleSearch, action) {
     return action.flexibleSearch ?? enableFlexibleSearch;
+  }),
+]);
+
+Reducer<bool> enableNativeBrowserReducer = combineReducers([
+  TypedReducer<bool, UpdateUserPreferences>((enableNativeBrowser, action) {
+    return action.enableNativeBrowser ?? enableNativeBrowser;
   }),
 ]);
 
@@ -404,6 +456,12 @@ Reducer<String> colorThemeReducer = combineReducers([
   }),
 ]);
 
+Reducer<String> darkColorThemeReducer = combineReducers([
+  TypedReducer<String, UpdateUserPreferences>((currentColorTheme, action) {
+    return action.darkColorTheme ?? currentColorTheme;
+  }),
+]);
+
 Reducer<bool> showPdfPreviewReducer = combineReducers([
   TypedReducer<bool, UpdateUserPreferences>((value, action) {
     return action.showPdfPreview ?? value;
@@ -432,6 +490,13 @@ Reducer<BuiltMap<String, String>> customColorsReducer = combineReducers([
   TypedReducer<BuiltMap<String, String>, UpdateUserPreferences>(
       (customColors, action) {
     return action.customColors ?? customColors;
+  }),
+]);
+
+Reducer<BuiltMap<String, String>> darkCustomColorsReducer = combineReducers([
+  TypedReducer<BuiltMap<String, String>, UpdateUserPreferences>(
+      (customColors, action) {
+    return action.darkCustomColors ?? customColors;
   }),
 ]);
 

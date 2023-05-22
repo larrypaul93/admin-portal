@@ -66,6 +66,7 @@ class PaymentFields {
   static const String exchangeCurrencyId = 'exchange_currency_id';
   static const String status = 'status';
   static const String gateway = 'gateway';
+  static const String gatewayType = 'gateway_type';
   static const String customValue1 = 'custom1';
   static const String customValue2 = 'custom2';
   static const String customValue3 = 'custom3';
@@ -117,6 +118,7 @@ abstract class PaymentEntity extends Object
       transactionId: '',
       invitationId: '',
       isApplying: false,
+      gatewayTypeId: '',
     );
   }
 
@@ -202,6 +204,9 @@ abstract class PaymentEntity extends Object
 
   @BuiltValueField(wireName: 'currency_id')
   String get currencyId;
+
+  @BuiltValueField(wireName: 'gateway_type_id')
+  String get gatewayTypeId;
 
   @nullable
   bool get isApplying;
@@ -511,8 +516,9 @@ abstract class PaymentEntity extends Object
   }
 
   // ignore: unused_element
-  static void _initializeBuilder(PaymentEntityBuilder builder) =>
-      builder..transactionId = '';
+  static void _initializeBuilder(PaymentEntityBuilder builder) => builder
+    ..transactionId = ''
+    ..gatewayTypeId = '';
 
   static Serializer<PaymentEntity> get serializer => _$paymentEntitySerializer;
 }

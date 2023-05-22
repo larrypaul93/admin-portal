@@ -12,9 +12,13 @@ import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:invoiceninja_flutter/redux/app/app_actions.dart';
+import 'package:invoiceninja_flutter/redux/document/document_actions.dart';
+import 'package:invoiceninja_flutter/utils/completers.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:share/share.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 // Project imports:
@@ -183,14 +187,14 @@ class DocumentTile extends StatelessWidget {
                             message: document.name ?? '',
                             child: Text(
                               document.name ?? '',
-                              style: Theme.of(context).textTheme.headline6,
+                              style: Theme.of(context).textTheme.titleLarge,
                               overflow: TextOverflow.ellipsis,
                               maxLines: 1,
                             ),
                           ),
                           Text(
                             '${formatDate(convertTimestampToDateString(document.createdAt), context)}\n${document.prettySize}',
-                            style: Theme.of(context).textTheme.caption,
+                            style: Theme.of(context).textTheme.bodySmall,
                             overflow: TextOverflow.ellipsis,
                             maxLines: 2,
                           ),
@@ -227,7 +231,7 @@ class DocumentTile extends StatelessWidget {
 
                                   await File(filePath)
                                       .writeAsBytes(response.bodyBytes);
-                                  await Share.shareFiles([filePath]);
+                                  await Share.shareXFiles([XFile(filePath)]);
                                 }
                               } else if (value == localization.delete) {
                                 confirmCallback(
@@ -242,6 +246,27 @@ class DocumentTile extends StatelessWidget {
                                     });
                               } else if (value == localization.viewExpense) {
                                 onViewExpense(document);
+                              } else if (value == localization.rename) {
+                                fieldCallback(
+                                  context: context,
+                                  title: localization.rename,
+                                  field: localization.name,
+                                  maxLength: 250,
+                                  callback: (name) {
+                                    store.dispatch(
+                                      SaveDocumentRequest(
+                                          completer:
+                                              snackBarCompleter<DocumentEntity>(
+                                                  context,
+                                                  localization.renamedDocument)
+                                                ..future.then((value) {
+                                                  store.dispatch(RefreshData());
+                                                }),
+                                          entity: document
+                                              .rebuild((b) => b..name = name)),
+                                    );
+                                  },
+                                );
                               }
                             },
                             itemBuilder: (context) {
@@ -260,6 +285,14 @@ class DocumentTile extends StatelessWidget {
                                   ),
                                   value: localization.download,
                                 ),
+                                if (!kReleaseMode)
+                                  PopupMenuItem<String>(
+                                    child: IconText(
+                                      text: localization.rename,
+                                      icon: MdiIcons.renameBox,
+                                    ),
+                                    value: localization.rename,
+                                  ),
                                 PopupMenuItem<String>(
                                   child: IconText(
                                     text: localization.delete,

@@ -46,9 +46,11 @@ enum ClientReportFields {
   assigned_to,
   balance,
   credit_balance,
+  payment_balance,
   paid_to_date,
   total,
   converted_balance,
+  converted_payment_balance,
   converted_credit_balance,
   converted_paid_to_date,
   converted_total,
@@ -68,6 +70,9 @@ enum ClientReportFields {
   is_active,
   created_at,
   updated_at,
+  documents,
+  routing_id,
+  tax_exempt,
 }
 
 var memoizedClientReport = memo6((
@@ -311,6 +316,9 @@ ReportResult clientReport(
         case ClientReportFields.credit_balance:
           value = client.creditBalance;
           break;
+        case ClientReportFields.payment_balance:
+          value = client.paymentBalance;
+          break;
         case ClientReportFields.paid_to_date:
           value = client.paidToDate;
           break;
@@ -323,6 +331,9 @@ ReportResult clientReport(
         case ClientReportFields.converted_credit_balance:
           value = round(client.creditBalance * exchangeRate, 2);
           break;
+        case ClientReportFields.converted_payment_balance:
+          value = round(client.paymentBalance * exchangeRate, 2);
+          break;
         case ClientReportFields.converted_paid_to_date:
           value = round(client.paidToDate * exchangeRate, 2);
           break;
@@ -334,6 +345,15 @@ ReportResult clientReport(
           break;
         case ClientReportFields.created_at:
           value = convertTimestampToDateString(client.createdAt);
+          break;
+        case ClientReportFields.documents:
+          value = client.documents.length;
+          break;
+        case ClientReportFields.routing_id:
+          value = client.routingId;
+          break;
+        case ClientReportFields.tax_exempt:
+          value = client.isTaxExempt;
           break;
       }
 
@@ -348,6 +368,8 @@ ReportResult clientReport(
 
       if (value.runtimeType == bool) {
         row.add(client.getReportBool(value: value));
+      } else if (column == ClientReportFields.documents) {
+        row.add(client.getReportInt(value: value));
       } else if (value.runtimeType == double || value.runtimeType == int) {
         String currencyId = client.currencyId;
         if ([

@@ -56,8 +56,8 @@ class EntityDropdown extends StatefulWidget {
   final bool allowClearing;
   final Function(String) onFieldSubmitted;
   final Function(Completer<SelectableEntity> completer) onAddPressed;
-  final Function(BaseEntity) overrideSuggestedAmount;
-  final Function(BaseEntity) overrideSuggestedLabel;
+  final Function(SelectableEntity) overrideSuggestedAmount;
+  final Function(SelectableEntity) overrideSuggestedLabel;
   final Function(Completer<SelectableEntity> completer, String) onCreateNew;
   final List<String> excludeIds;
 
@@ -179,7 +179,9 @@ class _EntityDropdownState extends State<EntityDropdown> {
         builder: (BuildContext context) {
           return EntityDropdownDialog(
             entityMap: _entityMap,
-            entityList: widget.entityList ?? _entityMap.keys.toList(),
+            entityList: (widget.entityList ?? _entityMap.keys)
+                .where((elementId) => !widget.excludeIds.contains(elementId))
+                .toList(),
             onSelected: (entity, [update = true]) {
               if (entity?.id == widget.entityId) {
                 return;
@@ -351,6 +353,10 @@ class _EntityDropdownState extends State<EntityDropdown> {
         optionsViewBuilder: (BuildContext context,
             AutocompleteOnSelected<SelectableEntity> onSelected,
             Iterable<SelectableEntity> options) {
+          if (hasValue) {
+            return SizedBox();
+          }
+
           return Theme(
             data: theme,
             child: Align(
@@ -457,8 +463,8 @@ class EntityDropdownDialog extends StatefulWidget {
   final List<String> entityList;
   final Function(SelectableEntity, [bool]) onSelected;
   final Function(BuildContext context, Completer completer) onAddPressed;
-  final Function(BaseEntity) overrideSuggestedAmount;
-  final Function(BaseEntity) overrideSuggestedLabel;
+  final Function(SelectableEntity) overrideSuggestedAmount;
+  final Function(SelectableEntity) overrideSuggestedLabel;
   final List<String> excludeIds;
 
   @override
@@ -583,8 +589,8 @@ class EntityAutocompleteListTile extends StatelessWidget {
   final Function(SelectableEntity entity) onTap;
   final String filter;
   final String subtitle;
-  final Function(BaseEntity) overrideSuggestedAmount;
-  final Function(BaseEntity) overrideSuggestedLabel;
+  final Function(SelectableEntity) overrideSuggestedAmount;
+  final Function(SelectableEntity) overrideSuggestedLabel;
 
   @override
   Widget build(BuildContext context) {
@@ -610,10 +616,10 @@ class EntityAutocompleteListTile extends StatelessWidget {
               ),
             ),
           Expanded(
-            child: Text(label, style: Theme.of(context).textTheme.subtitle1),
+            child: Text(label, style: Theme.of(context).textTheme.titleMedium),
           ),
           entity.listDisplayAmount != null
-              ? Text(amount, style: Theme.of(context).textTheme.subtitle1)
+              ? Text(amount, style: Theme.of(context).textTheme.titleMedium)
               : Container(),
         ],
       ),

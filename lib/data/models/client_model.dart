@@ -64,6 +64,7 @@ class ClientFields {
   static const String country = 'country';
   static const String balance = 'balance';
   static const String creditBalance = 'credit_balance';
+  static const String paymentBalance = 'payment_balance';
   static const String vatNumber = 'vat_number';
   static const String idNumber = 'id_number';
   static const String number = 'number';
@@ -130,6 +131,8 @@ class ClientFields {
   static const String mainCountryId = 'main_country_id';
 
   static const String group = 'group';
+  static const String routingId = 'routing_id';
+  static const String isTaxExempt = 'tax_exempt';
 }
 
 abstract class ClientEntity extends Object
@@ -149,6 +152,7 @@ abstract class ClientEntity extends Object
         displayName: '',
         balance: 0,
         creditBalance: 0,
+        paymentBalance: 0,
         paidToDate: 0,
         lastLogin: 0,
         address1: '',
@@ -177,6 +181,8 @@ abstract class ClientEntity extends Object
         customValue2: '',
         customValue3: '',
         customValue4: '',
+        routingId: '',
+        isTaxExempt: false,
         contacts: BuiltList<ContactEntity>(
           <ContactEntity>[ContactEntity().rebuild((b) => b..isPrimary = true)],
         ),
@@ -268,6 +274,9 @@ abstract class ClientEntity extends Object
 
   @BuiltValueField(wireName: 'credit_balance')
   double get creditBalance;
+
+  @BuiltValueField(wireName: 'payment_balance')
+  double get paymentBalance;
 
   @BuiltValueField(wireName: 'paid_to_date')
   double get paidToDate;
@@ -453,6 +462,13 @@ abstract class ClientEntity extends Object
   String get mainCountryId;
 
   BuiltList<ContactEntity> get contacts;
+  @BuiltValueField(wireName: 'routing_id')
+  String get routingId;
+
+  @BuiltValueField(wireName: 'is_tax_exempt')
+  bool get isTaxExempt;
+
+  // BuiltList<ClientContactEntity> get contacts;
 
   @override
   BuiltList<ActivityEntity> get activities;
@@ -552,6 +568,9 @@ abstract class ClientEntity extends Object
         break;
       case ClientFields.creditBalance:
         response = clientA.creditBalance.compareTo(clientB.creditBalance);
+        break;
+      case ClientFields.paymentBalance:
+        response = clientA.paymentBalance.compareTo(clientB.paymentBalance);
         break;
       case ClientFields.paidToDate:
         response = clientA.paidToDate.compareTo(clientB.paidToDate);
@@ -910,8 +929,11 @@ abstract class ClientEntity extends Object
   */
 
   // ignore: unused_element
-  static void _initializeBuilder(ClientEntityBuilder builder) =>
-      builder..number = '';
+  static void _initializeBuilder(ClientEntityBuilder builder) => builder
+    ..number = ''
+    ..routingId = ''
+    ..isTaxExempt = false
+    ..paymentBalance = 0;
 
   static Serializer<ClientEntity> get serializer => _$clientEntitySerializer;
 }

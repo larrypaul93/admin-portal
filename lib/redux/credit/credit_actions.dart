@@ -11,6 +11,7 @@ import 'package:flutter_redux/flutter_redux.dart';
 import 'package:http/http.dart';
 import 'package:invoiceninja_flutter/data/models/contact_model.dart';
 import 'package:invoiceninja_flutter/redux/document/document_actions.dart';
+import 'package:invoiceninja_flutter/redux/settings/settings_actions.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 // Project imports:
@@ -228,14 +229,21 @@ class SaveCreditFailure implements StopSaving {
 }
 
 class EmailCreditRequest implements StartSaving {
-  EmailCreditRequest(
-      {this.completer, this.creditId, this.template, this.subject, this.body});
+  EmailCreditRequest({
+    @required this.completer,
+    @required this.creditId,
+    @required this.template,
+    @required this.subject,
+    @required this.body,
+    @required this.ccEmail,
+  });
 
   final Completer completer;
   final String creditId;
   final EmailTemplate template;
   final String subject;
   final String body;
+  final String ccEmail;
 }
 
 class EmailCreditSuccess implements StopSaving, PersistData {}
@@ -463,6 +471,7 @@ Future handleCreditAction(
   final localization = AppLocalization.of(context);
   final credit = credits.first as InvoiceEntity;
   final creditIds = credits.map((credit) => credit.id).toList();
+  final client = state.clientState.get(credit.clientId);
 
   switch (action) {
     case EntityAction.edit:
@@ -481,6 +490,7 @@ Future handleCreditAction(
       break;
     case EntityAction.sendEmail:
     case EntityAction.bulkSendEmail:
+    case EntityAction.schedule:
       bool emailValid = true;
       credits.forEach((credit) {
         final client = state.clientState.get(
@@ -498,7 +508,7 @@ Future handleCreditAction(
               TextButton(
                   onPressed: () {
                     Navigator.of(context).pop();
-                    editEntity(entity: state.clientState.get(credit.clientId));
+                    editEntity(entity: client);
                   },
                   child: Text(localization.editClient.toUpperCase()))
             ]);
@@ -510,6 +520,29 @@ Future handleCreditAction(
                 snackBarCompleter<Null>(context, localization.emailedCredit),
             credit: credit,
             context: context));
+      } else if (action == EntityAction.schedule) {
+        if (!state.isProPlan) {
+          showMessageDialog(
+              context: context,
+              message: localization.upgradeToPaidPlanToSchedule,
+              secondaryActions: [
+                TextButton(
+                    onPressed: () {
+                      store.dispatch(
+                          ViewSettings(section: kSettingsAccountManagement));
+                      Navigator.of(context).pop();
+                    },
+                    child: Text(localization.upgrade.toUpperCase())),
+              ]);
+          return;
+        }
+
+        createEntity(
+            context: context,
+            entity: ScheduleEntity(ScheduleEntity.TEMPLATE_EMAIL_RECORD)
+                .rebuild((b) => b
+                  ..parameters.entityType = EntityType.credit.apiValue
+                  ..parameters.entityId = credit.id));
       } else {
         confirmCallback(
             context: context,
@@ -588,13 +621,12 @@ Future handleCreditAction(
     case EntityAction.applyCredit:
       createEntity(
         context: context,
-        entity: PaymentEntity(
-                state: state, client: state.clientState.get(credit.clientId))
-            .rebuild((b) => b
-              ..typeId = kPaymentTypeCredit
-              ..credits.addAll(credits
-                  .map((credit) => PaymentableEntity.fromCredit(credit))
-                  .toList())),
+        entity: PaymentEntity(state: state, client: client).rebuild((b) => b
+          ..typeId = kPaymentTypeCredit
+          ..credits.addAll(credits
+              .map((credit) => PaymentableEntity.fromCredit(credit))
+              .toList())),
+        filterEntity: client,
       );
       break;
     case EntityAction.download:

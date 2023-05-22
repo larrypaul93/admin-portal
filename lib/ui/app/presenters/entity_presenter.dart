@@ -108,6 +108,7 @@ class EntityPresenter {
     return [
       'quantity',
       'stock_quantity',
+      'documents',
     ].contains(field);
   }
 
@@ -133,6 +134,7 @@ class EntityPresenter {
       'invoice_balance',
       'client_balance',
       'credit_balance',
+      'payment_balance',
       'tax_rate',
       'tax_amount',
       'tax_amount1',
@@ -156,6 +158,7 @@ class EntityPresenter {
       'partial',
       'withdrawal',
       'deposit',
+      'documents',
     ].contains(field);
 
     return value;

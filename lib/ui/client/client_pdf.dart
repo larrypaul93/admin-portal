@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'dart:io' as file;
 
 // Flutter imports:
+import 'package:built_collection/built_collection.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
@@ -19,10 +20,10 @@ import 'package:invoiceninja_flutter/redux/settings/settings_actions.dart';
 import 'package:invoiceninja_flutter/ui/app/buttons/elevated_button.dart';
 import 'package:invoiceninja_flutter/ui/app/dialogs/error_dialog.dart';
 import 'package:invoiceninja_flutter/ui/app/forms/date_picker.dart';
+import 'package:invoiceninja_flutter/ui/app/multiselect.dart';
 import 'package:invoiceninja_flutter/utils/formatting.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:printing/printing.dart';
-import 'package:share/share.dart';
 
 // Project imports:
 import 'package:invoiceninja_flutter/data/models/dashboard_model.dart';
@@ -40,6 +41,7 @@ import 'package:invoiceninja_flutter/utils/platforms.dart';
 
 import 'package:invoiceninja_flutter/utils/web_stub.dart'
     if (dart.library.html) 'package:invoiceninja_flutter/utils/web.dart';
+import 'package:share_plus/share_plus.dart';
 
 class ClientPdfView extends StatefulWidget {
   const ClientPdfView({
@@ -66,8 +68,6 @@ class _ClientPdfViewState extends State<ClientPdfView> {
       convertDateTimeToSqlDate(DateTime.now().subtract(Duration(days: 365)));
   String _endDate = convertDateTimeToSqlDate();
   String _status = kStatementStatusAll;
-  bool _showPayments = true;
-  bool _showAging = true;
 
   @override
   void initState() {
@@ -155,12 +155,14 @@ class _ClientPdfViewState extends State<ClientPdfView> {
       _endDate = endDate;
     }
 
+    final includes = state.prefState.statementIncludes;
     final data = json.encode({
       'client_id': client.id,
       'start_date': startDate,
       'end_date': endDate,
-      'show_payments_table': _showPayments,
-      'show_aging_table': _showAging,
+      'show_payments_table': includes.contains(kStatementIncludePayments),
+      'show_credits_table': includes.contains(kStatementIncludeCredits),
+      'show_aging_table': includes.contains(kStatementIncludeAging),
       'status': _status,
     });
 
@@ -181,7 +183,6 @@ class _ClientPdfViewState extends State<ClientPdfView> {
         errorMessage += response.body;
       }
 
-      showErrorDialog(context: context, message: errorMessage);
       throw errorMessage;
     }
 
@@ -227,64 +228,6 @@ class _ClientPdfViewState extends State<ClientPdfView> {
             ),
           ];
     */
-
-    final showPayments = Theme(
-      data: ThemeData(
-        unselectedWidgetColor: state.headerTextColor,
-      ),
-      child: Flexible(
-        child: Tooltip(
-          message: localization.payments,
-          child: CheckboxListTile(
-            title: Text(
-              localization.payments,
-              overflow: TextOverflow.ellipsis,
-              style: TextStyle(
-                color: state.headerTextColor,
-              ),
-            ),
-            value: _showPayments,
-            onChanged: (value) {
-              setState(() {
-                _showPayments = !_showPayments;
-                loadPDF();
-              });
-            },
-            controlAffinity: ListTileControlAffinity.leading,
-            activeColor: state.accentColor,
-          ),
-        ),
-      ),
-    );
-
-    final showAging = Theme(
-      data: ThemeData(
-        unselectedWidgetColor: state.headerTextColor,
-      ),
-      child: Flexible(
-        child: Tooltip(
-          message: localization.aging,
-          child: CheckboxListTile(
-            title: Text(
-              localization.aging,
-              overflow: TextOverflow.ellipsis,
-              style: TextStyle(
-                color: state.headerTextColor,
-              ),
-            ),
-            value: _showAging,
-            onChanged: (value) {
-              setState(() {
-                _showAging = !_showAging;
-                loadPDF();
-              });
-            },
-            controlAffinity: ListTileControlAffinity.leading,
-            activeColor: state.accentColor,
-          ),
-        ),
-      ),
-    );
 
     return Scaffold(
       backgroundColor: Colors.grey.shade300,
@@ -363,8 +306,34 @@ class _ClientPdfViewState extends State<ClientPdfView> {
                     ),
                   ),
                   if (isDesktop(context)) ...[
-                    showPayments,
-                    showAging,
+                    Theme(
+                      data: ThemeData(
+                          appBarTheme: AppBarTheme(
+                        titleTextStyle: TextStyle(fontSize: 60),
+                      )),
+                      child: Flexible(
+                          child: DropDownMultiSelect(
+                        onChanged: (List<dynamic> selected) {
+                          //_selectedOptions = selected;
+                          store.dispatch(UpdateUserPreferences(
+                              statementIncludes: BuiltList<String>(selected)));
+                          loadPDF();
+                        },
+                        selectedValues:
+                            state.prefState.statementIncludes.toList(),
+                        menuItembuilder: (dynamic option) => Text(
+                          localization.lookup(option),
+                          style: TextStyle(fontSize: 14),
+                        ),
+                        isDense: true,
+                        options: <String>[
+                          kStatementIncludePayments,
+                          kStatementIncludeCredits,
+                          kStatementIncludeAging,
+                        ],
+                        whenEmpty: '',
+                      )),
+                    )
                     //...pageSelector,
                   ]
                 ],
@@ -404,7 +373,7 @@ class _ClientPdfViewState extends State<ClientPdfView> {
                               showToast(
                                   localization.fileSavedInDownloadsFolder);
                             } else {
-                              await Share.shareFiles([filePath]);
+                              await Share.shareXFiles([XFile(filePath)]);
                             }
                           }
                         },
@@ -458,15 +427,21 @@ class _ClientPdfViewState extends State<ClientPdfView> {
                         return;
                       }
 
+                      final includes = state.prefState.statementIncludes;
                       createEntity(
                           context: context,
-                          entity: ScheduleEntity().rebuild((b) => b
-                            ..template = ScheduleEntity.TEMPLATE_EMAIL_STATEMENT
-                            ..parameters.clients.add(client.id)
-                            ..parameters.showAgingTable = _showAging
-                            ..parameters.showPaymentsTable = _showPayments
-                            ..parameters.status = _status
-                            ..parameters.dateRange = _dateRange.snakeCase));
+                          entity: ScheduleEntity(
+                                  ScheduleEntity.TEMPLATE_EMAIL_STATEMENT)
+                              .rebuild((b) => b
+                                ..parameters.clients.add(client.id)
+                                ..parameters.showAgingTable =
+                                    includes.contains(localization.aging)
+                                ..parameters.showPaymentsTable =
+                                    includes.contains(localization.payments)
+                                ..parameters.showCreditsTable =
+                                    includes.contains(localization.credits)
+                                ..parameters.status = _status
+                                ..parameters.dateRange = _dateRange.snakeCase));
                     },
                     child: Text(localization.schedule,
                         style: TextStyle(color: state.headerTextColor))),
@@ -486,7 +461,7 @@ class _ClientPdfViewState extends State<ClientPdfView> {
           if (_dateRange == DateRange.custom)
             Container(
               width: double.infinity,
-              color: Theme.of(context).backgroundColor,
+              color: Theme.of(context).colorScheme.background,
               child: Wrap(
                 alignment: WrapAlignment.center,
                 children: [

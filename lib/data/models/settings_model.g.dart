@@ -1422,6 +1422,13 @@ class _$SettingsEntitySerializer
         ..add(serializers.serialize(value,
             specifiedType: const FullType(String)));
     }
+    value = object.mailgunEndpoint;
+    if (value != null) {
+      result
+        ..add('mailgun_endpoint')
+        ..add(serializers.serialize(value,
+            specifiedType: const FullType(String)));
+    }
     value = object.emailAlignment;
     if (value != null) {
       result
@@ -1470,6 +1477,62 @@ class _$SettingsEntitySerializer
         ..add('accept_client_input_quote_approval')
         ..add(
             serializers.serialize(value, specifiedType: const FullType(bool)));
+    }
+    value = object.clientInitiatedPayments;
+    if (value != null) {
+      result
+        ..add('client_initiated_payments')
+        ..add(
+            serializers.serialize(value, specifiedType: const FullType(bool)));
+    }
+    value = object.clientInitiatedPaymentsMinimum;
+    if (value != null) {
+      result
+        ..add('client_initiated_payments_minimum')
+        ..add(serializers.serialize(value,
+            specifiedType: const FullType(double)));
+    }
+    value = object.shareInvoiceQuoteColumns;
+    if (value != null) {
+      result
+        ..add('sync_invoice_quote_columns')
+        ..add(
+            serializers.serialize(value, specifiedType: const FullType(bool)));
+    }
+    value = object.allowBillableTaskItems;
+    if (value != null) {
+      result
+        ..add('allow_billable_task_items')
+        ..add(
+            serializers.serialize(value, specifiedType: const FullType(bool)));
+    }
+    value = object.showTaskItemDescription;
+    if (value != null) {
+      result
+        ..add('show_task_item_description')
+        ..add(
+            serializers.serialize(value, specifiedType: const FullType(bool)));
+    }
+    value = object.enableEInvoice;
+    if (value != null) {
+      result
+        ..add('enable_e_invoice')
+        ..add(
+            serializers.serialize(value, specifiedType: const FullType(bool)));
+    }
+    value = object.eInvoiceType;
+    if (value != null) {
+      result
+        ..add('e_invoice_type')
+        ..add(serializers.serialize(value,
+            specifiedType: const FullType(String)));
+    }
+    value = object.defaultExpensePaymentTypeId;
+    if (value != null) {
+      result
+        ..add('default_expense_payment_type_id')
+        ..add(serializers.serialize(value,
+            specifiedType: const FullType(String)));
     }
     return result;
   }
@@ -2299,6 +2362,10 @@ class _$SettingsEntitySerializer
           result.mailgunDomain = serializers.deserialize(value,
               specifiedType: const FullType(String)) as String;
           break;
+        case 'mailgun_endpoint':
+          result.mailgunEndpoint = serializers.deserialize(value,
+              specifiedType: const FullType(String)) as String;
+          break;
         case 'email_alignment':
           result.emailAlignment = serializers.deserialize(value,
               specifiedType: const FullType(String)) as String;
@@ -2326,6 +2393,38 @@ class _$SettingsEntitySerializer
         case 'accept_client_input_quote_approval':
           result.acceptPurchaseOrderNumber = serializers.deserialize(value,
               specifiedType: const FullType(bool)) as bool;
+          break;
+        case 'client_initiated_payments':
+          result.clientInitiatedPayments = serializers.deserialize(value,
+              specifiedType: const FullType(bool)) as bool;
+          break;
+        case 'client_initiated_payments_minimum':
+          result.clientInitiatedPaymentsMinimum = serializers.deserialize(value,
+              specifiedType: const FullType(double)) as double;
+          break;
+        case 'sync_invoice_quote_columns':
+          result.shareInvoiceQuoteColumns = serializers.deserialize(value,
+              specifiedType: const FullType(bool)) as bool;
+          break;
+        case 'allow_billable_task_items':
+          result.allowBillableTaskItems = serializers.deserialize(value,
+              specifiedType: const FullType(bool)) as bool;
+          break;
+        case 'show_task_item_description':
+          result.showTaskItemDescription = serializers.deserialize(value,
+              specifiedType: const FullType(bool)) as bool;
+          break;
+        case 'enable_e_invoice':
+          result.enableEInvoice = serializers.deserialize(value,
+              specifiedType: const FullType(bool)) as bool;
+          break;
+        case 'e_invoice_type':
+          result.eInvoiceType = serializers.deserialize(value,
+              specifiedType: const FullType(String)) as String;
+          break;
+        case 'default_expense_payment_type_id':
+          result.defaultExpensePaymentTypeId = serializers.deserialize(value,
+              specifiedType: const FullType(String)) as String;
           break;
       }
     }
@@ -2810,6 +2909,8 @@ class _$SettingsEntity extends SettingsEntity {
   @override
   final String mailgunDomain;
   @override
+  final String mailgunEndpoint;
+  @override
   final String emailAlignment;
   @override
   final bool showEmailFooter;
@@ -2823,6 +2924,22 @@ class _$SettingsEntity extends SettingsEntity {
   final String customSendingEmail;
   @override
   final bool acceptPurchaseOrderNumber;
+  @override
+  final bool clientInitiatedPayments;
+  @override
+  final double clientInitiatedPaymentsMinimum;
+  @override
+  final bool shareInvoiceQuoteColumns;
+  @override
+  final bool allowBillableTaskItems;
+  @override
+  final bool showTaskItemDescription;
+  @override
+  final bool enableEInvoice;
+  @override
+  final String eInvoiceType;
+  @override
+  final String defaultExpensePaymentTypeId;
 
   factory _$SettingsEntity([void Function(SettingsEntityBuilder) updates]) =>
       (new SettingsEntityBuilder()..update(updates))._build();
@@ -3030,13 +3147,22 @@ class _$SettingsEntity extends SettingsEntity {
       this.postmarkSecret,
       this.mailgunSecret,
       this.mailgunDomain,
+      this.mailgunEndpoint,
       this.emailAlignment,
       this.showEmailFooter,
       this.companyLogoSize,
       this.showPaidStamp,
       this.showShippingAddress,
       this.customSendingEmail,
-      this.acceptPurchaseOrderNumber})
+      this.acceptPurchaseOrderNumber,
+      this.clientInitiatedPayments,
+      this.clientInitiatedPaymentsMinimum,
+      this.shareInvoiceQuoteColumns,
+      this.allowBillableTaskItems,
+      this.showTaskItemDescription,
+      this.enableEInvoice,
+      this.eInvoiceType,
+      this.defaultExpensePaymentTypeId})
       : super._();
 
   @override
@@ -3257,13 +3383,23 @@ class _$SettingsEntity extends SettingsEntity {
         postmarkSecret == other.postmarkSecret &&
         mailgunSecret == other.mailgunSecret &&
         mailgunDomain == other.mailgunDomain &&
+        mailgunEndpoint == other.mailgunEndpoint &&
         emailAlignment == other.emailAlignment &&
         showEmailFooter == other.showEmailFooter &&
         companyLogoSize == other.companyLogoSize &&
         showPaidStamp == other.showPaidStamp &&
         showShippingAddress == other.showShippingAddress &&
         customSendingEmail == other.customSendingEmail &&
-        acceptPurchaseOrderNumber == other.acceptPurchaseOrderNumber;
+        acceptPurchaseOrderNumber == other.acceptPurchaseOrderNumber &&
+        clientInitiatedPayments == other.clientInitiatedPayments &&
+        clientInitiatedPaymentsMinimum ==
+            other.clientInitiatedPaymentsMinimum &&
+        shareInvoiceQuoteColumns == other.shareInvoiceQuoteColumns &&
+        allowBillableTaskItems == other.allowBillableTaskItems &&
+        showTaskItemDescription == other.showTaskItemDescription &&
+        enableEInvoice == other.enableEInvoice &&
+        eInvoiceType == other.eInvoiceType &&
+        defaultExpensePaymentTypeId == other.defaultExpensePaymentTypeId;
   }
 
   int __hashCode;
@@ -3473,6 +3609,7 @@ class _$SettingsEntity extends SettingsEntity {
     _$hash = $jc(_$hash, postmarkSecret.hashCode);
     _$hash = $jc(_$hash, mailgunSecret.hashCode);
     _$hash = $jc(_$hash, mailgunDomain.hashCode);
+    _$hash = $jc(_$hash, mailgunEndpoint.hashCode);
     _$hash = $jc(_$hash, emailAlignment.hashCode);
     _$hash = $jc(_$hash, showEmailFooter.hashCode);
     _$hash = $jc(_$hash, companyLogoSize.hashCode);
@@ -3480,6 +3617,14 @@ class _$SettingsEntity extends SettingsEntity {
     _$hash = $jc(_$hash, showShippingAddress.hashCode);
     _$hash = $jc(_$hash, customSendingEmail.hashCode);
     _$hash = $jc(_$hash, acceptPurchaseOrderNumber.hashCode);
+    _$hash = $jc(_$hash, clientInitiatedPayments.hashCode);
+    _$hash = $jc(_$hash, clientInitiatedPaymentsMinimum.hashCode);
+    _$hash = $jc(_$hash, shareInvoiceQuoteColumns.hashCode);
+    _$hash = $jc(_$hash, allowBillableTaskItems.hashCode);
+    _$hash = $jc(_$hash, showTaskItemDescription.hashCode);
+    _$hash = $jc(_$hash, enableEInvoice.hashCode);
+    _$hash = $jc(_$hash, eInvoiceType.hashCode);
+    _$hash = $jc(_$hash, defaultExpensePaymentTypeId.hashCode);
     _$hash = $jf(_$hash);
     return __hashCode ??= _$hash;
   }
@@ -3693,13 +3838,23 @@ class _$SettingsEntity extends SettingsEntity {
           ..add('postmarkSecret', postmarkSecret)
           ..add('mailgunSecret', mailgunSecret)
           ..add('mailgunDomain', mailgunDomain)
+          ..add('mailgunEndpoint', mailgunEndpoint)
           ..add('emailAlignment', emailAlignment)
           ..add('showEmailFooter', showEmailFooter)
           ..add('companyLogoSize', companyLogoSize)
           ..add('showPaidStamp', showPaidStamp)
           ..add('showShippingAddress', showShippingAddress)
           ..add('customSendingEmail', customSendingEmail)
-          ..add('acceptPurchaseOrderNumber', acceptPurchaseOrderNumber))
+          ..add('acceptPurchaseOrderNumber', acceptPurchaseOrderNumber)
+          ..add('clientInitiatedPayments', clientInitiatedPayments)
+          ..add(
+              'clientInitiatedPaymentsMinimum', clientInitiatedPaymentsMinimum)
+          ..add('shareInvoiceQuoteColumns', shareInvoiceQuoteColumns)
+          ..add('allowBillableTaskItems', allowBillableTaskItems)
+          ..add('showTaskItemDescription', showTaskItemDescription)
+          ..add('enableEInvoice', enableEInvoice)
+          ..add('eInvoiceType', eInvoiceType)
+          ..add('defaultExpensePaymentTypeId', defaultExpensePaymentTypeId))
         .toString();
   }
 }
@@ -4698,6 +4853,11 @@ class SettingsEntityBuilder
   set mailgunDomain(String mailgunDomain) =>
       _$this._mailgunDomain = mailgunDomain;
 
+  String _mailgunEndpoint;
+  String get mailgunEndpoint => _$this._mailgunEndpoint;
+  set mailgunEndpoint(String mailgunEndpoint) =>
+      _$this._mailgunEndpoint = mailgunEndpoint;
+
   String _emailAlignment;
   String get emailAlignment => _$this._emailAlignment;
   set emailAlignment(String emailAlignment) =>
@@ -4732,6 +4892,46 @@ class SettingsEntityBuilder
   bool get acceptPurchaseOrderNumber => _$this._acceptPurchaseOrderNumber;
   set acceptPurchaseOrderNumber(bool acceptPurchaseOrderNumber) =>
       _$this._acceptPurchaseOrderNumber = acceptPurchaseOrderNumber;
+
+  bool _clientInitiatedPayments;
+  bool get clientInitiatedPayments => _$this._clientInitiatedPayments;
+  set clientInitiatedPayments(bool clientInitiatedPayments) =>
+      _$this._clientInitiatedPayments = clientInitiatedPayments;
+
+  double _clientInitiatedPaymentsMinimum;
+  double get clientInitiatedPaymentsMinimum =>
+      _$this._clientInitiatedPaymentsMinimum;
+  set clientInitiatedPaymentsMinimum(double clientInitiatedPaymentsMinimum) =>
+      _$this._clientInitiatedPaymentsMinimum = clientInitiatedPaymentsMinimum;
+
+  bool _shareInvoiceQuoteColumns;
+  bool get shareInvoiceQuoteColumns => _$this._shareInvoiceQuoteColumns;
+  set shareInvoiceQuoteColumns(bool shareInvoiceQuoteColumns) =>
+      _$this._shareInvoiceQuoteColumns = shareInvoiceQuoteColumns;
+
+  bool _allowBillableTaskItems;
+  bool get allowBillableTaskItems => _$this._allowBillableTaskItems;
+  set allowBillableTaskItems(bool allowBillableTaskItems) =>
+      _$this._allowBillableTaskItems = allowBillableTaskItems;
+
+  bool _showTaskItemDescription;
+  bool get showTaskItemDescription => _$this._showTaskItemDescription;
+  set showTaskItemDescription(bool showTaskItemDescription) =>
+      _$this._showTaskItemDescription = showTaskItemDescription;
+
+  bool _enableEInvoice;
+  bool get enableEInvoice => _$this._enableEInvoice;
+  set enableEInvoice(bool enableEInvoice) =>
+      _$this._enableEInvoice = enableEInvoice;
+
+  String _eInvoiceType;
+  String get eInvoiceType => _$this._eInvoiceType;
+  set eInvoiceType(String eInvoiceType) => _$this._eInvoiceType = eInvoiceType;
+
+  String _defaultExpensePaymentTypeId;
+  String get defaultExpensePaymentTypeId => _$this._defaultExpensePaymentTypeId;
+  set defaultExpensePaymentTypeId(String defaultExpensePaymentTypeId) =>
+      _$this._defaultExpensePaymentTypeId = defaultExpensePaymentTypeId;
 
   SettingsEntityBuilder();
 
@@ -4940,6 +5140,7 @@ class SettingsEntityBuilder
       _postmarkSecret = $v.postmarkSecret;
       _mailgunSecret = $v.mailgunSecret;
       _mailgunDomain = $v.mailgunDomain;
+      _mailgunEndpoint = $v.mailgunEndpoint;
       _emailAlignment = $v.emailAlignment;
       _showEmailFooter = $v.showEmailFooter;
       _companyLogoSize = $v.companyLogoSize;
@@ -4947,6 +5148,14 @@ class SettingsEntityBuilder
       _showShippingAddress = $v.showShippingAddress;
       _customSendingEmail = $v.customSendingEmail;
       _acceptPurchaseOrderNumber = $v.acceptPurchaseOrderNumber;
+      _clientInitiatedPayments = $v.clientInitiatedPayments;
+      _clientInitiatedPaymentsMinimum = $v.clientInitiatedPaymentsMinimum;
+      _shareInvoiceQuoteColumns = $v.shareInvoiceQuoteColumns;
+      _allowBillableTaskItems = $v.allowBillableTaskItems;
+      _showTaskItemDescription = $v.showTaskItemDescription;
+      _enableEInvoice = $v.enableEInvoice;
+      _eInvoiceType = $v.eInvoiceType;
+      _defaultExpensePaymentTypeId = $v.defaultExpensePaymentTypeId;
       _$v = null;
     }
     return this;
@@ -5174,13 +5383,22 @@ class SettingsEntityBuilder
               postmarkSecret: postmarkSecret,
               mailgunSecret: mailgunSecret,
               mailgunDomain: mailgunDomain,
+              mailgunEndpoint: mailgunEndpoint,
               emailAlignment: emailAlignment,
               showEmailFooter: showEmailFooter,
               companyLogoSize: companyLogoSize,
               showPaidStamp: showPaidStamp,
               showShippingAddress: showShippingAddress,
               customSendingEmail: customSendingEmail,
-              acceptPurchaseOrderNumber: acceptPurchaseOrderNumber);
+              acceptPurchaseOrderNumber: acceptPurchaseOrderNumber,
+              clientInitiatedPayments: clientInitiatedPayments,
+              clientInitiatedPaymentsMinimum: clientInitiatedPaymentsMinimum,
+              shareInvoiceQuoteColumns: shareInvoiceQuoteColumns,
+              allowBillableTaskItems: allowBillableTaskItems,
+              showTaskItemDescription: showTaskItemDescription,
+              enableEInvoice: enableEInvoice,
+              eInvoiceType: eInvoiceType,
+              defaultExpensePaymentTypeId: defaultExpensePaymentTypeId);
     } catch (_) {
       String _$failedField;
       try {

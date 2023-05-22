@@ -3,9 +3,12 @@ import 'package:built_collection/built_collection.dart';
 import 'package:built_value/built_value.dart';
 import 'package:built_value/serializer.dart';
 import 'package:invoiceninja_flutter/data/models/category_model.dart';
+import 'package:flutter_redux/flutter_redux.dart';
+import 'package:invoiceninja_flutter/constants.dart';
 
 // Project imports:
 import 'package:invoiceninja_flutter/data/models/models.dart';
+import 'package:invoiceninja_flutter/main_app.dart';
 import 'package:invoiceninja_flutter/redux/app/app_state.dart';
 import 'package:invoiceninja_flutter/utils/formatting.dart';
 import 'package:invoiceninja_flutter/utils/strings.dart';
@@ -76,6 +79,8 @@ class ProductFields {
   static const String vendor = 'vendor';
   static const String stockQuantity = 'stock_quantity';
   static const String notificationThreshold = 'notification_threshold';
+  static const String taxCategoryId = 'tax_category_id';
+  static const String taxCategory = 'tax_category';
 }
 
 abstract class ProductEntity extends Object
@@ -111,6 +116,7 @@ abstract class ProductEntity extends Object
       stockNotification: true,
       imageUrl: '',
       maxQuantity: 0,
+      taxCategoryId: kTaxCategoryPhysical,
       documents: BuiltList<DocumentEntity>(),
       categoryId: '',
       subCategoryId: '',
@@ -221,6 +227,9 @@ abstract class ProductEntity extends Object
 
   @BuiltValueField(wireName: 'max_quantity')
   int get maxQuantity;
+
+  @BuiltValueField(wireName: 'tax_id')
+  String get taxCategoryId;
 
   BuiltList<DocumentEntity> get documents;
 
@@ -410,6 +419,13 @@ abstract class ProductEntity extends Object
       if (userCompany.canCreate(EntityType.purchaseOrder) && !isDeleted) {
         actions.add(EntityAction.newPurchaseOrder);
       }
+
+      final store = StoreProvider.of<AppState>(navigatorKey.currentContext);
+      final company = store.state.company;
+
+      if (company.calculateTaxes) {
+        actions.add(EntityAction.setTaxCategory);
+      }
     }
 
     if (userCompany.canCreate(EntityType.product) && !multiselect) {
@@ -433,7 +449,8 @@ abstract class ProductEntity extends Object
     ..stockNotification = true
     ..stockNotificationThreshold = 0
     ..imageUrl = ''
-    ..maxQuantity = 0;
+    ..maxQuantity = 0
+    ..taxCategoryId = kTaxCategoryPhysical;
 
   static Serializer<ProductEntity> get serializer => _$productEntitySerializer;
 }

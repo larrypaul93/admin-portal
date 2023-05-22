@@ -11,12 +11,14 @@ import 'package:invoiceninja_flutter/ui/app/forms/app_dropdown_button.dart';
 import 'package:invoiceninja_flutter/utils/localization.dart';
 import 'package:invoiceninja_flutter/utils/platforms.dart';
 
-void multiselectDialog(
-    {BuildContext context,
-    List<String> options,
-    List<String> selected,
-    List<String> defaultSelected,
-    Function(List<String>) onSelected}) {
+void multiselectDialog({
+  BuildContext context,
+  List<String> options,
+  List<String> selected,
+  List<String> defaultSelected,
+  Function(List<String>) onSelected,
+  EntityType entityType,
+}) {
   showDialog<AlertDialog>(
     context: context,
     barrierDismissible: false,
@@ -29,6 +31,7 @@ void multiselectDialog(
         defaultSelected: defaultSelected,
         onSelected: (values) => onSelected(values),
         isDialog: true,
+        entityType: entityType,
       );
     },
   );
@@ -44,6 +47,7 @@ class MultiSelectList extends StatefulWidget {
     this.liveChanges = false,
     this.prefix,
     this.isDialog = false,
+    this.entityType,
   });
 
   final List<String> options;
@@ -54,6 +58,7 @@ class MultiSelectList extends StatefulWidget {
   final bool liveChanges;
   final String prefix;
   final bool isDialog;
+  final EntityType entityType;
 
   @override
   MultiSelectListState createState() => MultiSelectListState();
@@ -109,7 +114,10 @@ class MultiSelectListState extends State<MultiSelectList> {
     widget.options
         .where((option) => !selected.contains(option))
         .forEach((option) {
-      final columnTitle = state.company.getCustomFieldLabel(option);
+      final columnTitle = state.company.getCustomFieldLabel(
+          widget.entityType != null
+              ? option.replaceFirst('custom', widget.entityType.snakeCase)
+              : option);
       options[option] =
           columnTitle.isEmpty ? lookupOption(option) : columnTitle;
     });
@@ -152,60 +160,69 @@ class MultiSelectListState extends State<MultiSelectList> {
           ),
           SizedBox(height: 20),
           Expanded(
-            child: ReorderableListView(
-              scrollController: _controller,
-              children: selected.asMap().entries.map((entry) {
-                final option = entry.value;
-                final columnTitle = state.company.getCustomFieldLabel(option);
-                return Padding(
-                  key: ValueKey('__${entry.key}_${entry.value}__'),
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 3, horizontal: 10),
-                  child: Row(
-                    children: <Widget>[
-                      IconButton(
-                        icon: Icon(Icons.close),
-                        onPressed: () {
-                          setState(() => selected.remove(option));
-                          if (widget.liveChanges) {
-                            widget.onSelected(selected);
-                          }
-                        },
-                      ),
-                      SizedBox(width: 20),
-                      Expanded(
-                        child: Text(
-                          columnTitle.isEmpty
-                              ? lookupOption(option)
-                              : columnTitle,
-                          textAlign: TextAlign.left,
-                          style: Theme.of(context).textTheme.subtitle1,
+            child: Scrollbar(
+              controller: _controller,
+              thumbVisibility: true,
+              child: ReorderableListView(
+                scrollController: _controller,
+                padding: const EdgeInsets.only(right: 12),
+                children: selected.asMap().entries.map((entry) {
+                  final option = entry.value;
+                  final columnTitle = state.company.getCustomFieldLabel(
+                      widget.entityType != null
+                          ? option.replaceFirst(
+                              'custom', widget.entityType.snakeCase)
+                          : option);
+                  return Padding(
+                    key: ValueKey('__${entry.key}_${entry.value}__'),
+                    padding:
+                        const EdgeInsets.symmetric(vertical: 3, horizontal: 10),
+                    child: Row(
+                      children: <Widget>[
+                        IconButton(
+                          icon: Icon(Icons.close),
+                          onPressed: () {
+                            setState(() => selected.remove(option));
+                            if (widget.liveChanges) {
+                              widget.onSelected(selected);
+                            }
+                          },
                         ),
-                      ),
-                    ],
-                  ),
-                );
-              }).toList(),
-              onReorder: (oldIndex, newIndex) {
-                // https://stackoverflow.com/a/54164333/497368
-                // These two lines are workarounds for ReorderableListView problems
-                if (newIndex > selected.length) {
-                  newIndex = selected.length;
-                }
-                if (oldIndex < newIndex) {
-                  newIndex--;
-                }
+                        SizedBox(width: 20),
+                        Expanded(
+                          child: Text(
+                            columnTitle.isEmpty
+                                ? lookupOption(option)
+                                : columnTitle,
+                            textAlign: TextAlign.left,
+                            style: Theme.of(context).textTheme.titleMedium,
+                          ),
+                        ),
+                      ],
+                    ),
+                  );
+                }).toList(),
+                onReorder: (oldIndex, newIndex) {
+                  // https://stackoverflow.com/a/54164333/497368
+                  // These two lines are workarounds for ReorderableListView problems
+                  if (newIndex > selected.length) {
+                    newIndex = selected.length;
+                  }
+                  if (oldIndex < newIndex) {
+                    newIndex--;
+                  }
 
-                setState(() {
-                  final field = selected[oldIndex];
-                  selected.removeAt(oldIndex);
-                  selected.insert(newIndex, field);
-                });
+                  setState(() {
+                    final field = selected[oldIndex];
+                    selected.removeAt(oldIndex);
+                    selected.insert(newIndex, field);
+                  });
 
-                if (widget.liveChanges) {
-                  widget.onSelected(selected);
-                }
-              },
+                  if (widget.liveChanges) {
+                    widget.onSelected(selected);
+                  }
+                },
+              ),
             ),
           ),
           if (!widget.isDialog)

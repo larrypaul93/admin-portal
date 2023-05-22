@@ -21,6 +21,7 @@ class _ReviewAppState extends State<ReviewApp> {
   Widget build(BuildContext context) {
     final localization = AppLocalization.of(context);
     final store = StoreProvider.of<AppState>(context);
+    final state = store.state;
 
     if (kIsWeb || isLinux()) {
       return SizedBox();
@@ -34,7 +35,7 @@ class _ReviewAppState extends State<ReviewApp> {
           SizedBox(height: 12),
           Text(
             localization.wouldYouRateTheApp,
-            style: Theme.of(context).textTheme.subtitle1,
+            style: Theme.of(context).textTheme.titleMedium,
             textAlign: TextAlign.center,
           ),
           SizedBox(height: 16),
@@ -43,17 +44,23 @@ class _ReviewAppState extends State<ReviewApp> {
               TextButton(
                 onPressed: () async {
                   // TODO remove this code: https://github.com/britannio/in_app_review/issues/56
-                  if (isAndroid()) {
+                  if (kIsWeb || isLinux()) {
+                    launchUrl(Uri.parse(getRateAppURL(context)));
+                  } else if (isAndroid()) {
                     AppReview.openStoreListing();
                   } else if (await AppReview.isAvailable()) {
                     AppReview.requestReview();
-                  } else if (kIsWeb || isLinux()) {
-                    launchUrl(Uri.parse(getRateAppURL(context)));
                   } else {
                     AppReview.openStoreListing();
                   }
 
-                  store.dispatch(DismissReviewAppPermanently());
+                  if (state.showTwoYearReviewApp) {
+                    store.dispatch(DismissTwoYearReviewAppPermanently());
+                  } else if (state.showOneYearReviewApp) {
+                    store.dispatch(DismissOneYearReviewAppPermanently());
+                  } else if (state.showReviewApp) {
+                    store.dispatch(DismissReviewAppPermanently());
+                  }
                 },
                 child: ConstrainedBox(
                   constraints: const BoxConstraints(minWidth: 100),
@@ -68,7 +75,13 @@ class _ReviewAppState extends State<ReviewApp> {
               ),
               TextButton(
                 onPressed: () async {
-                  store.dispatch(DismissReviewAppPermanently());
+                  if (state.showTwoYearReviewApp) {
+                    store.dispatch(DismissTwoYearReviewAppPermanently());
+                  } else if (state.showOneYearReviewApp) {
+                    store.dispatch(DismissOneYearReviewAppPermanently());
+                  } else if (state.showReviewApp) {
+                    store.dispatch(DismissReviewAppPermanently());
+                  }
                 },
                 child: ConstrainedBox(
                   constraints: const BoxConstraints(minWidth: 100),

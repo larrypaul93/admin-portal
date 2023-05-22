@@ -129,6 +129,25 @@ class ClientOverview extends StatelessWidget {
               formatNumber(client.balance, context, clientId: client.id),
         ),
         ListDivider(),
+        if (client.creditBalance != 0 || client.paymentBalance != 0) ...[
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+            child:
+                Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+              if (client.paymentBalance != 0)
+                Text(localization.payments +
+                    ': ' +
+                    formatNumber(client.paymentBalance, context,
+                        clientId: client.id)),
+              if (client.creditBalance != 0)
+                Text(localization.credit +
+                    ': ' +
+                    formatNumber(client.creditBalance, context,
+                        clientId: client.id)),
+            ]),
+          ),
+          ListDivider(),
+        ],
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
           child: PortalLinks(
@@ -275,7 +294,7 @@ class ClientOverview extends StatelessWidget {
                 .present(localization.active, localization.archived),
           ),
         if ((client.publicNotes ?? '').isNotEmpty) ...[
-          IconMessage(client.publicNotes),
+          IconMessage(client.publicNotes, copyToClipboard: true),
           ListDivider()
         ],
       ],

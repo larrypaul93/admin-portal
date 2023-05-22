@@ -52,7 +52,7 @@ class PurchaseOrderListItem extends StatelessWidget {
         ? (purchaseOrder.matchesFilterValue(filter) ??
             vendor.matchesFilterValue(filter))
         : null;
-    final textColor = Theme.of(context).textTheme.bodyText1.color;
+    final textColor = Theme.of(context).textTheme.bodyLarge.color;
 
     String subtitle = '';
     if (purchaseOrder.date.isNotEmpty) {
@@ -144,7 +144,7 @@ class PurchaseOrderListItem extends StatelessWidget {
                               overflow: TextOverflow.ellipsis,
                               style: Theme.of(context)
                                   .textTheme
-                                  .subtitle2
+                                  .titleSmall
                                   .copyWith(
                                     color:
                                         textColor.withOpacity(kLighterOpacity),
@@ -155,7 +155,11 @@ class PurchaseOrderListItem extends StatelessWidget {
                       ),
                       SizedBox(width: 10),
                       Text(
-                        formatNumber(purchaseOrder.amount, context),
+                        formatNumber(
+                          purchaseOrder.amount,
+                          context,
+                          vendorId: vendor.id,
+                        ),
                         style: textStyle,
                         textAlign: TextAlign.end,
                       ),
@@ -191,19 +195,18 @@ class PurchaseOrderListItem extends StatelessWidget {
                       Expanded(
                         child: Text(
                           vendor.name,
-                          style: Theme.of(context).textTheme.subtitle1,
+                          style: Theme.of(context).textTheme.titleMedium,
                           overflow: TextOverflow.ellipsis,
                         ),
                       ),
                       SizedBox(width: 4),
                       Text(
                           formatNumber(
-                            purchaseOrder.balance > 0
-                                ? purchaseOrder.balance
-                                : purchaseOrder.amount,
+                            purchaseOrder.amount,
                             context,
+                            vendorId: vendor.id,
                           ),
-                          style: Theme.of(context).textTheme.subtitle1),
+                          style: Theme.of(context).textTheme.titleMedium),
                     ],
                   ),
                 ),

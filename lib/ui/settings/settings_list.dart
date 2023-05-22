@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 // Package imports:
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:invoiceninja_flutter/redux/company/company_selectors.dart';
+import 'package:invoiceninja_flutter/utils/colors.dart';
 import 'package:invoiceninja_flutter/utils/formatting.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:timeago/timeago.dart' as timeago;
@@ -103,11 +104,11 @@ class _SettingsListState extends State<SettingsList> {
                 ),
               ),
             Container(
-              color: Theme.of(context).backgroundColor,
+              color: Theme.of(context).colorScheme.background,
               padding: const EdgeInsets.only(left: 19, top: 16, bottom: 16),
               child: Text(
                 localization.basicSettings,
-                style: Theme.of(context).textTheme.bodyText2,
+                style: Theme.of(context).textTheme.bodyMedium,
               ),
             ),
             SettingsListTile(
@@ -174,11 +175,11 @@ class _SettingsListState extends State<SettingsList> {
                 viewModel: widget.viewModel,
               ),
             Container(
-              color: Theme.of(context).backgroundColor,
+              color: Theme.of(context).colorScheme.background,
               padding: const EdgeInsets.only(left: 19, top: 16, bottom: 16),
               child: Text(
                 localization.advancedSettings,
-                style: Theme.of(context).textTheme.bodyText2,
+                style: Theme.of(context).textTheme.bodyMedium,
               ),
             ),
 
@@ -219,7 +220,7 @@ class _SettingsListState extends State<SettingsList> {
               ),
             if (showAll)
               SettingsListTile(
-                section: kSettingsSubscriptions,
+                section: kSettingsPaymentLinks,
                 viewModel: widget.viewModel,
               ),
             /*
@@ -257,7 +258,7 @@ class _SettingsListState extends State<SettingsList> {
   }
 }
 
-class SettingsListTile extends StatelessWidget {
+class SettingsListTile extends StatefulWidget {
   const SettingsListTile({
     @required this.section,
     @required this.viewModel,
@@ -267,32 +268,55 @@ class SettingsListTile extends StatelessWidget {
   final SettingsListVM viewModel;
 
   @override
+  State<SettingsListTile> createState() => _SettingsListTileState();
+}
+
+class _SettingsListTileState extends State<SettingsListTile> {
+  bool _isHovered = false;
+
+  @override
   Widget build(BuildContext context) {
     final localization = AppLocalization.of(context);
+    final store = StoreProvider.of<AppState>(context);
+    final state = store.state;
 
     IconData icon;
-    if (section == kSettingsDeviceSettings) {
+    if (widget.section == kSettingsDeviceSettings) {
       icon = isMobile(context) ? Icons.phone_android : MdiIcons.desktopClassic;
     } else {
-      icon = getSettingIcon(section);
+      icon = getSettingIcon(widget.section);
     }
 
-    return Container(
-      color: Theme.of(context).cardColor,
-      child: SelectedIndicator(
-        isSelected: viewModel.state.uiState.containsRoute('/$section') &&
-            isDesktop(context),
-        child: ListTile(
-          dense: isDesktop(context),
-          leading: Padding(
-            padding: const EdgeInsets.only(left: 6, top: 2),
-            child: Icon(icon ?? icon, size: 22),
+    final isSelected =
+        widget.viewModel.state.uiState.containsRoute('/${widget.section}') &&
+            isDesktop(context);
+
+    final hoverColor = convertHexStringToColor(state.prefState.enableDarkMode
+        ? kDefaultDarkSelectedColorMenu
+        : kDefaultLightSelectedColorMenu);
+
+    return MouseRegion(
+      onEnter: (_) => setState(() => _isHovered = true),
+      onExit: (_) => setState(() => _isHovered = false),
+      child: Container(
+        color: Theme.of(context).cardColor,
+        child: SelectedIndicator(
+          isSelected: isSelected,
+          child: ListTile(
+            tileColor: _isHovered && !isSelected ? hoverColor : null,
+            dense: isDesktop(context),
+            leading: Padding(
+              padding: const EdgeInsets.only(left: 6, top: 2),
+              child: Icon(icon ?? icon, size: 22),
+            ),
+            title: Text(
+              localization.lookup(widget.section),
+              style:
+                  Theme.of(context).textTheme.bodyLarge.copyWith(fontSize: 14),
+            ),
+            onTap: () =>
+                widget.viewModel.loadSection(context, widget.section, 0),
           ),
-          title: Text(
-            localization.lookup(section),
-            style: Theme.of(context).textTheme.bodyText1.copyWith(fontSize: 14),
-          ),
-          onTap: () => viewModel.loadSection(context, section, 0),
         ),
       ),
     );
@@ -397,17 +421,19 @@ class SettingsSearch extends StatelessWidget {
           'allow_over_payment',
           'allow_under_payment',
           'auto_bill_standard_invoices#2023-01-17',
+          'client_initiated_payments#2023-03-20',
         ]
       ],
       kSettingsTaxSettings: [
         [
           'tax_settings',
+          'inclusive_taxes',
+          if (supportsLatestFeatures()) 'calculate_taxes#2023-04-26',
         ],
       ],
       kSettingsTaxRates: [
         [
           'tax_rates',
-          'inclusive_taxes',
         ],
       ],
       kSettingsProducts: [
@@ -429,6 +455,8 @@ class SettingsSearch extends StatelessWidget {
           'client_portal',
           'lock_invoiced_tasks#2022-11-30',
           'invoice_task_hours#2023-01-19',
+          'allow_billable_task_items#2023-03-22',
+          'show_task_item_description#2023-03-22',
         ],
       ],
       kSettingsTaskStatuses: [
@@ -520,6 +548,7 @@ class SettingsSearch extends StatelessWidget {
           'logo_size#2023-01-26',
           'show_paid_stamp#2023-01-29',
           'show_shipping_address#2023-01-29',
+          'share_invoice_quote_columns#2023-03-20',
         ],
       ],
       kSettingsCustomDesigns: [
@@ -594,6 +623,7 @@ class SettingsSearch extends StatelessWidget {
           'mailgun#2023-01-11',
           'email_alignment#2023-01-17',
           'show_email_footer#2023-01-17',
+          if (supportsLatestFeatures()) 'enable_e_invoice#2023-04-27,'
         ],
       ],
       kSettingsTemplatesAndReminders: [
@@ -618,9 +648,9 @@ class SettingsSearch extends StatelessWidget {
           'groups',
         ],
       ],
-      kSettingsSubscriptions: [
+      kSettingsPaymentLinks: [
         [
-          'subscriptions',
+          'payment_links',
         ],
       ],
       kSettingsSchedules: [
@@ -670,17 +700,34 @@ class SettingsSearch extends StatelessWidget {
                   .toLowerCase()
                   .contains(filter.toLowerCase()))
             ListTile(
-              title: Text(localization.lookup(parts[1])),
+              title: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(localization.lookup(parts[1])),
+                        Text(
+                          localization.lookup(parts[2]),
+                          style: Theme.of(context).textTheme.bodySmall,
+                        ),
+                      ],
+                    ),
+                  ),
+                  SizedBox(width: 8),
+                  if (parts[0].isNotEmpty)
+                    Flexible(
+                        child: Text(timeago.format(DateTime.parse(parts[0]),
+                            locale:
+                                localeSelector(store.state, twoLetter: true) +
+                                    '_short'))),
+                ],
+              ),
               leading: Padding(
                 padding: const EdgeInsets.only(left: 6, top: 10),
                 child: Icon(getSettingIcon(parts[2]), size: 22),
               ),
-              trailing: parts[0].isEmpty
-                  ? null
-                  : Text(timeago.format(DateTime.parse(parts[0]),
-                      locale: localeSelector(store.state, twoLetter: true) +
-                          '_short')),
-              subtitle: Text(localization.lookup(parts[2])),
               onTap: () =>
                   viewModel.loadSection(context, parts[2], parseInt(parts[3])),
             ),

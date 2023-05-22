@@ -73,9 +73,10 @@ class LoadTaskActivity {
 }
 
 class LoadTasks {
-  LoadTasks({this.completer});
+  LoadTasks({this.completer, this.page = 1});
 
   final Completer completer;
+  final int page;
 }
 
 class LoadTaskRequest implements StartLoading {}
@@ -396,8 +397,7 @@ void handleTaskAction(
         }
       });
       if (hasMultipleClients) {
-        showErrorDialog(
-            context: context, message: localization.multipleClientError);
+        showErrorDialog(message: localization.multipleClientError);
         return;
       }
 

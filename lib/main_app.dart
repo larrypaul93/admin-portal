@@ -161,10 +161,13 @@ class InvoiceNinjaAppState extends State<InvoiceNinjaApp> {
 
     try {
       authenticated = await LocalAuthentication().authenticate(
-          localizedReason: 'Please authenticate to access the app',
+        localizedReason: 'Please authenticate to access the app',
+        options: const AuthenticationOptions(
           biometricOnly: true,
           useErrorDialogs: true,
-          stickyAuth: false);
+          stickyAuth: false,
+        ),
+      );
     } catch (e) {
       print(e);
     }
@@ -177,6 +180,14 @@ class InvoiceNinjaAppState extends State<InvoiceNinjaApp> {
   @override
   void initState() {
     super.initState();
+
+    final window = WidgetsBinding.instance.window;
+    window.onPlatformBrightnessChanged = () {
+      WidgetsBinding.instance.handlePlatformBrightnessChanged();
+      widget.store.dispatch(UpdateUserPreferences(
+          enableDarkModeSystem: window.platformBrightness == Brightness.dark));
+      setState(() {});
+    };
 
     if (kIsWeb) {
       WebUtils.warnChanges(widget.store);
@@ -393,12 +404,19 @@ class InvoiceNinjaAppState extends State<InvoiceNinjaApp> {
                       ? LockScreen(onAuthenticatePressed: _authenticate)
                       : InitScreen(),
                   locale: locale,
+                  /*
                   theme: state.prefState.enableDarkMode
                       ? ThemeData(
-                          colorScheme: ColorScheme.dark().copyWith(
-                            secondary: accentColor,
-                            primary: accentColor,
-                          ),
+                          brightness: Brightness.dark,
+                          colorSchemeSeed: accentColor,
+                          useMaterial3: true)
+                      : ThemeData(
+                          brightness: Brightness.light,
+                          colorSchemeSeed: accentColor,
+                          useMaterial3: true),
+                  */
+                  theme: state.prefState.enableDarkMode
+                      ? ThemeData(
                           tooltipTheme: TooltipThemeData(
                             waitDuration: Duration(milliseconds: 500),
                           ),
@@ -408,20 +426,22 @@ class InvoiceNinjaAppState extends State<InvoiceNinjaApp> {
                             selectionHandleColor: accentColor,
                           ),
                           fontFamily: fontFamily,
-                          backgroundColor: Colors.black,
                           canvasColor: Colors.black,
                           cardColor: const Color(0xFF1B1C1E),
-                          bottomAppBarColor: const Color(0xFF1B1C1E),
                           primaryColorDark: Colors.black,
                           textButtonTheme:
                               TextButtonThemeData(style: textButtonTheme),
                           outlinedButtonTheme: OutlinedButtonThemeData(
                               style: outlinedButtonTheme),
+                          colorScheme: ColorScheme.dark().copyWith(
+                            secondary: accentColor,
+                            primary: accentColor,
+                            background: Colors.black,
+                          ),
+                          bottomAppBarTheme:
+                              BottomAppBarTheme(color: const Color(0xFF1B1C1E)),
                         )
                       : ThemeData(
-                          colorScheme: ColorScheme.fromSwatch().copyWith(
-                            secondary: accentColor,
-                          ),
                           tooltipTheme: TooltipThemeData(
                             waitDuration: Duration(milliseconds: 500),
                           ),
@@ -432,10 +452,8 @@ class InvoiceNinjaAppState extends State<InvoiceNinjaApp> {
                             selectionColor: accentColor,
                           ),
                           fontFamily: fontFamily,
-                          backgroundColor: Colors.white,
                           canvasColor: Colors.white,
                           cardColor: Colors.white,
-                          bottomAppBarColor: Colors.white,
                           primaryColorDark: hasAccentColor
                               ? accentColor
                               : const Color(0xFF0D5D91),
@@ -469,6 +487,12 @@ class InvoiceNinjaAppState extends State<InvoiceNinjaApp> {
                               TextButtonThemeData(style: textButtonTheme),
                           outlinedButtonTheme: OutlinedButtonThemeData(
                               style: outlinedButtonTheme),
+                          colorScheme: ColorScheme.fromSwatch().copyWith(
+                            secondary: accentColor,
+                            background: Colors.white,
+                          ),
+                          bottomAppBarTheme:
+                              BottomAppBarTheme(color: Colors.white),
                         ),
                   title: kAppName,
                   onGenerateRoute: isMobile(context) ? null : generateRoute,

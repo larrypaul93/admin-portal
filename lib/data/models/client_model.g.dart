@@ -124,6 +124,9 @@ class _$ClientEntitySerializer implements StructuredSerializer<ClientEntity> {
       'credit_balance',
       serializers.serialize(object.creditBalance,
           specifiedType: const FullType(double)),
+      'payment_balance',
+      serializers.serialize(object.paymentBalance,
+          specifiedType: const FullType(double)),
       'paid_to_date',
       serializers.serialize(object.paidToDate,
           specifiedType: const FullType(double)),
@@ -232,6 +235,12 @@ class _$ClientEntitySerializer implements StructuredSerializer<ClientEntity> {
       serializers.serialize(object.contacts,
           specifiedType:
               const FullType(BuiltList, const [const FullType(ContactEntity)])),
+      'routing_id',
+      serializers.serialize(object.routingId,
+          specifiedType: const FullType(String)),
+      'is_tax_exempt',
+      serializers.serialize(object.isTaxExempt,
+          specifiedType: const FullType(bool)),
       'activities',
       serializers.serialize(object.activities,
           specifiedType: const FullType(
@@ -491,6 +500,10 @@ class _$ClientEntitySerializer implements StructuredSerializer<ClientEntity> {
           result.creditBalance = serializers.deserialize(value,
               specifiedType: const FullType(double)) as double;
           break;
+        case 'payment_balance':
+          result.paymentBalance = serializers.deserialize(value,
+              specifiedType: const FullType(double)) as double;
+          break;
         case 'paid_to_date':
           result.paidToDate = serializers.deserialize(value,
               specifiedType: const FullType(double)) as double;
@@ -724,6 +737,14 @@ class _$ClientEntitySerializer implements StructuredSerializer<ClientEntity> {
                   specifiedType: const FullType(
                       BuiltList, const [const FullType(ContactEntity)]))
               as BuiltList<Object>);
+          break;
+        case 'routing_id':
+          result.routingId = serializers.deserialize(value,
+              specifiedType: const FullType(String)) as String;
+          break;
+        case 'is_tax_exempt':
+          result.isTaxExempt = serializers.deserialize(value,
+              specifiedType: const FullType(bool)) as bool;
           break;
         case 'activities':
           result.activities.replace(serializers.deserialize(value,
@@ -1005,6 +1026,8 @@ class _$ClientEntity extends ClientEntity {
   @override
   final double creditBalance;
   @override
+  final double paymentBalance;
+  @override
   final double paidToDate;
   @override
   final String clientHash;
@@ -1121,6 +1144,10 @@ class _$ClientEntity extends ClientEntity {
   @override
   final BuiltList<ContactEntity> contacts;
   @override
+  final String routingId;
+  @override
+  final bool isTaxExempt;
+  @override
   final BuiltList<ActivityEntity> activities;
   @override
   final BuiltList<LedgerEntity> ledger;
@@ -1157,6 +1184,7 @@ class _$ClientEntity extends ClientEntity {
       this.displayName,
       this.balance,
       this.creditBalance,
+      this.paymentBalance,
       this.paidToDate,
       this.clientHash,
       this.address1,
@@ -1215,6 +1243,8 @@ class _$ClientEntity extends ClientEntity {
       this.mainPostalCode,
       this.mainCountryId,
       this.contacts,
+      this.routingId,
+      this.isTaxExempt,
       this.activities,
       this.ledger,
       this.gatewayTokens,
@@ -1236,6 +1266,8 @@ class _$ClientEntity extends ClientEntity {
     BuiltValueNullFieldError.checkNotNull(balance, r'ClientEntity', 'balance');
     BuiltValueNullFieldError.checkNotNull(
         creditBalance, r'ClientEntity', 'creditBalance');
+    BuiltValueNullFieldError.checkNotNull(
+        paymentBalance, r'ClientEntity', 'paymentBalance');
     BuiltValueNullFieldError.checkNotNull(
         paidToDate, r'ClientEntity', 'paidToDate');
     BuiltValueNullFieldError.checkNotNull(
@@ -1303,6 +1335,10 @@ class _$ClientEntity extends ClientEntity {
     BuiltValueNullFieldError.checkNotNull(
         contacts, r'ClientEntity', 'contacts');
     BuiltValueNullFieldError.checkNotNull(
+        routingId, r'ClientEntity', 'routingId');
+    BuiltValueNullFieldError.checkNotNull(
+        isTaxExempt, r'ClientEntity', 'isTaxExempt');
+    BuiltValueNullFieldError.checkNotNull(
         activities, r'ClientEntity', 'activities');
     BuiltValueNullFieldError.checkNotNull(ledger, r'ClientEntity', 'ledger');
     BuiltValueNullFieldError.checkNotNull(
@@ -1336,6 +1372,7 @@ class _$ClientEntity extends ClientEntity {
         displayName == other.displayName &&
         balance == other.balance &&
         creditBalance == other.creditBalance &&
+        paymentBalance == other.paymentBalance &&
         paidToDate == other.paidToDate &&
         clientHash == other.clientHash &&
         address1 == other.address1 &&
@@ -1394,6 +1431,8 @@ class _$ClientEntity extends ClientEntity {
         mainPostalCode == other.mainPostalCode &&
         mainCountryId == other.mainCountryId &&
         contacts == other.contacts &&
+        routingId == other.routingId &&
+        isTaxExempt == other.isTaxExempt &&
         activities == other.activities &&
         ledger == other.ledger &&
         gatewayTokens == other.gatewayTokens &&
@@ -1419,6 +1458,7 @@ class _$ClientEntity extends ClientEntity {
     _$hash = $jc(_$hash, displayName.hashCode);
     _$hash = $jc(_$hash, balance.hashCode);
     _$hash = $jc(_$hash, creditBalance.hashCode);
+    _$hash = $jc(_$hash, paymentBalance.hashCode);
     _$hash = $jc(_$hash, paidToDate.hashCode);
     _$hash = $jc(_$hash, clientHash.hashCode);
     _$hash = $jc(_$hash, address1.hashCode);
@@ -1477,6 +1517,8 @@ class _$ClientEntity extends ClientEntity {
     _$hash = $jc(_$hash, mainPostalCode.hashCode);
     _$hash = $jc(_$hash, mainCountryId.hashCode);
     _$hash = $jc(_$hash, contacts.hashCode);
+    _$hash = $jc(_$hash, routingId.hashCode);
+    _$hash = $jc(_$hash, isTaxExempt.hashCode);
     _$hash = $jc(_$hash, activities.hashCode);
     _$hash = $jc(_$hash, ledger.hashCode);
     _$hash = $jc(_$hash, gatewayTokens.hashCode);
@@ -1503,6 +1545,7 @@ class _$ClientEntity extends ClientEntity {
           ..add('displayName', displayName)
           ..add('balance', balance)
           ..add('creditBalance', creditBalance)
+          ..add('paymentBalance', paymentBalance)
           ..add('paidToDate', paidToDate)
           ..add('clientHash', clientHash)
           ..add('address1', address1)
@@ -1561,6 +1604,8 @@ class _$ClientEntity extends ClientEntity {
           ..add('mainPostalCode', mainPostalCode)
           ..add('mainCountryId', mainCountryId)
           ..add('contacts', contacts)
+          ..add('routingId', routingId)
+          ..add('isTaxExempt', isTaxExempt)
           ..add('activities', activities)
           ..add('ledger', ledger)
           ..add('gatewayTokens', gatewayTokens)
@@ -1606,6 +1651,11 @@ class ClientEntityBuilder
   double get creditBalance => _$this._creditBalance;
   set creditBalance(double creditBalance) =>
       _$this._creditBalance = creditBalance;
+
+  double _paymentBalance;
+  double get paymentBalance => _$this._paymentBalance;
+  set paymentBalance(double paymentBalance) =>
+      _$this._paymentBalance = paymentBalance;
 
   double _paidToDate;
   double get paidToDate => _$this._paidToDate;
@@ -1859,6 +1909,14 @@ class ClientEntityBuilder
   set contacts(ListBuilder<ContactEntity> contacts) =>
       _$this._contacts = contacts;
 
+  String _routingId;
+  String get routingId => _$this._routingId;
+  set routingId(String routingId) => _$this._routingId = routingId;
+
+  bool _isTaxExempt;
+  bool get isTaxExempt => _$this._isTaxExempt;
+  set isTaxExempt(bool isTaxExempt) => _$this._isTaxExempt = isTaxExempt;
+
   ListBuilder<ActivityEntity> _activities;
   ListBuilder<ActivityEntity> get activities =>
       _$this._activities ??= new ListBuilder<ActivityEntity>();
@@ -1935,6 +1993,7 @@ class ClientEntityBuilder
       _displayName = $v.displayName;
       _balance = $v.balance;
       _creditBalance = $v.creditBalance;
+      _paymentBalance = $v.paymentBalance;
       _paidToDate = $v.paidToDate;
       _clientHash = $v.clientHash;
       _address1 = $v.address1;
@@ -1993,6 +2052,8 @@ class ClientEntityBuilder
       _mainPostalCode = $v.mainPostalCode;
       _mainCountryId = $v.mainCountryId;
       _contacts = $v.contacts.toBuilder();
+      _routingId = $v.routingId;
+      _isTaxExempt = $v.isTaxExempt;
       _activities = $v.activities.toBuilder();
       _ledger = $v.ledger.toBuilder();
       _gatewayTokens = $v.gatewayTokens.toBuilder();
@@ -2041,14 +2102,14 @@ class ClientEntityBuilder
                   balance, r'ClientEntity', 'balance'),
               creditBalance: BuiltValueNullFieldError.checkNotNull(
                   creditBalance, r'ClientEntity', 'creditBalance'),
+              paymentBalance: BuiltValueNullFieldError.checkNotNull(
+                  paymentBalance, r'ClientEntity', 'paymentBalance'),
               paidToDate: BuiltValueNullFieldError.checkNotNull(
                   paidToDate, r'ClientEntity', 'paidToDate'),
               clientHash: BuiltValueNullFieldError.checkNotNull(
                   clientHash, r'ClientEntity', 'clientHash'),
-              address1: BuiltValueNullFieldError.checkNotNull(
-                  address1, r'ClientEntity', 'address1'),
-              address2:
-                  BuiltValueNullFieldError.checkNotNull(address2, r'ClientEntity', 'address2'),
+              address1: BuiltValueNullFieldError.checkNotNull(address1, r'ClientEntity', 'address1'),
+              address2: BuiltValueNullFieldError.checkNotNull(address2, r'ClientEntity', 'address2'),
               city: BuiltValueNullFieldError.checkNotNull(city, r'ClientEntity', 'city'),
               state: BuiltValueNullFieldError.checkNotNull(state, r'ClientEntity', 'state'),
               postalCode: BuiltValueNullFieldError.checkNotNull(postalCode, r'ClientEntity', 'postalCode'),
@@ -2103,6 +2164,8 @@ class ClientEntityBuilder
               mainPostalCode: BuiltValueNullFieldError.checkNotNull(mainPostalCode, r'ClientEntity', 'mainPostalCode'),
               mainCountryId: BuiltValueNullFieldError.checkNotNull(mainCountryId, r'ClientEntity', 'mainCountryId'),
               contacts: contacts.build(),
+              routingId: BuiltValueNullFieldError.checkNotNull(routingId, r'ClientEntity', 'routingId'),
+              isTaxExempt: BuiltValueNullFieldError.checkNotNull(isTaxExempt, r'ClientEntity', 'isTaxExempt'),
               activities: activities.build(),
               ledger: ledger.build(),
               gatewayTokens: gatewayTokens.build(),
@@ -2124,6 +2187,7 @@ class ClientEntityBuilder
 
         _$failedField = 'contacts';
         contacts.build();
+
         _$failedField = 'activities';
         activities.build();
         _$failedField = 'ledger';

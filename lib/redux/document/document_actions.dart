@@ -7,7 +7,6 @@ import 'package:flutter/widgets.dart';
 // Package imports:
 import 'package:built_collection/built_collection.dart';
 import 'package:flutter_redux/flutter_redux.dart';
-import 'package:http/http.dart';
 
 // Project imports:
 import 'package:invoiceninja_flutter/data/models/models.dart';
@@ -114,16 +113,14 @@ class LoadDocumentsSuccess implements StopLoading {
   }
 }
 
-abstract class SaveDocumentRequest implements StartSaving {
+class SaveDocumentRequest implements StartSaving {
   SaveDocumentRequest({
     @required this.completer,
-    @required this.multipartFile,
     @required this.entity,
   });
 
   final Completer completer;
-  final MultipartFile multipartFile;
-  final BaseEntity entity;
+  final DocumentEntity entity;
 }
 
 class SaveDocumentSuccess implements StopSaving, PersistData, PersistUI {

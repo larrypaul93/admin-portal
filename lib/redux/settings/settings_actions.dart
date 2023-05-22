@@ -57,6 +57,8 @@ class UpdateSettingsTab implements PersistUI {
 
 class UpdatedSetting implements PersistUI {}
 
+class UpdatedSettingUI implements PersistUI {}
+
 class UpdateSettingsTemplate implements PersistUI {
   UpdateSettingsTemplate({@required this.selectedTemplate});
 
@@ -148,15 +150,68 @@ class ConnecOAuthUserRequest implements StartSaving {
   final String accessToken;
 }
 
-class ConnecOAuthUserSuccess
+class ConnectOAuthUserSuccess
     implements StopSaving, PersistData, PersistUI, UserVerifiedPassword {
-  ConnecOAuthUserSuccess(this.user);
+  ConnectOAuthUserSuccess(this.user);
 
   final UserEntity user;
 }
 
 class ConnecOAuthUserFailure implements StopSaving {
   ConnecOAuthUserFailure(this.error);
+
+  final Object error;
+}
+
+class DisconnecOAuthUserRequest implements StartSaving {
+  DisconnecOAuthUserRequest({
+    @required this.user,
+    @required this.idToken,
+    @required this.completer,
+    @required this.password,
+  });
+
+  final UserEntity user;
+  final Completer completer;
+  final String password;
+  final String idToken;
+}
+
+class DisconnectOAuthUserSuccess
+    implements StopSaving, PersistData, PersistUI, UserVerifiedPassword {
+  DisconnectOAuthUserSuccess(this.user);
+
+  final UserEntity user;
+}
+
+class DisconnecOAuthUserFailure implements StopSaving {
+  DisconnecOAuthUserFailure(this.error);
+
+  final Object error;
+}
+
+class DisconnectOAuthMailerRequest implements StartSaving {
+  DisconnectOAuthMailerRequest({
+    @required this.completer,
+    @required this.idToken,
+    @required this.password,
+    @required this.user,
+  });
+  final Completer completer;
+  final String password;
+  final String idToken;
+  final UserEntity user;
+}
+
+class DisconnectOAuthMailerSuccess
+    implements StopSaving, PersistData, PersistUI, UserVerifiedPassword {
+  DisconnectOAuthMailerSuccess(this.user);
+
+  final UserEntity user;
+}
+
+class DisconnectOAuthMailerFailure implements StopSaving {
+  DisconnectOAuthMailerFailure(this.error);
 
   final Object error;
 }

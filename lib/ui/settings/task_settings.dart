@@ -125,18 +125,26 @@ class _TaskSettingsState extends State<TaskSettings> {
               ),
               SwitchListTile(
                 activeColor: Theme.of(context).colorScheme.secondary,
-                title: Text(localization.showTasksTable),
-                value: company.showTasksTable,
-                subtitle: Text(localization.showTasksTableHelp),
-                onChanged: (value) => viewModel.onCompanyChanged(
-                    company.rebuild((b) => b..showTasksTable = value)),
+                title: Text(localization.showTaskItemDescription),
+                value: settings.showTaskItemDescription,
+                subtitle: Text(localization.showTaskItemDescriptionHelp),
+                onChanged: (value) => viewModel.onSettingsChanged(settings
+                    .rebuild((b) => b..showTaskItemDescription = value)),
               ),
-            ]
+              SwitchListTile(
+                activeColor: Theme.of(context).colorScheme.secondary,
+                title: Text(localization.allowBillableTaskItems),
+                value: settings.allowBillableTaskItems,
+                subtitle: Text(localization.allowBillableTaskItemsHelp),
+                onChanged: (value) => viewModel.onSettingsChanged(
+                    settings.rebuild((b) => b..allowBillableTaskItems = value)),
+              ),
+            ],
           ]),
           if (!viewModel.state.settingsUIState.isFiltered)
             Padding(
-              padding:
-                  const EdgeInsets.only(top: 0, bottom: 8, right: 20, left: 20),
+              padding: const EdgeInsets.only(
+                  top: 0, bottom: 10, right: 16, left: 16),
               child: AppButton(
                 iconData: Icons.settings,
                 label: localization.configureStatuses.toUpperCase(),
@@ -183,6 +191,14 @@ class _TaskSettingsState extends State<TaskSettings> {
           ),
           FormCard(
             children: [
+              SwitchListTile(
+                activeColor: Theme.of(context).colorScheme.secondary,
+                title: Text(localization.showTasksTable),
+                value: company.showTasksTable,
+                subtitle: Text(localization.showTasksTableHelp),
+                onChanged: (value) => viewModel.onCompanyChanged(
+                    company.rebuild((b) => b..showTasksTable = value)),
+              ),
               SwitchListTile(
                 activeColor: Theme.of(context).colorScheme.secondary,
                 title: Text(localization.lockInvoicedTasks),

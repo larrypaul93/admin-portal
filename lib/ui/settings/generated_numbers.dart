@@ -152,8 +152,7 @@ class _GeneratedNumbersState extends State<GeneratedNumbers>
     bool isValid = true;
     values.forEach((value) {
       value ??= '';
-      final containsSubCounter = value.contains('{\$client_counter}') ||
-          value.contains('{\$group_counter}');
+      final containsSubCounter = value.contains('{\$client_counter}');
       final containsCounterOrId = value.contains('{\$client_id_number}') ||
           value.contains('{\$client_number}') ||
           value.contains('{\$counter}');
@@ -286,30 +285,6 @@ class _GeneratedNumbersState extends State<GeneratedNumbers>
                       ),
                     ],
                   ),
-                  if (company.isModuleEnabled(EntityType.recurringInvoice))
-                    DecoratedFormField(
-                      label: localization.recurringPrefix,
-                      controller: _recurringPrefixController,
-                      keyboardType: TextInputType.text,
-                    ),
-                  if (company.isModuleEnabled(EntityType.quote))
-                    BoolDropdownButton(
-                      iconData: Icons.content_copy,
-                      label: localization.sharedInvoiceQuoteCounter,
-                      value: settings.sharedInvoiceQuoteCounter,
-                      onChanged: (value) => viewModel.onSettingsChanged(
-                          settings.rebuild(
-                              (b) => b..sharedInvoiceQuoteCounter = value)),
-                    ),
-                  if (company.isModuleEnabled(EntityType.credit))
-                    BoolDropdownButton(
-                      iconData: Icons.content_copy,
-                      label: localization.sharedInvoiceCreditCounter,
-                      value: settings.sharedInvoiceCreditCounter,
-                      onChanged: (value) => viewModel.onSettingsChanged(
-                          settings.rebuild(
-                              (b) => b..sharedInvoiceCreditCounter = value)),
-                    ),
                   AppDropdownButton(
                     labelText: localization.resetCounter,
                     value: settings.resetCounterFrequencyId,
@@ -341,6 +316,31 @@ class _GeneratedNumbersState extends State<GeneratedNumbers>
                       selectedDate: settings.resetCounterDate,
                       onSelected: (value, _) => viewModel.onSettingsChanged(
                           settings.rebuild((b) => b..resetCounterDate = value)),
+                    ),
+                  if (company.isModuleEnabled(EntityType.recurringInvoice))
+                    DecoratedFormField(
+                      label: localization.recurringPrefix,
+                      controller: _recurringPrefixController,
+                      keyboardType: TextInputType.text,
+                    ),
+                  SizedBox(height: 20),
+                  if (company.isModuleEnabled(EntityType.quote))
+                    BoolDropdownButton(
+                      iconData: Icons.content_copy,
+                      label: localization.sharedInvoiceQuoteCounter,
+                      value: settings.sharedInvoiceQuoteCounter,
+                      onChanged: (value) => viewModel.onSettingsChanged(
+                          settings.rebuild(
+                              (b) => b..sharedInvoiceQuoteCounter = value)),
+                    ),
+                  if (company.isModuleEnabled(EntityType.credit))
+                    BoolDropdownButton(
+                      iconData: Icons.content_copy,
+                      label: localization.sharedInvoiceCreditCounter,
+                      value: settings.sharedInvoiceCreditCounter,
+                      onChanged: (value) => viewModel.onSettingsChanged(
+                          settings.rebuild(
+                              (b) => b..sharedInvoiceCreditCounter = value)),
                     ),
                 ],
               ),

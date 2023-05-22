@@ -33,8 +33,9 @@ class RecurringInvoiceRepository {
   }
 
   Future<BuiltList<InvoiceEntity>> loadList(
-      Credentials credentials, bool filterDeleted) async {
-    String url = credentials.url + '/recurring_invoices?';
+      Credentials credentials, int page, bool filterDeleted) async {
+    String url = credentials.url +
+        '/recurring_invoices?per_page=$kMaxRecordsPerPage&page=$page';
 
     if (filterDeleted) {
       url += '&filter_deleted_clients=true';
@@ -49,15 +50,21 @@ class RecurringInvoiceRepository {
   }
 
   Future<List<InvoiceEntity>> bulkAction(
-      Credentials credentials, List<String> ids, EntityAction action) async {
-    if (ids.length > kMaxEntitiesPerBulkAction) {
+      Credentials credentials, List<String> ids, EntityAction action,
+      {Map<String, Object> data}) async {
+    if (ids.length > kMaxEntitiesPerBulkAction && action.applyMaxLimit) {
       ids = ids.sublist(0, kMaxEntitiesPerBulkAction);
     }
 
     final url = credentials.url +
         '/recurring_invoices/bulk?per_page=$kMaxEntitiesPerBulkAction';
-    final dynamic response = await webClient.post(url, credentials.token,
-        data: json.encode({'ids': ids, 'action': action.toApiParam()}));
+    final params = {'ids': ids, 'action': action.toApiParam()};
+    if (data != null) {
+      params.addAll(data);
+    }
+
+    final dynamic response =
+        await webClient.post(url, credentials.token, data: json.encode(params));
 
     final InvoiceListResponse recurringInvoiceResponse =
         serializers.deserializeWith(InvoiceListResponse.serializer, response);

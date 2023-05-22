@@ -139,10 +139,8 @@ class InvoiceOverview extends StatelessWidget {
 
     if ((invoice.privateNotes ?? '').isNotEmpty) {
       widgets.addAll([
-        IconMessage(
-          invoice.privateNotes,
-          iconData: Icons.lock,
-        ),
+        IconMessage(invoice.privateNotes,
+            iconData: Icons.lock, copyToClipboard: true),
         ListDivider(),
       ]);
     }
@@ -408,7 +406,7 @@ class InvoiceOverview extends StatelessWidget {
             children: <Widget>[
               Text(
                 label,
-                style: Theme.of(context).textTheme.subtitle1,
+                style: Theme.of(context).textTheme.titleMedium,
               ),
               SizedBox(
                 width: 100.0,
@@ -423,7 +421,7 @@ class InvoiceOverview extends StatelessWidget {
                       vendorId:
                           invoice.isPurchaseOrder ? invoice.vendorId : null,
                     ),
-                    style: Theme.of(context).textTheme.subtitle1,
+                    style: Theme.of(context).textTheme.titleMedium,
                   ),
                 ),
               ),
@@ -510,7 +508,7 @@ class InvoiceOverview extends StatelessWidget {
     if ((invoice.publicNotes ?? '').isNotEmpty) {
       widgets.addAll([
         ListDivider(),
-        IconMessage(invoice.publicNotes),
+        IconMessage(invoice.publicNotes, copyToClipboard: true),
       ]);
     }
 

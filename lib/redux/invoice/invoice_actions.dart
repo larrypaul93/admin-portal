@@ -10,7 +10,9 @@ import 'package:built_collection/built_collection.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:http/http.dart';
 import 'package:invoiceninja_flutter/data/models/contact_model.dart';
+import 'package:invoiceninja_flutter/constants.dart';
 import 'package:invoiceninja_flutter/redux/document/document_actions.dart';
+import 'package:invoiceninja_flutter/redux/settings/settings_actions.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 // Project imports:
@@ -229,14 +231,21 @@ class SaveInvoiceFailure implements StopSaving {
 }
 
 class EmailInvoiceRequest implements StartSaving {
-  EmailInvoiceRequest(
-      {this.completer, this.invoiceId, this.template, this.subject, this.body});
+  EmailInvoiceRequest({
+    @required this.completer,
+    @required this.invoiceId,
+    @required this.template,
+    @required this.subject,
+    @required this.body,
+    @required this.ccEmail,
+  });
 
   final Completer completer;
   final String invoiceId;
   final EmailTemplate template;
   final String subject;
   final String body;
+  final String ccEmail;
 }
 
 class EmailInvoiceSuccess implements StopSaving, PersistData {
@@ -529,6 +538,7 @@ void handleInvoiceAction(BuildContext context, List<BaseEntity> invoices,
   final localization = AppLocalization.of(context);
   final invoice = invoices.first as InvoiceEntity;
   final invoiceIds = invoices.map((invoice) => invoice.id).toList();
+  final client = state.clientState.get(invoice.clientId);
 
   switch (action) {
     case EntityAction.edit:
@@ -600,6 +610,7 @@ void handleInvoiceAction(BuildContext context, List<BaseEntity> invoices,
       break;
     case EntityAction.sendEmail:
     case EntityAction.bulkSendEmail:
+    case EntityAction.schedule:
       bool emailValid = true;
       invoices.forEach((invoice) {
         final client = state.clientState.get(
@@ -617,7 +628,7 @@ void handleInvoiceAction(BuildContext context, List<BaseEntity> invoices,
               TextButton(
                   onPressed: () {
                     Navigator.of(context).pop();
-                    editEntity(entity: state.clientState.get(invoice.clientId));
+                    editEntity(entity: client);
                   },
                   child: Text(localization.editClient.toUpperCase()))
             ]);
@@ -629,6 +640,29 @@ void handleInvoiceAction(BuildContext context, List<BaseEntity> invoices,
                 snackBarCompleter<Null>(context, localization.emailedInvoice),
             invoice: invoice,
             context: context));
+      } else if (action == EntityAction.schedule) {
+        if (!state.isProPlan) {
+          showMessageDialog(
+              context: context,
+              message: localization.upgradeToPaidPlanToSchedule,
+              secondaryActions: [
+                TextButton(
+                    onPressed: () {
+                      store.dispatch(
+                          ViewSettings(section: kSettingsAccountManagement));
+                      Navigator.of(context).pop();
+                    },
+                    child: Text(localization.upgrade.toUpperCase())),
+              ]);
+          return;
+        }
+
+        createEntity(
+            context: context,
+            entity: ScheduleEntity(ScheduleEntity.TEMPLATE_EMAIL_RECORD)
+                .rebuild((b) => b
+                  ..parameters.entityType = EntityType.invoice.apiValue
+                  ..parameters.entityId = invoice.id));
       } else {
         confirmCallback(
             context: context,
@@ -695,17 +729,19 @@ void handleInvoiceAction(BuildContext context, List<BaseEntity> invoices,
     case EntityAction.newPayment:
       createEntity(
         context: context,
-        entity: PaymentEntity(
-                state: state, client: state.clientState.get(invoice.clientId))
-            .rebuild((b) => b
-              ..invoices.addAll(invoices
-                  .where((invoice) => !(invoice as InvoiceEntity).isPaid)
-                  .map((invoice) => PaymentableEntity.fromInvoice(invoice))
-                  .toList())),
+        entity: PaymentEntity(state: state, client: client).rebuild((b) => b
+          ..invoices.addAll(invoices
+              .where((invoice) => !(invoice as InvoiceEntity).isPaid)
+              .map((invoice) => PaymentableEntity.fromInvoice(invoice))
+              .toList())),
+        filterEntity: client,
       );
       break;
     case EntityAction.download:
       launchUrl(Uri.parse(invoice.invitationDownloadLink));
+      break;
+    case EntityAction.eInvoice:
+      launchUrl(Uri.parse(invoice.invitationEInvoiceDownloadLink));
       break;
     case EntityAction.bulkDownload:
       store.dispatch(DownloadInvoicesRequest(

@@ -141,13 +141,14 @@ class ImportType extends EnumClass {
         };
       case ImportType.csv:
         return {
-          EntityType.client.toString(): 'clients',
-          EntityType.invoice.toString(): 'invoices',
-          EntityType.payment.toString(): 'payments',
-          EntityType.product.toString(): 'products',
-          EntityType.vendor.toString(): 'vendors',
-          EntityType.expense.toString(): 'expenses',
-          'bank_transaction': 'transactions',
+          EntityType.client.apiValue: 'clients',
+          EntityType.invoice.apiValue: 'invoices',
+          EntityType.recurringInvoice.apiValue: 'recurring_invoices',
+          EntityType.payment.apiValue: 'payments',
+          EntityType.product.apiValue: 'products',
+          EntityType.vendor.apiValue: 'vendors',
+          EntityType.expense.apiValue: 'expenses',
+          EntityType.transaction.apiValue: 'transactions',
         };
       case ImportType.freshbooks:
       case ImportType.invoicely:
@@ -182,6 +183,7 @@ class ExportType extends EnumClass {
 
   static Serializer<ExportType> get serializer => _$exportTypeSerializer;
 
+  static const ExportType activities = _$activities;
   static const ExportType clients = _$clients;
   static const ExportType client_contacts = _$client_contacts;
   static const ExportType credits = _$credits;

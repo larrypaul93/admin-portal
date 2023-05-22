@@ -128,6 +128,11 @@ class EntityAction extends EnumClass {
   static const EntityAction merge = _$merge;
   static const EntityAction bulkPrint = _$bulkPrint;
   static const EntityAction autoBill = _$autoBill;
+  static const EntityAction schedule = _$schedule;
+  static const EntityAction updatePrices = _$updatePrices;
+  static const EntityAction increasePrices = _$increasePrices;
+  static const EntityAction setTaxCategory = _$setTaxCategory;
+  static const EntityAction eInvoice = _$eInvoice;
 
   @override
   String toString() {
@@ -137,6 +142,10 @@ class EntityAction extends EnumClass {
 
     return toSnakeCase(super.toString());
   }
+
+  bool get applyMaxLimit => ![
+        EntityAction.bulkDownload,
+      ].contains(this);
 
   bool get isServerSide => [
         EntityAction.start,
@@ -174,6 +183,8 @@ class EntityAction extends EnumClass {
       return 'expense';
     } else if (this == EntityAction.resume) {
       return 'start';
+    } else if (this == EntityAction.setTaxCategory) {
+      return 'set_tax_id';
     }
 
     // else if (value == 'approve') {

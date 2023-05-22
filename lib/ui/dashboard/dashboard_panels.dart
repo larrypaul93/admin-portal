@@ -151,7 +151,7 @@ class DashboardPanels extends StatelessWidget {
                 child: Text(
                   formatDateRange(settings.startDate(company),
                       settings.endDate(company), context),
-                  style: Theme.of(context).textTheme.subtitle1,
+                  style: Theme.of(context).textTheme.titleMedium,
                 ),
               ),
               SizedBox(width: 6.0),
@@ -459,8 +459,9 @@ class DashboardPanels extends StatelessWidget {
                 case DashboardSections.messages:
                   return Column(
                     children: [
-                      if (!state.prefState.hideReviewApp &&
-                          state.company.daysActive > (isMobileOS() ? 60 : 120))
+                      if (state.showReviewApp ||
+                          state.showOneYearReviewApp ||
+                          state.showTwoYearReviewApp)
                         ReviewApp(),
                       if (state.userCompany.isAdmin &&
                           state.company.daysActive < 30 &&
@@ -632,15 +633,21 @@ class DashboardPanels extends StatelessWidget {
                               padding: const EdgeInsets.all(0),
                               children: [
                                 Text(localization.lookup(dashboardField.field),
-                                    style: textTheme.subtitle1,
+                                    style: textTheme.titleMedium,
                                     textAlign: TextAlign.center),
                                 SizedBox(height: 6),
-                                Text(formatNumber(value, context),
-                                    style: textTheme.headline5,
+                                Text(
+                                    formatNumber(
+                                      value,
+                                      context,
+                                      currencyId: state
+                                          .dashboardUIState.settings.currencyId,
+                                    ),
+                                    style: textTheme.headlineSmall,
                                     textAlign: TextAlign.center),
                                 SizedBox(height: 6),
                                 Text(localization.lookup(dashboardField.period),
-                                    style: textTheme.caption,
+                                    style: textTheme.bodySmall,
                                     textAlign: TextAlign.center),
                               ],
                             );

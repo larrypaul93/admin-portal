@@ -6,7 +6,6 @@ import 'package:flutter_redux/flutter_redux.dart';
 
 // Project imports:
 import 'package:invoiceninja_flutter/data/models/models.dart';
-import 'package:invoiceninja_flutter/redux/app/app_actions.dart';
 import 'package:invoiceninja_flutter/redux/app/app_state.dart';
 import 'package:invoiceninja_flutter/redux/client/client_actions.dart';
 import 'package:invoiceninja_flutter/ui/app/app_border.dart';
@@ -85,11 +84,9 @@ class _ClientViewState extends State<ClientView>
   @override
   Widget build(BuildContext context) {
     final localization = AppLocalization.of(context);
-    final store = StoreProvider.of<AppState>(context);
     final viewModel = widget.viewModel;
     final client = viewModel.client;
     final documents = client.documents;
-    final userCompany = viewModel.state.userCompany;
 
     if (widget.isTopFilter) {
       return Material(
@@ -198,98 +195,6 @@ class _ClientViewState extends State<ClientView>
           ],
         );
       }),
-      floatingActionButton: FloatingActionButton(
-        heroTag: 'client_view_fab',
-        backgroundColor: Theme.of(context).primaryColorDark,
-        onPressed: () {
-          showDialog<SimpleDialog>(
-            context: context,
-            builder: (BuildContext context) => SimpleDialog(children: <Widget>[
-              userCompany.canViewCreateOrEdit(EntityType.client)
-                  ? ListTile(
-                      //dense: true,
-                      leading: Icon(Icons.add_circle_outline),
-                      title: Text(localization.invoice),
-                      onTap: () {
-                        Navigator.of(context).pop();
-                        handleClientAction(
-                            context, [client], EntityAction.newInvoice);
-                      },
-                    )
-                  : Container(),
-              userCompany.canViewCreateOrEdit(EntityType.payment)
-                  ? ListTile(
-                      //dense: true,
-                      leading: Icon(Icons.add_circle_outline),
-                      title: Text(localization.payment),
-                      onTap: () {
-                        Navigator.of(context).pop();
-                        handleClientAction(
-                            context, [client], EntityAction.newPayment);
-                      },
-                    )
-                  : Container(),
-              userCompany.canViewCreateOrEdit(EntityType.quote)
-                  ? ListTile(
-                      //dense: true,
-                      leading: Icon(Icons.add_circle_outline),
-                      title: Text(localization.quote),
-                      onTap: () {
-                        Navigator.of(context).pop();
-                        handleClientAction(
-                            context, [client], EntityAction.newQuote);
-                      },
-                    )
-                  : Container(),
-              userCompany.canViewCreateOrEdit(EntityType.project)
-                  ? ListTile(
-                      //dense: true,
-                      leading: Icon(Icons.add_circle_outline),
-                      title: Text(localization.project),
-                      onTap: () {
-                        Navigator.of(context).pop();
-                        handleClientAction(
-                            context, [client], EntityAction.newProject);
-                      },
-                    )
-                  : Container(),
-              userCompany.canViewCreateOrEdit(EntityType.task)
-                  ? ListTile(
-                      //dense: true,
-                      leading: Icon(Icons.add_circle_outline),
-                      title: Text(localization.task),
-                      onTap: () {
-                        Navigator.of(context).pop();
-                        handleClientAction(
-                            context, [client], EntityAction.newTask);
-                      },
-                    )
-                  : Container(),
-              userCompany.canViewCreateOrEdit(EntityType.expense)
-                  ? ListTile(
-                      //dense: true,
-                      leading: Icon(Icons.add_circle_outline),
-                      title: Text(localization.expense),
-                      onTap: () {
-                        Navigator.of(context).pop();
-                        createEntity(
-                            context: context,
-                            entity: ExpenseEntity(
-                              state: store.state,
-                              client: client,
-                            ));
-                      },
-                    )
-                  : Container(),
-            ]),
-          );
-        },
-        child: Icon(
-          Icons.add,
-          color: Colors.white,
-        ),
-        tooltip: localization.create,
-      ),
     );
   }
 }

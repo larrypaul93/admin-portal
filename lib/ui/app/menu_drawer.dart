@@ -73,8 +73,8 @@ class _MenuDrawerState extends State<MenuDrawer> {
     final enableDarkMode = state.prefState.enableDarkMode;
     final localization = AppLocalization.of(context);
     final company = widget.viewModel.selectedCompany;
-    final inactiveColor = state.prefState
-            .customColors[PrefState.THEME_SIDEBAR_INACTIVE_BACKGROUND_COLOR] ??
+    final inactiveColor = state.prefState.activeCustomColors[
+            PrefState.THEME_SIDEBAR_INACTIVE_BACKGROUND_COLOR] ??
         '';
 
     if (company == null) {
@@ -150,7 +150,7 @@ class _MenuDrawerState extends State<MenuDrawer> {
                 company.displayName.isEmpty
                     ? localization.newCompany
                     : company.displayName,
-                style: Theme.of(context).textTheme.subtitle1,
+                style: Theme.of(context).textTheme.titleMedium,
                 overflow: TextOverflow.ellipsis,
               ),
             ),
@@ -197,7 +197,7 @@ class _MenuDrawerState extends State<MenuDrawer> {
                 SizedBox(width: 15),
                 Text(
                   localization.addCompany,
-                  style: Theme.of(context).textTheme.subtitle1,
+                  style: Theme.of(context).textTheme.titleMedium,
                 ),
               ],
             ),
@@ -211,7 +211,7 @@ class _MenuDrawerState extends State<MenuDrawer> {
               SizedBox(width: 15),
               Text(
                 localization.logout,
-                style: Theme.of(context).textTheme.subtitle1,
+                style: Theme.of(context).textTheme.titleMedium,
               ),
             ],
           ),
@@ -270,7 +270,7 @@ class _MenuDrawerState extends State<MenuDrawer> {
                         SizedBox(width: 15),
                         Text(
                           localization.addCompany,
-                          style: Theme.of(context).textTheme.subtitle1,
+                          style: Theme.of(context).textTheme.titleMedium,
                         ),
                       ],
                     ),
@@ -284,7 +284,7 @@ class _MenuDrawerState extends State<MenuDrawer> {
                       SizedBox(width: 15),
                       Text(
                         localization.logout,
-                        style: Theme.of(context).textTheme.subtitle1,
+                        style: Theme.of(context).textTheme.titleMedium,
                       ),
                     ],
                   ),
@@ -345,7 +345,7 @@ class _MenuDrawerState extends State<MenuDrawer> {
                     ? SizedBox()
                     : Theme(
                         data: state.prefState.enableDarkMode ||
-                                (state.prefState.customColors[PrefState
+                                (state.prefState.activeCustomColors[PrefState
                                             .THEME_SIDEBAR_INACTIVE_BACKGROUND_COLOR] ??
                                         '')
                                     .isNotEmpty
@@ -554,7 +554,7 @@ class _MenuDrawerState extends State<MenuDrawer> {
                                                 localization.upgrade,
                                                 style: Theme.of(context)
                                                     .textTheme
-                                                    .bodyText1
+                                                    .bodyLarge
                                                     .copyWith(
                                                       fontSize: 14,
                                                       color: Colors.white,
@@ -690,7 +690,8 @@ class _MenuDrawerState extends State<MenuDrawer> {
                                   icon: getEntityIcon(EntityType.transaction),
                                   title: localization.transactions,
                                 ),
-                                if (!isApple() || state.isProPlan)
+                                if ((state.isProPlan || state.isTrial) &&
+                                    state.userCompany.canViewReports)
                                   DrawerTile(
                                     company: company,
                                     icon: getEntityIcon(EntityType.reports),
@@ -800,22 +801,23 @@ class _DrawerTileState extends State<DrawerTile> {
         ? widget.entityType == uiState.filterEntityType
         : uiState.currentRoute.startsWith('/${toSnakeCase(route)}');
 
-    final inactiveColor = prefState
-            .customColors[PrefState.THEME_SIDEBAR_INACTIVE_BACKGROUND_COLOR] ??
+    final inactiveColor = prefState.activeCustomColors[
+            PrefState.THEME_SIDEBAR_INACTIVE_BACKGROUND_COLOR] ??
         '';
-    final inactiveFontColor =
-        prefState.customColors[PrefState.THEME_SIDEBAR_INACTIVE_FONT_COLOR] ??
-            '';
-    final activeColor = prefState
-            .customColors[PrefState.THEME_SIDEBAR_ACTIVE_BACKGROUND_COLOR] ??
+    final inactiveFontColor = prefState
+            .activeCustomColors[PrefState.THEME_SIDEBAR_INACTIVE_FONT_COLOR] ??
         '';
-    final activeFontColor =
-        prefState.customColors[PrefState.THEME_SIDEBAR_ACTIVE_FONT_COLOR] ?? '';
+    final activeColor = prefState.activeCustomColors[
+            PrefState.THEME_SIDEBAR_ACTIVE_BACKGROUND_COLOR] ??
+        '';
+    final activeFontColor = prefState
+            .activeCustomColors[PrefState.THEME_SIDEBAR_ACTIVE_FONT_COLOR] ??
+        '';
 
     Color color = Colors.transparent;
     Color textColor = Theme.of(context)
         .textTheme
-        .bodyText1
+        .bodyLarge
         .color
         .withOpacity(isSelected ? 1 : .7);
 
@@ -831,7 +833,9 @@ class _DrawerTileState extends State<DrawerTile> {
         textColor = convertHexStringToColor(activeFontColor);
       }
     } else {
-      if (inactiveColor.isNotEmpty) {
+      if (_isHovered) {
+        color = convertHexStringToColor(activeColor);
+      } else if (inactiveColor.isNotEmpty) {
         color = convertHexStringToColor(inactiveColor);
       }
       if (inactiveFontColor.isNotEmpty) {
@@ -964,7 +968,7 @@ class _DrawerTileState extends State<DrawerTile> {
           title: Text(
             widget.title,
             key: ValueKey('menu_${widget.title}'),
-            style: Theme.of(context).textTheme.bodyText1.copyWith(
+            style: Theme.of(context).textTheme.bodyLarge.copyWith(
                   fontSize: 14,
                   color: textColor,
                 ),
@@ -1006,7 +1010,7 @@ class SidebarFooter extends StatelessWidget {
     final account = state.userCompany.account;
 
     return Material(
-      color: Theme.of(context).bottomAppBarColor,
+      color: Theme.of(context).bottomAppBarTheme.color,
       child: Row(
         mainAxisSize: MainAxisSize.max,
         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -1049,7 +1053,6 @@ class SidebarFooter extends StatelessWidget {
                     color: Colors.red,
                   ),
                   onPressed: () => showErrorDialog(
-                    context: context,
                     clearErrorOnDismiss: true,
                   ),
                 )
@@ -1125,7 +1128,8 @@ class SidebarFooter extends StatelessWidget {
             IconButton(
               icon: Icon(Icons.help_outline),
               onPressed: () {
-                String url = kDocsUrl + '/docs';
+                // TODO use language setting
+                String url = kDocsUrl + '/en';
                 final uiState = state.uiState;
                 final subRoute = uiState.baseSubRoute;
 
@@ -1339,6 +1343,16 @@ void _showAbout(BuildContext context) async {
     height: 40.0,
   );
 
+  final userCompany = state.userCompany;
+  String subtitle = state.appVersion + '\n';
+  subtitle +=
+      state.isSelfHosted ? localization.selfhosted : localization.hosted;
+  if (userCompany.isOwner) {
+    subtitle += ' • ' + localization.owner;
+  } else if (userCompany.isAdmin) {
+    subtitle += ' • ' + localization.admin;
+  }
+
   showDialog<Null>(
       context: context,
       builder: (BuildContext context) {
@@ -1372,9 +1386,9 @@ void _showAbout(BuildContext context) async {
                     ),
                     title: Text(
                       'Invoice Ninja',
-                      style: Theme.of(context).textTheme.subtitle1,
+                      style: Theme.of(context).textTheme.titleMedium,
                     ),
-                    subtitle: Text(state.appVersion),
+                    subtitle: Text(subtitle),
                     onTap: () {
                       Clipboard.setData(ClipboardData(text: state.appVersion));
                       showToast(localization.copiedToClipboard
@@ -1412,7 +1426,7 @@ void _showAbout(BuildContext context) async {
                       padding: const EdgeInsets.only(top: 4),
                       child: AppButton(
                         label: localization.appPlatforms.toUpperCase(),
-                        iconData: MdiIcons.desktopMac,
+                        iconData: MdiIcons.desktopClassic,
                         onPressed: () {
                           showDialog<AlertDialog>(
                               context: context,
@@ -1659,7 +1673,7 @@ class _ContactUsDialogState extends State<ContactUsDialog> {
     }).catchError((dynamic error) {
       print('## ERROR: $error');
       setState(() => _isSaving = false);
-      showErrorDialog(context: context, message: '$error');
+      showErrorDialog(message: '$error');
     });
   }
 

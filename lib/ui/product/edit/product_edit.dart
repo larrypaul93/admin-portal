@@ -1,5 +1,6 @@
 // Flutter imports:
 import 'package:flutter/material.dart';
+import 'package:invoiceninja_flutter/constants.dart';
 
 // Project imports:
 import 'package:invoiceninja_flutter/data/models/entities.dart';
@@ -8,6 +9,7 @@ import 'package:invoiceninja_flutter/redux/category/category_selectors.dart';
 import 'package:invoiceninja_flutter/redux/vendor/vendor_selectors.dart';
 import 'package:invoiceninja_flutter/ui/app/edit_scaffold.dart';
 import 'package:invoiceninja_flutter/ui/app/form_card.dart';
+import 'package:invoiceninja_flutter/ui/app/forms/app_dropdown_button.dart';
 import 'package:invoiceninja_flutter/ui/app/forms/app_form.dart';
 import 'package:invoiceninja_flutter/ui/app/forms/custom_field.dart';
 import 'package:invoiceninja_flutter/ui/app/forms/decorated_form_field.dart';
@@ -156,8 +158,9 @@ class _ProductEditState extends State<ProductEdit> {
       ..stockQuantity = parseInt(_stockQuantityController.text.trim())
       ..stockNotificationThreshold =
           parseInt(_notificationThresholdController.text.trim())
-      ..maxQuantity = parseInt(_stockQuantityController.text.trim())
+      ..maxQuantity = parseInt(_maxQuantityController.text.trim())
       ..imageUrl = _imageUrlController.text.trim());
+
     if (product != widget.viewModel.product) {
       _debouncer.run(() {
         widget.viewModel.onChanged(product);
@@ -237,6 +240,21 @@ class _ProductEditState extends State<ProductEdit> {
                         decimal: true, signed: true),
                     onSavePressed: _onSavePressed,
                   ),
+                if (company.calculateTaxes)
+                  AppDropdownButton<String>(
+                      labelText: localization.taxCategory,
+                      value: product.taxCategoryId,
+                      onChanged: (dynamic taxCategoryId) {
+                        viewModel.onChanged(product
+                            .rebuild((b) => b..taxCategoryId = taxCategoryId));
+                      },
+                      items: kTaxCategories.keys
+                          .map((key) => DropdownMenuItem<String>(
+                                child: Text(
+                                    localization.lookup(kTaxCategories[key])),
+                                value: key,
+                              ))
+                          .toList()),
                 if (company.enableFirstItemTaxRate ||
                     product.taxName1.isNotEmpty)
                   TaxRateDropdown(

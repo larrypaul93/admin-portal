@@ -195,8 +195,10 @@ ListUIState _clearListMultiselect(
 final usersReducer = combineReducers<UserState>([
   TypedReducer<UserState, SaveUserSuccess>(_updateUser),
   TypedReducer<UserState, SaveAuthUserSuccess>(_updateAuthUser),
-  TypedReducer<UserState, ConnecOAuthUserSuccess>(_connectOAuthUser),
+  TypedReducer<UserState, ConnectOAuthUserSuccess>(_connectOAuthUser),
+  TypedReducer<UserState, DisconnectOAuthUserSuccess>(_disconnectOAuthUser),
   TypedReducer<UserState, ConnecGmailUserSuccess>(_connectGmailUser),
+  TypedReducer<UserState, DisconnectOAuthMailerSuccess>(_disconnectOAuthMailer),
   TypedReducer<UserState, AddUserSuccess>(_addUser),
   TypedReducer<UserState, LoadUsersSuccess>(_setLoadedUsers),
   TypedReducer<UserState, LoadUserSuccess>(_setLoadedUser),
@@ -252,7 +254,17 @@ UserState _updateAuthUser(UserState userState, SaveAuthUserSuccess action) {
 }
 
 UserState _connectOAuthUser(
-    UserState userState, ConnecOAuthUserSuccess action) {
+    UserState userState, ConnectOAuthUserSuccess action) {
+  return userState.rebuild((b) => b..map[action.user.id] = action.user);
+}
+
+UserState _disconnectOAuthUser(
+    UserState userState, DisconnectOAuthUserSuccess action) {
+  return userState.rebuild((b) => b..map[action.user.id] = action.user);
+}
+
+UserState _disconnectOAuthMailer(
+    UserState userState, DisconnectOAuthMailerSuccess action) {
   return userState.rebuild((b) => b..map[action.user.id] = action.user);
 }
 

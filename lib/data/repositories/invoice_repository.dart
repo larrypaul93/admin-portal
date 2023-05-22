@@ -57,7 +57,7 @@ class InvoiceRepository {
 
   Future<List<InvoiceEntity>> bulkAction(
       Credentials credentials, List<String> ids, EntityAction action) async {
-    if (ids.length > kMaxEntitiesPerBulkAction) {
+    if (ids.length > kMaxEntitiesPerBulkAction && action.applyMaxLimit) {
       ids = ids.sublist(0, kMaxEntitiesPerBulkAction);
     }
 
@@ -121,17 +121,20 @@ class InvoiceRepository {
   }
 
   Future<InvoiceEntity> emailInvoice(
-      Credentials credentials,
-      InvoiceEntity invoice,
-      EmailTemplate template,
-      String subject,
-      String body) async {
+    Credentials credentials,
+    InvoiceEntity invoice,
+    EmailTemplate template,
+    String subject,
+    String body,
+    String ccEmail,
+  ) async {
     final data = {
       'entity': '${invoice.entityType}',
       'entity_id': invoice.id,
       'template': 'email_template_$template',
       'body': body,
       'subject': subject,
+      'cc_email': ccEmail,
     };
 
     final dynamic response = await webClient.post(

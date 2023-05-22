@@ -196,6 +196,9 @@ class _$ProductEntitySerializer implements StructuredSerializer<ProductEntity> {
       'max_quantity',
       serializers.serialize(object.maxQuantity,
           specifiedType: const FullType(int)),
+      'tax_id',
+      serializers.serialize(object.taxCategoryId,
+          specifiedType: const FullType(String)),
       'documents',
       serializers.serialize(object.documents,
           specifiedType: const FullType(
@@ -396,6 +399,10 @@ class _$ProductEntitySerializer implements StructuredSerializer<ProductEntity> {
         case 'max_quantity':
           result.maxQuantity = serializers.deserialize(value,
               specifiedType: const FullType(int)) as int;
+          break;
+        case 'tax_id':
+          result.taxCategoryId = serializers.deserialize(value,
+              specifiedType: const FullType(String)) as String;
           break;
         case 'documents':
           result.documents.replace(serializers.deserialize(value,
@@ -701,6 +708,8 @@ class _$ProductEntity extends ProductEntity {
   @override
   final int maxQuantity;
   @override
+  final String taxCategoryId;
+  @override
   final BuiltList<DocumentEntity> documents;
   @override
   final bool isChanged;
@@ -753,6 +762,7 @@ class _$ProductEntity extends ProductEntity {
       this.stockNotification,
       this.imageUrl,
       this.maxQuantity,
+      this.taxCategoryId,
       this.documents,
       this.isChanged,
       this.createdAt,
@@ -811,6 +821,8 @@ class _$ProductEntity extends ProductEntity {
     BuiltValueNullFieldError.checkNotNull(
         maxQuantity, r'ProductEntity', 'maxQuantity');
     BuiltValueNullFieldError.checkNotNull(
+        taxCategoryId, r'ProductEntity', 'taxCategoryId');
+    BuiltValueNullFieldError.checkNotNull(
         documents, r'ProductEntity', 'documents');
     BuiltValueNullFieldError.checkNotNull(
         createdAt, r'ProductEntity', 'createdAt');
@@ -862,6 +874,7 @@ class _$ProductEntity extends ProductEntity {
         stockNotification == other.stockNotification &&
         imageUrl == other.imageUrl &&
         maxQuantity == other.maxQuantity &&
+        taxCategoryId == other.taxCategoryId &&
         documents == other.documents &&
         isChanged == other.isChanged &&
         createdAt == other.createdAt &&
@@ -908,6 +921,7 @@ class _$ProductEntity extends ProductEntity {
     _$hash = $jc(_$hash, stockNotification.hashCode);
     _$hash = $jc(_$hash, imageUrl.hashCode);
     _$hash = $jc(_$hash, maxQuantity.hashCode);
+    _$hash = $jc(_$hash, taxCategoryId.hashCode);
     _$hash = $jc(_$hash, documents.hashCode);
     _$hash = $jc(_$hash, isChanged.hashCode);
     _$hash = $jc(_$hash, createdAt.hashCode);
@@ -954,6 +968,7 @@ class _$ProductEntity extends ProductEntity {
           ..add('stockNotification', stockNotification)
           ..add('imageUrl', imageUrl)
           ..add('maxQuantity', maxQuantity)
+          ..add('taxCategoryId', taxCategoryId)
           ..add('documents', documents)
           ..add('isChanged', isChanged)
           ..add('createdAt', createdAt)
@@ -1098,6 +1113,11 @@ class ProductEntityBuilder
   int get maxQuantity => _$this._maxQuantity;
   set maxQuantity(int maxQuantity) => _$this._maxQuantity = maxQuantity;
 
+  String _taxCategoryId;
+  String get taxCategoryId => _$this._taxCategoryId;
+  set taxCategoryId(String taxCategoryId) =>
+      _$this._taxCategoryId = taxCategoryId;
+
   ListBuilder<DocumentEntity> _documents;
   ListBuilder<DocumentEntity> get documents =>
       _$this._documents ??= new ListBuilder<DocumentEntity>();
@@ -1175,6 +1195,7 @@ class ProductEntityBuilder
       _stockNotification = $v.stockNotification;
       _imageUrl = $v.imageUrl;
       _maxQuantity = $v.maxQuantity;
+      _taxCategoryId = $v.taxCategoryId;
       _documents = $v.documents.toBuilder();
       _isChanged = $v.isChanged;
       _createdAt = $v.createdAt;
@@ -1247,6 +1268,7 @@ class ProductEntityBuilder
               stockNotification: BuiltValueNullFieldError.checkNotNull(stockNotification, r'ProductEntity', 'stockNotification'),
               imageUrl: BuiltValueNullFieldError.checkNotNull(imageUrl, r'ProductEntity', 'imageUrl'),
               maxQuantity: BuiltValueNullFieldError.checkNotNull(maxQuantity, r'ProductEntity', 'maxQuantity'),
+              taxCategoryId: BuiltValueNullFieldError.checkNotNull(taxCategoryId, r'ProductEntity', 'taxCategoryId'),
               documents: documents.build(),
               isChanged: isChanged,
               createdAt: BuiltValueNullFieldError.checkNotNull(createdAt, r'ProductEntity', 'createdAt'),

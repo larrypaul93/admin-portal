@@ -11,6 +11,7 @@ import 'package:invoiceninja_flutter/ui/app/copy_to_clipboard.dart';
 import 'package:invoiceninja_flutter/ui/app/link_text.dart';
 import 'package:invoiceninja_flutter/ui/app/presenters/entity_presenter.dart';
 import 'package:invoiceninja_flutter/utils/formatting.dart';
+import 'package:invoiceninja_flutter/utils/localization.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class ClientPresenter extends EntityPresenter {
@@ -44,6 +45,7 @@ class ClientPresenter extends EntityPresenter {
       ClientFields.publicNotes,
       ClientFields.privateNotes,
       ClientFields.creditBalance,
+      ClientFields.paymentBalance,
       ClientFields.custom1,
       ClientFields.custom2,
       ClientFields.custom3,
@@ -52,6 +54,8 @@ class ClientPresenter extends EntityPresenter {
       ClientFields.group,
       ClientFields.contactPhone,
       ClientFields.contacts,
+      ClientFields.routingId,
+      ClientFields.isTaxExempt,
     ];
   }
 
@@ -59,6 +63,7 @@ class ClientPresenter extends EntityPresenter {
   Widget getField({String field, BuildContext context}) {
     final client = entity as ClientEntity;
     final store = StoreProvider.of<AppState>(context);
+    final localization = AppLocalization.of(context);
     final state = store.state;
 
     switch (field) {
@@ -98,6 +103,11 @@ class ClientPresenter extends EntityPresenter {
             alignment: Alignment.centerRight,
             child: Text(formatNumber(client.creditBalance, context,
                 clientId: client.id)));
+      case ClientFields.paymentBalance:
+        return Align(
+            alignment: Alignment.centerRight,
+            child: Text(formatNumber(client.paymentBalance, context,
+                clientId: client.id)));
       case ClientFields.paidToDate:
         return Align(
           alignment: Alignment.centerRight,
@@ -128,6 +138,10 @@ class ClientPresenter extends EntityPresenter {
         return Text(presentCustomField(context, client.customValue3));
       case ClientFields.custom4:
         return Text(presentCustomField(context, client.customValue4));
+      case ClientFields.routingId:
+        return Text(client.routingId);
+      case ClientFields.isTaxExempt:
+        return Text(client.isTaxExempt ? localization.yes : localization.no);
       case ClientFields.publicNotes:
         return TableTooltip(message: client.publicNotes);
       case ClientFields.privateNotes:

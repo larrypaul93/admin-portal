@@ -312,11 +312,11 @@ class _InvoiceEditItemsDesktopState extends State<InvoiceEditItemsDesktop> {
         widget.isTasks ? CustomFieldType.task4 : CustomFieldType.product4;
 
     final tableFontColor = state.prefState
-            .customColors[PrefState.THEME_INVOICE_HEADER_FONT_COLOR] ??
+            .activeCustomColors[PrefState.THEME_INVOICE_HEADER_FONT_COLOR] ??
         '';
 
-    final tableHeaderColor = state.prefState
-            .customColors[PrefState.THEME_INVOICE_HEADER_BACKGROUND_COLOR] ??
+    final tableHeaderColor = state.prefState.activeCustomColors[
+            PrefState.THEME_INVOICE_HEADER_BACKGROUND_COLOR] ??
         '';
 
     final tableHeaderColumns = <Widget>[];
@@ -327,9 +327,13 @@ class _InvoiceEditItemsDesktopState extends State<InvoiceEditItemsDesktop> {
       String label = '';
       bool isNumeric = false;
       if (column == COLUMN_ITEM) {
-        label = translations['item'] ?? localization.item;
+        label = (translations['item'] ?? '').isNotEmpty
+            ? translations['item']
+            : localization.item;
       } else if (column == COLUMN_DESCRIPTION) {
-        label = translations['description'] ?? localization.description;
+        label = (translations['description'] ?? '').isNotEmpty
+            ? translations['description']
+            : localization.description;
       } else if (column == COLUMN_CUSTOM1) {
         label = company.getCustomFieldLabel(customField1);
       } else if (column == COLUMN_CUSTOM2) {
@@ -345,20 +349,30 @@ class _InvoiceEditItemsDesktopState extends State<InvoiceEditItemsDesktop> {
                 : '');
       } else if (column == COLUMN_QUANTITY) {
         if (widget.isTasks) {
-          label = translations['hours'] ?? localization.hours;
+          label = (translations['hours'] ?? '').isNotEmpty
+              ? translations['hours']
+              : localization.hours;
         } else {
-          label = translations['quantity'] ?? localization.quantity;
+          label = (translations['quantity'] ?? '').isNotEmpty
+              ? translations['quantity']
+              : localization.quantity;
         }
         isNumeric = true;
       } else if (column == COLUMN_UNIT_COST) {
         if (widget.isTasks) {
-          label = translations['rate'] ?? localization.rate;
+          label = (translations['rate'] ?? '').isNotEmpty
+              ? translations['rate']
+              : localization.rate;
         } else {
-          label = translations['unit_cost'] ?? localization.unitCost;
+          label = (translations['unit_cost'] ?? '').isNotEmpty
+              ? translations['unit_cost']
+              : localization.unitCost;
         }
         isNumeric = true;
       } else if (column == COLUMN_DISCOUNT) {
-        label = translations['discount'] ?? localization.discount;
+        label = (translations['discount'] ?? '').isNotEmpty
+            ? translations['discount']
+            : localization.discount;
         isNumeric = true;
       } else if (column == COLUMN_SKU) {
         label = translations['sku'] ?? 'SKU';
@@ -711,6 +725,7 @@ class _InvoiceEditItemsDesktopState extends State<InvoiceEditItemsDesktop> {
                                       ..customValue2 = product.customValue2
                                       ..customValue3 = product.customValue3
                                       ..customValue4 = product.customValue4
+                                      ..taxCategoryId = product.taxCategoryId
                                       ..taxName1 =
                                           company.numberOfItemTaxRates >= 1 &&
                                                   product.taxName1.isNotEmpty
@@ -1412,11 +1427,11 @@ class TableHeader extends StatelessWidget {
     final store = StoreProvider.of<AppState>(context);
     final state = store.state;
 
-    final tableHeaderColor = state.prefState
-            .customColors[PrefState.THEME_INVOICE_HEADER_BACKGROUND_COLOR] ??
+    final tableHeaderColor = state.prefState.activeCustomColors[
+            PrefState.THEME_INVOICE_HEADER_BACKGROUND_COLOR] ??
         '';
     final tableFontColor = state.prefState
-            .customColors[PrefState.THEME_INVOICE_HEADER_FONT_COLOR] ??
+            .activeCustomColors[PrefState.THEME_INVOICE_HEADER_FONT_COLOR] ??
         '';
 
     return Padding(

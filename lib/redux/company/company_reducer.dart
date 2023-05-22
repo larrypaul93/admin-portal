@@ -110,6 +110,13 @@ Reducer<UserCompanyEntity> userCompanyEntityReducer = combineReducers([
       loadCompanySuccessReducer),
   TypedReducer<UserCompanyEntity, SaveCompanySuccess>(
       saveCompanySuccessReducer),
+  TypedReducer<UserCompanyEntity, SaveEInvoiceCertificateSuccess>(
+      (userCompany, action) {
+    return userCompany.rebuild((b) => b
+      ..company.hasEInvoiceCertificate = action.company.hasEInvoiceCertificate
+      ..company.hasEInvoiceCertificatePassphrase =
+          action.company.hasEInvoiceCertificatePassphrase);
+  }),
   TypedReducer<UserCompanyEntity, UpdateReportSettings>((userCompany, action) {
     if (userCompany.settings.reportSettings.containsKey(action.report)) {
       final settings = userCompany.settings.reportSettings[action.report];
@@ -143,11 +150,19 @@ Reducer<UserCompanyEntity> userCompanyEntityReducer = combineReducers([
       ..user.replace(action.user)
       ..settings.replace(action.user.userCompany.settings)),
   ),
-  TypedReducer<UserCompanyEntity, ConnecOAuthUserSuccess>(
+  TypedReducer<UserCompanyEntity, ConnectOAuthUserSuccess>(
     (userCompany, action) =>
         userCompany.rebuild((b) => b..user.replace(action.user)),
   ),
   TypedReducer<UserCompanyEntity, ConnecGmailUserSuccess>(
+    (userCompany, action) =>
+        userCompany.rebuild((b) => b..user.replace(action.user)),
+  ),
+  TypedReducer<UserCompanyEntity, DisconnectOAuthUserSuccess>(
+    (userCompany, action) =>
+        userCompany.rebuild((b) => b..user.replace(action.user)),
+  ),
+  TypedReducer<UserCompanyEntity, DisconnectOAuthMailerSuccess>(
     (userCompany, action) =>
         userCompany.rebuild((b) => b..user.replace(action.user)),
   ),

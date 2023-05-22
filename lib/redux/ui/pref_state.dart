@@ -14,7 +14,7 @@ import 'package:invoiceninja_flutter/data/models/static/color_theme_model.dart';
 part 'pref_state.g.dart';
 
 abstract class PrefState implements Built<PrefState, PrefStateBuilder> {
-  factory PrefState({ModuleLayout moduleLayout}) {
+  factory PrefState() {
     return _$PrefState._(
       appLayout: AppLayout.desktop,
       moduleLayout: ModuleLayout.table,
@@ -26,11 +26,13 @@ abstract class PrefState implements Built<PrefState, PrefStateBuilder> {
       rowsPerPage: 10,
       isMenuVisible: true,
       isHistoryVisible: false,
-      enableDarkMode: false,
+      darkModeType: kBrightnessSytem,
+      enableDarkModeSystem: false,
       enableFlexibleSearch: false,
       editAfterSaving: true,
       requireAuthentication: false,
       colorTheme: kColorThemeLight,
+      darkColorTheme: kColorThemeDark,
       enableTouchEvents: false,
       enableTooltips: true,
       isFilterVisible: false,
@@ -40,14 +42,19 @@ abstract class PrefState implements Built<PrefState, PrefStateBuilder> {
       hideDesktopWarning: false,
       hideGatewayWarning: false,
       hideReviewApp: false,
+      hideOneYearReviewApp: false,
+      hideTwoYearReviewApp: false,
       showKanban: false,
       showPdfPreview: true,
       showPdfPreviewSideBySide: false,
       persistData: false,
       persistUI: true,
+      enableNativeBrowser: false,
+      statementIncludes: BuiltList(<String>[kStatementIncludePayments]),
       companyPrefs: BuiltMap<String, CompanyPrefState>(),
       sortFields: BuiltMap<EntityType, PrefStateSortField>(),
       customColors: BuiltMap<String, String>(CONTRAST_COLORS),
+      darkCustomColors: BuiltMap<String, String>(),
     );
   }
 
@@ -109,6 +116,10 @@ abstract class PrefState implements Built<PrefState, PrefStateBuilder> {
 
   BuiltMap<String, String> get customColors;
 
+  BuiltMap<String, String> get darkCustomColors;
+
+  BuiltList<String> get statementIncludes;
+
   bool get isPreviewVisible;
 
   bool get isMenuVisible;
@@ -125,7 +136,9 @@ abstract class PrefState implements Built<PrefState, PrefStateBuilder> {
 
   bool get isHistoryVisible;
 
-  bool get enableDarkMode;
+  String get darkModeType;
+
+  bool get enableDarkModeSystem;
 
   bool get isFilterVisible;
 
@@ -145,21 +158,44 @@ abstract class PrefState implements Built<PrefState, PrefStateBuilder> {
 
   String get colorTheme;
 
+  String get darkColorTheme;
+
   bool get hideDesktopWarning;
 
   bool get hideGatewayWarning;
 
   bool get hideReviewApp;
 
+  bool get hideOneYearReviewApp;
+
+  bool get hideTwoYearReviewApp;
+
   bool get editAfterSaving;
+
+  bool get enableNativeBrowser;
 
   double get textScaleFactor;
 
   BuiltMap<EntityType, PrefStateSortField> get sortFields;
 
-  ColorTheme get colorThemeModel => colorThemesMap.containsKey(colorTheme)
-      ? colorThemesMap[colorTheme]
-      : colorThemesMap[kColorThemeLight];
+  bool get enableDarkMode => darkModeType == kBrightnessSytem
+      ? enableDarkModeSystem
+      : darkModeType == kBrightnessDark;
+
+  ColorTheme get colorThemeModel {
+    final theme = enableDarkMode ? darkColorTheme : colorTheme;
+
+    if (colorThemesMap.containsKey(theme)) {
+      return colorThemesMap[theme];
+    } else if (enableDarkMode) {
+      return colorThemesMap[kColorThemeDark];
+    } else {
+      return colorThemesMap[kColorThemeLight];
+    }
+  }
+
+  BuiltMap<String, String> get activeCustomColors =>
+      enableDarkMode ? darkCustomColors : customColors;
 
   BuiltMap<String, CompanyPrefState> get companyPrefs;
 
@@ -221,18 +257,21 @@ abstract class PrefState implements Built<PrefState, PrefStateBuilder> {
 
   // ignore: unused_element
   static void _initializeBuilder(PrefStateBuilder builder) => builder
+    ..statementIncludes
+        .replace(BuiltList<String>(<String>[kStatementIncludePayments]))
     ..useSidebarEditor.replace(BuiltMap<EntityType, bool>())
     ..useSidebarViewer.replace(BuiltMap<EntityType, bool>())
     ..sortFields.replace(BuiltMap<EntityType, PrefStateSortField>())
-    ..customColors.replace(builder.enableDarkMode == true
-        ? BuiltMap<String, String>()
-        : BuiltMap<String, String>(PrefState.CONTRAST_COLORS))
+    ..customColors.replace(BuiltMap<String, String>(PrefState.CONTRAST_COLORS))
+    ..darkCustomColors.replace(BuiltMap<String, String>())
     ..showKanban = false
     ..isPreviewVisible = false
     ..isFilterVisible = false
     ..hideDesktopWarning = false
     ..hideGatewayWarning = false
     ..hideReviewApp = false
+    ..hideOneYearReviewApp = false
+    ..hideTwoYearReviewApp = false
     ..tapSelectedToEdit = false
     ..persistData = false
     ..persistUI = true
@@ -242,9 +281,12 @@ abstract class PrefState implements Built<PrefState, PrefStateBuilder> {
     ..enableTouchEvents = false
     ..enableFlexibleSearch = false
     ..enableTooltips = true
+    ..enableNativeBrowser = false
     ..textScaleFactor = 1
-    ..colorTheme =
-        builder.enableDarkMode == true ? kColorThemeLight : kColorThemeLight;
+    ..darkModeType = kBrightnessSytem
+    ..colorTheme = kColorThemeLight
+    ..darkColorTheme = kColorThemeDark
+    ..enableDarkModeSystem = false;
 
   static Serializer<PrefState> get serializer => _$prefStateSerializer;
 }

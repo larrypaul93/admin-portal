@@ -4,23 +4,24 @@ class Constants {
 }
 
 // TODO remove version once #46609 is fixed
-const String kClientVersion = '5.0.108';
+const String kClientVersion = '5.0.115';
 const String kMinServerVersion = '5.0.4';
 
 const String kAppName = 'Invoice Ninja';
 const String kSiteUrl = 'https://invoiceninja.com';
 const String kAppProductionUrl = 'https://invoicing.co';
 const String kAppStagingUrl = 'https://staging.invoicing.co';
+const String kAppStagingNetUrl = 'https://invoiceninja.net';
 const String kAppLargeTestUrl = 'https://testv5.invoicing.co';
 const String kAppDemoUrl = 'https://demo.invoiceninja.com';
 const String kWhiteLabelUrl =
     'https://app.invoiceninja.com/buy_now/?account_key=AsFmBAeLXF0IKf7tmi0eiyZfmWW9hxMT&product_id=3';
 const String kPrivacyPolicyURL = 'https://www.invoiceninja.com/privacy-policy';
 const String kTermsOfServiceURL = 'https://www.invoiceninja.com/terms';
-const String kBankingURL = 'https://invoiceninja.com/banking/';
+const String kBankingURL = 'https://invoiceninja.com/banking';
 const String kTransifexURL =
     'https://www.transifex.com/invoice-ninja/invoice-ninja';
-const String kWebhookSiteURL = 'https://webhook.site';
+const String kWebhookSiteURL = 'https://requestcatcher.com';
 const String kSourceCodeBackend =
     'https://github.com/invoiceninja/invoiceninja/tree/v5-stable';
 const String kSourceCodeFrontend =
@@ -30,7 +31,7 @@ const String kSourceCodeFrontendSDK = 'https://pub.dev/packages/invoiceninja';
 const String kPlayStoreAppId = 'com.invoiceninja.app';
 const String kAppStoreAppId = 'id1503970375';
 
-const String kMicrosoftAppStoreId = '9n3f2bbcfdr6';
+const String kMicrosoftAppStoreId = '9N3F2BBCFDR6';
 const String kAppleStoreUrl =
     'https://apps.apple.com/us/app/invoice-ninja-v5/$kAppStoreAppId';
 const String kGoogleStoreUrl =
@@ -40,7 +41,7 @@ const String kGoogleFDroidUrl =
 const String kMacOSUrl = 'https://apps.apple.com/app/id1503970375';
 const String kLinuxUrl = 'https://snapcraft.io/invoiceninja';
 const String kWindowsUrl =
-    'https://apps.microsoft.com/store/detail/invoice-ninja/9N3F2BBCFDR6';
+    'https://apps.microsoft.com/store/detail/invoice-ninja/$kMicrosoftAppStoreId';
 
 const String kSlackUrl = 'http://slack.invoiceninja.com';
 const String kGitHubUrl = 'https://github.com/invoiceninja';
@@ -72,7 +73,7 @@ const String kGatewayFeeHelpURL =
     'https://support.stripe.com/questions/passing-the-stripe-fee-on-to-customers';
 
 const String kDebugModeUrl =
-    'https://www.mailgun.com/blog/a-word-of-caution-for-laravel-developers';
+    'https://invoiceninja.github.io/docs/self-host-debug-mode';
 const String kCapterralUrl = 'https://www.capterra.com/p/145215/Invoice-Ninja';
 const String kCronsHelpUrl =
     'https://invoiceninja.github.io/docs/self-host-troubleshooting/#cron-not-running-queue-not-running';
@@ -80,7 +81,7 @@ const String kGitHubDiffUrl =
     'https://github.com/invoiceninja/invoiceninja/compare/vVERSION...v5-stable';
 const String kGitHubLangUrl =
     'https://github.com/invoiceninja/invoiceninja/blob/master/resources/lang/en/texts.php';
-const String kStatusCheckUrl = 'https://status.invoiceninja.com/';
+const String kStatusCheckUrl = 'https://status.invoiceninja.com';
 const String kGoogleAnalyticsUrl =
     'https://support.google.com/analytics/answer/1037249?hl=en';
 
@@ -162,11 +163,19 @@ const String kPlanPro = 'pro';
 const String kPlanEnterprise = 'enterprise';
 const String kPlanWhiteLabel = 'white_label';
 
+const String kBrightnessLight = 'light';
+const String kBrightnessDark = 'dark';
+const String kBrightnessSytem = 'system';
+
 const String kColorThemeLight = 'light';
 const String kColorThemeDark = 'dark';
 
 const double kGutterWidth = 16;
 const double kLighterOpacity = .6;
+
+const String kStatementIncludePayments = 'payments';
+const String kStatementIncludeCredits = 'credits';
+const String kStatementIncludeAging = 'aging';
 
 const int kMaxNumberOfCompanies = 10;
 const int kMaxNumberOfHistory = 50;
@@ -189,7 +198,56 @@ const String kCurrencyAll = '-1';
 const String kCurrencyUSDollar = '1';
 const String kCurrencyEuro = '3';
 
+const String kTaxCategoryPhysical = '1';
+const String kTaxCategoryServices = '2';
+const String kTaxCategoryDigital = '3';
+const String kTaxCategoryShipping = '4';
+const String kTaxCategoryExempt = '5';
+const String kTaxCategoryReducedTax = '6';
+const String kTaxCategoryOverrideTax = '7';
+const String kTaxCategoryZeroRated = '8';
+const String kTaxCategoryReverseTax = '9';
+
+const kTaxCategories = {
+  kTaxCategoryPhysical: 'physical_goods',
+  kTaxCategoryDigital: 'digital_products',
+  kTaxCategoryServices: 'services',
+  kTaxCategoryShipping: 'shipping',
+  kTaxCategoryExempt: 'tax_exempt',
+  kTaxCategoryReducedTax: 'reduced_tax',
+  kTaxCategoryOverrideTax: 'override_tax',
+  kTaxCategoryZeroRated: 'zero_rated',
+  kTaxCategoryReverseTax: 'reverse_tax',
+};
+
+const String kEInvoiceTypeEN16931 = 'EN16931';
+const String kEInvoiceTypeXInvoice_2_2 = 'XInvoice_2_2';
+const String kEInvoiceTypeXInvoice_2_1 = 'XInvoice_2_1';
+const String kEInvoiceTypeXInvoice_2_0 = 'XInvoice_2_0';
+const String kEInvoiceTypeXInvoice_1_0 = 'XInvoice_1_0';
+const String kEInvoiceTypeXInvoice_Extended = 'XInvoice-Extended';
+const String kEInvoiceTypeXInvoice_BasicWL = 'XInvoice-BasicWL';
+const String kEInvoiceTypeXInvoice_Basic = 'XInvoice-Basic';
+const String kEInvoiceTypeFacturae_3_2 = 'Facturae_3.2';
+const String kEInvoiceTypeFacturae_3_2_1 = 'Facturae_3.2.1';
+const String kEInvoiceTypeFacturae_3_2_2 = 'Facturae_3.2.2';
+
+const kEInvoiceTypes = [
+  kEInvoiceTypeEN16931,
+  kEInvoiceTypeXInvoice_2_2,
+  kEInvoiceTypeXInvoice_2_1,
+  kEInvoiceTypeXInvoice_2_0,
+  kEInvoiceTypeXInvoice_1_0,
+  kEInvoiceTypeXInvoice_Extended,
+  kEInvoiceTypeXInvoice_BasicWL,
+  kEInvoiceTypeXInvoice_Basic,
+  kEInvoiceTypeFacturae_3_2_2,
+  kEInvoiceTypeFacturae_3_2_1,
+  kEInvoiceTypeFacturae_3_2,
+];
+
 const String kCountryUnitedStates = '840';
+const String kCountryAustralia = '36';
 const String kCountryCanada = '124';
 const String kCountrySwitzerland = '756';
 
@@ -311,6 +369,7 @@ const String kGatewayTypeBECS = '20';
 const String kGatewayTypeInstantBankPay = '21';
 const String kGatewayTypeFPX = '22';
 const String kGatewayTypeKlarna = '23';
+const String kGatewayTypeBacs = '24';
 
 const kGatewayTypes = {
   kGatewayTypeCreditCard: 'credit_card',
@@ -336,6 +395,7 @@ const kGatewayTypes = {
   kGatewayTypeInstantBankPay: 'instant_bank_pay',
   kGatewayTypeFPX: 'fpx',
   kGatewayTypeKlarna: 'klarna',
+  kGatewayTypeBacs: 'bacs',
 };
 
 const String kNotificationChannelEmail = 'email';
@@ -351,6 +411,7 @@ const String kNotificationsAll = 'all_notifications';
 const String kNotificationsAllUser = 'all_user_notifications';
 const String kNotificationsPaymentSuccess = 'payment_success';
 const String kNotificationsPaymentFailure = 'payment_failure';
+const String kNotificationsPaymentManual = 'payment_manual';
 const String kNotificationsInvoiceCreated = 'invoice_created';
 const String kNotificationsInvoiceSent = 'invoice_sent';
 const String kNotificationsInvoiceLate = 'invoice_late';
@@ -376,6 +437,7 @@ const kNotificationEvents = [
   kNotificationsInvoiceLate,
   kNotificationsPaymentSuccess,
   kNotificationsPaymentFailure,
+  kNotificationsPaymentManual,
   kNotificationsQuoteCreated,
   kNotificationsQuoteSent,
   kNotificationsQuoteViewed,
@@ -490,9 +552,9 @@ const String kSettingsDeviceSettings = 'device_settings';
 const String kSettingsGroupSettings = 'group_settings';
 const String kSettingsGroupSettingsView = 'group_settings/view';
 const String kSettingsGroupSettingsEdit = 'group_settings/edit';
-const String kSettingsSubscriptions = 'subscriptions';
-const String kSettingsSubscriptionsView = 'subscriptions/view';
-const String kSettingsSubscriptionsEdit = 'subscriptions/edit';
+const String kSettingsPaymentLinks = 'payment_links';
+const String kSettingsPaymentLinksView = 'payment_links/view';
+const String kSettingsPaymentLinksEdit = 'payment_links/edit';
 const String kSettingsCustomFields = 'custom_fields';
 const String kSettingsCustomDesigns = 'custom_designs';
 const String kSettingsCustomDesignsView = 'custom_designs/view';
@@ -541,7 +603,7 @@ const List<String> kAdvancedSettings = [
   kSettingsGeneratedNumbers,
   kSettingsInvoiceDesign,
   kSettingsTemplatesAndReminders,
-  kSettingsSubscriptions,
+  kSettingsPaymentLinks,
   kSettingsUserManagement,
   kSettingsTransactionRules,
 ];
@@ -575,6 +637,7 @@ const String kPdfFieldsInvoiceDetails = 'invoice_details';
 const String kPdfFieldsQuoteDetails = 'quote_details';
 const String kPdfFieldsCreditDetails = 'credit_details';
 const String kPdfFieldsProductColumns = 'product_columns';
+const String kPdfFieldsProductQuoteColumns = 'product_quote_columns';
 const String kPdfFieldsVendorDetails = 'vendor_details';
 const String kPdfFieldsPurchaseOrderDetails = 'purchase_order_details';
 const String kPdfFieldsTaskColumns = 'task_columns';
@@ -584,6 +647,7 @@ const String kPdfFields = '';
 const String kPermissionCreateAll = 'create_all';
 const String kPermissionViewAll = 'view_all';
 const String kPermissionEditAll = 'edit_all';
+const String kPermissionViewReports = 'view_reports';
 
 const String kPaymentStatusPartiallyUnapplied = '-2';
 const String kPaymentStatusUnapplied = '-1';
@@ -642,6 +706,10 @@ const String kDefaultDarkBorderColor = '#393A3C';
 const String kDefaultLightSelectedColorMenu = '#f2faff';
 const String kDefaultLightSelectedColor = '#e5f5ff';
 const String kDefaultLightBorderColor = '#dfdfdf';
+
+const String kTaxRegionUnitedStates = 'US';
+const String kTaxRegionEurope = 'EU';
+const String kTaxRegionAustralia = 'AU';
 
 const String kReportGroupDay = 'day';
 const String kReportGroupWeek = 'week';
@@ -925,3 +993,4 @@ const String kActivityRestorePurchaseOrder = '134';
 const String kActivityEmailPurchaseOrder = '135';
 const String kActivityViewPurchaseOrder = '136';
 const String kActivityAcceptPurchaseOrder = '137';
+const String kActivityEmailPayment = '138';
