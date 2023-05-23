@@ -528,6 +528,26 @@ abstract class SettingsEntity
   String get emailBodyPaymentPartial;
 
   @nullable
+  @BuiltValueField(wireName: 'sms_template_invoice')
+  String get smsMsgInvoice;
+
+  @nullable
+  @BuiltValueField(wireName: 'sms_template_quote')
+  String get smsMsgQuote;
+
+  @nullable
+  @BuiltValueField(wireName: 'sms_template_credit')
+  String get smsMsgCredit;
+
+  @nullable
+  @BuiltValueField(wireName: 'sms_template_payment')
+  String get smsMsgPayment;
+
+  @nullable
+  @BuiltValueField(wireName: 'sms_template_payment_partial')
+  String get smsMsgPaymentPartial;
+
+  @nullable
   @BuiltValueField(wireName: 'email_subject_reminder1')
   String get emailSubjectReminder1;
 
@@ -552,12 +572,28 @@ abstract class SettingsEntity
   String get emailBodyReminder3;
 
   @nullable
+  @BuiltValueField(wireName: 'sms_template_reminder1')
+  String get smsMsgReminder1;
+
+  @nullable
+  @BuiltValueField(wireName: 'sms_template_reminder2')
+  String get smsMsgReminder2;
+
+  @nullable
+  @BuiltValueField(wireName: 'sms_template_reminder3')
+  String get smsMsgReminder3;
+
+  @nullable
   @BuiltValueField(wireName: 'email_subject_custom1')
   String get emailSubjectCustom1;
 
   @nullable
   @BuiltValueField(wireName: 'email_template_custom1')
   String get emailBodyCustom1;
+
+  @nullable
+  @BuiltValueField(wireName: 'sms_template_custom1')
+  String get smsMsgCustom1;
 
   @nullable
   @BuiltValueField(wireName: 'email_subject_custom2')
@@ -568,12 +604,20 @@ abstract class SettingsEntity
   String get emailBodyCustom2;
 
   @nullable
+  @BuiltValueField(wireName: 'sms_template_custom2')
+  String get smsMsgCustom2;
+
+  @nullable
   @BuiltValueField(wireName: 'email_subject_custom3')
   String get emailSubjectCustom3;
 
   @nullable
   @BuiltValueField(wireName: 'email_template_custom3')
   String get emailBodyCustom3;
+
+  @nullable
+  @BuiltValueField(wireName: 'sms_template_custom3')
+  String get smsMsgCustom3;
 
   @nullable
   @BuiltValueField(wireName: 'email_subject_statement')
@@ -584,12 +628,20 @@ abstract class SettingsEntity
   String get emailBodyStatement;
 
   @nullable
+  @BuiltValueField(wireName: 'sms_template_statement')
+  String get smsMsgStatement;
+
+  @nullable
   @BuiltValueField(wireName: 'email_subject_purchase_order')
   String get emailSubjectPurchaseOrder;
 
   @nullable
   @BuiltValueField(wireName: 'email_template_purchase_order')
   String get emailBodyPurchaseOrder;
+
+  @nullable
+  @BuiltValueField(wireName: 'sms_template_purchase_order')
+  String get smsMsgPurchaseOrder;
 
   @nullable
   @BuiltValueField(wireName: 'enable_client_portal_password')
@@ -791,6 +843,10 @@ abstract class SettingsEntity
   @nullable
   @BuiltValueField(wireName: 'email_template_reminder_endless')
   String get emailBodyReminderEndless;
+
+  @nullable
+  @BuiltValueField(wireName: 'sms_template_reminder_endless')
+  String get smsMsgReminderEndless;
 
   @nullable
   @BuiltValueField(wireName: 'client_online_payment_notification')
@@ -1141,6 +1197,39 @@ abstract class SettingsEntity
         return emailBodyCustom3;
       case EmailTemplate.purchase_order:
         return emailBodyPurchaseOrder;
+      default:
+        return 'Error: template not defined for $template';
+    }
+  }
+
+  String getSMSMsg(EmailTemplate template) {
+    switch (template) {
+      case EmailTemplate.invoice:
+        return smsMsgInvoice;
+      case EmailTemplate.quote:
+        return smsMsgQuote;
+      case EmailTemplate.credit:
+        return smsMsgCredit;
+      case EmailTemplate.payment:
+        return smsMsgPayment;
+      case EmailTemplate.payment_partial:
+        return smsMsgPaymentPartial;
+      case EmailTemplate.reminder1:
+        return smsMsgReminder1;
+      case EmailTemplate.reminder2:
+        return smsMsgReminder2;
+      case EmailTemplate.reminder3:
+        return smsMsgReminder3;
+      case EmailTemplate.reminder_endless:
+        return smsMsgReminderEndless;
+      case EmailTemplate.custom1:
+        return smsMsgCustom1;
+      case EmailTemplate.custom2:
+        return smsMsgCustom2;
+      case EmailTemplate.custom3:
+        return smsMsgCustom3;
+      case EmailTemplate.purchase_order:
+        return smsMsgPurchaseOrder;
       default:
         return 'Error: template not defined for $template';
     }

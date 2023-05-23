@@ -136,6 +136,7 @@ abstract class TemplateEntity
     return _$TemplateEntity._(
       subject: '',
       body: '',
+      sms: '',
     );
   }
 
@@ -148,6 +149,9 @@ abstract class TemplateEntity
   String get subject;
 
   String get body;
+
+  @nullable
+  String get sms;
 
   static Serializer<TemplateEntity> get serializer =>
       _$templateEntitySerializer;

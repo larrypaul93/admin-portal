@@ -231,14 +231,14 @@ class SaveInvoiceFailure implements StopSaving {
 }
 
 class EmailInvoiceRequest implements StartSaving {
-  EmailInvoiceRequest({
-    @required this.completer,
-    @required this.invoiceId,
-    @required this.template,
-    @required this.subject,
-    @required this.body,
-    @required this.ccEmail,
-  });
+  EmailInvoiceRequest(
+      {@required this.completer,
+      @required this.invoiceId,
+      @required this.template,
+      @required this.subject,
+      @required this.body,
+      @required this.ccEmail,
+      @required this.smsMsg});
 
   final Completer completer;
   final String invoiceId;
@@ -246,6 +246,7 @@ class EmailInvoiceRequest implements StartSaving {
   final String subject;
   final String body;
   final String ccEmail;
+  final String smsMsg;
 }
 
 class EmailInvoiceSuccess implements StopSaving, PersistData {

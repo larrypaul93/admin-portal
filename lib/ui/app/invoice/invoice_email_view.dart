@@ -53,6 +53,7 @@ class _InvoiceEmailViewState extends State<InvoiceEmailView>
   bool _isLoading = false;
 
   final _subjectController = TextEditingController();
+  final _smsController = TextEditingController();
   final _bodyController = TextEditingController();
   final _ccEmailController = TextEditingController();
   final _debouncer = Debouncer(milliseconds: kMillisecondsToDebounceSave);
@@ -74,6 +75,7 @@ class _InvoiceEmailViewState extends State<InvoiceEmailView>
       _subjectController,
       _bodyController,
       _ccEmailController,
+      _smsController
     ];
 
     final viewModel = widget.viewModel;
@@ -135,6 +137,7 @@ class _InvoiceEmailViewState extends State<InvoiceEmailView>
 
     final origSubject = _subjectController.text.trim();
     final origBody = _bodyController.text.trim();
+    final origSms = _smsController.text.trim();
 
     setState(() {
       _isLoading = true;
@@ -146,7 +149,7 @@ class _InvoiceEmailViewState extends State<InvoiceEmailView>
         body: origBody,
         template: '$selectedTemplate',
         invoice: widget.viewModel.invoice,
-        onComplete: (subject, body, email, rawSubject, rawBody) {
+        onComplete: (subject, body, email, rawSubject, rawBody, [sms = '']) {
           if (!mounted) {
             return;
           }
@@ -167,9 +170,10 @@ class _InvoiceEmailViewState extends State<InvoiceEmailView>
               }
             }
 
-            if (origSubject.isEmpty && origBody.isEmpty) {
+            if (origSubject.isEmpty && origBody.isEmpty && origSms.isEmpty) {
               _subjectController.text = rawSubject.trim();
               _bodyController.text = rawBody.trim();
+              _smsController.text = sms.trim();
             }
           });
         });
@@ -218,6 +222,7 @@ class _InvoiceEmailViewState extends State<InvoiceEmailView>
                       ? null
                       : (template) {
                           setState(() {
+                            _smsController.text = '';
                             _subjectController.text = '';
                             _bodyController.text = '';
                             _rawBodyPreview = '';
@@ -367,6 +372,21 @@ class _InvoiceEmailViewState extends State<InvoiceEmailView>
             ),
           ),
         ),
+        ColoredBox(
+          color: state.company.markdownEmailEnabled && !isDarkMode(context)
+              ? Colors.white
+              : Theme.of(context).colorScheme.background,
+          child: Padding(
+            padding: const EdgeInsets.only(left: 24, right: 10, bottom: 16),
+            child: DecoratedFormField(
+              controller: _smsController,
+              label: localization.sms,
+              onChanged: (_) => _onChanged(),
+              keyboardType: TextInputType.text,
+              enabled: enableCustomEmail,
+            ),
+          ),
+        ),
         if (state.company.markdownEmailEnabled)
           Expanded(
             child: ColoredBox(
@@ -445,6 +465,7 @@ class _InvoiceEmailViewState extends State<InvoiceEmailView>
               _subjectController.text.trim(),
               _bodyController.text.trim(),
               _ccEmailController.text.trim(),
+              _smsController.text.trim(),
             );
           } else {
             showMessageDialog(

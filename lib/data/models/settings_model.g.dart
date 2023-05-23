@@ -700,6 +700,41 @@ class _$SettingsEntitySerializer
         ..add(serializers.serialize(value,
             specifiedType: const FullType(String)));
     }
+    value = object.smsMsgInvoice;
+    if (value != null) {
+      result
+        ..add('sms_template_invoice')
+        ..add(serializers.serialize(value,
+            specifiedType: const FullType(String)));
+    }
+    value = object.smsMsgQuote;
+    if (value != null) {
+      result
+        ..add('sms_template_quote')
+        ..add(serializers.serialize(value,
+            specifiedType: const FullType(String)));
+    }
+    value = object.smsMsgCredit;
+    if (value != null) {
+      result
+        ..add('sms_template_credit')
+        ..add(serializers.serialize(value,
+            specifiedType: const FullType(String)));
+    }
+    value = object.smsMsgPayment;
+    if (value != null) {
+      result
+        ..add('sms_template_payment')
+        ..add(serializers.serialize(value,
+            specifiedType: const FullType(String)));
+    }
+    value = object.smsMsgPaymentPartial;
+    if (value != null) {
+      result
+        ..add('sms_template_payment_partial')
+        ..add(serializers.serialize(value,
+            specifiedType: const FullType(String)));
+    }
     value = object.emailSubjectReminder1;
     if (value != null) {
       result
@@ -742,6 +777,27 @@ class _$SettingsEntitySerializer
         ..add(serializers.serialize(value,
             specifiedType: const FullType(String)));
     }
+    value = object.smsMsgReminder1;
+    if (value != null) {
+      result
+        ..add('sms_template_reminder1')
+        ..add(serializers.serialize(value,
+            specifiedType: const FullType(String)));
+    }
+    value = object.smsMsgReminder2;
+    if (value != null) {
+      result
+        ..add('sms_template_reminder2')
+        ..add(serializers.serialize(value,
+            specifiedType: const FullType(String)));
+    }
+    value = object.smsMsgReminder3;
+    if (value != null) {
+      result
+        ..add('sms_template_reminder3')
+        ..add(serializers.serialize(value,
+            specifiedType: const FullType(String)));
+    }
     value = object.emailSubjectCustom1;
     if (value != null) {
       result
@@ -753,6 +809,13 @@ class _$SettingsEntitySerializer
     if (value != null) {
       result
         ..add('email_template_custom1')
+        ..add(serializers.serialize(value,
+            specifiedType: const FullType(String)));
+    }
+    value = object.smsMsgCustom1;
+    if (value != null) {
+      result
+        ..add('sms_template_custom1')
         ..add(serializers.serialize(value,
             specifiedType: const FullType(String)));
     }
@@ -770,6 +833,13 @@ class _$SettingsEntitySerializer
         ..add(serializers.serialize(value,
             specifiedType: const FullType(String)));
     }
+    value = object.smsMsgCustom2;
+    if (value != null) {
+      result
+        ..add('sms_template_custom2')
+        ..add(serializers.serialize(value,
+            specifiedType: const FullType(String)));
+    }
     value = object.emailSubjectCustom3;
     if (value != null) {
       result
@@ -781,6 +851,13 @@ class _$SettingsEntitySerializer
     if (value != null) {
       result
         ..add('email_template_custom3')
+        ..add(serializers.serialize(value,
+            specifiedType: const FullType(String)));
+    }
+    value = object.smsMsgCustom3;
+    if (value != null) {
+      result
+        ..add('sms_template_custom3')
         ..add(serializers.serialize(value,
             specifiedType: const FullType(String)));
     }
@@ -798,6 +875,13 @@ class _$SettingsEntitySerializer
         ..add(serializers.serialize(value,
             specifiedType: const FullType(String)));
     }
+    value = object.smsMsgStatement;
+    if (value != null) {
+      result
+        ..add('sms_template_statement')
+        ..add(serializers.serialize(value,
+            specifiedType: const FullType(String)));
+    }
     value = object.emailSubjectPurchaseOrder;
     if (value != null) {
       result
@@ -809,6 +893,13 @@ class _$SettingsEntitySerializer
     if (value != null) {
       result
         ..add('email_template_purchase_order')
+        ..add(serializers.serialize(value,
+            specifiedType: const FullType(String)));
+    }
+    value = object.smsMsgPurchaseOrder;
+    if (value != null) {
+      result
+        ..add('sms_template_purchase_order')
         ..add(serializers.serialize(value,
             specifiedType: const FullType(String)));
     }
@@ -1169,6 +1260,13 @@ class _$SettingsEntitySerializer
     if (value != null) {
       result
         ..add('email_template_reminder_endless')
+        ..add(serializers.serialize(value,
+            specifiedType: const FullType(String)));
+    }
+    value = object.smsMsgReminderEndless;
+    if (value != null) {
+      result
+        ..add('sms_template_reminder_endless')
         ..add(serializers.serialize(value,
             specifiedType: const FullType(String)));
     }
@@ -1945,6 +2043,26 @@ class _$SettingsEntitySerializer
           result.emailBodyPaymentPartial = serializers.deserialize(value,
               specifiedType: const FullType(String)) as String;
           break;
+        case 'sms_template_invoice':
+          result.smsMsgInvoice = serializers.deserialize(value,
+              specifiedType: const FullType(String)) as String;
+          break;
+        case 'sms_template_quote':
+          result.smsMsgQuote = serializers.deserialize(value,
+              specifiedType: const FullType(String)) as String;
+          break;
+        case 'sms_template_credit':
+          result.smsMsgCredit = serializers.deserialize(value,
+              specifiedType: const FullType(String)) as String;
+          break;
+        case 'sms_template_payment':
+          result.smsMsgPayment = serializers.deserialize(value,
+              specifiedType: const FullType(String)) as String;
+          break;
+        case 'sms_template_payment_partial':
+          result.smsMsgPaymentPartial = serializers.deserialize(value,
+              specifiedType: const FullType(String)) as String;
+          break;
         case 'email_subject_reminder1':
           result.emailSubjectReminder1 = serializers.deserialize(value,
               specifiedType: const FullType(String)) as String;
@@ -1969,12 +2087,28 @@ class _$SettingsEntitySerializer
           result.emailBodyReminder3 = serializers.deserialize(value,
               specifiedType: const FullType(String)) as String;
           break;
+        case 'sms_template_reminder1':
+          result.smsMsgReminder1 = serializers.deserialize(value,
+              specifiedType: const FullType(String)) as String;
+          break;
+        case 'sms_template_reminder2':
+          result.smsMsgReminder2 = serializers.deserialize(value,
+              specifiedType: const FullType(String)) as String;
+          break;
+        case 'sms_template_reminder3':
+          result.smsMsgReminder3 = serializers.deserialize(value,
+              specifiedType: const FullType(String)) as String;
+          break;
         case 'email_subject_custom1':
           result.emailSubjectCustom1 = serializers.deserialize(value,
               specifiedType: const FullType(String)) as String;
           break;
         case 'email_template_custom1':
           result.emailBodyCustom1 = serializers.deserialize(value,
+              specifiedType: const FullType(String)) as String;
+          break;
+        case 'sms_template_custom1':
+          result.smsMsgCustom1 = serializers.deserialize(value,
               specifiedType: const FullType(String)) as String;
           break;
         case 'email_subject_custom2':
@@ -1985,12 +2119,20 @@ class _$SettingsEntitySerializer
           result.emailBodyCustom2 = serializers.deserialize(value,
               specifiedType: const FullType(String)) as String;
           break;
+        case 'sms_template_custom2':
+          result.smsMsgCustom2 = serializers.deserialize(value,
+              specifiedType: const FullType(String)) as String;
+          break;
         case 'email_subject_custom3':
           result.emailSubjectCustom3 = serializers.deserialize(value,
               specifiedType: const FullType(String)) as String;
           break;
         case 'email_template_custom3':
           result.emailBodyCustom3 = serializers.deserialize(value,
+              specifiedType: const FullType(String)) as String;
+          break;
+        case 'sms_template_custom3':
+          result.smsMsgCustom3 = serializers.deserialize(value,
               specifiedType: const FullType(String)) as String;
           break;
         case 'email_subject_statement':
@@ -2001,12 +2143,20 @@ class _$SettingsEntitySerializer
           result.emailBodyStatement = serializers.deserialize(value,
               specifiedType: const FullType(String)) as String;
           break;
+        case 'sms_template_statement':
+          result.smsMsgStatement = serializers.deserialize(value,
+              specifiedType: const FullType(String)) as String;
+          break;
         case 'email_subject_purchase_order':
           result.emailSubjectPurchaseOrder = serializers.deserialize(value,
               specifiedType: const FullType(String)) as String;
           break;
         case 'email_template_purchase_order':
           result.emailBodyPurchaseOrder = serializers.deserialize(value,
+              specifiedType: const FullType(String)) as String;
+          break;
+        case 'sms_template_purchase_order':
+          result.smsMsgPurchaseOrder = serializers.deserialize(value,
               specifiedType: const FullType(String)) as String;
           break;
         case 'enable_client_portal_password':
@@ -2215,6 +2365,10 @@ class _$SettingsEntitySerializer
           break;
         case 'email_template_reminder_endless':
           result.emailBodyReminderEndless = serializers.deserialize(value,
+              specifiedType: const FullType(String)) as String;
+          break;
+        case 'sms_template_reminder_endless':
+          result.smsMsgReminderEndless = serializers.deserialize(value,
               specifiedType: const FullType(String)) as String;
           break;
         case 'client_online_payment_notification':
@@ -2701,6 +2855,16 @@ class _$SettingsEntity extends SettingsEntity {
   @override
   final String emailBodyPaymentPartial;
   @override
+  final String smsMsgInvoice;
+  @override
+  final String smsMsgQuote;
+  @override
+  final String smsMsgCredit;
+  @override
+  final String smsMsgPayment;
+  @override
+  final String smsMsgPaymentPartial;
+  @override
   final String emailSubjectReminder1;
   @override
   final String emailSubjectReminder2;
@@ -2713,25 +2877,41 @@ class _$SettingsEntity extends SettingsEntity {
   @override
   final String emailBodyReminder3;
   @override
+  final String smsMsgReminder1;
+  @override
+  final String smsMsgReminder2;
+  @override
+  final String smsMsgReminder3;
+  @override
   final String emailSubjectCustom1;
   @override
   final String emailBodyCustom1;
+  @override
+  final String smsMsgCustom1;
   @override
   final String emailSubjectCustom2;
   @override
   final String emailBodyCustom2;
   @override
+  final String smsMsgCustom2;
+  @override
   final String emailSubjectCustom3;
   @override
   final String emailBodyCustom3;
+  @override
+  final String smsMsgCustom3;
   @override
   final String emailSubjectStatement;
   @override
   final String emailBodyStatement;
   @override
+  final String smsMsgStatement;
+  @override
   final String emailSubjectPurchaseOrder;
   @override
   final String emailBodyPurchaseOrder;
+  @override
+  final String smsMsgPurchaseOrder;
   @override
   final bool enablePortalPassword;
   @override
@@ -2836,6 +3016,8 @@ class _$SettingsEntity extends SettingsEntity {
   final String emailSubjectReminderEndless;
   @override
   final String emailBodyReminderEndless;
+  @override
+  final String smsMsgReminderEndless;
   @override
   final bool clientOnlinePaymentNotification;
   @override
@@ -3043,22 +3225,35 @@ class _$SettingsEntity extends SettingsEntity {
       this.emailBodyCredit,
       this.emailBodyPayment,
       this.emailBodyPaymentPartial,
+      this.smsMsgInvoice,
+      this.smsMsgQuote,
+      this.smsMsgCredit,
+      this.smsMsgPayment,
+      this.smsMsgPaymentPartial,
       this.emailSubjectReminder1,
       this.emailSubjectReminder2,
       this.emailSubjectReminder3,
       this.emailBodyReminder1,
       this.emailBodyReminder2,
       this.emailBodyReminder3,
+      this.smsMsgReminder1,
+      this.smsMsgReminder2,
+      this.smsMsgReminder3,
       this.emailSubjectCustom1,
       this.emailBodyCustom1,
+      this.smsMsgCustom1,
       this.emailSubjectCustom2,
       this.emailBodyCustom2,
+      this.smsMsgCustom2,
       this.emailSubjectCustom3,
       this.emailBodyCustom3,
+      this.smsMsgCustom3,
       this.emailSubjectStatement,
       this.emailBodyStatement,
+      this.smsMsgStatement,
       this.emailSubjectPurchaseOrder,
       this.emailBodyPurchaseOrder,
+      this.smsMsgPurchaseOrder,
       this.enablePortalPassword,
       this.signatureOnPdf,
       this.enableEmailMarkup,
@@ -3111,6 +3306,7 @@ class _$SettingsEntity extends SettingsEntity {
       this.lateFeePercentEndless,
       this.emailSubjectReminderEndless,
       this.emailBodyReminderEndless,
+      this.smsMsgReminderEndless,
       this.clientOnlinePaymentNotification,
       this.clientManualPaymentNotification,
       this.clientMarkPaidPaymentNotification,
@@ -3275,22 +3471,35 @@ class _$SettingsEntity extends SettingsEntity {
         emailBodyCredit == other.emailBodyCredit &&
         emailBodyPayment == other.emailBodyPayment &&
         emailBodyPaymentPartial == other.emailBodyPaymentPartial &&
+        smsMsgInvoice == other.smsMsgInvoice &&
+        smsMsgQuote == other.smsMsgQuote &&
+        smsMsgCredit == other.smsMsgCredit &&
+        smsMsgPayment == other.smsMsgPayment &&
+        smsMsgPaymentPartial == other.smsMsgPaymentPartial &&
         emailSubjectReminder1 == other.emailSubjectReminder1 &&
         emailSubjectReminder2 == other.emailSubjectReminder2 &&
         emailSubjectReminder3 == other.emailSubjectReminder3 &&
         emailBodyReminder1 == other.emailBodyReminder1 &&
         emailBodyReminder2 == other.emailBodyReminder2 &&
         emailBodyReminder3 == other.emailBodyReminder3 &&
+        smsMsgReminder1 == other.smsMsgReminder1 &&
+        smsMsgReminder2 == other.smsMsgReminder2 &&
+        smsMsgReminder3 == other.smsMsgReminder3 &&
         emailSubjectCustom1 == other.emailSubjectCustom1 &&
         emailBodyCustom1 == other.emailBodyCustom1 &&
+        smsMsgCustom1 == other.smsMsgCustom1 &&
         emailSubjectCustom2 == other.emailSubjectCustom2 &&
         emailBodyCustom2 == other.emailBodyCustom2 &&
+        smsMsgCustom2 == other.smsMsgCustom2 &&
         emailSubjectCustom3 == other.emailSubjectCustom3 &&
         emailBodyCustom3 == other.emailBodyCustom3 &&
+        smsMsgCustom3 == other.smsMsgCustom3 &&
         emailSubjectStatement == other.emailSubjectStatement &&
         emailBodyStatement == other.emailBodyStatement &&
+        smsMsgStatement == other.smsMsgStatement &&
         emailSubjectPurchaseOrder == other.emailSubjectPurchaseOrder &&
         emailBodyPurchaseOrder == other.emailBodyPurchaseOrder &&
+        smsMsgPurchaseOrder == other.smsMsgPurchaseOrder &&
         enablePortalPassword == other.enablePortalPassword &&
         signatureOnPdf == other.signatureOnPdf &&
         enableEmailMarkup == other.enableEmailMarkup &&
@@ -3343,6 +3552,7 @@ class _$SettingsEntity extends SettingsEntity {
         lateFeePercentEndless == other.lateFeePercentEndless &&
         emailSubjectReminderEndless == other.emailSubjectReminderEndless &&
         emailBodyReminderEndless == other.emailBodyReminderEndless &&
+        smsMsgReminderEndless == other.smsMsgReminderEndless &&
         clientOnlinePaymentNotification ==
             other.clientOnlinePaymentNotification &&
         clientManualPaymentNotification ==
@@ -3505,22 +3715,35 @@ class _$SettingsEntity extends SettingsEntity {
     _$hash = $jc(_$hash, emailBodyCredit.hashCode);
     _$hash = $jc(_$hash, emailBodyPayment.hashCode);
     _$hash = $jc(_$hash, emailBodyPaymentPartial.hashCode);
+    _$hash = $jc(_$hash, smsMsgInvoice.hashCode);
+    _$hash = $jc(_$hash, smsMsgQuote.hashCode);
+    _$hash = $jc(_$hash, smsMsgCredit.hashCode);
+    _$hash = $jc(_$hash, smsMsgPayment.hashCode);
+    _$hash = $jc(_$hash, smsMsgPaymentPartial.hashCode);
     _$hash = $jc(_$hash, emailSubjectReminder1.hashCode);
     _$hash = $jc(_$hash, emailSubjectReminder2.hashCode);
     _$hash = $jc(_$hash, emailSubjectReminder3.hashCode);
     _$hash = $jc(_$hash, emailBodyReminder1.hashCode);
     _$hash = $jc(_$hash, emailBodyReminder2.hashCode);
     _$hash = $jc(_$hash, emailBodyReminder3.hashCode);
+    _$hash = $jc(_$hash, smsMsgReminder1.hashCode);
+    _$hash = $jc(_$hash, smsMsgReminder2.hashCode);
+    _$hash = $jc(_$hash, smsMsgReminder3.hashCode);
     _$hash = $jc(_$hash, emailSubjectCustom1.hashCode);
     _$hash = $jc(_$hash, emailBodyCustom1.hashCode);
+    _$hash = $jc(_$hash, smsMsgCustom1.hashCode);
     _$hash = $jc(_$hash, emailSubjectCustom2.hashCode);
     _$hash = $jc(_$hash, emailBodyCustom2.hashCode);
+    _$hash = $jc(_$hash, smsMsgCustom2.hashCode);
     _$hash = $jc(_$hash, emailSubjectCustom3.hashCode);
     _$hash = $jc(_$hash, emailBodyCustom3.hashCode);
+    _$hash = $jc(_$hash, smsMsgCustom3.hashCode);
     _$hash = $jc(_$hash, emailSubjectStatement.hashCode);
     _$hash = $jc(_$hash, emailBodyStatement.hashCode);
+    _$hash = $jc(_$hash, smsMsgStatement.hashCode);
     _$hash = $jc(_$hash, emailSubjectPurchaseOrder.hashCode);
     _$hash = $jc(_$hash, emailBodyPurchaseOrder.hashCode);
+    _$hash = $jc(_$hash, smsMsgPurchaseOrder.hashCode);
     _$hash = $jc(_$hash, enablePortalPassword.hashCode);
     _$hash = $jc(_$hash, signatureOnPdf.hashCode);
     _$hash = $jc(_$hash, enableEmailMarkup.hashCode);
@@ -3573,6 +3796,7 @@ class _$SettingsEntity extends SettingsEntity {
     _$hash = $jc(_$hash, lateFeePercentEndless.hashCode);
     _$hash = $jc(_$hash, emailSubjectReminderEndless.hashCode);
     _$hash = $jc(_$hash, emailBodyReminderEndless.hashCode);
+    _$hash = $jc(_$hash, smsMsgReminderEndless.hashCode);
     _$hash = $jc(_$hash, clientOnlinePaymentNotification.hashCode);
     _$hash = $jc(_$hash, clientManualPaymentNotification.hashCode);
     _$hash = $jc(_$hash, clientMarkPaidPaymentNotification.hashCode);
@@ -3730,22 +3954,35 @@ class _$SettingsEntity extends SettingsEntity {
           ..add('emailBodyCredit', emailBodyCredit)
           ..add('emailBodyPayment', emailBodyPayment)
           ..add('emailBodyPaymentPartial', emailBodyPaymentPartial)
+          ..add('smsMsgInvoice', smsMsgInvoice)
+          ..add('smsMsgQuote', smsMsgQuote)
+          ..add('smsMsgCredit', smsMsgCredit)
+          ..add('smsMsgPayment', smsMsgPayment)
+          ..add('smsMsgPaymentPartial', smsMsgPaymentPartial)
           ..add('emailSubjectReminder1', emailSubjectReminder1)
           ..add('emailSubjectReminder2', emailSubjectReminder2)
           ..add('emailSubjectReminder3', emailSubjectReminder3)
           ..add('emailBodyReminder1', emailBodyReminder1)
           ..add('emailBodyReminder2', emailBodyReminder2)
           ..add('emailBodyReminder3', emailBodyReminder3)
+          ..add('smsMsgReminder1', smsMsgReminder1)
+          ..add('smsMsgReminder2', smsMsgReminder2)
+          ..add('smsMsgReminder3', smsMsgReminder3)
           ..add('emailSubjectCustom1', emailSubjectCustom1)
           ..add('emailBodyCustom1', emailBodyCustom1)
+          ..add('smsMsgCustom1', smsMsgCustom1)
           ..add('emailSubjectCustom2', emailSubjectCustom2)
           ..add('emailBodyCustom2', emailBodyCustom2)
+          ..add('smsMsgCustom2', smsMsgCustom2)
           ..add('emailSubjectCustom3', emailSubjectCustom3)
           ..add('emailBodyCustom3', emailBodyCustom3)
+          ..add('smsMsgCustom3', smsMsgCustom3)
           ..add('emailSubjectStatement', emailSubjectStatement)
           ..add('emailBodyStatement', emailBodyStatement)
+          ..add('smsMsgStatement', smsMsgStatement)
           ..add('emailSubjectPurchaseOrder', emailSubjectPurchaseOrder)
           ..add('emailBodyPurchaseOrder', emailBodyPurchaseOrder)
+          ..add('smsMsgPurchaseOrder', smsMsgPurchaseOrder)
           ..add('enablePortalPassword', enablePortalPassword)
           ..add('signatureOnPdf', signatureOnPdf)
           ..add('enableEmailMarkup', enableEmailMarkup)
@@ -3798,6 +4035,7 @@ class _$SettingsEntity extends SettingsEntity {
           ..add('lateFeePercentEndless', lateFeePercentEndless)
           ..add('emailSubjectReminderEndless', emailSubjectReminderEndless)
           ..add('emailBodyReminderEndless', emailBodyReminderEndless)
+          ..add('smsMsgReminderEndless', smsMsgReminderEndless)
           ..add('clientOnlinePaymentNotification',
               clientOnlinePaymentNotification)
           ..add('clientManualPaymentNotification',
@@ -4347,6 +4585,29 @@ class SettingsEntityBuilder
   set emailBodyPaymentPartial(String emailBodyPaymentPartial) =>
       _$this._emailBodyPaymentPartial = emailBodyPaymentPartial;
 
+  String _smsMsgInvoice;
+  String get smsMsgInvoice => _$this._smsMsgInvoice;
+  set smsMsgInvoice(String smsMsgInvoice) =>
+      _$this._smsMsgInvoice = smsMsgInvoice;
+
+  String _smsMsgQuote;
+  String get smsMsgQuote => _$this._smsMsgQuote;
+  set smsMsgQuote(String smsMsgQuote) => _$this._smsMsgQuote = smsMsgQuote;
+
+  String _smsMsgCredit;
+  String get smsMsgCredit => _$this._smsMsgCredit;
+  set smsMsgCredit(String smsMsgCredit) => _$this._smsMsgCredit = smsMsgCredit;
+
+  String _smsMsgPayment;
+  String get smsMsgPayment => _$this._smsMsgPayment;
+  set smsMsgPayment(String smsMsgPayment) =>
+      _$this._smsMsgPayment = smsMsgPayment;
+
+  String _smsMsgPaymentPartial;
+  String get smsMsgPaymentPartial => _$this._smsMsgPaymentPartial;
+  set smsMsgPaymentPartial(String smsMsgPaymentPartial) =>
+      _$this._smsMsgPaymentPartial = smsMsgPaymentPartial;
+
   String _emailSubjectReminder1;
   String get emailSubjectReminder1 => _$this._emailSubjectReminder1;
   set emailSubjectReminder1(String emailSubjectReminder1) =>
@@ -4377,6 +4638,21 @@ class SettingsEntityBuilder
   set emailBodyReminder3(String emailBodyReminder3) =>
       _$this._emailBodyReminder3 = emailBodyReminder3;
 
+  String _smsMsgReminder1;
+  String get smsMsgReminder1 => _$this._smsMsgReminder1;
+  set smsMsgReminder1(String smsMsgReminder1) =>
+      _$this._smsMsgReminder1 = smsMsgReminder1;
+
+  String _smsMsgReminder2;
+  String get smsMsgReminder2 => _$this._smsMsgReminder2;
+  set smsMsgReminder2(String smsMsgReminder2) =>
+      _$this._smsMsgReminder2 = smsMsgReminder2;
+
+  String _smsMsgReminder3;
+  String get smsMsgReminder3 => _$this._smsMsgReminder3;
+  set smsMsgReminder3(String smsMsgReminder3) =>
+      _$this._smsMsgReminder3 = smsMsgReminder3;
+
   String _emailSubjectCustom1;
   String get emailSubjectCustom1 => _$this._emailSubjectCustom1;
   set emailSubjectCustom1(String emailSubjectCustom1) =>
@@ -4386,6 +4662,11 @@ class SettingsEntityBuilder
   String get emailBodyCustom1 => _$this._emailBodyCustom1;
   set emailBodyCustom1(String emailBodyCustom1) =>
       _$this._emailBodyCustom1 = emailBodyCustom1;
+
+  String _smsMsgCustom1;
+  String get smsMsgCustom1 => _$this._smsMsgCustom1;
+  set smsMsgCustom1(String smsMsgCustom1) =>
+      _$this._smsMsgCustom1 = smsMsgCustom1;
 
   String _emailSubjectCustom2;
   String get emailSubjectCustom2 => _$this._emailSubjectCustom2;
@@ -4397,6 +4678,11 @@ class SettingsEntityBuilder
   set emailBodyCustom2(String emailBodyCustom2) =>
       _$this._emailBodyCustom2 = emailBodyCustom2;
 
+  String _smsMsgCustom2;
+  String get smsMsgCustom2 => _$this._smsMsgCustom2;
+  set smsMsgCustom2(String smsMsgCustom2) =>
+      _$this._smsMsgCustom2 = smsMsgCustom2;
+
   String _emailSubjectCustom3;
   String get emailSubjectCustom3 => _$this._emailSubjectCustom3;
   set emailSubjectCustom3(String emailSubjectCustom3) =>
@@ -4406,6 +4692,11 @@ class SettingsEntityBuilder
   String get emailBodyCustom3 => _$this._emailBodyCustom3;
   set emailBodyCustom3(String emailBodyCustom3) =>
       _$this._emailBodyCustom3 = emailBodyCustom3;
+
+  String _smsMsgCustom3;
+  String get smsMsgCustom3 => _$this._smsMsgCustom3;
+  set smsMsgCustom3(String smsMsgCustom3) =>
+      _$this._smsMsgCustom3 = smsMsgCustom3;
 
   String _emailSubjectStatement;
   String get emailSubjectStatement => _$this._emailSubjectStatement;
@@ -4417,6 +4708,11 @@ class SettingsEntityBuilder
   set emailBodyStatement(String emailBodyStatement) =>
       _$this._emailBodyStatement = emailBodyStatement;
 
+  String _smsMsgStatement;
+  String get smsMsgStatement => _$this._smsMsgStatement;
+  set smsMsgStatement(String smsMsgStatement) =>
+      _$this._smsMsgStatement = smsMsgStatement;
+
   String _emailSubjectPurchaseOrder;
   String get emailSubjectPurchaseOrder => _$this._emailSubjectPurchaseOrder;
   set emailSubjectPurchaseOrder(String emailSubjectPurchaseOrder) =>
@@ -4426,6 +4722,11 @@ class SettingsEntityBuilder
   String get emailBodyPurchaseOrder => _$this._emailBodyPurchaseOrder;
   set emailBodyPurchaseOrder(String emailBodyPurchaseOrder) =>
       _$this._emailBodyPurchaseOrder = emailBodyPurchaseOrder;
+
+  String _smsMsgPurchaseOrder;
+  String get smsMsgPurchaseOrder => _$this._smsMsgPurchaseOrder;
+  set smsMsgPurchaseOrder(String smsMsgPurchaseOrder) =>
+      _$this._smsMsgPurchaseOrder = smsMsgPurchaseOrder;
 
   bool _enablePortalPassword;
   bool get enablePortalPassword => _$this._enablePortalPassword;
@@ -4668,6 +4969,11 @@ class SettingsEntityBuilder
   String get emailBodyReminderEndless => _$this._emailBodyReminderEndless;
   set emailBodyReminderEndless(String emailBodyReminderEndless) =>
       _$this._emailBodyReminderEndless = emailBodyReminderEndless;
+
+  String _smsMsgReminderEndless;
+  String get smsMsgReminderEndless => _$this._smsMsgReminderEndless;
+  set smsMsgReminderEndless(String smsMsgReminderEndless) =>
+      _$this._smsMsgReminderEndless = smsMsgReminderEndless;
 
   bool _clientOnlinePaymentNotification;
   bool get clientOnlinePaymentNotification =>
@@ -5036,22 +5342,35 @@ class SettingsEntityBuilder
       _emailBodyCredit = $v.emailBodyCredit;
       _emailBodyPayment = $v.emailBodyPayment;
       _emailBodyPaymentPartial = $v.emailBodyPaymentPartial;
+      _smsMsgInvoice = $v.smsMsgInvoice;
+      _smsMsgQuote = $v.smsMsgQuote;
+      _smsMsgCredit = $v.smsMsgCredit;
+      _smsMsgPayment = $v.smsMsgPayment;
+      _smsMsgPaymentPartial = $v.smsMsgPaymentPartial;
       _emailSubjectReminder1 = $v.emailSubjectReminder1;
       _emailSubjectReminder2 = $v.emailSubjectReminder2;
       _emailSubjectReminder3 = $v.emailSubjectReminder3;
       _emailBodyReminder1 = $v.emailBodyReminder1;
       _emailBodyReminder2 = $v.emailBodyReminder2;
       _emailBodyReminder3 = $v.emailBodyReminder3;
+      _smsMsgReminder1 = $v.smsMsgReminder1;
+      _smsMsgReminder2 = $v.smsMsgReminder2;
+      _smsMsgReminder3 = $v.smsMsgReminder3;
       _emailSubjectCustom1 = $v.emailSubjectCustom1;
       _emailBodyCustom1 = $v.emailBodyCustom1;
+      _smsMsgCustom1 = $v.smsMsgCustom1;
       _emailSubjectCustom2 = $v.emailSubjectCustom2;
       _emailBodyCustom2 = $v.emailBodyCustom2;
+      _smsMsgCustom2 = $v.smsMsgCustom2;
       _emailSubjectCustom3 = $v.emailSubjectCustom3;
       _emailBodyCustom3 = $v.emailBodyCustom3;
+      _smsMsgCustom3 = $v.smsMsgCustom3;
       _emailSubjectStatement = $v.emailSubjectStatement;
       _emailBodyStatement = $v.emailBodyStatement;
+      _smsMsgStatement = $v.smsMsgStatement;
       _emailSubjectPurchaseOrder = $v.emailSubjectPurchaseOrder;
       _emailBodyPurchaseOrder = $v.emailBodyPurchaseOrder;
+      _smsMsgPurchaseOrder = $v.smsMsgPurchaseOrder;
       _enablePortalPassword = $v.enablePortalPassword;
       _signatureOnPdf = $v.signatureOnPdf;
       _enableEmailMarkup = $v.enableEmailMarkup;
@@ -5104,6 +5423,7 @@ class SettingsEntityBuilder
       _lateFeePercentEndless = $v.lateFeePercentEndless;
       _emailSubjectReminderEndless = $v.emailSubjectReminderEndless;
       _emailBodyReminderEndless = $v.emailBodyReminderEndless;
+      _smsMsgReminderEndless = $v.smsMsgReminderEndless;
       _clientOnlinePaymentNotification = $v.clientOnlinePaymentNotification;
       _clientManualPaymentNotification = $v.clientManualPaymentNotification;
       _clientMarkPaidPaymentNotification = $v.clientMarkPaidPaymentNotification;
@@ -5278,22 +5598,35 @@ class SettingsEntityBuilder
               emailBodyCredit: emailBodyCredit,
               emailBodyPayment: emailBodyPayment,
               emailBodyPaymentPartial: emailBodyPaymentPartial,
+              smsMsgInvoice: smsMsgInvoice,
+              smsMsgQuote: smsMsgQuote,
+              smsMsgCredit: smsMsgCredit,
+              smsMsgPayment: smsMsgPayment,
+              smsMsgPaymentPartial: smsMsgPaymentPartial,
               emailSubjectReminder1: emailSubjectReminder1,
               emailSubjectReminder2: emailSubjectReminder2,
               emailSubjectReminder3: emailSubjectReminder3,
               emailBodyReminder1: emailBodyReminder1,
               emailBodyReminder2: emailBodyReminder2,
               emailBodyReminder3: emailBodyReminder3,
+              smsMsgReminder1: smsMsgReminder1,
+              smsMsgReminder2: smsMsgReminder2,
+              smsMsgReminder3: smsMsgReminder3,
               emailSubjectCustom1: emailSubjectCustom1,
               emailBodyCustom1: emailBodyCustom1,
+              smsMsgCustom1: smsMsgCustom1,
               emailSubjectCustom2: emailSubjectCustom2,
               emailBodyCustom2: emailBodyCustom2,
+              smsMsgCustom2: smsMsgCustom2,
               emailSubjectCustom3: emailSubjectCustom3,
               emailBodyCustom3: emailBodyCustom3,
+              smsMsgCustom3: smsMsgCustom3,
               emailSubjectStatement: emailSubjectStatement,
               emailBodyStatement: emailBodyStatement,
+              smsMsgStatement: smsMsgStatement,
               emailSubjectPurchaseOrder: emailSubjectPurchaseOrder,
               emailBodyPurchaseOrder: emailBodyPurchaseOrder,
+              smsMsgPurchaseOrder: smsMsgPurchaseOrder,
               enablePortalPassword: enablePortalPassword,
               signatureOnPdf: signatureOnPdf,
               enableEmailMarkup: enableEmailMarkup,
@@ -5346,6 +5679,7 @@ class SettingsEntityBuilder
               lateFeePercentEndless: lateFeePercentEndless,
               emailSubjectReminderEndless: emailSubjectReminderEndless,
               emailBodyReminderEndless: emailBodyReminderEndless,
+              smsMsgReminderEndless: smsMsgReminderEndless,
               clientOnlinePaymentNotification: clientOnlinePaymentNotification,
               clientManualPaymentNotification: clientManualPaymentNotification,
               clientMarkPaidPaymentNotification:

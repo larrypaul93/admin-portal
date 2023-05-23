@@ -60,12 +60,14 @@ class _TemplatesAndRemindersState extends State<TemplatesAndReminders>
   String _emailPreview = '';
   String _defaultSubject = '';
   String _defaultBody = '';
+  String _defaultSMS = '';
 
   bool _isLoading = false;
   FocusScopeNode _focusNode;
   TabController _controller;
   bool _updateReminders = false;
 
+  final _smsController = TextEditingController();
   final _subjectController = TextEditingController();
   final _bodyController = TextEditingController();
 
@@ -86,10 +88,12 @@ class _TemplatesAndRemindersState extends State<TemplatesAndReminders>
     _controller.addListener(_onTabChanged);
 
     _controllers = [
+      _smsController,
       _subjectController,
       _bodyController,
     ];
 
+    _smsController.addListener(_onTextChanged);
     _subjectController.addListener(_onTextChanged);
     _bodyController.addListener(_onTextChanged);
 
@@ -128,9 +132,11 @@ class _TemplatesAndRemindersState extends State<TemplatesAndReminders>
     final templateMap = state.staticState.templateMap;
     final template = templateMap[emailTemplate.name] ?? TemplateEntity();
 
+    _smsController.removeListener(_onTextChanged);
     _bodyController.removeListener(_onTextChanged);
     _subjectController.removeListener(_onTextChanged);
 
+    _smsController.text = settings.getSMSMsg(emailTemplate) ?? '';
     _bodyController.text = settings.getEmailBody(emailTemplate) ?? '';
     _subjectController.text = settings.getEmailSubject(emailTemplate) ?? '';
 
@@ -142,6 +148,10 @@ class _TemplatesAndRemindersState extends State<TemplatesAndReminders>
       _bodyController.text = template.body;
     }
 
+    if (_smsController.text.isEmpty) {
+      _smsController.text = template.sms;
+    }
+
     if (viewModel.state.company.markdownEmailEnabled &&
         _bodyController.text.trim().startsWith('<')) {
       _bodyController.text = html2md.convert(_bodyController.text);
@@ -149,10 +159,12 @@ class _TemplatesAndRemindersState extends State<TemplatesAndReminders>
 
     _bodyController.addListener(_onTextChanged);
     _subjectController.addListener(_onTextChanged);
+    _smsController.addListener(_onTextChanged);
 
     setState(() {
       _defaultSubject = template.subject;
       _defaultBody = template.body;
+      _defaultSMS = template.sms;
       _bodyMarkdown = _bodyController.text;
       _subjectPreview = '';
       _bodyPreview = '';
@@ -179,9 +191,14 @@ class _TemplatesAndRemindersState extends State<TemplatesAndReminders>
     SettingsEntity settings = widget.viewModel.settings;
     String body = _bodyController.text.trim();
     String subject = _subjectController.text.trim();
+    String sms = _smsController.text.trim();
 
     if (subject.isEmpty || subject == template.subject) {
       subject = null;
+    }
+
+    if (sms.isEmpty || sms == template.sms) {
+      sms = null;
     }
 
     if (body.isEmpty ||
@@ -193,58 +210,72 @@ class _TemplatesAndRemindersState extends State<TemplatesAndReminders>
     if (_selectedTemplate == EmailTemplate.invoice) {
       settings = settings.rebuild((b) => b
         ..emailBodyInvoice = body
+        ..smsMsgInvoice = sms
         ..emailSubjectInvoice = subject);
     } else if (_selectedTemplate == EmailTemplate.quote) {
       settings = settings.rebuild((b) => b
         ..emailBodyQuote = body
+        ..smsMsgQuote = sms
         ..emailSubjectQuote = subject);
     } else if (_selectedTemplate == EmailTemplate.credit) {
       settings = settings.rebuild((b) => b
         ..emailBodyCredit = body
+        ..smsMsgCredit = sms
         ..emailSubjectCredit = subject);
     } else if (_selectedTemplate == EmailTemplate.payment) {
       settings = settings.rebuild((b) => b
         ..emailBodyPayment = body
+        ..smsMsgPayment = sms
         ..emailSubjectPayment = subject);
     } else if (_selectedTemplate == EmailTemplate.payment_partial) {
       settings = settings.rebuild((b) => b
         ..emailBodyPaymentPartial = body
+        ..smsMsgPaymentPartial = sms
         ..emailSubjectPaymentPartial = subject);
     } else if (_selectedTemplate == EmailTemplate.reminder1) {
       settings = settings.rebuild((b) => b
         ..emailBodyReminder1 = body
+        ..smsMsgReminder1 = sms
         ..emailSubjectReminder1 = subject);
     } else if (_selectedTemplate == EmailTemplate.reminder2) {
       settings = settings.rebuild((b) => b
         ..emailBodyReminder2 = body
+        ..smsMsgReminder2 = sms
         ..emailSubjectReminder2 = subject);
     } else if (_selectedTemplate == EmailTemplate.reminder3) {
       settings = settings.rebuild((b) => b
         ..emailBodyReminder3 = body
+        ..smsMsgReminder3 = sms
         ..emailSubjectReminder3 = subject);
     } else if (_selectedTemplate == EmailTemplate.reminder_endless) {
       settings = settings.rebuild((b) => b
         ..emailBodyReminderEndless = body
+        ..smsMsgReminderEndless = sms
         ..emailSubjectReminderEndless = subject);
     } else if (_selectedTemplate == EmailTemplate.custom1) {
       settings = settings.rebuild((b) => b
         ..emailBodyCustom1 = body
+        ..smsMsgCustom1 = sms
         ..emailSubjectCustom1 = subject);
     } else if (_selectedTemplate == EmailTemplate.custom2) {
       settings = settings.rebuild((b) => b
         ..emailBodyCustom2 = body
+        ..smsMsgCustom2 = sms
         ..emailSubjectCustom2 = subject);
     } else if (_selectedTemplate == EmailTemplate.custom3) {
       settings = settings.rebuild((b) => b
         ..emailBodyCustom3 = body
+        ..smsMsgCustom3 = sms
         ..emailSubjectCustom3 = subject);
     } else if (_selectedTemplate == EmailTemplate.statement) {
       settings = settings.rebuild((b) => b
         ..emailBodyStatement = body
+        ..smsMsgStatement = sms
         ..emailSubjectStatement = subject);
     } else if (_selectedTemplate == EmailTemplate.purchase_order) {
       settings = settings.rebuild((b) => b
         ..emailBodyPurchaseOrder = body
+        ..smsMsgPurchaseOrder = sms
         ..emailSubjectPurchaseOrder = subject);
     }
 
@@ -291,7 +322,7 @@ class _TemplatesAndRemindersState extends State<TemplatesAndReminders>
         template: '${widget.viewModel.selectedTemplate}',
         body: body,
         subject: subject,
-        onComplete: (subject, body, email, rawSubject, rawBody) {
+        onComplete: (subject, body, email, rawSubject, rawBody, [sms]) {
           if (!mounted) {
             return;
           }
@@ -411,6 +442,13 @@ class _TemplatesAndRemindersState extends State<TemplatesAndReminders>
                   label: localization.subject,
                   controller: _subjectController,
                   hint: _defaultSubject,
+                  keyboardType: TextInputType.text,
+                  enabled: enableCustomEmail,
+                ),
+                DecoratedFormField(
+                  label: localization.sms,
+                  controller: _smsController,
+                  hint: _defaultSMS,
                   keyboardType: TextInputType.text,
                   enabled: enableCustomEmail,
                 ),

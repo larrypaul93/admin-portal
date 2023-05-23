@@ -16,10 +16,12 @@ import 'dialogs.dart';
 
 void loadEmailTemplate({
   @required BuildContext context,
-  @required Function(String, String, String, String, String) onComplete,
+  @required
+      Function(String, String, String, String, String, [String]) onComplete,
   String template,
   String subject,
   String body,
+  String sms,
   InvoiceEntity invoice,
 }) {
   if (Config.DEMO_MODE) {
@@ -40,6 +42,7 @@ void loadEmailTemplate({
 
   subject ??= '';
   body ??= '';
+  sms ??= '';
 
   if (template != null) {
     template = 'email_template_$template';
@@ -53,6 +56,7 @@ void loadEmailTemplate({
             'template': template,
             'subject': subject,
             'body': body,
+            'sms': sms,
           }))
       .then((dynamic response) {
     onComplete(
@@ -61,9 +65,10 @@ void loadEmailTemplate({
       response['wrapper'].replaceFirst('\$body', response['body']),
       response['raw_subject'],
       response['raw_body'],
+      response['sms'] ?? '',
     );
   }).catchError((dynamic error) {
     showErrorDialog(message: '$error');
-    onComplete(subject, body, body, subject, body);
+    onComplete(subject, body, body, subject, body, sms);
   });
 }

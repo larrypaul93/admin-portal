@@ -121,13 +121,13 @@ class InvoiceRepository {
   }
 
   Future<InvoiceEntity> emailInvoice(
-    Credentials credentials,
-    InvoiceEntity invoice,
-    EmailTemplate template,
-    String subject,
-    String body,
-    String ccEmail,
-  ) async {
+      Credentials credentials,
+      InvoiceEntity invoice,
+      EmailTemplate template,
+      String subject,
+      String body,
+      String ccEmail,
+      [String smsMsg]) async {
     final data = {
       'entity': '${invoice.entityType}',
       'entity_id': invoice.id,
@@ -135,6 +135,7 @@ class InvoiceRepository {
       'body': body,
       'subject': subject,
       'cc_email': ccEmail,
+      'sms': smsMsg
     };
 
     final dynamic response = await webClient.post(

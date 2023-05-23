@@ -284,7 +284,14 @@ class _$TemplateEntitySerializer
       'body',
       serializers.serialize(object.body, specifiedType: const FullType(String)),
     ];
-
+    Object value;
+    value = object.sms;
+    if (value != null) {
+      result
+        ..add('sms')
+        ..add(serializers.serialize(value,
+            specifiedType: const FullType(String)));
+    }
     return result;
   }
 
@@ -306,6 +313,10 @@ class _$TemplateEntitySerializer
           break;
         case 'body':
           result.body = serializers.deserialize(value,
+              specifiedType: const FullType(String)) as String;
+          break;
+        case 'sms':
+          result.sms = serializers.deserialize(value,
               specifiedType: const FullType(String)) as String;
           break;
       }
@@ -821,11 +832,13 @@ class _$TemplateEntity extends TemplateEntity {
   final String subject;
   @override
   final String body;
+  @override
+  final String sms;
 
   factory _$TemplateEntity([void Function(TemplateEntityBuilder) updates]) =>
       (new TemplateEntityBuilder()..update(updates))._build();
 
-  _$TemplateEntity._({this.subject, this.body}) : super._() {
+  _$TemplateEntity._({this.subject, this.body, this.sms}) : super._() {
     BuiltValueNullFieldError.checkNotNull(
         subject, r'TemplateEntity', 'subject');
     BuiltValueNullFieldError.checkNotNull(body, r'TemplateEntity', 'body');
@@ -844,7 +857,8 @@ class _$TemplateEntity extends TemplateEntity {
     if (identical(other, this)) return true;
     return other is TemplateEntity &&
         subject == other.subject &&
-        body == other.body;
+        body == other.body &&
+        sms == other.sms;
   }
 
   int __hashCode;
@@ -854,6 +868,7 @@ class _$TemplateEntity extends TemplateEntity {
     var _$hash = 0;
     _$hash = $jc(_$hash, subject.hashCode);
     _$hash = $jc(_$hash, body.hashCode);
+    _$hash = $jc(_$hash, sms.hashCode);
     _$hash = $jf(_$hash);
     return __hashCode ??= _$hash;
   }
@@ -862,7 +877,8 @@ class _$TemplateEntity extends TemplateEntity {
   String toString() {
     return (newBuiltValueToStringHelper(r'TemplateEntity')
           ..add('subject', subject)
-          ..add('body', body))
+          ..add('body', body)
+          ..add('sms', sms))
         .toString();
   }
 }
@@ -879,6 +895,10 @@ class TemplateEntityBuilder
   String get body => _$this._body;
   set body(String body) => _$this._body = body;
 
+  String _sms;
+  String get sms => _$this._sms;
+  set sms(String sms) => _$this._sms = sms;
+
   TemplateEntityBuilder();
 
   TemplateEntityBuilder get _$this {
@@ -886,6 +906,7 @@ class TemplateEntityBuilder
     if ($v != null) {
       _subject = $v.subject;
       _body = $v.body;
+      _sms = $v.sms;
       _$v = null;
     }
     return this;
@@ -911,7 +932,8 @@ class TemplateEntityBuilder
             subject: BuiltValueNullFieldError.checkNotNull(
                 subject, r'TemplateEntity', 'subject'),
             body: BuiltValueNullFieldError.checkNotNull(
-                body, r'TemplateEntity', 'body'));
+                body, r'TemplateEntity', 'body'),
+            sms: sms);
     replace(_$result);
     return _$result;
   }

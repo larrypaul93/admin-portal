@@ -491,7 +491,7 @@ abstract class ClientEntity extends Object
     if (suffix.isEmpty)
       return displayName;
     else
-      return displayName + ' (' + suffix + ')';
+      return displayName + ' - (' + suffix + ')';
   }
 
   bool getManualPaymentEmail(
