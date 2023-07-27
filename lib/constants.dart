@@ -479,6 +479,7 @@ const String kDesignIncludes = 'includes';
 const String kEmailDesignPlain = 'plain';
 const String kEmailDesignLight = 'light';
 const String kEmailDesignDark = 'dark';
+const String kEmailDesignGd = 'gd';
 const String kEmailDesignCustom = 'custom';
 
 const String kEntityStateActive = 'active';

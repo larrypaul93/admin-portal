@@ -117,14 +117,9 @@ class QuoteRepository {
     return quoteResponse.data;
   }
 
-  Future<InvoiceEntity> emailQuote(
-    Credentials credentials,
-    InvoiceEntity quote,
-    EmailTemplate template,
-    String subject,
-    String body,
-    String ccEmail,
-  ) async {
+  Future<InvoiceEntity> emailQuote(Credentials credentials, InvoiceEntity quote,
+      EmailTemplate template, String subject, String body, String ccEmail,
+      [String smsMsg]) async {
     final data = {
       'entity': '${quote.entityType}',
       'entity_id': quote.id,
@@ -132,6 +127,7 @@ class QuoteRepository {
       'body': body,
       'subject': subject,
       'cc_email': ccEmail,
+      'sms': smsMsg
     };
 
     final dynamic response = await webClient.post(

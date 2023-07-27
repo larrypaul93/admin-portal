@@ -59,7 +59,7 @@ class EmailQuoteVM extends EmailEntityVM {
     @required ClientEntity client,
     @required VendorEntity vendor,
     @required
-        Function(BuildContext, EmailTemplate, String, String, String)
+        Function(BuildContext, EmailTemplate, String, String, String, [String])
             onSendPressed,
   }) : super(
           state: state,
@@ -83,7 +83,8 @@ class EmailQuoteVM extends EmailEntityVM {
       invoice: quote,
       client: state.clientState.map[quote.clientId],
       vendor: state.vendorState.map[quote.vendorId],
-      onSendPressed: (context, template, subject, body, ccEmail) {
+      onSendPressed: (context, template, subject, body, ccEmail,
+          [smsMsg = '']) {
         final completer = snackBarCompleter<Null>(
             context, AppLocalization.of(context).emailedQuote,
             shouldPop: isMobile(context));
@@ -93,13 +94,13 @@ class EmailQuoteVM extends EmailEntityVM {
           });
         }
         store.dispatch(EmailQuoteRequest(
-          completer: completer,
-          quoteId: quote.id,
-          template: template,
-          subject: subject,
-          body: body,
-          ccEmail: ccEmail,
-        ));
+            completer: completer,
+            quoteId: quote.id,
+            template: template,
+            subject: subject,
+            body: body,
+            ccEmail: ccEmail,
+            smsMsg: smsMsg));
       },
     );
   }

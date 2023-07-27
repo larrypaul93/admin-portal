@@ -430,6 +430,10 @@ class _EmailSettingsState extends State<EmailSettings> {
                     value: kEmailDesignDark,
                   ),
                   DropdownMenuItem(
+                    child: Text(localization.gd),
+                    value: kEmailDesignGd,
+                  ),
+                  DropdownMenuItem(
                     child: Text(localization.custom),
                     value: kEmailDesignCustom,
                   ),

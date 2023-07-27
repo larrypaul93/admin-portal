@@ -230,14 +230,14 @@ class SaveQuoteFailure implements StopSaving {
 }
 
 class EmailQuoteRequest implements StartSaving {
-  EmailQuoteRequest({
-    @required this.completer,
-    @required this.quoteId,
-    @required this.template,
-    @required this.subject,
-    @required this.body,
-    @required this.ccEmail,
-  });
+  EmailQuoteRequest(
+      {@required this.completer,
+      @required this.quoteId,
+      @required this.template,
+      @required this.subject,
+      @required this.body,
+      @required this.ccEmail,
+      @required this.smsMsg});
 
   final Completer completer;
   final String quoteId;
@@ -245,6 +245,7 @@ class EmailQuoteRequest implements StartSaving {
   final String subject;
   final String body;
   final String ccEmail;
+  final String smsMsg;
 }
 
 class EmailQuoteSuccess implements StopSaving, PersistData {

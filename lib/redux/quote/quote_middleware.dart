@@ -314,14 +314,8 @@ Middleware<AppState> _emailQuote(QuoteRepository repository) {
     final action = dynamicAction as EmailQuoteRequest;
     final origQuote = store.state.quoteState.map[action.quoteId];
     repository
-        .emailQuote(
-      store.state.credentials,
-      origQuote,
-      action.template,
-      action.subject,
-      action.body,
-      action.ccEmail,
-    )
+        .emailQuote(store.state.credentials, origQuote, action.template,
+            action.subject, action.body, action.ccEmail, action.smsMsg)
         .then((quote) {
       store.dispatch(EmailQuoteSuccess(quote));
       if (action.completer != null) {
